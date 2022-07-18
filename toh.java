@@ -11,6 +11,6 @@ public static void towersOfHannoi(int a,char src,char des,char aux){
 }
     public static void main(String[] args) {
 
-        towersOfHannoi(2,'a','c','b');
+        towersOfHannoi(2,'a','c','b') ;
     }
 }
