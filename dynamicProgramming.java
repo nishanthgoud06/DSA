@@ -1,5 +1,4 @@
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class dynamicProgramming {
     //fibonacci series
@@ -87,13 +86,111 @@ public class dynamicProgramming {
         }
         return false;
     }
+    public static void doit(List<List<Integer>> result,List<Integer> temp,int[] elements,int target,int index){
+        if(target<0)
+            return;
+        if(target==0){
+            result.add(new ArrayList<>(temp));
+        }
+        for(int i=index;i<elements.length;i++){
+            int a=target-elements[i];
+            temp.add(elements[i]);
+            doit(result,temp,elements,a,i);
+            temp.remove(temp.size()-1);
+        }
+    }
+    public static List<List<Integer>> combineSum(int[] elements, int target){
+        //here we have used back tracking so that we can find all posiible combination of number
+        // present in the element that could add up to the target
+        Arrays.sort(elements);
+        List<List<Integer>> result=new ArrayList<>();
+        doit(result,new ArrayList<Integer>(),elements,target,0);
+        return result;
+    }
+    //here we are checking weather we can construct a target string from the list of string
+    public static Boolean canCon(String[] items,String target){
+        if(target.isEmpty()){
+            return true;
+        }
+        for(String i:items){
+            if(target.indexOf(i)==0){
+                String suffix=target.substring(i.length());
+                if(canCon(items,suffix)==true){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static Boolean DcanCon(String[] items,String target,HashMap<String,Boolean> hashMap){
+        //for reducing the time complexity we have used hashmap so that we can skip doing the same opertaion again.
+        if(target.isEmpty()){
+            return true;
+        }
+        if(hashMap.containsKey(target))
+            return hashMap.get(target);
+        for(String i:items){
+            if(target.indexOf(i)==0){
+                String suffix=target.substring(i.length());
+                if(DcanCon(items,suffix,hashMap)==true){
+                    hashMap.put(target,true);
+                    return true;
+                }
+            }
+        }
+        return false;
+        //for the bruteforce approach of the problem canConstruct
+        //m=target.length
+        //n=elements.length
+//        brute force                   memorized
+//         O(n.pow(m) * m);                 O(n *m**2) time
+//        O(m**2) space                     O(m**2) space
+    }
+    public static int Countcon(String[] items,String target,HashMap<String,Integer> hm){
+        if(hm.containsKey(target))
+            return hm.get(target);
+        if(target.isEmpty())
+            return 1;
+        int count=0;
+        for(String s:items){
+            if(target.indexOf(s)==0){
+                int ini=Countcon(items,target.substring(s.length()),hm);
+                count+=ini;
+            }
+        }
+        hm.put(target,count);
+        return count;
+    }
+    public static int fibi(int n){
+        int[] arrray=new int[n +1];
+        arrray[0]=0;
+        arrray[1]=1;
+        for(int i=2;i<=n;i++){
+            arrray[i]=arrray[i-1]+arrray[i-2];
+        }
+        return arrray[n];
+    }
+    public static int gridTraveller(int m,int n){
+        if(m==1||n==1)
+            return 1;
+        return gridTraveller(m-1,n)+gridTraveller(m,n-1);
+    }
     public static void main(String[] args) {
 //        System.out.println(fibInt(9));
 //        System.out.println(fiBIntRec(9));
 //        System.out.println(DGridTraveller(0,3));
 //        int[][] a=new int[16][16];
 //        System.out.println(grid(3,3,a));
-        System.out.println(canSum(8,new int[]{12}));
-        System.out.println(Dcansum(8,new int[]{12}));
+//        System.out.println(canSum(8,new int[]{12}));
+//        System.out.println(Dcansum(8,new int[]{12}));
+//        System.out.println(combineSum(new int[] {2,3,7},7));
+//        System.out.println(canCon(new String[]{"ab","abc","cd","def","abcd"},new String("abcdef")));
+////        HashMap<String , Boolean> hm=new HashMap<>();
+//        System.out.println(DcanCon(new String[]{"ab","abc","cd","def","abcd"},new String("abcdef"),hm));
+//        HashMap<String,Integer> hm1=new HashMap<>();
+//        System.out.println(Countcon(new String[]{"purp","p","ur","le","purpl"},new String("purple"),hm1));
+//        System.out.println(hm1);
+//        System.out.println(fibi(8));
+        System.out.println(gridTraveller(3,3));
     }
 }
