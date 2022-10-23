@@ -212,8 +212,51 @@ public class dynamicProgramming {
 //        }
 //        return elements[target];
 //    }
-    
+    //for this below program we will be using backtracking to print all possible combinations of target value.
+    //for the below program if can repeat the combination
+    public static List<List<Integer>>  combination(int[] values,int target){
+        Arrays.sort(values);
+        List<List<Integer>> result=new ArrayList<>();
+        find(result,new ArrayList<Integer>(),target,values,0);
+        return result;
+    }
+    public static void find(List<List<Integer>> result,List<Integer> temp,int target,int[] values,int index){
+            if(target<0)
+                return;
+            if(target==0)
+                result.add(new ArrayList<>(temp));
+            for(int i=index;i<values.length;i++){
+                temp.add(values[i]);
+                find(result,temp,target-values[i],values,i);
+                temp.remove(temp.size()-1);
+            }
+    }
+    //below is the same program as combination but here we are not allowed to repeat the combinatio
+    //which means the values inside the list should only be used once
+     static List<List<Integer>> combi(int[] values,int target){
+        Arrays.sort(values);
+        List<List<Integer>> results=new ArrayList<>();
+        combiE(results,new ArrayList<Integer>(),values,target,0);
+        return results;
+    }
+    private static void combiE(List<List<Integer>> results,List<Integer> temp,int[] values,int target,int index){
+        if(target<0)
+            return;
+        if(target==0)
+            results.add(new ArrayList<>(temp));
+        for(int i=index;i<values.length;i++){
+            if(i>index&&(values[i]==values[i-1]))
+                continue;
+            temp.add(values[i]);
+            combiE(results,temp,values,target-values[i],i+1);
+            temp.remove(temp.size()-1);
+        }
+    }
+
     public static void main(String[] args) {
+
+        System.out.println(combination(new int[]{10,1,2,7,6,1,5},8));
+        System.out.println(combi(new int[]{10,1,2,7,6,1,5},8));
 //        System.out.println(fibInt(9));
 //        System.out.println(fiBIntRec(9));
 //        System.out.println(DGridTraveller(0,3));
@@ -230,6 +273,6 @@ public class dynamicProgramming {
 //        System.out.println(hm1);
 //        System.out.println(fibi(8));
 //        System.out.println(gridTraveller(3,3));
-        System.out.println(incsum(7,new int[] {2,4}));
+        //System.out.println(incsum(7,new int[] {2,4}));
     }
 }
