@@ -1,5 +1,4 @@
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class dynamicProgramming {
     //fibonacci series
@@ -87,13 +86,193 @@ public class dynamicProgramming {
         }
         return false;
     }
+    public static void doit(List<List<Integer>> result,List<Integer> temp,int[] elements,int target,int index){
+        if(target<0)
+            return;
+        if(target==0){
+            result.add(new ArrayList<>(temp));
+        }
+        for(int i=index;i<elements.length;i++){
+            int a=target-elements[i];
+            temp.add(elements[i]);
+            doit(result,temp,elements,a,i);
+            temp.remove(temp.size()-1);
+        }
+    }
+    public static List<List<Integer>> combineSum(int[] elements, int target){
+        //here we have used back tracking so that we can find all posiible combination of number
+        // present in the element that could add up to the target
+        Arrays.sort(elements);
+        List<List<Integer>> result=new ArrayList<>();
+        doit(result,new ArrayList<Integer>(),elements,target,0);
+        return result;
+    }
+    //here we are checking weather we can construct a target string from the list of string
+    public static Boolean canCon(String[] items,String target){
+        if(target.isEmpty()){
+            return true;
+        }
+        for(String i:items){
+            if(target.indexOf(i)==0){
+                String suffix=target.substring(i.length());
+                if(canCon(items,suffix)==true){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static Boolean DcanCon(String[] items,String target,HashMap<String,Boolean> hashMap){
+        //for reducing the time complexity we have used hashmap so that we can skip doing the same opertaion again.
+        if(target.isEmpty()){
+            return true;
+        }
+        if(hashMap.containsKey(target))
+            return hashMap.get(target);
+        for(String i:items){
+            if(target.indexOf(i)==0){
+                String suffix=target.substring(i.length());
+                if(DcanCon(items,suffix,hashMap)==true){
+                    hashMap.put(target,true);
+                    return true;
+                }
+            }
+        }
+        return false;
+        //for the bruteforce approach of the problem canConstruct
+        //m=target.length
+        //n=elements.length
+//        brute force                   memorized
+//         O(n.pow(m) * m);                 O(n *m**2) time
+//        O(m**2) space                     O(m**2) space
+    }
+    public static int Countcon(String[] items,String target,HashMap<String,Integer> hm){
+        if(hm.containsKey(target))
+            return hm.get(target);
+        if(target.isEmpty())
+            return 1;
+        int count=0;
+        for(String s:items){
+            if(target.indexOf(s)==0){
+                int ini=Countcon(items,target.substring(s.length()),hm);
+                count+=ini;
+            }
+        }
+        hm.put(target,count);
+        return count;
+    }
+    public static int fibi(int n){
+        int[] arrray=new int[n +1];
+        arrray[0]=0;
+        arrray[1]=1;
+        for(int i=2;i<=n;i++){
+            arrray[i]=arrray[i-1]+arrray[i-2];
+        }
+        return arrray[n];
+    }
+    public static int gridTraveller(int m,int n){
+        if(m==1||n==1)
+            return 1;
+        return gridTraveller(m-1,n)+gridTraveller(m,n-1);
+    }
+    //now we are going to code all the above using tabulation technique
+    //the tecnique is simple you just have to craete a empty array with the length
+    // of the target and populate with constant value you need to start from the index
+    // and add the values from the index and change the value from that that position
+    public static boolean incsum(int target, int[] items){
+        boolean[] value=new boolean[target+1];
+        Arrays.fill(value,false);
+        value[0]=true;
+        for(int i=0;i<=target;i++){
+            if(value[i]){
+                for(int j:items){
+                    if(i+j< value.length){
+                        value[i+j]=true;
+                    }
+                }
+            }
+        }
+        return value[target];
+    }
+    //for the next program we are actually trying to find the nu ber of values required to find the target value
+//    public static List<List<Integer>> Hosum(int target,int[] values){
+//        List<List> elements=new ArrayList<>(target+1);
+//        for(List i:elements){
+//            i.add(null);
+//        }
+//        elements.add(0,new ArrayList<Integer>());
+//        for(int i=0;i<target;i++){
+//            if(elements.get(i)==null){
+//                for(int j:values){
+//                    if(i+j<target){
+//                        elements.set(i + j, Collections.singletonList(j));
+//                    }
+//                }
+//            }
+//        }
+//        return elements[target];
+//    }
+    //for this below program we will be using backtracking to print all possible combinations of target value.
+    //for the below program if can repeat the combination
+    public static List<List<Integer>>  combination(int[] values,int target){
+        Arrays.sort(values);
+        List<List<Integer>> result=new ArrayList<>();
+        find(result,new ArrayList<Integer>(),target,values,0);
+        return result;
+    }
+    public static void find(List<List<Integer>> result,List<Integer> temp,int target,int[] values,int index){
+            if(target<0)
+                return;
+            if(target==0)
+                result.add(new ArrayList<>(temp));
+            for(int i=index;i<values.length;i++){
+                temp.add(values[i]);
+                find(result,temp,target-values[i],values,i);
+                temp.remove(temp.size()-1);
+            }
+    }
+    //below is the same program as combination but here we are not allowed to repeat the combinatio
+    //which means the values inside the list should only be used once
+     static List<List<Integer>> combi(int[] values,int target){
+        Arrays.sort(values);
+        List<List<Integer>> results=new ArrayList<>();
+        combiE(results,new ArrayList<Integer>(),values,target,0);
+        return results;
+    }
+    private static void combiE(List<List<Integer>> results,List<Integer> temp,int[] values,int target,int index){
+        if(target<0)
+            return;
+        if(target==0)
+            results.add(new ArrayList<>(temp));
+        for(int i=index;i<values.length;i++){
+            if(i>index&&(values[i]==values[i-1]))
+                continue;
+            temp.add(values[i]);
+            combiE(results,temp,values,target-values[i],i+1);
+            temp.remove(temp.size()-1);
+        }
+    }
+
     public static void main(String[] args) {
+
+        System.out.println(combination(new int[]{10,1,2,7,6,1,5},8));
+        System.out.println(combi(new int[]{10,1,2,7,6,1,5},8));
 //        System.out.println(fibInt(9));
 //        System.out.println(fiBIntRec(9));
 //        System.out.println(DGridTraveller(0,3));
 //        int[][] a=new int[16][16];
 //        System.out.println(grid(3,3,a));
-        System.out.println(canSum(8,new int[]{12}));
-        System.out.println(Dcansum(8,new int[]{12}));
+//        System.out.println(canSum(8,new int[]{12}));
+//        System.out.println(Dcansum(8,new int[]{12}));
+//        System.out.println(combineSum(new int[] {2,3,7},7));
+//        System.out.println(canCon(new String[]{"ab","abc","cd","def","abcd"},new String("abcdef")));
+////        HashMap<String , Boolean> hm=new HashMap<>();
+//        System.out.println(DcanCon(new String[]{"ab","abc","cd","def","abcd"},new String("abcdef"),hm));
+//        HashMap<String,Integer> hm1=new HashMap<>();
+//        System.out.println(Countcon(new String[]{"purp","p","ur","le","purpl"},new String("purple"),hm1));
+//        System.out.println(hm1);
+//        System.out.println(fibi(8));
+//        System.out.println(gridTraveller(3,3));
+        //System.out.println(incsum(7,new int[] {2,4}));
     }
 }
