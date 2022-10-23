@@ -175,6 +175,44 @@ public class dynamicProgramming {
             return 1;
         return gridTraveller(m-1,n)+gridTraveller(m,n-1);
     }
+    //now we are going to code all the above using tabulation technique
+    //the tecnique is simple you just have to craete a empty array with the length
+    // of the target and populate with constant value you need to start from the index
+    // and add the values from the index and change the value from that that position
+    public static boolean incsum(int target, int[] items){
+        boolean[] value=new boolean[target+1];
+        Arrays.fill(value,false);
+        value[0]=true;
+        for(int i=0;i<=target;i++){
+            if(value[i]){
+                for(int j:items){
+                    if(i+j< value.length){
+                        value[i+j]=true;
+                    }
+                }
+            }
+        }
+        return value[target];
+    }
+    //for the next program we are actually trying to find the nu ber of values required to find the target value
+//    public static List<List<Integer>> Hosum(int target,int[] values){
+//        List<List> elements=new ArrayList<>(target+1);
+//        for(List i:elements){
+//            i.add(null);
+//        }
+//        elements.add(0,new ArrayList<Integer>());
+//        for(int i=0;i<target;i++){
+//            if(elements.get(i)==null){
+//                for(int j:values){
+//                    if(i+j<target){
+//                        elements.set(i + j, Collections.singletonList(j));
+//                    }
+//                }
+//            }
+//        }
+//        return elements[target];
+//    }
+    
     public static void main(String[] args) {
 //        System.out.println(fibInt(9));
 //        System.out.println(fiBIntRec(9));
@@ -191,6 +229,7 @@ public class dynamicProgramming {
 //        System.out.println(Countcon(new String[]{"purp","p","ur","le","purpl"},new String("purple"),hm1));
 //        System.out.println(hm1);
 //        System.out.println(fibi(8));
-        System.out.println(gridTraveller(3,3));
+//        System.out.println(gridTraveller(3,3));
+        System.out.println(incsum(7,new int[] {2,4}));
     }
 }
