@@ -252,11 +252,189 @@ public class dynamicProgramming {
             temp.remove(temp.size()-1);
         }
     }
+    //below is the program where we find all possible combination of target value form the given set of
+    // candidates using dynamic programming following tabulation strategy
+    public static List<Integer> tcansum(int[] candidates, int target){
+        if(target==0)
+            return null;
+        ArrayList<Integer>[] result=new ArrayList[target+1];
+        result[0]=new ArrayList<Integer>();
+        for(int i=0;i<candidates.length;i++){
+            ArrayList<Integer> ab=new ArrayList<>();
+            int a=candidates[i];
+            ab.add(a);
+            result[a]=ab;
+        }
+        for(int i=1;i<=target;i++){
+            if(result[i]==null)
+                continue;
+            for(int j=0;j<candidates.length;j++){
+                int n=candidates[j];
+                //System.out.println(n);
+                int target_cube=i+n;
 
+                if(target_cube >target)
+                    continue;
+               // System.out.println(target_cube);
+                if(result[target_cube]==null)
+                    result[target_cube]= new ArrayList<Integer>();
+                ArrayList<Integer> src=result[i];
+                ArrayList<Integer>desc=result[target_cube];
+                desc.clear();
+                desc.addAll(src);
+                desc.add(n);
+                //System.out.println(desc.toString());
+                if(target_cube==target){
+                    return result[target];
+                }
+
+            }
+        }
+        if (result[target] == null) return null;
+
+
+        return result[target];
+
+    }
+    //the below program i have found in google
+    static int[] howSum(int targetSum, int[] numbers) {
+
+        // **** sanity checks ****
+        if (targetSum == 0) return null;
+
+
+        ArrayList<Integer>[] table = new ArrayList[targetSum + 1];
+
+        table[0] = new ArrayList<Integer>();
+
+        for (int i = 0; i < numbers.length; i++) {
+            ArrayList<Integer> al = new ArrayList<Integer>();
+            int nums = numbers[i];
+            al.add(nums);
+            table[nums] = al;
+        }
+
+        // **** iterate through the table ****
+        for (int i = 1; i <= targetSum; i++) {
+
+            // ???? ????
+            // System.out.println("<<< i: " + i);
+
+            // **** skip this entry (if needed) ****
+            if (table[i] == null)
+                continue;
+
+            // **** loop through the numbers array ****
+            for (int j = 0; j < numbers.length; j++) {
+
+                // **** for ease of use ****
+                int num = numbers[j];
+
+                // ???? ????
+                // System.out.println("<<< num: " + num);
+
+                // **** compute target index ****
+                int ndx = i + num;
+
+                // **** skip this index (out of range) ****
+                if (ndx > targetSum)
+                    continue;
+
+                // ???? ????
+                 //System.out.println("<<< ndx: " + ndx);
+
+                // **** initialize list (if needed) ****
+                if (table[ndx] == null)
+                    table[ndx] = new ArrayList<Integer>();
+
+                // **** copy all elements from table[i] to table[ndx] ****
+                ArrayList<Integer> src = table[i];
+                ArrayList<Integer> dst = table[ndx];
+                dst.clear();
+                dst.addAll(src);
+
+                // **** add current element to table[ndx] ****
+                dst.add(num);
+
+                // ???? ????
+                 //System.out.println("<<< dst: " + dst.toString());
+
+                // **** check if done ****
+                if (ndx == targetSum) {
+
+                    // **** convert List<Integer> to int[] ****
+                    int[] arr = dst.stream().mapToInt( x -> x).toArray();
+
+                    // **** return int[] ****
+                    return arr;
+                }
+            }
+
+            // ???? ????
+            // System.out.println("<<< table: " + Arrays.toString(table));
+        }
+
+        // **** check if no ansswer was found ****
+        if (table[targetSum] == null) return null;
+
+        // **** get last list in the table ****
+        ArrayList<Integer> lst = table[targetSum];
+
+        // **** convert List<Integer> to int[] ****
+        int[] arr = lst.stream().mapToInt( x -> x).toArray();
+
+        // **** return int[] ****
+        return arr;
+    }
+    public static boolean canCons(String[] candidate,String target){
+        boolean[] result=new boolean[target.length()+1];
+        Arrays.fill(result,false);
+        result[0]=true;
+        for(int i=0;i<target.length();i++){
+            if(result[i]){
+                for(String s:candidate){
+                    if(target.substring(i,i+s.length())==s){
+                        result[i+s.length()]=true;
+                    }
+                }
+            }
+        }
+        return result[target.length()-1];
+    }
+    //here we are implementing tabulation to find the whether a string can be found with the
+    // elements in the candiadtes set if possible it should return true
+    //here first trying to fill our boolean array values then we iterate through the
+    // candidate key then we select the one element in the candiadte key and finds lits length and
+    // we get the substring of the target value if the target value of the length of the element matches we mark the length of the candidate element length to true
+    public static boolean caanCons(String[] arr,String Target){
+        if(Target.length()==0)
+            return true;
+        boolean[] set=new boolean[Target.length()+1];
+        set[0]=true;
+        for(int i=0;i<set.length;i++){
+            if(set[i]==false)
+                continue;
+                for(int j=0;j<arr.length;j++){
+                    String s=arr[j];
+                    if(i+s.length()>= set.length)
+                        continue;
+                    String sub=Target.substring(i,i+s.length());
+                    if(sub.equals(s)){
+                        set[i+s.length()]=true;
+                    }
+                }
+                if(set[Target.length()])
+                    return true;
+
+        }
+        return set[Target.length()];
+    }
     public static void main(String[] args) {
-
-        System.out.println(combination(new int[]{10,1,2,7,6,1,5},8));
-        System.out.println(combi(new int[]{10,1,2,7,6,1,5},8));
+        System.out.println(caanCons(new String[]{"ab","abc","cd","def","abcd"},"abcdef"));
+//        System.out.println(Arrays.toString(howSum(7,new int[]{5,3,4})));
+//        System.out.println(tcansum(new int[]{5,3,4},7));
+//        System.out.println(combination(new int[]{10,1,2,7,6,1,5},8));
+//        System.out.println(combi(new int[]{10,1,2,7,6,1,5},8));
 //        System.out.println(fibInt(9));
 //        System.out.println(fiBIntRec(9));
 //        System.out.println(DGridTraveller(0,3));
