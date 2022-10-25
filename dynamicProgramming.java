@@ -386,10 +386,53 @@ public class dynamicProgramming {
         // **** return int[] ****
         return arr;
     }
-    public static void main(String[] args) {
+    public static boolean canCons(String[] candidate,String target){
+        boolean[] result=new boolean[target.length()+1];
+        Arrays.fill(result,false);
+        result[0]=true;
+        for(int i=0;i<target.length();i++){
+            if(result[i]){
+                for(String s:candidate){
+                    if(target.substring(i,i+s.length())==s){
+                        result[i+s.length()]=true;
+                    }
+                }
+            }
+        }
+        return result[target.length()-1];
+    }
+    //here we are implementing tabulation to find the whether a string can be found with the
+    // elements in the candiadtes set if possible it should return true
+    //here first trying to fill our boolean array values then we iterate through the
+    // candidate key then we select the one element in the candiadte key and finds lits length and
+    // we get the substring of the target value if the target value of the length of the element matches we mark the length of the candidate element length to true
+    public static boolean caanCons(String[] arr,String Target){
+        if(Target.length()==0)
+            return true;
+        boolean[] set=new boolean[Target.length()+1];
+        set[0]=true;
+        for(int i=0;i<set.length;i++){
+            if(set[i]==false)
+                continue;
+                for(int j=0;j<arr.length;j++){
+                    String s=arr[j];
+                    if(i+s.length()>= set.length)
+                        continue;
+                    String sub=Target.substring(i,i+s.length());
+                    if(sub.equals(s)){
+                        set[i+s.length()]=true;
+                    }
+                }
+                if(set[Target.length()])
+                    return true;
 
-        System.out.println(Arrays.toString(howSum(7,new int[]{5,3,4})));
-        System.out.println(tcansum(new int[]{5,3,4},7));
+        }
+        return set[Target.length()];
+    }
+    public static void main(String[] args) {
+        System.out.println(caanCons(new String[]{"ab","abc","cd","def","abcd"},"abcdef"));
+//        System.out.println(Arrays.toString(howSum(7,new int[]{5,3,4})));
+//        System.out.println(tcansum(new int[]{5,3,4},7));
 //        System.out.println(combination(new int[]{10,1,2,7,6,1,5},8));
 //        System.out.println(combi(new int[]{10,1,2,7,6,1,5},8));
 //        System.out.println(fibInt(9));
