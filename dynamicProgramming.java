@@ -429,8 +429,36 @@ public class dynamicProgramming {
         }
         return set[Target.length()];
     }
+    //Palindrome Partitioning
+    //Given a string s, partition s such that every substring of the partition is a palindrome.
+    // Return all possible palindrome partitioning of s.
+    //A palindrome string is a string that reads the same backward as forward.
+    public static boolean p(String s,int low,int high){
+        while(low<high){
+            if(s.charAt(low++)!=s.charAt(high--))
+                return false;
+        }
+        return true;
+    }
+    public static void DP(List<List<String>> result,List<String> temp,String target,int index){
+        if(index==target.length())
+            result.add(new ArrayList<>(temp));
+        for(int i=index;i<target.length();i++){
+            if(p(target,index,i)){
+                temp.add(target.substring(index,i+1));
+                DP(result,temp,target,i+1);
+                temp.remove(temp.size()-1);
+            }
+        }
+    }
+    public static List<List<String>> paliPart(String s){
+        List<List<String>> result=new ArrayList<>();
+        DP(result,new ArrayList<String>() ,s,0);
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(caanCons(new String[]{"ab","abc","cd","def","abcd"},"abcdef"));
+        System.out.println(paliPart("aab"));
+//        System.out.println(caanCons(new String[]{"ab","abc","cd","def","abcd"},"abcdef"));
 //        System.out.println(Arrays.toString(howSum(7,new int[]{5,3,4})));
 //        System.out.println(tcansum(new int[]{5,3,4},7));
 //        System.out.println(combination(new int[]{10,1,2,7,6,1,5},8));
