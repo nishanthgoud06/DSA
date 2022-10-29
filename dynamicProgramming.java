@@ -456,8 +456,22 @@ public class dynamicProgramming {
         DP(result,new ArrayList<String>() ,s,0);
         return result;
     }
+    //we need to implement the subset sum problem
+    //where Given a set of non-negative integers, and a value sum,
+    //determine if there is a subset of the given set with sum equal to given sum.
+    //the first approach which we are going to use is the recursive
+    public static boolean sumSub(int[] candidates,int len,int target){
+        if(target==0)
+            return true;
+        if(len==0)
+            return false;
+        if(candidates[len-1]>target)
+            sumSub(candidates,len-1,target);
+        return sumSub(candidates,len-1,target)||sumSub(candidates,len-1,target-candidates[len-1]);
+    }
     public static void main(String[] args) {
-        System.out.println(paliPart("aab"));
+        System.out.println(sumSub(new int[]{3, 34, 4, 12, 5, 2},6,8));
+//        System.out.println(paliPart("aab"));
 //        System.out.println(caanCons(new String[]{"ab","abc","cd","def","abcd"},"abcdef"));
 //        System.out.println(Arrays.toString(howSum(7,new int[]{5,3,4})));
 //        System.out.println(tcansum(new int[]{5,3,4},7));
