@@ -1,7 +1,11 @@
 import java.lang.reflect.Array;
 import java.util.Arrays;
-
+//in this class we will be executing all the easy level problems by gfg
 public class gfgEasy {
+    //1.You are given an array of size N. Rearrange the given array in-place such that all the negative numbers
+    // occur before positive numbers.(Maintain the order of all -ve and +ve numbers as given in the original array).
+    //the approach is just placing the negative number first in the order in which they come
+    //and the postive numbers are moved to there above number
     public void Arrange(long[] a,long n){
         int j=0;
         long temp;
@@ -58,11 +62,11 @@ public class gfgEasy {
         return isMultipleof3(even_count-odd_count);
     }
     public static void main(String[] args) {
-//        long[] a={-3,2,-2,2};
-//        gfgEasy g=new gfgEasy();
-//        g.Arrange(a,4);
-//        print(a);
+        long[] a={-3,2,-2,2};
+        gfgEasy g=new gfgEasy();
+        g.Arrange(a,4);
+       print(a);
        // System.out.println(swapAndMax(new int[] {4,2,1,8}));
-        System.out.println(isMultipleof3(23));
+//        System.out.println(isMultipleof3(9));
     }
 }
