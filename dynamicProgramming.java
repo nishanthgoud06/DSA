@@ -486,9 +486,33 @@ public class dynamicProgramming {
             return false;
         return subSe(nums,total,0,0);
     }
+    //using Dyanmic Programming for this we are using datatype hashmap to store the
+    // value and the boolean value with that combination
+    public static boolean DsumSe(int[] array,int total,int index,int sum,HashMap<String,Boolean> hm){
+        String s=index+" "+sum;
+        if(hm.containsKey(s))
+            return hm.get(s);
+        if(sum*2==total)
+            return true;
+        if(sum>total/2 ||index>=array.length)
+            return false;
+        Boolean b=DsumSe(array,total,index+1,sum,hm)||DsumSe(array,total,index+1,sum+array[index],hm);
+        hm.put(s,b);
+        return b;
+    }
+    public static Boolean cD(int[] array){
+        int total=0;
+        for(int i: array){
+            total+=i;
+        }
+        if(total%2!=0)
+            return false;
+        return DsumSe(array,total,0,0,new HashMap<String,Boolean>());
+    }
     public static void main(String[] args) {
-        System.out.println(sumSub(new int[]{3, 34, 4, 12, 5, 2},6,8));
-        System.out.println(che(new int[]{1,5,11,5}));
+        System.out.println(cD(new int[]{1,2,3,5}));
+//        System.out.println(sumSub(new int[]{3, 34, 4, 12, 5, 2},6,8));
+//        System.out.println(che(new int[]{1,5,11,5}));
 //        System.out.println(paliPart("aab"));
 //        System.out.println(caanCons(new String[]{"ab","abc","cd","def","abcd"},"abcdef"));
 //        System.out.println(Arrays.toString(howSum(7,new int[]{5,3,4})));
