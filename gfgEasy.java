@@ -61,12 +61,61 @@ public class gfgEasy {
         }
         return isMultipleof3(even_count-odd_count);
     }
+    //Smallest subset with sum greater than all other elements
+    public static int smallSub(int[] a){
+        if(a.length==1)
+            return 1;
+        int total=0;
+        for(int i:a){
+            total+=i;
+        }
+        int result=0,sub=0;
+        Arrays.sort(a);
+        for(int i=a.length-1;i>=0;i--){
+            result+=a[i];
+            total-=a[i];
+            sub++;
+            if(result>total)
+                return sub;
+        }
+        return a.length;
+    }
+    //Minimum Sum of Absolute Differences of Pairs
+    static long findMinSum(int[] A,int[] B,int N) {
+        Arrays.sort(A);
+        Arrays.sort(B);
+        long total=0;
+        for(int i=0;i<N;i++){
+            total+=Math.abs(A[i]-B[i]);
+        }
+        return total;
+    }
+    //First negative integer in every window of size k
+    //the first aproach that we are goibg to follow is the brute Force Approach
+    public static void sizeSearch(int[] a,int len,int size){
+        boolean point;
+        for(int i=0;i<len-size+1;i++){
+            point=false;
+            for(int j=0;j<size;j++){
+                if(a[i+j]<0){
+                    point =true;
+                    System.out.print(a[i+j]+" ");
+                    break;
+                }
+            }
+            if(!point)
+                System.out.print("0");
+        }
+    }
     public static void main(String[] args) {
+        sizeSearch(new int[] {2,-1,-7,8,-15,30,16,28},8,3);
+//        System.out.println(findMinSum(new int[]{4,1,8,7},new int[] {2,3,6,5},4));
+//        System.out.println(smallSub(new int[] { 3 , 1 , 7, 1}));
 //        long[] a={-3,2,-2,2};
 //        gfgEasy g=new gfgEasy();
 //        g.Arrange(a,4);
 //       print(a);
-        System.out.println(swapAndMax(new int[] {4,2,1,8}));
+//        System.out.println(swapAndMax(new int[] {4,2,1,8}));
 //        System.out.println(isMultipleof3(9));
     }
 }
