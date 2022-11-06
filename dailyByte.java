@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 
 public class dailyByte {
@@ -167,8 +169,31 @@ public class dailyByte {
         }
         return true;
     }
-    
+//    Two Sum
+    public static boolean twoSum(int[] arr,int target){
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        for(int i=0;i<arr.length;i++){
+            if(hm.containsKey(target-arr[i]))
+                return true;
+            else
+                hm.put(arr[i],i);
+        }
+        return false;
+    }
+    public static int jAS(String s1,String s2){
+        HashSet<Character> hs=new HashSet<>();
+        for(char c:s1.toCharArray())
+            hs.add(c);
+        int count=0;
+        for(char c:s2.toCharArray()){
+            if(hs.contains(c))
+                count++;
+        }
+            return count;
+    }
     public static void main(String[] args) {
+        System.out.println(jAS("abc","ac"));
+//        System.out.println(twoSum(new int[]{1, 3, 8, 2},11));
 //        String s1="foobof";
 //        int a=palind(s1);
 //        if(a==-1)
