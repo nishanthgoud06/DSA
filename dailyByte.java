@@ -1,7 +1,4 @@
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
+import java.util.*;
 
 public class dailyByte {
     //This question is asked by Google. Given a string, reverse all of its characters and return the resulting string.
@@ -191,8 +188,78 @@ public class dailyByte {
         }
             return count;
     }
+    //Valid Anagram
+    //the idea that i could think to implement this function is i can sort all the characters in the String
+    //other way is to add all the character in the hashset-this would hot work in all cases
+    //we are now going to try using hashmap merge function
+    public static boolean anagram(String s1,String s2){
+        HashMap<Character,Integer> hashMap1=new HashMap<>();
+        HashMap<Character,Integer> hashMap2=new HashMap<>();
+        for(int i=0;i<s1.length();i++){
+            hashMap1.merge(s1.charAt(i),1,Integer::sum);
+            hashMap2.merge(s2.charAt(i),1,Integer::sum);
+        }
+        for(int i=0;i<s1.length();i++){
+            if(hashMap1.get(s1.charAt(i))!=hashMap2.get(s2.charAt(i))){
+                return false;
+            }
+        }
+        return true;
+    }
+//    First Unique Character
+//    public static int funique(String str){
+//
+//    }
+    //this is same as the anagram
+    static char[] characterCount=new char[256];
+    public static void Funique(String s){
+        for(int i=0;i<s.length();i++){
+            characterCount[s.charAt(i)]++;
+        }
+        for(int i=0;i<256;i++){
+            if(characterCount[i]==1){
+                System.out.println(s.charAt(i-97));
+                break;
+            }
+        }
+    }
+//    Spot the Difference
+//i thought of doing like converting the trying to char Array as
+// iterating and finding the char but the time complexity has become exponential
+    public static char Spot(String s1,String s2){
+        int count=(int)s2.charAt(s1.length());
+        for(int i=0;i<s1.length();i++){
+            count-=(int)s1.charAt(i);
+            count+=(int)s2.charAt(i);
+        }
+
+        return (char)count;
+    }
+    //executing the same program using hashmap
+    public static char Spot1(String s1,String s2){
+        HashMap<Character,Integer> hm1=new HashMap<>();
+        for(int i=0;i<s1.length();i++){
+            char c=s1.charAt(i);
+            int count=hm1.getOrDefault(c,0);
+            hm1.put(c,count+1);
+        }
+        for(int i=0;i<s2.length();i++){
+            char c=s2.charAt(i);
+            if(hm1.containsKey(c)&&hm1.get(c)>0){
+                 hm1.put(c,hm1.get(c)-1);
+             }else{
+                 return c;
+             }
+        }
+        return '$';
+    }
     public static void main(String[] args) {
-        System.out.println(jAS("abc","ac"));
+        System.out.println(Spot1("coding"," ingcod"));
+        System.out.println(Spot("coding"," ingcod"));
+//        Funique("abcabd");
+//        System.out.println(funique("developer")-'a');
+//        System.out.println(anagram("listen","silent"));
+//        System.out.println(jAS("abc","ac"));
 //        System.out.println(twoSum(new int[]{1, 3, 8, 2},11));
 //        String s1="foobof";
 //        int a=palind(s1);
