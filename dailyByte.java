@@ -1,6 +1,40 @@
 import java.util.*;
 
 public class dailyByte {
+    //here we are creating a new class to execte linked list
+    class Node{
+        int val;
+        Node next;
+        public Node(int val){
+            this.val=val;
+        }
+        public Node(int val,Node next){
+            this.val=val;
+            this.next=next;
+        }
+    }
+    //now we are going to implement Merge LinkedList
+    public Node MeLinkedList(Node n1, Node n2){
+        Node result=new Node(0);
+        Node head=result;
+        while(n1!=null&&n2!=null){
+            if(n1.val< n2.val){
+                head.next=n1;
+                n1=n1.next;
+            }else{
+                head.next=n2;
+                n2=n2.next;
+            }
+        }
+        head=head.next;
+        if(n1!=null)
+            head=n1.next;
+        else
+            head=n2.next;
+
+        return result.next;
+    }
+
     //This question is asked by Google. Given a string, reverse all of its characters and return the resulting string.
     //first i would like to execute the following problem using brute force
     public static void rev(String s){
@@ -253,6 +287,23 @@ public class dailyByte {
         }
         return '$';
     }
+//uncommon words
+public static String[] unCommonWord(String s1,String s2){
+    Map<String,Integer> hashmap=new HashMap<>();
+    for(String s:s1.split(" ")){
+        hashmap.put(s,hashmap.getOrDefault(s,0)+1);
+    }
+    for(String s:s2.split(" ")){
+        hashmap.put(s,hashmap.getOrDefault(s,0)+1);
+    }
+    List<String> result=new LinkedList<>();
+    for(String s:hashmap.keySet()){
+        if(hashmap.get(s)==1){
+            result.add(s);
+        }
+    }
+    return result.toArray(new String[result.size()]);
+}
     public static void main(String[] args) {
         System.out.println(Spot1("coding"," ingcod"));
         System.out.println(Spot("coding"," ingcod"));
