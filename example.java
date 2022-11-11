@@ -105,9 +105,9 @@ public class example {
         }
     }
     public static void main(String[] args) {
-        Powerof2(25);
-//        permutation("abc","");
-//        permute("abc",0,2);
+//        Powerof2(25);
+        permutation("abc","");
+        permute("abc",0,2);
 //        //1.extract numbers from text
 //        String text="one1two2THREE3Four4";
 //        String dilimitter="\\d";
