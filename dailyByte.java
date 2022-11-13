@@ -304,8 +304,30 @@ public static String[] unCommonWord(String s1,String s2){
     }
     return result.toArray(new String[result.size()]);
 }
+    public static void removeFirst(Node n){
+        n=n.next;
+        print(n);
+    }
+    public static void removelast(Node n1){
+        Node n=n1;
+        while(n.next.next!=null){
+            n=n.next;
+        }
+        n.next=null;
+        print(n1);
+    }
+    public static void remove(Node n,int n1){
+        Node node=n;
+        Node prev=null;
+        for(int i=0;i<n1-1;i++){
+            prev=node;
+            node=node.next;
+        }
+        prev.next=node.next;
+        print(prev);
+    }
 //Remove Nth to Last Node
-    
+
     public static void main(String[] args) {
         System.out.println(Spot1("coding"," ingcod"));
         System.out.println(Spot("coding"," ingcod"));
