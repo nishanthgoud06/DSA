@@ -26,20 +26,12 @@ public class Arrays_cci {
         return true;
     }
     //check permutations
-    public static boolean permutations(String s1,String s2){
-        if(s2.length()==0)
-            return false;
-        return checkPermutations(s1,s2);
-    }
-    public static boolean checkPermutations(String s1,String s2){
-        String[] a=allp(s2);
-    }
-    static List<String> coll=new ArrayList<>();
-    public static String[] allp(String s1,int low,int high){
-        if(low==high)
-            coll.add()
-
-    }
+//    public static boolean permutations(String s1,String s2){
+//        if(s2.length()==0)
+//            return false;
+//        return checkPermutations(s1,s2);
+//    }
+//
     public static void main(String[] args) {
         System.out.println(isUnique("cabc"));
     }

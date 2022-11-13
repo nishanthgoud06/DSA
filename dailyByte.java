@@ -304,6 +304,8 @@ public static String[] unCommonWord(String s1,String s2){
     }
     return result.toArray(new String[result.size()]);
 }
+//Remove Nth to Last Node
+    
     public static void main(String[] args) {
         System.out.println(Spot1("coding"," ingcod"));
         System.out.println(Spot("coding"," ingcod"));
