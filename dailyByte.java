@@ -374,7 +374,15 @@ public static String[] unCommonWord(String s1,String s2){
         print(n);
     }
     //return the middle element
-    
+    public static void middleElement(Node n){
+        Node slow=n;
+        Node fast=n;
+        while( fast!=null && fast.next!=null ){
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        System.out.println(slow.val);
+    }
     public static void main(String[] args) {
         Node n=new Node(1);
         Node n1=new Node(2);
@@ -387,7 +395,8 @@ public static String[] unCommonWord(String s1,String s2){
         n2.next=n3;
         n3.next=n4;
         n4.next=n5;
-        removeValue(n,2);
+        middleElement(n);
+//        removeValue(n,2);
 //        remmoveN(n,2);
 //        System.out.println(Spot1("coding"," ingcod"));
 //        System.out.println(Spot("coding"," ingcod"));
