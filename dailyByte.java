@@ -2,11 +2,12 @@ import java.util.*;
 
 public class dailyByte {
     //here we are creating a new class to execte linked list
-    class Node{
+    static class Node{
         int val;
         Node next;
         public Node(int val){
             this.val=val;
+            next=null;
         }
         public Node(int val,Node next){
             this.val=val;
@@ -304,11 +305,92 @@ public static String[] unCommonWord(String s1,String s2){
     }
     return result.toArray(new String[result.size()]);
 }
-//Remove Nth to Last Node
+
+    public static void print(Node n){
+        while(n!=null){
+            System.out.println(n.val);
+            n=n.next;
+        }
+    }
+    public static int len(Node n){
+        int count=0;
+        while(n!=null){
+            count++;
+            n=n.next;
+        }
+        return count;
+    }
+    public static void removeFirst(Node n){
+        n=n.next;
+        print(n);
+    }
+    public static void removelast(Node n1){
+        Node n=n1;
+        while(n.next.next!=null){
+            n=n.next;
+        }
+        n.next=null;
+        print(n1);
+    }
+    public static void remove(Node n,int n1){
+        Node node=n;
+        Node prev=null;
+        for(int i=0;i<n1-1;i++){
+            prev=node;
+            node=node.next;
+        }
+        prev.next=node.next;
+        print(prev);
+    }
+    //Remove Nth to Last Node
+    public static void remmoveN(Node n,int pos){
+        Node c=new Node(0);
+        c.next=n;
+        Node fast=c;
+        Node slow=c;
+        for(int i=1;i<=pos+1;i++){
+            fast=fast.next;
+        }
+        while(fast!=null){
+            slow=slow.next;
+            fast=fast.next;
+        }
+        slow.next=slow.next.next;
+        print(n);
+    }
+//    Remove Value
+    public static void removeValue(Node n,int val){
+        while(n.next!=null&&n.val==val){
+            n=n.next;
+        }
+        Node num=n;
+        while(num!=null&&num.next!=null){
+            if(num.next.val==val){
+                num.next=num.next.next;
+            }else{
+                num=num.next;
+            }
+        }
+        print(n);
+    }
+    //return the middle element
     
     public static void main(String[] args) {
-        System.out.println(Spot1("coding"," ingcod"));
-        System.out.println(Spot("coding"," ingcod"));
+        Node n=new Node(1);
+        Node n1=new Node(2);
+        Node n2=new Node(3);
+        Node n3=new Node(4);
+        Node n4=new Node(5);
+        Node n5=new Node(2);
+        n.next=n1;
+        n1.next=n2;
+        n2.next=n3;
+        n3.next=n4;
+        n4.next=n5;
+        removeValue(n,2);
+//        remmoveN(n,2);
+//        System.out.println(Spot1("coding"," ingcod"));
+//        System.out.println(Spot("coding"," ingcod"));
 //        Funique("abcabd");
 //        System.out.println(funique("developer")-'a');
 //        System.out.println(anagram("listen","silent"));
