@@ -383,19 +383,100 @@ public static String[] unCommonWord(String s1,String s2){
         }
         System.out.println(slow.val);
     }
+//    now we are going to check weather there is a cycle or not
+    public static boolean check(Node n){
+        Node slow=n;
+        Node fast=n;
+        while(fast!=null&&fast.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+            if(slow==fast){
+                return true;
+            }
+        }
+        return false;
+    }
+    //for this program we are going to return the index form which the cycle has started
+    public static Node indexLL(Node n){
+        Node fast=n;
+        Node slow=n;
+        while(fast!=null &&fast.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+            if(slow==fast){
+                Node slow2=n;
+                while(slow!=slow2){
+                    slow=slow.next;
+                    slow2=slow2.next;
+                }
+                return slow;
+            }
+        }
+        return null;
+    }
+    //for this program we are going to reorder the list
+    //sample input 1->2->3->4->5
+    //sample output 1->5->2->4->3
+    public static Node reverseOfNode(Node n){
+        Node prev=null;
+        Node current=n;
+        while(current!=null){
+            Node next=current.next;
+            current.next=prev;
+            prev=current;
+            current=next;
+        }
+        return prev;
+    }
+    public static void mergeOfNode(Node first,Node second){
+        while(first!=null){
+            Node l1=first.next;
+            Node l2=second.next;
+            first.next=second;
+            if(l1==null)
+                break;
+            second.next=l1;
+            first=l1;
+            second=l2;
+        }
+    }
+    public static void reOrder(Node n){
+        Node first=n;
+        Node slow=n;
+        Node fast=n;
+        Node prev=null;
+        while(fast!=null && fast.next!=null){
+            prev=slow;
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        prev.next=null;
+        Node list2=reverseOfNode(slow);
+        mergeOfNode(first,list2);
+    }
     public static void main(String[] args) {
         Node n=new Node(1);
         Node n1=new Node(2);
         Node n2=new Node(3);
         Node n3=new Node(4);
         Node n4=new Node(5);
-        Node n5=new Node(2);
+//        Node n5=new Node(6);
+//        Node n6=new Node(7);
+//        Node n7=new Node(8);
         n.next=n1;
         n1.next=n2;
         n2.next=n3;
         n3.next=n4;
-        n4.next=n5;
-        middleElement(n);
+//        n4.next=n5;
+//        n5.next=n6;
+//        n6.next=n7;
+        print(n);
+        System.out.println("--------------------");
+        reOrder(n);
+        print(n);
+//        middleElement(n);
+//        indexLL(n);
+//        middleElement(n);
 //        removeValue(n,2);
 //        remmoveN(n,2);
 //        System.out.println(Spot1("coding"," ingcod"));
