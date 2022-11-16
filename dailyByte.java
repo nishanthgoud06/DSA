@@ -454,6 +454,24 @@ public static String[] unCommonWord(String s1,String s2){
         Node list2=reverseOfNode(slow);
         mergeOfNode(first,list2);
     }
+    //now we are going to create our own hashset
+    //which will include the methods add,contains,remove
+    //the hashset limitations are not mentioned as every one knows it
+    class MyHashSet{
+        static int arraylength=100;
+        static int max_integer_value=1000000;
+        List<List<Integer>> Parent;
+        public MyHashSet(){
+            Parent=new ArrayList<>(arraylength);
+            for(int i=0;i<arraylength;i++){
+                Parent.add(null);
+            }
+        }
+        public static void add(int x){
+            int index=x%arraylength;
+            List<Integer>
+        }
+    }
     public static void main(String[] args) {
         Node n=new Node(1);
         Node n1=new Node(2);
