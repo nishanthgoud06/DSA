@@ -460,7 +460,7 @@ public static String[] unCommonWord(String s1,String s2){
     class MyHashSet{
         static int arraylength=100;
         static int max_integer_value=1000000;
-        List<List<Integer>> Parent;
+        static List<List<Integer>> Parent;
         public MyHashSet(){
             Parent=new ArrayList<>(arraylength);
             for(int i=0;i<arraylength;i++){
@@ -469,29 +469,133 @@ public static String[] unCommonWord(String s1,String s2){
         }
         public static void add(int x){
             int index=x%arraylength;
-            List<Integer>
+            List<Integer> child=Parent.get(index);
+            if(child==null){
+                List<Integer> list=new ArrayList<>();
+                list.add(x);
+                Parent.add(index,list);
+            }else{
+                if(!child.contains(x)){
+                    child.add(x);
+                }
+            }
+        }
+        public static boolean contains(int x){
+            int index=x%arraylength;
+            List<Integer> child=Parent.get(index);
+            return child.contains(x)&&child!=null;
+        }
+        public static void remove(int x){
+            int index=x%arraylength;
+            List<Integer> child=Parent.get(index);
+            if(child.contains(x))
+                child.remove(x);
         }
     }
+    //validate the string which only has the paratensics/baracket
+    public static boolean Validate(String s){
+        Stack<Character> stack=new Stack<>();
+        for(char c:s.toCharArray()){
+            if(c=='(')
+                stack.push(')');
+            else if(c=='[')
+                stack.push(']');
+            else if(c=='{')
+                stack.push('}');
+            else if(stack.isEmpty()||stack.pop()==c){
+                return false;
+            }
+        }
+        return true;
+    }
+    //the below function is to add two linked list
+    //we need to consider that the length of each list may or may not be equal
+    public static Node adding(Node l1,Node l2){
+        Node l3=new Node(0);
+        Node dummy_head=l3;
+        int carry=0;
+        while(l1!=null&&l2!=null){
+            int num1=(l1!=null)?l1.val:0;
+            int num2=(l2!=null)?l2.val:0;
+            int sum=num1+num2+0;
+            carry=sum/10;
+            int last=sum%10;
+            Node num=new Node(last);
+            dummy_head.next=num;
+            dummy_head=dummy_head.next;
+            if(l1!=null)
+                l1=l1.next;
+            if(l2!=null)
+                l2=l2.next;
+        }
+        if(carry>0){
+            Node n=new Node(carry);
+            dummy_head.next=n;
+            dummy_head=dummy_head.next;
+        }
+        return l3.next;
+    }
+//    here we are going to impliment the compare the keyStrokes
+//    here we are gonna return the boolean value to see whether the given two strings are equals or not
+    public static String Stacking(String s){
+        Stack<Character> stack=new Stack();
+        for(char c:s.toCharArray()){
+            if(c=='#'){
+                if(!stack.isEmpty()){
+                    stack.pop();
+                    continue;
+                }
+            }
+            stack.push(c);
+        }
+        return stack.toString();
+    }
+    //now we are going to use the StringBuilder
+    public static String StrBuilding(String s){
+        StringBuilder str=new StringBuilder();
+        for(char c:s.toCharArray()){
+            if(c=='#'){
+                if(!str.isEmpty()){
+                    str.delete(str.length()-1,str.length());
+                    continue;
+                }
+            }
+            str.append(c);
+        }
+        return str.toString();
+    }
+    public static boolean Comparing(String s,String t){
+        //for the first approach we are gonna use the stack data Structure
+        return Stacking(s).equals(Stacking(t));
+    }
+    public static boolean comp(String s,String q){
+        return StrBuilding(s).equals(StrBuilding(q));
+    }
     public static void main(String[] args) {
-        Node n=new Node(1);
-        Node n1=new Node(2);
-        Node n2=new Node(3);
-        Node n3=new Node(4);
-        Node n4=new Node(5);
-//        Node n5=new Node(6);
-//        Node n6=new Node(7);
-//        Node n7=new Node(8);
-        n.next=n1;
-        n1.next=n2;
-        n2.next=n3;
-        n3.next=n4;
-//        n4.next=n5;
-//        n5.next=n6;
-//        n6.next=n7;
-        print(n);
-        System.out.println("--------------------");
-        reOrder(n);
-        print(n);
+        System.out.println(Comparing("ab#c","ac"));
+        System.out.println(comp("ab#c","ac"));
+        Node n1=new Node(3);
+        Node n2=new Node(7);
+//        print(adding(n1,n2));
+//        Node n=new Node(1);
+//        Node n1=new Node(2);
+//        Node n2=new Node(3);
+//        Node n3=new Node(4);
+//        Node n4=new Node(5);
+////        Node n5=new Node(6);
+////        Node n6=new Node(7);
+////        Node n7=new Node(8);
+//        n.next=n1;
+//        n1.next=n2;
+//        n2.next=n3;
+//        n3.next=n4;
+////        n4.next=n5;
+////        n5.next=n6;
+////        n6.next=n7;
+//        print(n);
+//        System.out.println("--------------------");
+//        reOrder(n);
+//        print(n);
 //        middleElement(n);
 //        indexLL(n);
 //        middleElement(n);

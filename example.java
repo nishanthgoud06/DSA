@@ -104,6 +104,11 @@ public class example {
             System.out.println("the closest perfect square is lower than the given number "+lower);
         }
     }
+    //now we going to desing hashmap;
+    //right now i am thinking of implementing this the in the same approach as hashset
+    //but i a bit confused on how to handle conlission in hashmap hopefully by 30 min i can figure out
+    //how to design it
+
     public static void main(String[] args) {
 //        Powerof2(25);
         permutation("abc","");
