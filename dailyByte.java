@@ -568,14 +568,30 @@ public static String[] unCommonWord(String s1,String s2){
         //for the first approach we are gonna use the stack data Structure
         return Stacking(s).equals(Stacking(t));
     }
+    //for this program we have to remove adjacent charcters from the string
+    //my first approach is using hashmap but by using that we are not geeting the sequence
+    //now we are using stack approach
+    public static void removeAdj(String s){
+       StringBuilder str=new StringBuilder();
+       for(char c:s.toCharArray()){
+           int count=str.length();
+           if(count>1&&str.charAt(count-1)==c){
+               str.deleteCharAt(count-1);
+           }else{
+               str.append(c);
+           }
+       }
+        System.out.println(str);
+    }
     public static boolean comp(String s,String q){
         return StrBuilding(s).equals(StrBuilding(q));
     }
     public static void main(String[] args) {
-        System.out.println(Comparing("ab#c","ac"));
-        System.out.println(comp("ab#c","ac"));
-        Node n1=new Node(3);
-        Node n2=new Node(7);
+        removeAdj("foobar");
+//        System.out.println(Comparing("ab#c","ac"));
+//        System.out.println(comp("ab#c","ac"));
+//        Node n1=new Node(3);
+//        Node n2=new Node(7);
 //        print(adding(n1,n2));
 //        Node n=new Node(1);
 //        Node n1=new Node(2);
