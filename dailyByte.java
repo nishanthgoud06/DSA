@@ -583,11 +583,40 @@ public static String[] unCommonWord(String s1,String s2){
        }
         System.out.println(str);
     }
+    //now we are going to implement the same using two pointers
+    public static void RemoAj(String s){
+        int i=0;
+        int length=s.length();
+        char[] c=s.toCharArray();
+        for(int j=0;j<length;j++,i++){
+            c[i]=c[j];
+            if(i>0&&c[i-1]==c[i]){
+                i=i-2;
+            }
+        }
+        System.out.println(new String(c,0,i));
+    }
+//    Next Greater Element I
+    public static int[] neGr(int[] a,int[] b){
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        Stack<Integer> stack=new Stack<>();
+        for(int i:b){
+            if(!stack.isEmpty()&&stack.peek()<i){
+                hm.put(stack.pop(),i);
+            }
+            stack.push(i);
+        }
+        for(int i=0;i<a.length;i++){
+            a[i]=hm.getOrDefault(i,-1);
+        }
+        return a;
+    }
     public static boolean comp(String s,String q){
         return StrBuilding(s).equals(StrBuilding(q));
     }
     public static void main(String[] args) {
         removeAdj("foobar");
+        RemoAj("foobar");
 //        System.out.println(Comparing("ab#c","ac"));
 //        System.out.println(comp("ab#c","ac"));
 //        Node n1=new Node(3);
