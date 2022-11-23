@@ -611,12 +611,32 @@ public static String[] unCommonWord(String s1,String s2){
         }
         return a;
     }
+    //finding the permutations of a string
+    public static String Swaping(String s,int i,int j){
+        char[] c=s.toCharArray();
+        char temp=c[i];
+        c[i]=c[j];
+        c[j]=temp;
+        return String.valueOf(c);
+    }
+    public static void combination(String s,int i,int j){
+        if(i==j){
+            System.out.println(s);
+        }
+        else{
+            for(int k=i;k<=j;k++){
+                s=Swaping(s,i,k);
+                combination(s,i+1,j);
+            }
+        }
+    }
     public static boolean comp(String s,String q){
         return StrBuilding(s).equals(StrBuilding(q));
     }
     public static void main(String[] args) {
-        removeAdj("foobar");
-        RemoAj("foobar");
+        combination("abc",0,2);
+//        removeAdj("foobar");
+//        RemoAj("foobar");
 //        System.out.println(Comparing("ab#c","ac"));
 //        System.out.println(comp("ab#c","ac"));
 //        Node n1=new Node(3);
