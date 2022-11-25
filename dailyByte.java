@@ -633,8 +633,95 @@ public static String[] unCommonWord(String s1,String s2){
     public static boolean comp(String s,String q){
         return StrBuilding(s).equals(StrBuilding(q));
     }
+    static class MovingAverage{
+        int capacity;
+        int sum;
+        Queue<Double> c;
+        public MovingAverage(int capacity){
+            c=new LinkedList<>();
+            this.capacity=capacity;
+        }
+        public void next(double val){
+            sum+=val;
+            c.add(val);
+            if(c.size()>capacity){
+                sum-=c.remove();
+            }
+            System.out.println(sum/c.size());
+        }
+    }
+        static class classCounter{
+        int limit;
+        static Queue<Integer> coll;
+        public classCounter(int limit){
+            this.limit=limit;
+        }
+        public static void ping(int val){
+            coll.add(val);
+            while(coll.peek()<val-3000){
+                coll.remove();
+            }
+            System.out.println(coll.size());
+        }
+        }
+//        now we are to implement stack using queue
+//            first we are going to use two queue
+//            then we are going to use single queue
+    static class sQueue{
+        Queue<Integer> q1;
+        Queue<Integer> q2;
+        public sQueue(){
+            q1=new LinkedList<>();
+            q2=new LinkedList<>();
+        }
+        public void add(int val){
+            q2.add(val);
+            while(!q1.isEmpty()){
+                q2.add(q1.peek());
+                q1.remove();
+            }
+            Queue q=q2;
+            q1=q2;
+            q2=q;
+        }
+        public void remove(){
+            if(!q1.isEmpty())
+                q1.remove();
+        }
+}
+    static class sQS{
+        Queue<Integer> q;
+        public sQS(){
+            q=new LinkedList<>();
+        }
+        public void add(int val){
+            int size=q.size();
+            q.add(val);
+            for(int i=0;i<size;i++){
+                q.add(q.peek());
+                q.remove();
+            }
+        }
+        public int peek(){
+            if(q.isEmpty())
+                return -1;
+            return q.peek();
+        }
+    }
+    
     public static void main(String[] args) {
-        combination("abc",0,2);
+        sQS s=new sQS();
+        s.add(1);
+        s.add(2);
+        s.add(3);
+        System.out.println(s.peek());
+//        MovingAverage mv=n
+//        ew MovingAverage(3);
+//        mv.next(3);
+//        mv.next(5);
+//        mv.next(7);
+//        mv.next(6);
+//        combination("abc",0,2);
 //        removeAdj("foobar");
 //        RemoAj("foobar");
 //        System.out.println(Comparing("ab#c","ac"));

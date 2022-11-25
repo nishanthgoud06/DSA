@@ -132,8 +132,30 @@ public class gfgBasic {
         int mid= (int) Math.floor(a.length/2);
         return ((mid&1)==1)?a[mid]:(a[mid]+a[mid-1])/2;
     }
+    //Find the Duplicate Number
+    //Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
+    //
+    //There is only one repeated number in nums, return this repeated number.
+    //
+    //You must solve the problem without modifying the array nums and uses only constant extra space.
+    public static  int Dupli(int[] a){
+        int slow=a[0];
+        int fast=a[0];
+        do{
+            slow=a[slow];
+            fast=a[a[fast]];
+        }while(slow!=fast);
+        fast=a[0];
+        while(slow!=fast){
+            slow=a[slow];
+            fast=a[fast];
+        }
+        return slow;
+    }
+
     public static void main(String[] args) {
-        System.out.println(median(new int[] {56,67,30,79}));
+        System.out.println(Dupli(new int[]{1,2,3,4,5,1}));
+//        System.out.println(median(new int[] {56,67,30,79}));
 //        System.out.println(middle(23,45,65));
 //        Node head=null;
 //       Node a=new Node(1);
