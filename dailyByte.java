@@ -583,11 +583,147 @@ public static String[] unCommonWord(String s1,String s2){
        }
         System.out.println(str);
     }
+    //now we are going to implement the same using two pointers
+    public static void RemoAj(String s){
+        int i=0;
+        int length=s.length();
+        char[] c=s.toCharArray();
+        for(int j=0;j<length;j++,i++){
+            c[i]=c[j];
+            if(i>0&&c[i-1]==c[i]){
+                i=i-2;
+            }
+        }
+        System.out.println(new String(c,0,i));
+    }
+//    Next Greater Element I
+    public static int[] neGr(int[] a,int[] b){
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        Stack<Integer> stack=new Stack<>();
+        for(int i:b){
+            if(!stack.isEmpty()&&stack.peek()<i){
+                hm.put(stack.pop(),i);
+            }
+            stack.push(i);
+        }
+        for(int i=0;i<a.length;i++){
+            a[i]=hm.getOrDefault(i,-1);
+        }
+        return a;
+    }
+    //finding the permutations of a string
+    public static String Swaping(String s,int i,int j){
+        char[] c=s.toCharArray();
+        char temp=c[i];
+        c[i]=c[j];
+        c[j]=temp;
+        return String.valueOf(c);
+    }
+    public static void combination(String s,int i,int j){
+        if(i==j){
+            System.out.println(s);
+        }
+        else{
+            for(int k=i;k<=j;k++){
+                s=Swaping(s,i,k);
+                combination(s,i+1,j);
+            }
+        }
+    }
     public static boolean comp(String s,String q){
         return StrBuilding(s).equals(StrBuilding(q));
     }
+    static class MovingAverage{
+        int capacity;
+        int sum;
+        Queue<Double> c;
+        public MovingAverage(int capacity){
+            c=new LinkedList<>();
+            this.capacity=capacity;
+        }
+        public void next(double val){
+            sum+=val;
+            c.add(val);
+            if(c.size()>capacity){
+                sum-=c.remove();
+            }
+            System.out.println(sum/c.size());
+        }
+    }
+        static class classCounter{
+        int limit;
+        static Queue<Integer> coll;
+        public classCounter(int limit){
+            this.limit=limit;
+        }
+        public static void ping(int val){
+            coll.add(val);
+            while(coll.peek()<val-3000){
+                coll.remove();
+            }
+            System.out.println(coll.size());
+        }
+        }
+//        now we are to implement stack using queue
+//            first we are going to use two queue
+//            then we are going to use single queue
+    static class sQueue{
+        Queue<Integer> q1;
+        Queue<Integer> q2;
+        public sQueue(){
+            q1=new LinkedList<>();
+            q2=new LinkedList<>();
+        }
+        public void add(int val){
+            q2.add(val);
+            while(!q1.isEmpty()){
+                q2.add(q1.peek());
+                q1.remove();
+            }
+            Queue q=q2;
+            q1=q2;
+            q2=q;
+        }
+        public void remove(){
+            if(!q1.isEmpty())
+                q1.remove();
+        }
+}
+    static class sQS{
+        Queue<Integer> q;
+        public sQS(){
+            q=new LinkedList<>();
+        }
+        public void add(int val){
+            int size=q.size();
+            q.add(val);
+            for(int i=0;i<size;i++){
+                q.add(q.peek());
+                q.remove();
+            }
+        }
+        public int peek(){
+            if(q.isEmpty())
+                return -1;
+            return q.peek();
+        }
+    }
+    
     public static void main(String[] args) {
-        removeAdj("foobar");
+        sQS s=new sQS();
+        s.add(1);
+        s.add(2);
+        s.add(3);
+        System.out.println(s.peek());
+//        MovingAverage mv=n
+//        ew MovingAverage(3);
+//        mv.next(3);
+//        mv.next(5);
+//        mv.next(7);
+//        mv.next(6);
+//        combination("abc",0,2);
+//        removeAdj("foobar");
+//        RemoAj("foobar");
 //        System.out.println(Comparing("ab#c","ac"));
 //        System.out.println(comp("ab#c","ac"));
 //        Node n1=new Node(3);
