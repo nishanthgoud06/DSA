@@ -708,7 +708,20 @@ public static String[] unCommonWord(String s1,String s2){
             return q.peek();
         }
     }
-    
+    //find value in BST
+    static class BST{
+        int val;
+      BST left;
+      BST right;
+      BST() {}
+      BST(int val) { this.val = val; }
+      BST(int val, BST left, BST right) {
+          this.val = val;
+          this.left = left;
+          this.right = right;
+      }
+    }
+
     public static void main(String[] args) {
         sQS s=new sQS();
         s.add(1);
