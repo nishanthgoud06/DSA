@@ -721,13 +721,31 @@ public static String[] unCommonWord(String s1,String s2){
           this.right = right;
       }
     }
-
+//for this program we are going to Convert Binary Search Tree to Sorted Linked List
+    public static void conBtoLl(BST node,List<Integer> results){
+        if(node ==null){
+            return;
+        }
+        conBtoLl(node.left,results);
+        results.add(node.val);
+        conBtoLl(node.right,results);
+    }
     public static void main(String[] args) {
-        sQS s=new sQS();
-        s.add(1);
-        s.add(2);
-        s.add(3);
-        System.out.println(s.peek());
+        BST n=new BST(4);
+        n.left=new BST(2);
+        n.left.left=new BST(1);
+        n.left.right=new BST(3);
+        n.right=new BST(6);
+        n.right.left=new BST(5);
+        n.right.right=new BST(7);
+        List<Integer> result=new LinkedList<>();
+        conBtoLl(n,result);
+        System.out.println(result);
+//        sQS s=new sQS();
+//        s.add(1);
+//        s.add(2);
+//        s.add(3);
+//        System.out.println(s.peek());
 //        MovingAverage mv=n
 //        ew MovingAverage(3);
 //        mv.next(3);
