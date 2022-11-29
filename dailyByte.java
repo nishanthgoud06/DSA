@@ -745,6 +745,7 @@ public static String[] unCommonWord(String s1,String s2){
         else
             return rightside;
     }
+    
     public static void main(String[] args) {
         BST n=new BST(4);
         n.left=new BST(2);
