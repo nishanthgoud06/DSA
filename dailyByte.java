@@ -730,6 +730,22 @@ public static String[] unCommonWord(String s1,String s2){
         results.add(node.val);
         conBtoLl(node.right,results);
     }
+//    Lowest Common Ancestor for this program we will give to values we need to find the least common ancestor of given two nodes
+    public static BST leastC(BST node,int n1,int n2){
+        if(node ==null)
+            return null;
+        if(node.val==n1 || node.val==n2)
+            return node;
+        BST leftside=leastC(node.left,n1,n2);
+        BST rightside=leastC(node.right,n1,n2);
+        if(leftside!=null&&rightside!=null)
+            return node;
+        else if(leftside!=null)
+            return leftside;
+        else
+            return rightside;
+    }
+    
     public static void main(String[] args) {
         BST n=new BST(4);
         n.left=new BST(2);
@@ -738,9 +754,10 @@ public static String[] unCommonWord(String s1,String s2){
         n.right=new BST(6);
         n.right.left=new BST(5);
         n.right.right=new BST(7);
-        List<Integer> result=new LinkedList<>();
-        conBtoLl(n,result);
-        System.out.println(result);
+//        List<Integer> result=new LinkedList<>();
+//        conBtoLl(n,result);
+//        System.out.println(result);
+        System.out.println(leastC(n,5,2).val);
 //        sQS s=new sQS();
 //        s.add(1);
 //        s.add(2);
