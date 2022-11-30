@@ -745,7 +745,44 @@ public static String[] unCommonWord(String s1,String s2){
         else
             return rightside;
     }
-    
+    //for this program we are going to check whether the given two trees are same or not;
+    //one way is to use the recursive version where you pass the same loaction each time;
+    //other way is the iterative version where we have used the queue
+    public static boolean checkSimilarR(BST n1,BST n2){
+        if(n1==null && n2==null){
+            return true;
+        }else if(n1==null ||n2==null)
+            return false;
+        if(n1.val==n2.val)
+           return checkSimilarR(n1.left,n2.left)&&checkSimilarR(n1.right,n2.right);
+        return false;
+    }
+    public static boolean checkSimilarI(BST n1,BST n2){
+        Queue<BST> queue=new LinkedList<>();
+        if(n1==null &&n2==null)
+            return true;
+        else if(n1==null ||n2==null)
+            return false;
+        if(n1!=null && n2!=null){
+            queue.offer(n1);
+            queue.offer(n2);
+        }
+        while(!queue.isEmpty()){
+            BST a=queue.poll();
+            BST b=queue.poll();
+            if(a==null&&b==null)
+                continue;
+            if(a==null || b==null)
+                return false;
+            if(a.val!=b.val)
+                return false;
+            queue.offer(a.left);
+            queue.offer(b.left);
+            queue.offer(a.right);
+            queue.offer(b.right);
+        }
+        return true;
+    }
     public static void main(String[] args) {
         BST n=new BST(4);
         n.left=new BST(2);
