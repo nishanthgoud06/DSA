@@ -783,6 +783,20 @@ public static String[] unCommonWord(String s1,String s2){
         }
         return true;
     }
+    //Given a binary search tree, return the minimum difference between any two nodes in the tree.
+    static Integer prev=null;
+    static int min=Integer.MAX_VALUE;
+    public static int minDiff(BST node){
+        if(node==null)
+            return min;
+        minDiff(node.left);
+        if(prev!=null){
+            min=Math.min(node.val-prev,min);
+        }
+        prev= node.val;
+        minDiff(node.right);
+        return min;
+    }
     public static void main(String[] args) {
         BST n=new BST(4);
         n.left=new BST(2);
@@ -791,10 +805,11 @@ public static String[] unCommonWord(String s1,String s2){
         n.right=new BST(6);
         n.right.left=new BST(5);
         n.right.right=new BST(7);
+        System.out.println(minDiff(n));
 //        List<Integer> result=new LinkedList<>();
 //        conBtoLl(n,result);
 //        System.out.println(result);
-        System.out.println(leastC(n,5,2).val);
+//        System.out.println(leastC(n,5,2).val);
 //        sQS s=new sQS();
 //        s.add(1);
 //        s.add(2);
