@@ -85,16 +85,65 @@ public class BinarySeachTree {
 //
 //
 //    }
+    //now we are going to use the recursive version with dfs and perform the "or" function
+    public static boolean dfs_target(BinarySeachTree node,int target){
+        if(node==null)
+            return false;
+        if(node.val==target)
+            return true;
+        return dfs_target(node.left,target)||dfs_target(node.right,target);
+    }
+    //now we are going to implement the trees sum
+    //my initial thought is to use dfs in recursive approach
+    public static int treesum(BinarySeachTree node){
+        if(node==null)
+            return 0;
+        return node.val+treesum(node.left)+treesum(node.right);
+    }
+    public static int treesumI(BinarySeachTree node){
+        int result=0;
+        Queue<BinarySeachTree> queue=new LinkedList<>();
+        queue.offer(node);
+        while(!queue.isEmpty()){
+            BinarySeachTree val=queue.poll();
+            result+=val.val;
+            if(val.left!=null)
+            queue.offer(val.left);
+            if(val.right!=null)
+                queue.offer(val.right);
+        }
+        return result;
+    }
+    //now we are going to find the min value in the tree
+    public static int minV(BinarySeachTree node){
+        if(node==null)
+            return Integer.MAX_VALUE;
+        return Math.min(node.val,Math.min(minV(node.left),minV(node.right)));
+    }
+    //now we are going to find the max sum path from the root to the child
+    public static int maxSum(BinarySeachTree node){
+        if(node==null)
+            return Integer.MIN_VALUE;
+        if(node.left==null && node.right==null)
+            return node.val;
+        int max=Math.max(maxSum(node.left),maxSum(node.right));
+        return node.val+max;
+    }
     public static void main(String[] args) {
         BinarySeachTree node=new BinarySeachTree(1);
         node.left=new BinarySeachTree(2);
-        node .left.left=new BinarySeachTree(4);
+        node.left.left=new BinarySeachTree(4);
         node.left.right=new BinarySeachTree(5);
         node.right=new BinarySeachTree(3);
         node.right.right=new BinarySeachTree(6);
 //        System.out.println(dfs(node));
 //        System.out.println(dfsR(node,new ArrayList<>()));
 //        System.out.println(bfs(node));
-        System.out.println(targetCheck(node,10));
+//        System.out.println(targetCheck(node,10));
+//        System.out.println(dfs_target(node,5));
+//        System.out.println(treesum(node));
+//        System.out.println(treesumI(node));
+//        System.out.println(minV(node));
+        System.out.println(maxSum(node));
     }
 }
