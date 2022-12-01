@@ -850,12 +850,41 @@ public static String[] unCommonWord(String s1,String s2){
         implement(node,coll);
         return coll;
     }
+
+    //Max Value in Each Level
+    public static List<Integer> maxValue(BST node){
+        //now we are going to use bfs
+        Queue<BST>  q=new LinkedList<>();
+        List<Integer> result=new ArrayList<>();
+        q.offer(node);
+        while(!q.isEmpty()){
+            int max=Integer.MIN_VALUE;
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                BST temp=q.poll();
+                max=Math.max(max,temp.val);
+                if(temp.left!=null)
+                    q.offer(temp.left);
+                if(temp.right!=null)
+                    q.offer(temp.right);
+            }
+            result.add(max);
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        BST n=new BST(2);
-        n.left=new BST(1);
-        n.right=new BST(3);
-        n.left.right=new BST(2);
-        System.out.println(modeL(n));
+        BST n=new BST(1);
+        n.left=new BST(5);
+        n.left.left=new BST(5);
+        n.left.right=new BST(3);
+        n.right=new BST(6);
+        n.right.right=new BST(7);
+        System.out.println(maxValue(n));
+//        BST n=new BST(2);
+//        n.left=new BST(1);
+//        n.right=new BST(3);
+//        n.left.right=new BST(2);
+//        System.out.println(modeL(n));
 //        System.out.println(modeH(n));
 //        BST n=new BST(4);
 //        n.left=new BST(2);
