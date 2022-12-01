@@ -129,6 +129,15 @@ public class BinarySeachTree {
         int max=Math.max(maxSum(node.left),maxSum(node.right));
         return node.val+max;
     }
+    //here we are trying to find the path sum where a value is given we need to find whether that sum can be formed by
+    //following the path from root to leaf
+    public static boolean pathSum(BinarySeachTree node,int target){
+        if(node==null)
+            return false;
+        if(node.left==null&&node.right==null)
+            return node.val==target;
+        return pathSum(node.left,target- node.val)||pathSum(node.right,target- node.val);
+    }
     public static void main(String[] args) {
         BinarySeachTree node=new BinarySeachTree(1);
         node.left=new BinarySeachTree(2);
@@ -144,6 +153,7 @@ public class BinarySeachTree {
 //        System.out.println(treesum(node));
 //        System.out.println(treesumI(node));
 //        System.out.println(minV(node));
-        System.out.println(maxSum(node));
+//        System.out.println(maxSum(node));
+        System.out.println(pathSum(node,10));
     }
 }
