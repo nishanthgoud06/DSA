@@ -116,6 +116,21 @@ public class trees {
         diametercount(node);
         return max;
     }
+    //create a binary tree for the sorted array
+    public static trees building(int[] a,int low,int high){
+        if(low>high)
+            return null;
+        int mid=low+(high-low)/2;
+        trees n=new trees(a[mid]);
+        n.left=building(a,low,mid-1);
+        n.right=building(a,mid+1,high);
+        return n;
+    }
+    public static trees build(int[] a){
+        if(a.length==0)
+            return null;
+        return building(a,0,a.length-1);
+    }
     public static void main(String[] args) {
         trees n=new trees(4);
         n.left=new trees(3);
