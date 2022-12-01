@@ -797,15 +797,74 @@ public static String[] unCommonWord(String s1,String s2){
         minDiff(node.right);
         return min;
     }
+    //Given a binary search tree, return its mode (you may assume the answer is unique). If the tree is empty,
+    // return -1. Note: the mode is the most frequently occurring value in the tree.
+    //for the first approach we are going to use the hashmap the time complexity is O(n) and the space complexity is O(n)
+    public static void check(BST node,HashMap<Integer,Integer> hm,int[] max){
+        if(node == null)
+            return;
+        check(node.left,hm,max);
+        hm.put(node.val,hm.getOrDefault(node.val,0)+1);
+        max[0]=Math.max(max[0],hm.get(node.val));
+        check(node.right,hm,max);
+    }
+    public static List<Integer> modeH(BST node){
+        int[] a=new int[1];
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        check(node,hm,a);
+        List<Integer> result=new ArrayList<>();
+        for(Map.Entry<Integer,Integer> check:hm.entrySet()){
+            if(a[0]==check.getValue()){
+                result.add(check.getKey());
+            }
+        }
+        return result;
+    }
+    //now we are going to the approach where the memory is linear
+    Integer prev1=null;
+    static int max=1;
+    static int count=0;
+    public static void implement(BST node,List<Integer> coll){
+        if(node ==null)
+            return;
+        implement(node.left,coll);
+        if(prev!=null){
+            if(prev==node.val){
+                count++;
+            }else{
+                count=1;
+            }
+        }
+        if(count>max){
+            max=count;
+            coll.clear();
+            coll.add(node.val);
+        }else if(count==max){
+            coll.add(node.val);
+        }
+        prev=node.val;
+        implement(node.right,coll);
+    }
+    public static List<Integer> modeL(BST node){
+        List<Integer> coll=new ArrayList<>();
+        implement(node,coll);
+        return coll;
+    }
     public static void main(String[] args) {
-        BST n=new BST(4);
-        n.left=new BST(2);
-        n.left.left=new BST(1);
-        n.left.right=new BST(3);
-        n.right=new BST(6);
-        n.right.left=new BST(5);
-        n.right.right=new BST(7);
-        System.out.println(minDiff(n));
+        BST n=new BST(2);
+        n.left=new BST(1);
+        n.right=new BST(3);
+        n.left.right=new BST(2);
+        System.out.println(modeL(n));
+//        System.out.println(modeH(n));
+//        BST n=new BST(4);
+//        n.left=new BST(2);
+//        n.left.left=new BST(1);
+//        n.left.right=new BST(3);
+//        n.right=new BST(6);
+//        n.right.left=new BST(5);
+//        n.right.right=new BST(7);
+//        System.out.println(minDiff(n));
 //        List<Integer> result=new LinkedList<>();
 //        conBtoLl(n,result);
 //        System.out.println(result);
