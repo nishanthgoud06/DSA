@@ -872,6 +872,61 @@ public static String[] unCommonWord(String s1,String s2){
         }
         return result;
     }
+    //Visible Values
+    //for the first approach we are going to use BST
+    public static List<Integer> printVisible(BST node){
+        List<Integer> result=new ArrayList<>();
+        if(node==null)
+            return result;
+        Queue<BST> q=new LinkedList<>();
+        q.offer(node);
+        while(!q.isEmpty()){
+            int size=q.size();
+            for(int i=0;i<size;i++) {
+                BST temp = q.poll();
+                if (i == 0)
+                    result.add(temp.val);
+                if (temp.left != null)
+                    q.add(temp.left);
+                if (temp.right != null)
+                    q.add(temp.right);
+            }
+        }
+            return result;
+    }
+    //now we are going to use the recursion method which can also be called as depth first search
+    static int maxi=0;
+    public static void p(BST n,int level){
+        if(n==null)
+            return;
+        if(maxi<level){
+            System.out.print(n.val+" ");
+            maxi=level;
+        }
+        p(n.left,level+1);
+        p(n.right,level+1);
+    }
+    public static void pr(BST n){
+        maxi=0;
+        p(n,1);
+    }
+    //bottoms up
+    //naive approach
+    //the approach we are going to use is dfs
+    public static void doingBottomup(List<List<Integer>> result,BST node,int level){
+        if(node==null)
+            return;
+        if(level>=result.size())
+            result.add(0,new ArrayList<>());
+        doingBottomup(result,node.left,level+1);
+        doingBottomup(result,node.right,level+1);
+        result.get(result.size()-level-1).add(node.val);
+    }
+    public static List<List<Integer>> bottomUp(BST node){
+        List<List<Integer>> result=new ArrayList<>();
+        doingBottomup(result,node,0);
+        return result;
+    }
     public static void main(String[] args) {
         BST n=new BST(1);
         n.left=new BST(5);
@@ -879,7 +934,9 @@ public static String[] unCommonWord(String s1,String s2){
         n.left.right=new BST(3);
         n.right=new BST(6);
         n.right.right=new BST(7);
-        System.out.println(maxValue(n));
+        System.out.println(bottomUp(n));
+//        pr(n);
+//        System.out.println(maxValue(n));
 //        BST n=new BST(2);
 //        n.left=new BST(1);
 //        n.right=new BST(3);
