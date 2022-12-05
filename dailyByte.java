@@ -927,6 +927,33 @@ public static String[] unCommonWord(String s1,String s2){
         doingBottomup(result,node,0);
         return result;
     }
+    //now we are goinf to do the zigzag traversal
+    public static void zigZag(BST n,List<List<Integer>> result,int level){
+        if(n == null)
+            return;
+        Queue<BST> q=new LinkedList<>();
+        q.offer(n);
+        while(!q.isEmpty()){
+            int size=q.size();
+            List<Integer> temp=new ArrayList<>();
+            for(int i=0;i<size;i++){
+                BST ni=q.poll();
+                if(level%2==0){
+                    temp.add(ni.val);
+                }else{
+                    temp.add(0,ni.val);
+                }
+                if(ni.left!=null){
+                    q.offer(ni.left);
+                }
+                if(ni.right!=null){
+                    q.offer(ni.right);
+                }
+            }
+            result.add(temp);
+            level++;
+        }
+    }
     public static void main(String[] args) {
         BST n=new BST(1);
         n.left=new BST(5);
