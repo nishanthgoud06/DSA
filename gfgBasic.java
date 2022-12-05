@@ -107,6 +107,7 @@ public class gfgBasic {
             next=null;
         }
     }
+    //to check whether a binary search tree is balanced or not
     //to check wetaher the node is Circular or not
     public static boolean checlCir(Node test){
         Node temp=test;

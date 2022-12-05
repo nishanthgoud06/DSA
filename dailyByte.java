@@ -954,14 +954,60 @@ public static String[] unCommonWord(String s1,String s2){
             level++;
         }
     }
+    //Gather N-ary Tree Levels
+    //Given an n-ary tree, return its level order traversal.
+    //Note: an n-ary tree is a tree in which each node has no more than N children.
+    static class treeNode{
+        int val;
+        List<treeNode> child;
+        public treeNode(int val){
+            this.val=val;
+            child=new ArrayList<>();
+        }
+    }
+    //we are going to perform bst for finding the node at each level
+    public static List<List<Integer>> levelOrder(treeNode root) {
+        List<List<Integer>> result=new ArrayList<>();
+        if(root==null)
+            return result;
+        Queue<treeNode> queue=new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            List<Integer> a=new ArrayList<>();
+            for(int i=0;i<size;i++){
+                treeNode temp=queue.poll();
+                a.add(temp.val);
+                for(treeNode ab:temp.child){
+                    queue.add(ab);
+                }
+            }
+            result.add(a);
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        BST n=new BST(1);
-        n.left=new BST(5);
-        n.left.left=new BST(5);
-        n.left.right=new BST(3);
-        n.right=new BST(6);
-        n.right.right=new BST(7);
-        System.out.println(bottomUp(n));
+        treeNode n=new treeNode(1);
+        treeNode n1=new treeNode(3);
+        treeNode n2=new treeNode(2);
+        treeNode n3=new treeNode(4);
+        treeNode n4=new treeNode(5);
+        treeNode n5=new treeNode(6);
+
+        n.child.add(n1);
+        n.child.add(n2);
+        n.child.add(n3);
+        System.out.println(levelOrder(n));
+//        BST n=new BST(1);
+//        n.left=new BST(5);
+//        n.left.left=new BST(5);
+//        n.left.right=new BST(3);
+//        n.right=new BST(6);
+//        n.right.right=new BST(7);
+//        List<List<Integer>> a=new ArrayList<>();
+//        zigZag(n,a,0);
+//        System.out.println(a);
+//        System.out.println(bottomUp(n));
 //        pr(n);
 //        System.out.println(maxValue(n));
 //        BST n=new BST(2);
