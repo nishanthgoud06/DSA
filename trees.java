@@ -1,6 +1,10 @@
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
+import java.util.*;
 
 public class trees {
     int val;
@@ -131,16 +135,41 @@ public class trees {
             return null;
         return building(a,0,a.length-1);
     }
+    //binary tree inorder traversal using stacks
+    public static List<Integer> inorder(trees n){
+        List<Integer> result=new ArrayList<>();
+        if(n==null)
+            return result;
+        Stack<trees> stack=new Stack<>();
+        while(n!=null||!stack.isEmpty()){
+            while(n!=null){
+                stack.push(n);
+                n=n.left;
+            }
+            n=stack.pop();
+            result.add(n.val);
+            n=n.right;
+        }
+    return result;
+    }
     public static void main(String[] args) {
         trees n=new trees(4);
-        n.left=new trees(3);
+        n.left=new trees(2);
         n.left.left=new trees(1);
-        n.left.right=new trees(2);
+        n.left.right=new trees(3);
         n.right=new trees(7);
-        n.right.right=new trees(6);
-        System.out.println(level(n));
-        System.out.println(levelB(n));
-        System.out.println(depthI(n));
+        n.right.left=new trees(6);
+        n.right.right=new trees(8);
+        System.out.println(inorder(n));
+//        trees n=new trees(4);
+//        n.left=new trees(3);
+//        n.left.left=new trees(1);
+//        n.left.right=new trees(2);
+//        n.right=new trees(7);
+//        n.right.right=new trees(6);
+//        System.out.println(level(n));
+//        System.out.println(levelB(n));
+//        System.out.println(depthI(n));
 //        inOrder(n);
 //        System.out.println();
 //        trees result1=conD(n);
