@@ -138,13 +138,42 @@ public class BinarySeachTree {
             return node.val==target;
         return pathSum(node.left,target- node.val)||pathSum(node.right,target- node.val);
     }
+    //print the right side view of the binary tree
+    //for the first approach we are going to use bfs
+    public static List<Integer> rightView(BinarySeachTree node){
+        List<Integer> result=new ArrayList<>();
+        if(node ==null)
+            return result;
+        Queue<BinarySeachTree> temp=new LinkedList<>();
+        temp.offer(node);
+        while(!temp.isEmpty()){
+            int size=temp.size();
+            for(int i=0;i<size;i++){
+                BinarySeachTree q= temp.poll();
+                if(i==size-1){
+                    result.add(q.val);
+                }
+                if(q.left!=null)
+                    temp.offer(q.left);
+                if(q.right!=null)
+                    temp.offer(q.right);
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        BinarySeachTree node=new BinarySeachTree(1);
-        node.left=new BinarySeachTree(2);
-        node.left.left=new BinarySeachTree(4);
-        node.left.right=new BinarySeachTree(5);
-        node.right=new BinarySeachTree(3);
-        node.right.right=new BinarySeachTree(6);
+        BinarySeachTree n=new BinarySeachTree(1);
+        n.left=new BinarySeachTree(2);
+        n.left.right=new BinarySeachTree(5);
+        n.right=new BinarySeachTree(3);
+        n.right.right=new BinarySeachTree(4);
+        System.out.println(rightView(n));
+//        BinarySeachTree node=new BinarySeachTree(1);
+//        node.left=new BinarySeachTree(2);
+//        node.left.left=new BinarySeachTree(4);
+//        node.left.right=new BinarySeachTree(5);
+//        node.right=new BinarySeachTree(3);
+//        node.right.right=new BinarySeachTree(6);
 //        System.out.println(dfs(node));
 //        System.out.println(dfsR(node,new ArrayList<>()));
 //        System.out.println(bfs(node));
@@ -154,6 +183,6 @@ public class BinarySeachTree {
 //        System.out.println(treesumI(node));
 //        System.out.println(minV(node));
 //        System.out.println(maxSum(node));
-        System.out.println(pathSum(node,10));
+//        System.out.println(pathSum(node,10));
     }
 }

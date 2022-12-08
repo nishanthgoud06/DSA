@@ -202,12 +202,46 @@ public class gfgBasic {
         }
         return true;
     }
+    //now we are going to check whether a subtree is part of a tree;
+    public static boolean isPart(node n1,node n2){
+        if(n1==null)
+            return false;
+        if(n1.val==n2.val){
+            if(ispartornot(n1,n2))
+                return true;
+        }
+        return isPart(n1.left,n2)||isPart(n1.right,n2);
+    }
+    public static boolean ispartornot(node n1,node n2){
+        if(n1==null || n2==null)
+            return n1==null&&n2==null;
+        return n1.val==n2.val&&ispartornot(n1.left,n2.left)&&ispartornot(n1.right,n2.right);
+    }
+    //here we are going to return the total no of good values
+    public static int good(node n){
+        return values(n,-999);
+    }
+    public static int values(node n,int max){
+        if(n==null)
+            return 0;
+        int result= n.val>max?1:0;
+        result+=values(n.left,Math.max(n.val,max));
+        result+=values(n.right,Math.max(n.val,max));
+        return result;
+    }
     public static void main(String[] args) {
-        node n=new node(3);
-        n.left=new node(9);
-        n.right=new node(20);
-        n.right.right=new node(1);
-        n.right.right.right=new node(5);
+            node n=new node(3);
+            n.left=new node(1);
+            n.left.left=new node(3);
+            n.right=new node(4);
+            n.right.left=new node(1);
+            n.right.right=new node(5);
+        System.out.println(good(n));
+//        node n=new node(3);
+//        n.left=new node(9);
+//        n.right=new node(20);
+//        n.right.right=new node(1);
+//        n.right.right.right=new node(5);
 //        System.out.println(isBal(n));
 //        System.out.println(Dupli(new int[]{1,2,3,4,5,1}));
 //        System.out.println(median(new int[] {56,67,30,79}));
