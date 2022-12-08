@@ -161,6 +161,19 @@ public class BinarySeachTree {
         }
         return result;
     }
+//validate whether a given node is a proper binary search tree or
+// nor whether all the nodes are following all the conditions are not
+    public static boolean validate(BinarySeachTree n ,Integer min,Integer max){
+        if(n==null)
+            return true;
+        else if(min!=null&&n.val<min||max!=null&&n.val>max)
+            return false;
+        else
+            return validate(n.left,min,n.val)&&validate(n.right,n.val,max);
+    }
+    public static boolean isBinarySearchTree(BinarySeachTree node){
+        return validate(node,null,null);
+    }
     public static void main(String[] args) {
         BinarySeachTree n=new BinarySeachTree(1);
         n.left=new BinarySeachTree(2);
