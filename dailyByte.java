@@ -986,18 +986,71 @@ public static String[] unCommonWord(String s1,String s2){
         }
         return result;
     }
+    //we need to print all possible way a root can reach to the leaf
+    public static List<String> pri(BST node){
+        List<String> result=new ArrayList<>();
+        if(node==null)
+            return result;
+        dfs(node,"",result);
+        return result;
+    }
+    public static void dfs(BST node,String s,List<String> temp){
+        s+=node.val;
+        if(node.left==null&&node.right==null)
+            temp.add(s);
+        if(node.left!=null)
+            dfs(node.left,s+"->",temp);
+        if(node.right!=null)
+            dfs(node.right,s+"->",temp);
+    }
+    //another way to implement the above problem
+    public static List<String> chain(BST node){
+        List<String> result=new ArrayList<>();
+        if(node ==null)
+            return result;
+        String temp=Integer.toString(node.val);
+        if(node.left==null&&node.right==null)
+            result.add(temp);
+        if(node.left!=null)
+            dfsing(node.left,temp,result);
+        if(node.right!=null)
+            dfsing(node.right,temp,result);
+        return result;
+    }
+    public static void dfsing(BST node,String temp,List<String> result){
+        temp+="->"+node.val;
+        if(node.left==null&&node.right==null)
+            result.add(temp);
+        if(node.left!=null)
+            dfsing(node.left,temp,result);
+        if(node.right!=null)
+            dfsing(node.right,temp,result);
+    }
     public static void main(String[] args) {
-        treeNode n=new treeNode(1);
-        treeNode n1=new treeNode(3);
-        treeNode n2=new treeNode(2);
-        treeNode n3=new treeNode(4);
-        treeNode n4=new treeNode(5);
-        treeNode n5=new treeNode(6);
-
-        n.child.add(n1);
-        n.child.add(n2);
-        n.child.add(n3);
-        System.out.println(levelOrder(n));
+        BST node=new BST(1);
+        node.left=new BST(2);
+        node.right=new BST(3);
+        node.left.left=new BST(4);
+        node.left.right=new BST(5);
+        node.right.left=new BST(6);
+        node.right.right=new BST(7);
+        System.out.println(chain(node));
+//        BST node=new BST(1);
+//        node.left=new BST(2);
+//        node.right=new BST(3);
+//        node.left.right=new BST(5);
+//        System.out.println(pri(node));
+//        treeNode n=new treeNode(1);
+//        treeNode n1=new treeNode(3);
+//        treeNode n2=new treeNode(2);
+//        treeNode n3=new treeNode(4);
+//        treeNode n4=new treeNode(5);
+//        treeNode n5=new treeNode(6);
+//
+//        n.child.add(n1);
+//        n.child.add(n2);
+//        n.child.add(n3);
+//        System.out.println(levelOrder(n));
 //        BST n=new BST(1);
 //        n.left=new BST(5);
 //        n.left.left=new BST(5);
