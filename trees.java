@@ -152,15 +152,27 @@ public class trees {
         }
     return result;
     }
+    //construct a binary search tree from sorted array
+    public static trees bst(int[] arr,int low,int high){
+        if(low>high)
+            return null;
+        int mid=low+(high-low)/2;
+        trees node=new trees(arr[mid]);
+        node.left=bst(arr,low,mid-1);
+        node.right=bst(arr,mid+1,high);
+        return node;
+    }
     public static void main(String[] args) {
-        trees n=new trees(4);
-        n.left=new trees(2);
-        n.left.left=new trees(1);
-        n.left.right=new trees(3);
-        n.right=new trees(7);
-        n.right.left=new trees(6);
-        n.right.right=new trees(8);
-        System.out.println(inorder(n));
+        trees n=bst(new int[]{1,2,3,4,5},0,4);
+        inOrder(n);
+//        trees n=new trees(4);
+//        n.left=new trees(2);
+//        n.left.left=new trees(1);
+//        n.left.right=new trees(3);
+//        n.right=new trees(7);
+//        n.right.left=new trees(6);
+//        n.right.right=new trees(8);
+//        System.out.println(inorder(n));
 //        trees n=new trees(4);
 //        n.left=new trees(3);
 //        n.left.left=new trees(1);

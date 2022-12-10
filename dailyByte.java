@@ -1026,15 +1026,40 @@ public static String[] unCommonWord(String s1,String s2){
         if(node.right!=null)
             dfsing(node.right,temp,result);
     }
+    //Root to Leaf Path Sum
+    //Given a binary tree and a target, return whether or not there exists a root to leaf path
+    // such that all values along the path sum to the target.
+    public static String LeafPath(BST n,int target){
+        if(n==null)
+            return null;
+        HashMap<Integer,String>hm=new HashMap<>();
+        findingPath(n,"",0,hm);
+        if(hm.containsKey(target))
+            return hm.get(target);
+        else
+            return "can't find";
+    }
+    static void findingPath(BST n,String str,int value,HashMap<Integer,String> hm){
+        value+=n.val;
+        str+=n.val;
+        if(n.left==null&&n.right==null)
+            hm.put(value,str);
+        if(n.left!=null)
+            findingPath(n.left,str+"->",value,hm);
+        if(n.right!=null)
+            findingPath(n.right,str+"->",value,hm);
+
+    }
     public static void main(String[] args) {
-        BST node=new BST(1);
-        node.left=new BST(2);
-        node.right=new BST(3);
-        node.left.left=new BST(4);
-        node.left.right=new BST(5);
-        node.right.left=new BST(6);
-        node.right.right=new BST(7);
-        System.out.println(chain(node));
+        BST node=new BST(104);
+        node.left=new BST(39);
+        node.right=new BST(31);
+        node.left.left=new BST(32);
+        node.left.right=new BST(1);
+        node.right.left=new BST(9);
+        node.right.right=new BST(10);
+        System.out.println(LeafPath(node,175));
+//        System.out.println(chain(node));
 //        BST node=new BST(1);
 //        node.left=new BST(2);
 //        node.right=new BST(3);

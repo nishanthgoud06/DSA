@@ -174,13 +174,48 @@ public class BinarySeachTree {
     public static boolean isBinarySearchTree(BinarySeachTree node){
         return validate(node,null,null);
     }
+    //now we are going to print the inorder traversal of binary search tree
+    public static List<Integer> inOrder(BinarySeachTree node){
+        List<Integer> result=new ArrayList<>();
+        Stack<BinarySeachTree> stack=new Stack<>();
+        while(!stack.isEmpty()||node!=null){
+            while(node!=null){
+                stack.push(node);
+                node=node.left;
+            }
+            node=stack.pop();
+            result.add(node.val);
+            node=node.right;
+        }
+        return result;
+    }
+    //now we are going to execute the program where we are going to print the
+    // KTH minimum element we are going to pass the arguments node and the postiton of number which we want
+    public static int KthSmallest(BinarySeachTree node,int position){
+        Stack<BinarySeachTree> stack=new Stack<>();
+        while(!stack.isEmpty()||node!=null){
+            while(node!=null){
+                stack.push(node);
+                node=node.left;
+            }
+            node=stack.pop();
+            if(--position==0)
+                break;
+            node=node.right;
+        }
+        return node.val;
+    }
     public static void main(String[] args) {
-        BinarySeachTree n=new BinarySeachTree(1);
+        BinarySeachTree n=new BinarySeachTree(4);
         n.left=new BinarySeachTree(2);
-        n.left.right=new BinarySeachTree(5);
-        n.right=new BinarySeachTree(3);
+        n.left.left=new BinarySeachTree(1);
+        n.left.right=new BinarySeachTree(3);
+        n.right=new BinarySeachTree(7);
+        n.right.left=new BinarySeachTree(6);
         n.right.right=new BinarySeachTree(4);
-        System.out.println(rightView(n));
+        System.out.println(KthSmallest(n,4));
+//        System.out.println(inOrder(n));
+//        System.out.println(rightView(n));
 //        BinarySeachTree node=new BinarySeachTree(1);
 //        node.left=new BinarySeachTree(2);
 //        node.left.left=new BinarySeachTree(4);
