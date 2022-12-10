@@ -1050,15 +1050,31 @@ public static String[] unCommonWord(String s1,String s2){
             findingPath(n.right,str+"->",value,hm);
 
     }
+    //checking whether a tree is valid binary tree or not
+    public static boolean isValid(BST n){
+
+        return ihelper(n,null,null);
+    }
+    public static boolean ihelper(BST node,Integer min,Integer max){
+        if(node==null)
+            return true;
+        if(min!=null&&node.val<min||max!=null&&node.val>max)
+            return false;
+        return ihelper(node.left,0,node.val)||ihelper(node.right,node.val,0);
+    }
     public static void main(String[] args) {
-        BST node=new BST(104);
-        node.left=new BST(39);
-        node.right=new BST(31);
-        node.left.left=new BST(32);
-        node.left.right=new BST(1);
-        node.right.left=new BST(9);
-        node.right.right=new BST(10);
-        System.out.println(LeafPath(node,175));
+//        BST node=new BST(104);
+//        node.left=new BST(39);
+//        node.right=new BST(31);
+//        node.left.left=new BST(32);
+//        node.left.right=new BST(1);
+//        node.right.left=new BST(9);
+//        node.right.right=new BST(10);
+        BST node=new BST(2);
+        node.left=new BST(1);
+        node.right=new BST(3);
+        System.out.println(isValid(node));
+//        System.out.println(LeafPath(node,175));
 //        System.out.println(chain(node));
 //        BST node=new BST(1);
 //        node.left=new BST(2);
