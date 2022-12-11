@@ -66,7 +66,59 @@ public class Graphs {
             }
         }
     }
-
+    //copy graph here we are copying the graph
+    static class graph{
+        int val;
+        List<graph> neighbours;
+        public graph(){
+            this.val=0;
+            neighbours=new ArrayList<graph>();
+        }
+        public graph(int val){
+            this.val=val;
+            neighbours=new ArrayList<graph>();
+        }
+        public graph(int val,ArrayList<graph> neighbours){
+            this.val=val;
+            this.neighbours=neighbours;
+        }
+    }
+    //for the first approach we are going to use hashmap
+    static HashMap<Integer,graph> hm=new HashMap<>();
+    public static graph copy(graph node){
+        if(node==null)
+            return null;
+        if(hm.containsKey(node.val))
+            return hm.get(node.val);
+        graph g=new graph(node.val,new ArrayList<graph>());
+        hm.put(node.val,g);
+        for(graph n:node.neighbours){
+            g.neighbours.add(copy(n));
+        }
+        return g;
+    }
+    //the second approach we are going to use the helper function to use the dfs
+    public static graph copied(graph node){
+        if(node==null)
+            return null;
+        graph[] memory=new graph[100];
+        Arrays.fill(memory,null);
+        graph copy=new graph(node.val);
+        helper(node,memory,copy);
+        return copy;
+    }
+    public static void helper(graph node,graph[] memory,graph copy){
+        memory[copy.val]=copy;
+        for(graph g:node.neighbours){
+            if(memory[g.val]==null){
+                graph gh=new graph(g.val);
+                copy.neighbours.add(gh);
+                helper(g,memory,copy);
+            }else{
+                copy.neighbours.add(memory[g.val]);
+            }
+        }
+    }
     public static void main(String[] args) {
         char[][]  grid = {
                 {'1','1','1','1','0'},
