@@ -1050,15 +1050,46 @@ public static String[] unCommonWord(String s1,String s2){
             findingPath(n.right,str+"->",value,hm);
 
     }
+    //checking whether a tree is valid binary tree or not
+    public static boolean isValid(BST n){
+
+        return ihelper(n,null,null);
+    }
+    public static boolean ihelper(BST node,Integer min,Integer max){
+        if(node==null)
+            return true;
+        if(min!=null&&node.val<min||max!=null&&node.val>max)
+            return false;
+        return ihelper(node.left,0,node.val)||ihelper(node.right,node.val,0);
+    }
+    //construct a binary tree from preorder traversal array list
+    static int count_of_the_list=0;
+    public static BST constrcutTree(int[] arr){
+        return doingtree(arr,Integer.MAX_VALUE);
+    }
+    public static BST doingtree(int[] arr,Integer max){
+        if(count_of_the_list==arr.length||arr[count_of_the_list]>max)
+            return null;
+        BST node=new BST(arr[count_of_the_list++]);
+        node.left=doingtree(arr,node.val);
+        node.right=doingtree(arr,max);
+        return node;
+    }
     public static void main(String[] args) {
-        BST node=new BST(104);
-        node.left=new BST(39);
-        node.right=new BST(31);
-        node.left.left=new BST(32);
-        node.left.right=new BST(1);
-        node.right.left=new BST(9);
-        node.right.right=new BST(10);
-        System.out.println(LeafPath(node,175));
+        int[] arr={8,5,1,7,10,12};
+        System.out.println(constrcutTree(arr).toString());
+//        BST node=new BST(104);
+//        node.left=new BST(39);
+//        node.right=new BST(31);
+//        node.left.left=new BST(32);
+//        node.left.right=new BST(1);
+//        node.right.left=new BST(9);
+//        node.right.right=new BST(10);
+//        BST node=new BST(2);
+//        node.left=new BST(1);
+//        node.right=new BST(3);
+//        System.out.println(isValid(node));
+//        System.out.println(LeafPath(node,175));
 //        System.out.println(chain(node));
 //        BST node=new BST(1);
 //        node.left=new BST(2);
