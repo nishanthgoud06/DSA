@@ -119,13 +119,47 @@ public class Graphs {
             }
         }
     }
+    //695. Max Area of Island
+    //You are given an m x n binary matrix grid. An island is a group of 1's (representing land) connected
+    // 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.
+    //The area of an island is the number of cells with a value 1 in the island.
+    //Return the maximum area of an island in grid. If there is no island, return 0.
+    public static int countArea(int[][] island,int i,int j){
+        if(i>=0&&i<island.length&&j>=0&&j<island[0].length&&island[i][j]==1){
+            island[i][j]=0;
+            return 1+countArea(island,i+1,j)+countArea(island,i-1,j)+countArea(island,i,j+1)+countArea(island,i,j-1);
+        }
+        return 0;
+    }
+    public static int maxArea(int[][] island){
+        int max=0;
+        if(island==null||island.length==0)
+            return 0;
+        for(int i=0;i<island.length;i++){
+            for(int j=0;j<island[0].length;j++){
+                if(island[i][j]==1){
+                    max=Math.max(max,countArea(island,i,j));
+                }
+            }
+        }
+        return max;
+    }
     public static void main(String[] args) {
-        char[][]  grid = {
-                {'1','1','1','1','0'},
-                {'1','1','0','1','0'},
-                {'1','1','0','0','0'},
-                {'0','0','0','0','0'}};
-//         System.out.println(island(grid));
-        System.out.println(numIslands(grid));
+        int[][] grid = {{0,0,1,0,0,0,0,1,0,0,0,0,0},
+                        {0,0,0,0,0,0,0,1,1,1,0,0,0},
+                        {0,1,1,0,1,0,0,0,0,0,0,0,0},
+                        {0,1,0,0,1,1,0,0,1,0,1,0,0},
+                        {0,1,0,0,1,1,0,0,1,1,1,0,0},
+                        {0,0,0,0,0,0,0,0,0,0,1,0,0},
+                        {0,0,0,0,0,0,0,1,1,1,0,0,0},
+                        {0,0,0,0,0,0,0,1,1,0,0,0,0}};
+        System.out.println(maxArea(grid));
+//        char[][]  grid = {
+//                {'1','1','1','1','0'},
+//                {'1','1','0','1','0'},
+//                {'1','1','0','0','0'},
+//                {'0','0','0','0','0'}};
+////         System.out.println(island(grid));
+//        System.out.println(numIslands(grid));
     }
 }
