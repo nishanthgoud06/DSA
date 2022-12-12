@@ -1075,6 +1075,20 @@ public static String[] unCommonWord(String s1,String s2){
         node.right=doingtree(arr,max);
         return node;
     }
+    //Symmetrical Tree
+    //Given a binary tree, return whether or not it forms a reflection across its center (i.e. a line drawn straight down starting from the root).
+    //Note: a reflection is when an image, flipped across a specified line, forms the same image.
+    public static boolean isSymmetrical(BST node){
+        return node==null||checkingIS(node.left,node.right);
+    }
+    public static boolean checkingIS(BST node1,BST node2){
+        if(node1==null||node2==null)
+            return node1==node2;
+        if(node1.val!=node2.val)
+            return false;
+        return checkingIS(node1.left,node2.right) &&checking(node1.right,node2.left);
+    }
+    
     public static void main(String[] args) {
         int[] arr={8,5,1,7,10,12};
         System.out.println(constrcutTree(arr).toString());
