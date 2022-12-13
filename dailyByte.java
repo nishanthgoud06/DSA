@@ -1126,6 +1126,25 @@ public static String[] unCommonWord(String s1,String s2){
         }
         return true;
     }
+    //Same Leaves
+    //Given two binary trees, return whether or not both trees have the same leaf sequence.
+    // Two trees have the same leaf sequence if both trees’ leaves read the same from left to right.
+    public static List<Integer> doit(BST node,List<Integer> result){
+        if(node==null)
+            return result;
+        if(node.left==null && node.right==null)
+            result.add(node.val);
+        doit(node.left,result);
+        doit(node.right,result);
+        return result;
+    }
+    public static boolean checkLeaves(BST root1,BST root2){
+        if(root1==null&&root2==null)
+            return true;
+        List<Integer> result1=doit(root1,new ArrayList<>());
+        List<Integer> result2=doit(root2,new ArrayList<>());
+        return result1.equals(result2);
+    }
     public static void main(String[] args) {
         BST node=new BST(1);
         node.left=new BST(2);
