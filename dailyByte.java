@@ -1075,9 +1075,95 @@ public static String[] unCommonWord(String s1,String s2){
         node.right=doingtree(arr,max);
         return node;
     }
+    //Symmetrical Tree
+    //Given a binary tree, return whether or not it forms a reflection across its center (i.e. a line drawn straight down starting from the root).
+    //Note: a reflection is when an image, flipped across a specified line, forms the same image.
+    public static boolean isSymmetrical(BST node){
+        return node==null||checkingIS(node.left,node.right);
+    }
+    public static boolean checkingIS(BST node1,BST node2){
+        if(node1==null||node2==null)
+            return node1==node2;
+        if(node1.val!=node2.val)
+            return false;
+        return checkingIS(node1.left,node2.right) &&checkingIS(node1.right,node2.left);
+    }
+    //for the second approach we are going to use the stack
+    public static boolean checkSYS(BST node){
+        if(node ==null)
+            return true;
+        Stack<BST> stack=new Stack<>();
+        if(node.left!=null){
+            if(node.right==null)
+                return false;
+            stack.push(node.left);
+            stack.push(node.right);
+        }else if(node.right!=null)
+            return false;
+        while(!stack.isEmpty()){
+            if(stack.size()%2!=0)
+                return false;
+            BST right=stack.pop();
+            BST left=stack.pop();
+            if(left.val!=right.val)
+                return false;
+            if(left.left!=null){
+                if(right.right==null)
+                    return false;
+                stack.push(left.left);
+                stack.push(right.right);
+            }else if(right.right!=null){
+                return false;
+            }
+            if(left.right!=null){
+                if(right.left==null)
+                    return false;
+                stack.push(left.right);
+                stack.push(right.left);
+            }else if(right.left!=null){
+                return false;
+            }
+        }
+        return true;
+    }
+    //Same Leaves
+    //Given two binary trees, return whether or not both trees have the same leaf sequence.
+    // Two trees have the same leaf sequence if both trees’ leaves read the same from left to right.
+    public static List<Integer> doit(BST node,List<Integer> result){
+        if(node==null)
+            return result;
+        if(node.left==null && node.right==null)
+            result.add(node.val);
+        doit(node.left,result);
+        doit(node.right,result);
+        return result;
+    }
+    public static boolean checkLeaves(BST root1,BST root2){
+        if(root1==null&&root2==null)
+            return true;
+        List<Integer> result1=doit(root1,new ArrayList<>());
+        List<Integer> result2=doit(root2,new ArrayList<>());
+        return result1.equals(result2);
+    }
     public static void main(String[] args) {
-        int[] arr={8,5,1,7,10,12};
-        System.out.println(constrcutTree(arr).toString());
+        BST node=new BST(1);
+        node.left=new BST(2);
+        node.right=new BST(2);
+        node.left.left=new BST(3);
+        node.left.right=new BST(4);
+        node.right.left=new BST(4);
+        node.right.right=new BST(3);
+        BST node1=new BST(1);
+        node1.left=new BST(2);
+        node1.right=new BST(2);
+        node1.left.left=null;
+        node1.left.right=new BST(3);
+        node1.right.left=null;
+        node1.right.right=new BST(3);
+        System.out.println(checkSYS(node));
+        System.out.println(checkSYS(node1));
+//        int[] arr={8,5,1,7,10,12};
+//        System.out.println(constrcutTree(arr).toString());
 //        BST node=new BST(104);
 //        node.left=new BST(39);
 //        node.right=new BST(31);
