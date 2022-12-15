@@ -1180,19 +1180,77 @@ public static String[] unCommonWord(String s1,String s2){
                 }
             }
         }
-        
         return result;
     }
+    //String Permutations
+    // a string s consisting of only letters and digits, where we are allowed to transform any
+    // letter to uppercase or lowercase, return a list containing all possible permutations of the string.
+    public static boolean isprem(String s1,String s2){
+        if(s1.length()==0)
+            return true;
+        if(s2.length()==0||s1.length()>s2.length())
+            return false;
+        int[] a=new int[26];
+        int[] b=new int[26];
+        int limit1=s1.length();
+        int limit2=s2.length();
+        for(int i=0;i<limit1;i++){
+            a[s1.charAt(i)-'a']++;
+            b[s2.charAt(i)-'a']++;
+        }
+        if(Arrays.equals(a,b))
+            return true;
+        for(int i=limit1;i<limit2;i++){
+            b[s2.charAt(i-limit1)-'a']--;
+            b[s2.charAt(i)-'a']++;
+            if(Arrays.equals(a,b))
+                return true;
+        }
+        return false;
+    }
+    public static boolean prechecko(String s1,String s2){
+        if(s1.length()==0)
+            return true;
+        if(s2.length()==0||s1.length() >s2.length())
+            return false;
+        int[] array=new int[26];
+        int limit1=s1.length();
+        int limit2=s2.length();
+        for(int i=0;i<s1.length();i++){
+            array[s1.charAt(i)-'a']++;
+            array[s2.charAt(i)-'a']--;
+        }
+        if(allZero(array))
+            return true;
+        for(int i=limit1;i<limit2;i++){
+            array[s2.charAt(i)-'a']--;
+            array[s2.charAt(i-limit1)-'a']++;
+            if(allZero(array))
+                return true;
+        }
+        return false;
+    }
+    public static boolean allZero(int[] array){
+        for(int i=0;i<array.length;i++){
+            if(array[i]!=0)
+                return false;
+        }
+        return true;
+    }
     public static void main(String[] args) {
-        BST node=new BST(1);
-        node.left=new BST(2);
-        node.right=new BST(2);
-        node.left.left=new BST(3);
-        node.left.right=new BST(4);
-        node.right.left=new BST(4);
-        node.right.right=new BST(3);
-        System.out.println(sumOfLL(node));
-        System.out.println(LLsum(node));
+        String s1="ab";
+        String s2="eidbaooo";
+        System.out.println(isprem(s1,s2));
+        System.out.println(prechecko(s1,s2));
+//        BST node=new BST(1);
+//        node.left=new BST(2);
+//        node.right=new BST(2);
+//        node.left.left=new BST(3);
+//        node.left.right=new BST(4);
+//        node.right.left=new BST(4);
+//        node.right.right=new BST(3);
+//        System.out.println(sumOfLL(node));
+//        System.out.println(LLsum(node));
 //        BST node1=new BST(1);
 //        node1.left=new BST(2);
 //        node1.right=new BST(2);
