@@ -1145,6 +1145,44 @@ public static String[] unCommonWord(String s1,String s2){
         List<Integer> result2=doit(root2,new ArrayList<>());
         return result1.equals(result2);
     }
+    //for this program we are going to solve sum of left leaves of the bst
+    //the first approach is going to be a dfs using recursion
+    public static int sumOfLL(BST node){
+        return sumofll(node,false);
+    }
+    public static int sumofll(BST node,boolean status){
+        if(node == null)
+            return 0;
+        if(node.left==null&&node.right==null&&status==true){
+            return node.val;
+        }
+        return sumofll(node.left,true)+sumofll(node.right,false);
+    }
+    //the second method is also using dfs with recursion
+    public static int LLsum(BST node){
+        int result=0;
+        if(node==null)
+            return result;
+        Stack<BST> stack=new Stack<>();
+        stack.push(node);
+        while(!stack.isEmpty()){
+            BST temp=stack.pop();
+            if(temp.left!=null){
+                if(temp.left.left==null&&temp.left.right==null){
+                    result+=temp.left.val;
+                }else{
+                    stack.push(temp.left);
+                }
+            }
+            if(temp.right!=null){
+                if(temp.right.left!=null||temp.right.right!=null){
+                    stack.push(temp.right);
+                }
+            }
+        }
+        
+        return result;
+    }
     public static void main(String[] args) {
         BST node=new BST(1);
         node.left=new BST(2);
@@ -1153,15 +1191,17 @@ public static String[] unCommonWord(String s1,String s2){
         node.left.right=new BST(4);
         node.right.left=new BST(4);
         node.right.right=new BST(3);
-        BST node1=new BST(1);
-        node1.left=new BST(2);
-        node1.right=new BST(2);
-        node1.left.left=null;
-        node1.left.right=new BST(3);
-        node1.right.left=null;
-        node1.right.right=new BST(3);
-        System.out.println(checkSYS(node));
-        System.out.println(checkSYS(node1));
+        System.out.println(sumOfLL(node));
+        System.out.println(LLsum(node));
+//        BST node1=new BST(1);
+//        node1.left=new BST(2);
+//        node1.right=new BST(2);
+//        node1.left.left=null;
+//        node1.left.right=new BST(3);
+//        node1.right.left=null;
+//        node1.right.right=new BST(3);
+//        System.out.println(checkSYS(node));
+//        System.out.println(checkSYS(node1));
 //        int[] arr={8,5,1,7,10,12};
 //        System.out.println(constrcutTree(arr).toString());
 //        BST node=new BST(104);
