@@ -1237,11 +1237,61 @@ public static String[] unCommonWord(String s1,String s2){
         }
         return true;
     }
+    //784. Letter Case Permutation
+    //Given a string s, you can transform every letter individually to be lowercase or uppercase
+    //to create another string.
+    //Return a list of all possible strings we could create. Return the output in any order.
+    //the first approach is using bfs
+    public static List<String> letterCasePermutation(String s) {
+        if(s.length()==0)
+            return new LinkedList<>();
+        Queue<String> queue=new LinkedList<>();
+        queue.offer(s);
+        for(int i=0;i<s.length();i++){
+            int size=queue.size();
+            if(Character.isDigit(s.charAt(i)))
+                continue;
+            for(int j=0;j<size;j++){
+                String str=queue.poll();
+                char[] c=str.toCharArray();
+                c[i]=Character.toUpperCase(c[i]);
+                queue.offer(String.valueOf(c));
+                c[i]=Character.toLowerCase(c[i]);
+                queue.offer(String.valueOf(c));
+            }
+        }
+        return new LinkedList<>(queue);
+    }
+    //the second approach is using dfs
+    public static List<String> dfsLettercase(String s){
+        if(s.length()==0)
+            return new LinkedList<>();
+        List<String> str=new LinkedList<>();
+        dfsLetterCaseHelper(s.toCharArray(),str,0);
+        return str;
+    }
+    public static void dfsLetterCaseHelper(char[] c,List<String> str,int pos){
+        if(pos==c.length){
+            str.add(new String(c));
+            return ;
+        }
+        if(c[pos]>='0'&&c[pos]<='9'){
+            dfsLetterCaseHelper(c,str,pos+1);
+            return;
+        }
+        c[pos]=Character.toLowerCase(c[pos]);
+        dfsLetterCaseHelper(c,str,pos+1);
+        c[pos]=Character.toUpperCase(c[pos]);
+        dfsLetterCaseHelper(c,str,pos+1);
+    }
     public static void main(String[] args) {
-        String s1="ab";
-        String s2="eidbaooo";
-        System.out.println(isprem(s1,s2));
-        System.out.println(prechecko(s1,s2));
+        String s="a1b2";
+        System.out.println(dfsLettercase(s));
+        System.out.println(letterCasePermutation(s));
+//        String s1="ab";
+//        String s2="eidbaooo";
+//        System.out.println(isprem(s1,s2));
+//        System.out.println(prechecko(s1,s2));
 //        BST node=new BST(1);
 //        node.left=new BST(2);
 //        node.right=new BST(2);
