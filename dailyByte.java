@@ -1386,8 +1386,29 @@ public static String[] unCommonWord(String s1,String s2){
             current.remove(current.size()-1);
         }
     }
+//    Unique Combinations
+//Given a list of positive numbers without duplicates and a target number,
+// find all unique combinations of the numbers that sum to the target.
+    public static List<String> uniqueCom(int limit){
+        List<String> result=new ArrayList<>();
+        if(limit==0)
+            return result;
+        uniqueComHelper(limit,result,0,0,"");
+        return result;
+    }
+    public static void uniqueComHelper(int limit,List<String> result,int min,int max,String current){
+        if(current.length()==limit*2){
+            result.add(new String(current));
+            return;
+        }
+        if(min<limit)
+            uniqueComHelper(limit,result,min+1,max,current+"(");
+        if(max<min)
+            uniqueComHelper(limit,result,min,max+1,current+")");
+    }
     public static void main(String[] args) {
-        System.out.println(combini(new int[]{2,3,6,7},7));
+        System.out.println(uniqueCom(3));
+//        System.out.println(combini(new int[]{2,3,6,7},7));
 //        int[][] grid={{0,6,0},{5,8,7},{0,9,0}};
 //        System.out.println(goldRush(grid));
 //        char[][] board={{'c','a','t','f'},{'b','g','e','s'},{'i','t','a','e'}};
