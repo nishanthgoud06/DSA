@@ -1345,9 +1345,35 @@ public static String[] unCommonWord(String s1,String s2){
         board[row][col]=temp;
         return result;
     }
+    public static int goldRush(int[][] grid){
+        if(grid.length==0||grid==null)
+            return 0;
+        int[] max=new int[1];
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                goldRushHelper(grid,max,i,j,0);
+            }
+        }
+        return max[0];
+    }
+    public static void goldRushHelper(int[][] grid,int[] max,int i,int j,int current){
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]==0){
+            max[0]=Math.max(max[0],current);
+            return;
+        }
+        int temp=grid[i][j];
+        grid[i][j]=0;
+        goldRushHelper(grid,max,i-1,j,current+temp);
+        goldRushHelper(grid,max,i+1,j,current+temp);
+        goldRushHelper(grid,max,i,j-1,current+temp);
+        goldRushHelper(grid,max,i,j+1,current+temp);
+        grid[i][j]=temp;
+    }
     public static void main(String[] args) {
-        char[][] board={{'c','a','t','f'},{'b','g','e','s'},{'i','t','a','e'}};
-        System.out.println(exist(board,"uydiutiu6erurku"));
+        int[][] grid={{0,6,0},{5,8,7},{0,9,0}};
+        System.out.println(goldRush(grid));
+//        char[][] board={{'c','a','t','f'},{'b','g','e','s'},{'i','t','a','e'}};
+//        System.out.println(exist(board,"uydiutiu6erurku"));
 //        System.out.println(letterCombinations("23"));
 //        String s="a1b2";
 //        System.out.println(dfsLettercase(s));
