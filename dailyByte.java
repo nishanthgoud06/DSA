@@ -1284,6 +1284,38 @@ public static String[] unCommonWord(String s1,String s2){
         c[pos]=Character.toUpperCase(c[pos]);
         dfsLetterCaseHelper(c,str,pos+1);
     }
+    //Generate Text Messages
+    //This question is asked by Google. Given a string of digits, return all possible text messages
+    //those digits could send.
+    public static List<String> letterCombinations(String digits) {
+        List<String> result=new LinkedList<>();
+        if(digits.length()==0||digits==null)
+            return result;
+        String[] ans=new String[]{
+                "0",
+                "1",
+                "abc",
+                "def",
+                "ghi",
+                "jkl",
+                "mno",
+                "pqrs",
+                "tuv",
+                "wxyz"
+        };
+        helperforcall(digits,result,"",0,ans);
+        return result;
+    }
+    public static void helperforcall(String digits,List<String> result,String current,int index,String[] ans){
+        if(index==digits.length()){
+            result.add(current);
+            return;
+        }
+        String s=ans[digits.charAt(index)-'0'];
+        for(int i=0;i<s.length();i++){
+            helperforcall(digits,result,current+s.charAt(i),index+1,ans);
+        }
+    }
     public static void main(String[] args) {
         String s="a1b2";
         System.out.println(dfsLettercase(s));
