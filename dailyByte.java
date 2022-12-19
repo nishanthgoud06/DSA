@@ -1316,10 +1316,107 @@ public static String[] unCommonWord(String s1,String s2){
             helperforcall(digits,result,current+s.charAt(i),index+1,ans);
         }
     }
+    //Word Search
+//    Given a 2D board that represents a word search puzzle and a string word,
+//    return whether or the given word can be formed in the puzzle by only connecting cells
+//    horizontally and vertically.
+    public static boolean exist(char[][] board, String word) {
+        if(word.length()==0||word==null)
+            return true;
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                if(board[i][j]==word.charAt(0)&&existHelper(board,word,i,j,0))
+                    return true;
+            }
+        }
+        return false;
+    }
+    public static boolean existHelper(char[][] board,String word,int row,int col,int count){
+        if(count==word.length())
+            return true;
+        if(row<0||row>=board.length||col<0||col>=board[0].length||board[row][col]!=word.charAt(count))
+            return false;
+        char temp=board[row][col];
+        board[row][col]=' ';
+        boolean result=existHelper(board,word,row-1,col,count+1)||
+                existHelper(board,word,row+1,col,count+1)||
+                existHelper(board,word,row,col-1,count+1)||
+                existHelper(board,word,row,col+1,count+1);
+        board[row][col]=temp;
+        return result;
+    }
+    public static int goldRush(int[][] grid){
+        if(grid.length==0||grid==null)
+            return 0;
+        int[] max=new int[1];
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                goldRushHelper(grid,max,i,j,0);
+            }
+        }
+        return max[0];
+    }
+    public static void goldRushHelper(int[][] grid,int[] max,int i,int j,int current){
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]==0){
+            max[0]=Math.max(max[0],current);
+            return;
+        }
+        int temp=grid[i][j];
+        grid[i][j]=0;
+        goldRushHelper(grid,max,i-1,j,current+temp);
+        goldRushHelper(grid,max,i+1,j,current+temp);
+        goldRushHelper(grid,max,i,j-1,current+temp);
+        goldRushHelper(grid,max,i,j+1,current+temp);
+        grid[i][j]=temp;
+    }
+    //combination sum
+    public static List<List<Integer>> combini(int[] combi,int target){
+        List<List<Integer>> result=new ArrayList<>();
+        combiniHelper(combi,target,new ArrayList<>(),0,result);
+        return result;
+    }
+    public static void combiniHelper(int[] com,int target,List<Integer> current,int index,List<List<Integer>> result){
+        if(target<0)
+            return;
+        if(target==0)
+            result.add(new ArrayList<>(current));
+        for(int i=index;i<com.length;i++){
+            current.add(com[i]);
+            combiniHelper(com,target-com[i],current,i,result);
+            current.remove(current.size()-1);
+        }
+    }
+//    Unique Combinations
+//Given a list of positive numbers without duplicates and a target number,
+// find all unique combinations of the numbers that sum to the target.
+    public static List<String> uniqueCom(int limit){
+        List<String> result=new ArrayList<>();
+        if(limit==0)
+            return result;
+        uniqueComHelper(limit,result,0,0,"");
+        return result;
+    }
+    public static void uniqueComHelper(int limit,List<String> result,int min,int max,String current){
+        if(current.length()==limit*2){
+            result.add(new String(current));
+            return;
+        }
+        if(min<limit)
+            uniqueComHelper(limit,result,min+1,max,current+"(");
+        if(max<min)
+            uniqueComHelper(limit,result,min,max+1,current+")");
+    }
     public static void main(String[] args) {
-        String s="a1b2";
-        System.out.println(dfsLettercase(s));
-        System.out.println(letterCasePermutation(s));
+        System.out.println(uniqueCom(3));
+//        System.out.println(combini(new int[]{2,3,6,7},7));
+//        int[][] grid={{0,6,0},{5,8,7},{0,9,0}};
+//        System.out.println(goldRush(grid));
+//        char[][] board={{'c','a','t','f'},{'b','g','e','s'},{'i','t','a','e'}};
+//        System.out.println(exist(board,"uydiutiu6erurku"));
+//        System.out.println(letterCombinations("23"));
+//        String s="a1b2";
+//        System.out.println(dfsLettercase(s));
+//        System.out.println(letterCasePermutation(s));
 //        String s1="ab";
 //        String s2="eidbaooo";
 //        System.out.println(isprem(s1,s2));
