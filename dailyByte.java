@@ -1369,9 +1369,27 @@ public static String[] unCommonWord(String s1,String s2){
         goldRushHelper(grid,max,i,j+1,current+temp);
         grid[i][j]=temp;
     }
+    //combination sum
+    public static List<List<Integer>> combini(int[] combi,int target){
+        List<List<Integer>> result=new ArrayList<>();
+        combiniHelper(combi,target,new ArrayList<>(),0,result);
+        return result;
+    }
+    public static void combiniHelper(int[] com,int target,List<Integer> current,int index,List<List<Integer>> result){
+        if(target<0)
+            return;
+        if(target==0)
+            result.add(new ArrayList<>(current));
+        for(int i=index;i<com.length;i++){
+            current.add(com[i]);
+            combiniHelper(com,target-com[i],current,i,result);
+            current.remove(current.size()-1);
+        }
+    }
     public static void main(String[] args) {
-        int[][] grid={{0,6,0},{5,8,7},{0,9,0}};
-        System.out.println(goldRush(grid));
+        System.out.println(combini(new int[]{2,3,6,7},7));
+//        int[][] grid={{0,6,0},{5,8,7},{0,9,0}};
+//        System.out.println(goldRush(grid));
 //        char[][] board={{'c','a','t','f'},{'b','g','e','s'},{'i','t','a','e'}};
 //        System.out.println(exist(board,"uydiutiu6erurku"));
 //        System.out.println(letterCombinations("23"));
