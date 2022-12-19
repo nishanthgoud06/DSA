@@ -1316,10 +1316,42 @@ public static String[] unCommonWord(String s1,String s2){
             helperforcall(digits,result,current+s.charAt(i),index+1,ans);
         }
     }
+    //Word Search
+//    Given a 2D board that represents a word search puzzle and a string word,
+//    return whether or the given word can be formed in the puzzle by only connecting cells
+//    horizontally and vertically.
+    public static boolean exist(char[][] board, String word) {
+        if(word.length()==0||word==null)
+            return true;
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                if(board[i][j]==word.charAt(0)&&existHelper(board,word,i,j,0))
+                    return true;
+            }
+        }
+        return false;
+    }
+    public static boolean existHelper(char[][] board,String word,int row,int col,int count){
+        if(count==word.length())
+            return true;
+        if(row<0||row>=board.length||col<0||col>=board[0].length||board[row][col]!=word.charAt(count))
+            return false;
+        char temp=board[row][col];
+        board[row][col]=' ';
+        boolean result=existHelper(board,word,row-1,col,count+1)||
+                existHelper(board,word,row+1,col,count+1)||
+                existHelper(board,word,row,col-1,count+1)||
+                existHelper(board,word,row,col+1,count+1);
+        board[row][col]=temp;
+        return result;
+    }
     public static void main(String[] args) {
-        String s="a1b2";
-        System.out.println(dfsLettercase(s));
-        System.out.println(letterCasePermutation(s));
+        char[][] board={{'c','a','t','f'},{'b','g','e','s'},{'i','t','a','e'}};
+        System.out.println(exist(board,"uydiutiu6erurku"));
+//        System.out.println(letterCombinations("23"));
+//        String s="a1b2";
+//        System.out.println(dfsLettercase(s));
+//        System.out.println(letterCasePermutation(s));
 //        String s1="ab";
 //        String s2="eidbaooo";
 //        System.out.println(isprem(s1,s2));
