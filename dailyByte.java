@@ -1406,8 +1406,39 @@ public static String[] unCommonWord(String s1,String s2){
         if(max<min)
             uniqueComHelper(limit,result,min,max+1,current+")");
     }
+    //131. Palindrome Partitioning
+    //Given a string s, partition s such that every substring of the partition is a palindrome.
+    // Return all possible palindrome partitioning of s.
+    public static boolean isPali(String s,int low,int high){
+        while(low<high){
+            if(s.charAt(low++)!=s.charAt(high--))
+                return false;
+        }
+        return true;
+    }
+    public static List<List<String>> palidrome(String s){
+        List<List<String>> result=new ArrayList<>();
+        if(s.length()==0||s==null)
+            return result;
+        palindromeHelper(result,new ArrayList<>(),0,s);
+        return  result;
+    }
+    public static void palindromeHelper(List<List<String>> result,List<String> temp,int index,String target){
+        if(index==target.length()) {
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+        for(int i=index;i<target.length();i++){
+            if(isPali(target,index,i)){
+                temp.add(target.substring(index,i+1));
+                palindromeHelper(result,temp,i+1,target);
+                temp.remove(temp.size()-1);
+            }
+        }
+    }
     public static void main(String[] args) {
-        System.out.println(uniqueCom(3));
+        System.out.println(palidrome("abba"));
+//        System.out.println(uniqueCom(3));
 //        System.out.println(combini(new int[]{2,3,6,7},7));
 //        int[][] grid={{0,6,0},{5,8,7},{0,9,0}};
 //        System.out.println(goldRush(grid));
