@@ -151,8 +151,30 @@ public class backTracking {
             }
         }
     }
+    //Life Rafts
+    //A ship is about to set sail and you are responsible for its safety precautions.
+    // More specifically, you are responsible for determining how many life rafts to carry onboard.
+    // You are given a list of all the passengers’ weights and are informed that a single life raft
+    // has a maximum capacity of limit and can hold at most two people. Return the minimum number of life
+    // rafts you must take onboard to ensure the safety of all your passengers.
+    // Note: You may assume that a the maximum weight of any individual is at most limit.
+    public static int life(int[] weight,int limit){
+        int i=0,j=weight.length-1,result=0;
+        while(i<=j){
+            result++;
+            if(weight[i]+weight[j]<=limit){
+                i++;
+                j--;
+            }else{
+                j--;
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
-        System.out.println(palipart("aab"));
+        System.out.println(life(new int[]{3,3,5,4},5));
+//        System.out.println(palipart("aab"));
 //        System.out.println(combitwo(new int[]{10,1,2,7,6,1,5},8));
 //        System.out.println(combi(new int[]{2,3,6,7},7));
 //        System.out.println(ptwo(new int[]{1,1,2}));
