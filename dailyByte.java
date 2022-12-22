@@ -1436,8 +1436,30 @@ public static String[] unCommonWord(String s1,String s2){
             }
         }
     }
+    //Max Points
+    public static int maxpoints(int[] col,int energy){
+        int i=0;
+        int j=col.length-1;
+        int points=0;
+        int maxpoints=0;
+        Arrays.sort(col);
+        while(i<=j){
+            if(energy>=col[i]){
+                energy-=col[i++];
+                points++;
+                maxpoints=Math.max(points,maxpoints);
+            }else if(points>0){
+                energy+=col[j--];
+                points--;
+            }else{
+                return maxpoints;
+            }
+        }
+        return maxpoints;
+    }
     public static void main(String[] args) {
-        System.out.println(palidrome("abba"));
+        System.out.println(maxpoints(new int[]{100,200,300,400},200));
+//        System.out.println(palidrome("abba"));
 //        System.out.println(uniqueCom(3));
 //        System.out.println(combini(new int[]{2,3,6,7},7));
 //        int[][] grid={{0,6,0},{5,8,7},{0,9,0}};
@@ -1538,70 +1560,5 @@ public static String[] unCommonWord(String s1,String s2){
 //        System.out.println(s.peek());
 //        MovingAverage mv=n
 //        ew MovingAverage(3);
-//        mv.next(3);
-//        mv.next(5);
-//        mv.next(7);
-//        mv.next(6);
-//        combination("abc",0,2);
-//        removeAdj("foobar");
-//        RemoAj("foobar");
-//        System.out.println(Comparing("ab#c","ac"));
-//        System.out.println(comp("ab#c","ac"));
-//        Node n1=new Node(3);
-//        Node n2=new Node(7);
-//        print(adding(n1,n2));
-//        Node n=new Node(1);
-//        Node n1=new Node(2);
-//        Node n2=new Node(3);
-//        Node n3=new Node(4);
-//        Node n4=new Node(5);
-////        Node n5=new Node(6);
-////        Node n6=new Node(7);
-////        Node n7=new Node(8);
-//        n.next=n1;
-//        n1.next=n2;
-//        n2.next=n3;
-//        n3.next=n4;
-////        n4.next=n5;
-////        n5.next=n6;
-////        n6.next=n7;
-//        print(n);
-//        System.out.println("--------------------");
-//        reOrder(n);
-//        print(n);
-//        middleElement(n);
-//        indexLL(n);
-//        middleElement(n);
-//        removeValue(n,2);
-//        remmoveN(n,2);
-//        System.out.println(Spot1("coding"," ingcod"));
-//        System.out.println(Spot("coding"," ingcod"));
-//        Funique("abcabd");
-//        System.out.println(funique("developer")-'a');
-//        System.out.println(anagram("listen","silent"));
-//        System.out.println(jAS("abc","ac"));
-//        System.out.println(twoSum(new int[]{1, 3, 8, 2},11));
-//        String s1="foobof";
-//        int a=palind(s1);
-//        if(a==-1)
-//            System.out.println("its not a palindrome");
-//        else if(a==-2)
-//            System.out.println("its a palindrome");
-//        else
-//            System.out.println("its a palindrome by removing a character which is at "+ a);
-//        System.out.println(DaC(new String[] {"spot", "spotty", "spotted"},0,2));
-//        System.out.println(Prefix1(new String[] {"spot", "spotty", "spotted"}));
-//        System.out.println(Prefix(new String[] {"spot", "spotty", "spotted"}));
-//        System.out.println(Binary("11","11"));
-//        System.out.println(correction("coding"));
-//        String s="ruulldrd";
-//        System.out.println(route(s));
-//        String s="North Texas";
-//        System.out.println(s);
-//        rev(s);
-//        System.out.println();
-//        in(s);
-//        String s="levelsr";
-//        System.out.println(check(s));
     }
 }
