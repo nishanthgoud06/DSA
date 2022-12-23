@@ -1457,6 +1457,40 @@ public static String[] unCommonWord(String s1,String s2){
         }
         return maxpoints;
     }
+//    You are given a group of stones, all of which have a positive weight.
+//    At each turn, we select the heaviest two stones and smash them together.
+//    When smashing these two stones together, one of two things can happen:
+    public static int stones(int[] arr){
+        if(arr.length==1)
+            return arr[0];
+        if(arr.length==0)
+            return 0;
+        Arrays.sort(arr);
+        int i=0,j=arr.length-1,differ=0;
+        while(j>i){
+            arr[j-1]=arr[j]-arr[j-1];
+            Arrays.sort(arr);
+            j=j-1;
+        }
+        return arr[0];
+    }
+    //using priority queue
+    public static int syonespri(int[] a){
+        if(a.length==1)
+            return a[0];
+        if(a.length==0)
+            return 0;
+        PriorityQueue<Integer> pq=new PriorityQueue<>(Collections.reverseOrder());
+        for(int i:a){
+            pq.add(i);
+        }
+        while(pq.size()!=1){
+            int p=pq.poll();
+            int q=pq.poll();
+            pq.add(p-q);
+        }
+        return pq.peek();
+    }
     public static void main(String[] args) {
         System.out.println(maxpoints(new int[]{100,200,300,400},200));
 //        System.out.println(palidrome("abba"));
