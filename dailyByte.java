@@ -1491,6 +1491,58 @@ public static String[] unCommonWord(String s1,String s2){
         }
         return pq.peek();
     }
+//    860. Lemonade Change
+//At a lemonade stand, each lemonade costs $5. Customers are standing in a queue to buy from you and order one at
+// a time (in the order specified by bills). Each customer will only buy one lemonade and pay with either a $5, $10,
+// or $20 bill. You must provide the correct change to each customer so that the net transaction is that the customer
+// pays $5.
+    public static boolean lemChange(int[] lem){
+        int five=0,ten=0;
+        for(int i:lem){
+            if(i==5)
+                five++;
+            else if(i==10){
+                five--;
+                ten++;
+            }else if(ten>0){
+                ten--;
+                five--;
+            }else{
+                five-=3;
+            }
+            if(five<0){
+                return false;
+            }
+        }
+        return true;
+    }
+//Lunchtime
+public static int balancedMeals(String items) {
+    // Initialize a counter for the number of balanced meals
+    int count = 0;
+
+    // Initialize variables to keep track of the number of F's and D's seen so far
+    int fCount = 0;
+    int dCount = 0;
+
+    // Iterate through the items
+    for (int i = 0; i < items.length(); i++) {
+        // Update the count of F's and D's seen so far
+        if (items.charAt(i) == 'F') {
+            fCount++;
+        } else {
+            dCount++;
+        }
+
+        // If we have seen an equal number of F's and D's, increment the count of balanced meals
+        if (fCount == dCount) {
+            count++;
+        }
+    }
+
+    // Return the count of balanced meals
+    return count;
+}
     public static void main(String[] args) {
         System.out.println(maxpoints(new int[]{100,200,300,400},200));
 //        System.out.println(palidrome("abba"));
