@@ -1457,6 +1457,92 @@ public static String[] unCommonWord(String s1,String s2){
         }
         return maxpoints;
     }
+//    You are given a group of stones, all of which have a positive weight.
+//    At each turn, we select the heaviest two stones and smash them together.
+//    When smashing these two stones together, one of two things can happen:
+    public static int stones(int[] arr){
+        if(arr.length==1)
+            return arr[0];
+        if(arr.length==0)
+            return 0;
+        Arrays.sort(arr);
+        int i=0,j=arr.length-1,differ=0;
+        while(j>i){
+            arr[j-1]=arr[j]-arr[j-1];
+            Arrays.sort(arr);
+            j=j-1;
+        }
+        return arr[0];
+    }
+    //using priority queue
+    public static int syonespri(int[] a){
+        if(a.length==1)
+            return a[0];
+        if(a.length==0)
+            return 0;
+        PriorityQueue<Integer> pq=new PriorityQueue<>(Collections.reverseOrder());
+        for(int i:a){
+            pq.add(i);
+        }
+        while(pq.size()!=1){
+            int p=pq.poll();
+            int q=pq.poll();
+            pq.add(p-q);
+        }
+        return pq.peek();
+    }
+//    860. Lemonade Change
+//At a lemonade stand, each lemonade costs $5. Customers are standing in a queue to buy from you and order one at
+// a time (in the order specified by bills). Each customer will only buy one lemonade and pay with either a $5, $10,
+// or $20 bill. You must provide the correct change to each customer so that the net transaction is that the customer
+// pays $5.
+    public static boolean lemChange(int[] lem){
+        int five=0,ten=0;
+        for(int i:lem){
+            if(i==5)
+                five++;
+            else if(i==10){
+                five--;
+                ten++;
+            }else if(ten>0){
+                ten--;
+                five--;
+            }else{
+                five-=3;
+            }
+            if(five<0){
+                return false;
+            }
+        }
+        return true;
+    }
+//Lunchtime
+public static int balancedMeals(String items) {
+    // Initialize a counter for the number of balanced meals
+    int count = 0;
+
+    // Initialize variables to keep track of the number of F's and D's seen so far
+    int fCount = 0;
+    int dCount = 0;
+
+    // Iterate through the items
+    for (int i = 0; i < items.length(); i++) {
+        // Update the count of F's and D's seen so far
+        if (items.charAt(i) == 'F') {
+            fCount++;
+        } else {
+            dCount++;
+        }
+
+        // If we have seen an equal number of F's and D's, increment the count of balanced meals
+        if (fCount == dCount) {
+            count++;
+        }
+    }
+
+    // Return the count of balanced meals
+    return count;
+}
     public static void main(String[] args) {
         System.out.println(maxpoints(new int[]{100,200,300,400},200));
 //        System.out.println(palidrome("abba"));
