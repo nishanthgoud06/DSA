@@ -1543,8 +1543,26 @@ public static int balancedMeals(String items) {
     // Return the count of balanced meals
     return count;
 }
+//1029. Two City Scheduling
+//A company is planning to interview 2n people. Given the array costs where costs[i] = [aCosti, bCosti],
+// the cost of flying the ith person to city a is aCosti, and the cost of flying the ith person to city b is bCosti.
+//    Return the minimum cost to fly every person to a city such that exactly n people arrive in each city.
+public static int twoCitySchedCost(int[][] costs) {
+    int cost=0,j=0;
+    int total=0;
+    int[] value=new int[costs.length];
+    for(int[] i:costs){
+        total+=i[0];
+        value[j++]=i[1]-i[0];
+    }
+    Arrays.sort(value);
+    for(int i=0;i<costs.length/2;i++){
+        total+=value[i];
+    }
+    return total;
     public static void main(String[] args) {
-        System.out.println(maxpoints(new int[]{100,200,300,400},200));
+
+//        System.out.println(maxpoints(new int[]{100,200,300,400},200));
 //        System.out.println(palidrome("abba"));
 //        System.out.println(uniqueCom(3));
 //        System.out.println(combini(new int[]{2,3,6,7},7));
