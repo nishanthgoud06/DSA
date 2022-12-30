@@ -1548,18 +1548,38 @@ public static int balancedMeals(String items) {
 // the cost of flying the ith person to city a is aCosti, and the cost of flying the ith person to city b is bCosti.
 //    Return the minimum cost to fly every person to a city such that exactly n people arrive in each city.
 public static int twoCitySchedCost(int[][] costs) {
-    int cost=0,j=0;
-    int total=0;
-    int[] value=new int[costs.length];
-    for(int[] i:costs){
-        total+=i[0];
-        value[j++]=i[1]-i[0];
+    int cost = 0, j = 0;
+    int total = 0;
+    int[] value = new int[costs.length];
+    for (int[] i : costs) {
+        total += i[0];
+        value[j++] = i[1] - i[0];
     }
     Arrays.sort(value);
-    for(int i=0;i<costs.length/2;i++){
-        total+=value[i];
+    for (int i = 0; i < costs.length / 2; i++) {
+        total += value[i];
     }
     return total;
+}
+//
+//approach 1
+// public int minCostClimbingStair(int[] cost) {
+//     for(int i=2;i<cost.length;i++){
+//         cost[i]+=Math.min(cost[i-1],cost[i-2]);
+//     }
+//     return Math.min(cost[cost.length-1],cost[cost.length-2]);
+// }
+//approch 2
+public int minCostClimbingStairs(int[] cost){
+    int step1=0;
+    int step2=0;
+    for(int i=cost.length-1;i>=0;i--){
+        int c=cost[i]+Math.min(step1,step2);
+        step1=step2;
+        step2=c;
+    }
+    return Math.min(step1,step2);
+}
     public static void main(String[] args) {
 
 //        System.out.println(maxpoints(new int[]{100,200,300,400},200));
