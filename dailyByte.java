@@ -1617,8 +1617,30 @@ public int minCostClimbingStairs(int[] cost){
         count[amount-1] = (min==Integer.MAX_VALUE) ? -1 : min;
         return count[amount-1];
     }
+//    91. Decode Ways
+    public static int Decode(String s){
+        if(s.length()==0||s==null)
+            return 0;
+        if(s.length()==1)
+            return 1;
+        int[] dp=new int[s.length()+1];
+        dp[0]=1;
+        dp[1]=s.charAt(0)=='0'?0:1;
+        for(int i=2;i<=s.length();i++){
+            int one=Integer.valueOf(s.substring(i-1,i));
+            int two=Integer.valueOf(s.substring(i-2,i));
+            if(one>=1){
+                dp[i]+=dp[i-1];
+            }
+            if(two>=10&&two<=26){
+                dp[i]+=dp[i-2];
+            }
+        }
+        return dp[s.length()];
+    }
     public static void main(String[] args) {
-        System.out.println(coinChange(new int[]{1,2,5},11));
+        System.out.println(Decode("12"));
+//        System.out.println(coinChange(new int[]{1,2,5},11));
 //        System.out.println(maxpoints(new int[]{100,200,300,400},200));
 //        System.out.println(palidrome("abba"));
 //        System.out.println(uniqueCom(3));
