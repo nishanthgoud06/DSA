@@ -1638,8 +1638,25 @@ public int minCostClimbingStairs(int[] cost){
         }
         return dp[s.length()];
     }
+//    62. Unique Paths
+    public static int uniquePath(int m,int n){
+        int[][] grid=new int[m][n];
+        for(int i=0;i<m;i++){
+            grid[i][0]=1;
+        }
+        for(int j=0;j<n;j++){
+            grid[0][j]=1;
+        }
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                grid[i][j]=grid[i][j-1]+grid[i-1][j];
+            }
+        }
+        return grid[m-1][n-1];
+    }
     public static void main(String[] args) {
-        System.out.println(Decode("12"));
+        System.out.println(uniquePath(3,7));
+//        System.out.println(Decode("12"));
 //        System.out.println(coinChange(new int[]{1,2,5},11));
 //        System.out.println(maxpoints(new int[]{100,200,300,400},200));
 //        System.out.println(palidrome("abba"));
