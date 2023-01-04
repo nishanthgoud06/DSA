@@ -1548,20 +1548,116 @@ public static int balancedMeals(String items) {
 // the cost of flying the ith person to city a is aCosti, and the cost of flying the ith person to city b is bCosti.
 //    Return the minimum cost to fly every person to a city such that exactly n people arrive in each city.
 public static int twoCitySchedCost(int[][] costs) {
-    int cost=0,j=0;
-    int total=0;
-    int[] value=new int[costs.length];
-    for(int[] i:costs){
-        total+=i[0];
-        value[j++]=i[1]-i[0];
+    int cost = 0, j = 0;
+    int total = 0;
+    int[] value = new int[costs.length];
+    for (int[] i : costs) {
+        total += i[0];
+        value[j++] = i[1] - i[0];
     }
     Arrays.sort(value);
-    for(int i=0;i<costs.length/2;i++){
-        total+=value[i];
+    for (int i = 0; i < costs.length / 2; i++) {
+        total += value[i];
     }
     return total;
+}
+//
+//approach 1
+// public int minCostClimbingStair(int[] cost) {
+//     for(int i=2;i<cost.length;i++){
+//         cost[i]+=Math.min(cost[i-1],cost[i-2]);
+//     }
+//     return Math.min(cost[cost.length-1],cost[cost.length-2]);
+// }
+//approch 2
+public int minCostClimbingStairs(int[] cost){
+    int step1=0;
+    int step2=0;
+    for(int i=cost.length-1;i>=0;i--){
+        int c=cost[i]+Math.min(step1,step2);
+        step1=step2;
+        step2=c;
+    }
+    return Math.min(step1,step2);
+}
+//322. Coin Change
+    //Dynamic Programming approach
+    public static  int coinChange(int coins[],int amount){
+        int[] change=new int[amount+1];
+        Arrays.fill(change,Integer.MAX_VALUE);
+        change[0]=0;
+        for(int i=1;i<=amount;i++){
+            for(int j=0;j< coins.length;j++){
+                if(coins[j]<=i){
+                    change[i]=Math.min(change[i],1 + change[i-coins[j]]);
+                }
+            }
+        }
+        return change[amount]<Integer.MAX_VALUE?change[amount]:-1;
+    }
+    //recursive approach
+    public static int coinChangeR(int[] coins,int amount){
+        if(amount<0)
+            return 0;
+        return coinChangeRHelper(coins,amount,new int[amount]);
+    }
+    public static int coinChangeRHelper(int[] coins,int amount,int[] count){
+        if(amount<0)
+            return -1;
+        if(amount==0)
+            return 0;
+        if(count[amount-1]!=0)
+            return count[amount-1];
+        int min=Integer.MAX_VALUE;
+        for(int i:coins){
+            int res=coinChangeRHelper(coins,amount-i,count);
+            if(res>=0 && res< min)
+                min=1+res;
+        }
+        count[amount-1] = (min==Integer.MAX_VALUE) ? -1 : min;
+        return count[amount-1];
+    }
+//    91. Decode Ways
+    public static int Decode(String s){
+        if(s.length()==0||s==null)
+            return 0;
+        if(s.length()==1)
+            return 1;
+        int[] dp=new int[s.length()+1];
+        dp[0]=1;
+        dp[1]=s.charAt(0)=='0'?0:1;
+        for(int i=2;i<=s.length();i++){
+            int one=Integer.valueOf(s.substring(i-1,i));
+            int two=Integer.valueOf(s.substring(i-2,i));
+            if(one>=1){
+                dp[i]+=dp[i-1];
+            }
+            if(two>=10&&two<=26){
+                dp[i]+=dp[i-2];
+            }
+        }
+        return dp[s.length()];
+    }
+//    62. Unique Paths
+    public static int uniquePath(int m,int n){
+        int[][] grid=new int[m][n];
+        for(int i=0;i<m;i++){
+            grid[i][0]=1;
+        }
+        for(int j=0;j<n;j++){
+            grid[0][j]=1;
+        }
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                grid[i][j]=grid[i][j-1]+grid[i-1][j];
+            }
+        }
+        return grid[m-1][n-1];
+    }
     public static void main(String[] args) {
-
+        System.out.println(uniquePath(3,7));
+//        System.out.println(Decode("12"));
+//        System.out.println(coinChange(new int[]{1,2,5},11));
 //        System.out.println(maxpoints(new int[]{100,200,300,400},200));
 //        System.out.println(palidrome("abba"));
 //        System.out.println(uniqueCom(3));
