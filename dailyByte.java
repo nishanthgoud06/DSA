@@ -1580,8 +1580,45 @@ public int minCostClimbingStairs(int[] cost){
     }
     return Math.min(step1,step2);
 }
+//322. Coin Change
+    //Dynamic Programming approach
+    public static  int coinChange(int coins[],int amount){
+        int[] change=new int[amount+1];
+        Arrays.fill(change,Integer.MAX_VALUE);
+        change[0]=0;
+        for(int i=1;i<=amount;i++){
+            for(int j=0;j< coins.length;j++){
+                if(coins[j]<=i){
+                    change[i]=Math.min(change[i],1 + change[i-coins[j]]);
+                }
+            }
+        }
+        return change[amount]<Integer.MAX_VALUE?change[amount]:-1;
+    }
+    //recursive approach
+    public static int coinChangeR(int[] coins,int amount){
+        if(amount<0)
+            return 0;
+        return coinChangeRHelper(coins,amount,new int[amount]);
+    }
+    public static int coinChangeRHelper(int[] coins,int amount,int[] count){
+        if(amount<0)
+            return -1;
+        if(amount==0)
+            return 0;
+        if(count[amount-1]!=0)
+            return count[amount-1];
+        int min=Integer.MAX_VALUE;
+        for(int i:coins){
+            int res=coinChangeRHelper(coins,amount-i,count);
+            if(res>=0 && res< min)
+                min=1+res;
+        }
+        count[amount-1] = (min==Integer.MAX_VALUE) ? -1 : min;
+        return count[amount-1];
+    }
     public static void main(String[] args) {
-
+        System.out.println(coinChange(new int[]{1,2,5},11));
 //        System.out.println(maxpoints(new int[]{100,200,300,400},200));
 //        System.out.println(palidrome("abba"));
 //        System.out.println(uniqueCom(3));
