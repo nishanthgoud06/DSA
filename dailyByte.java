@@ -1654,8 +1654,58 @@ public int minCostClimbingStairs(int[] cost){
         }
         return grid[m-1][n-1];
     }
+//    403. Frog Jump
+public static boolean canCross(int[] stones) {
+    for(int i = 3; i < stones.length; i++) {
+        if(stones[i] > stones[i - 1] * 2) {
+            return false;
+        }
+    }
+
+    Set<Integer> stoneSet = new HashSet<>();
+    Set<List<Integer>> visited = new HashSet<>();
+    for(int stone: stones) {
+        stoneSet.add(stone);
+    }
+
+    int lastPosition = stones[stones.length - 1];
+    Stack<Integer> positions = new Stack<>();
+    Stack<Integer> jumps = new Stack<>();
+    positions.add(0);
+    jumps.add(0);
+
+    while(!positions.isEmpty()) {
+        int pos = positions.pop();
+        int dis = jumps.pop();
+
+        for(int i = dis - 1; i <= dis + 1; i++) {
+            if(i <= 0) {
+                continue;
+            }
+
+            int nextPos = pos + i;
+            if(nextPos == lastPosition) {
+                return true;
+            }
+
+            List<Integer> target = new ArrayList<>();
+            target.add(nextPos);
+            target.add(i);
+
+            if(stoneSet.contains(nextPos) && !visited.contains(target)) {
+                positions.add(nextPos);
+                jumps.add(i);
+                visited.add(target);
+            }
+        }
+    }
+
+    return false;
+}
+
     public static void main(String[] args) {
-        System.out.println(uniquePath(3,7));
+        System.out.println(canCross(new int[]{0,1,3,5,6,8,12,17}));
+//        System.out.println(uniquePath(3,7));
 //        System.out.println(Decode("12"));
 //        System.out.println(coinChange(new int[]{1,2,5},11));
 //        System.out.println(maxpoints(new int[]{100,200,300,400},200));
