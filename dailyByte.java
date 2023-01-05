@@ -1702,9 +1702,64 @@ public static boolean canCross(int[] stones) {
 
     return false;
 }
-
+//1143. Longest Common Subsequence
+    //the first approach is brutefroce which will not work for long length string
+    public static int longCSBF(String s1,String s2){
+        return longCSBFHelper(s1,s2,0,0);
+    }
+    public static int longCSBFHelper(String s1,String s2,int len1,int len2){
+        if(len1==s1.length()||len2==s2.length())
+            return 0;
+        if(s1.charAt(len1)==s2.charAt(len2))
+            return 1+longCSBFHelper(s1,s2,len1+1,len2+1);
+        else
+            return Math.max(longCSBFHelper(s1,s2,len1+1,len2),longCSBFHelper(s1,s2,len1,len2+1));
+    }
+    //approach 2
+    //we use dynamic programming approach
+    private static Integer[][] dp;
+    public static int longCS(String s1,String s2){
+        dp=new Integer[s1.length()][s2.length()];
+        return longCSHelper(s1,s2,0,0);
+    }
+    public static int longCSHelper(String s1,String s2,int i,int j){
+        if(i==s1.length()||j==s2.length())
+            return 0;
+        if(dp[i][j]!=null)
+            return dp[i][j];
+        if(s1.charAt(i)==s2.charAt(j))
+            return dp[i][j]=1+longCSHelper(s1,s2,i+1,j+1);
+        else
+            return dp[i][j]=Math.max(longCSHelper(s1,s2,i+1,j),longCSHelper(s1,s2,i,j+1));
+    }
+    //thrid approach is bottom up dynamic programming
+    public static int LongcS(String s1,String s2){
+        int[][] dp=new int[s1.length()+1][s2.length()+1];
+        for(int i=1;i<s1.length();i++){
+            for(int j=1;j<s2.length();j++){
+                if(s1.charAt(i)==s2.charAt(j))
+                    dp[i][j]=1+dp[i-1][j-1];
+                else
+                    dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+        return dp[s1.length()][s2.length()];
+    }
+//    53. Maximum Subarray
+    public static int maxSub(int[] arr){
+        int[] dp=new int[arr.length];
+        dp[0]=arr[0];
+        int max=arr[0];
+        for(int i=1;i<arr.length;i++){
+            dp[i]=arr[i]+(dp[i-1]>=0?dp[i-1]:0);
+            max=Math.max(dp[i],max);
+        }
+        return max;
+    }
     public static void main(String[] args) {
-        System.out.println(canCross(new int[]{0,1,3,5,6,8,12,17}));
+        System.out.println(maxSub(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
+//        System.out.println(longCS("abcde","ace"));
+//        System.out.println(canCross(new int[]{0,1,3,5,6,8,12,17}));
 //        System.out.println(uniquePath(3,7));
 //        System.out.println(Decode("12"));
 //        System.out.println(coinChange(new int[]{1,2,5},11));
