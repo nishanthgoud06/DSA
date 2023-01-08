@@ -1733,17 +1733,19 @@ public static boolean canCross(int[] stones) {
             return dp[i][j]=Math.max(longCSHelper(s1,s2,i+1,j),longCSHelper(s1,s2,i,j+1));
     }
     //thrid approach is bottom up dynamic programming
-    public static int LongcS(String s1,String s2){
-        int[][] dp=new int[s1.length()+1][s2.length()+1];
-        for(int i=1;i<s1.length();i++){
-            for(int j=1;j<s2.length();j++){
-                if(s1.charAt(i)==s2.charAt(j))
+    public static int longestCommonSubsequence(String text1, String text2){
+        int[][] dp=new int[text1.length()+1][text2.length()+1];
+        for(int i=1;i<=text1.length();i++){
+            for(int j=1;j<=text2.length();j++){
+                if(text1.charAt(i-1)==text2.charAt(j-1)){
                     dp[i][j]=1+dp[i-1][j-1];
-                else
+                }else{
                     dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+                }
             }
         }
-        return dp[s1.length()][s2.length()];
+        System.out.println(dp[1][1]);
+        return dp[text1.length()][text2.length()];
     }
 //    53. Maximum Subarray
     public static int maxSub(int[] arr){
@@ -1756,9 +1758,10 @@ public static boolean canCross(int[] stones) {
         }
         return max;
     }
+
     public static void main(String[] args) {
-        System.out.println(maxSub(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
-//        System.out.println(longCS("abcde","ace"));
+//        System.out.println(maxSub(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
+        System.out.println(longCS("abcde","ace"));
 //        System.out.println(canCross(new int[]{0,1,3,5,6,8,12,17}));
 //        System.out.println(uniquePath(3,7));
 //        System.out.println(Decode("12"));
