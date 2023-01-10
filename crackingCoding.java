@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class crackingCoding {
 //    Is Unique: Implement an algorithm to determine if a string has all unique characters. What if you
@@ -50,7 +53,54 @@ public class crackingCoding {
 //    Palindrome Permutation: Given a string, write a function to check if it is a permutation of a palindrome.
 //    A palindrome is a word or phrase that is the same forwards and backwards. A permutation
 //    is a rea rrangement of letters. The palindrome does not need to be limited to just dictionary words.
+public static List<List<Integer>> threeSum(int[] nums) {
+    //using two pointers
+    //time comp-o(n*2)
+    //space com-o(1)
+    List<List<Integer>> result=new ArrayList<>();
+    if(nums.length==0)
+        return result;
+    Arrays.sort(nums);
+    for(int i=0;i<nums.length-2;i++){
+        if(i==0||(i>0 && nums[i] != nums[i-1])){
+            int low=i+1;
+            int high=nums.length-1;
+            int sum=0-nums[i];
+            while(low<high){
+                if(nums[low]+nums[high]==sum){
+                    result.add(Arrays.asList(nums[i],nums[low],nums[high]));
+                    while(low<high &&nums[low]==nums[low+1])low=low+1;
+                    while(low<high&&nums[high]==nums[high-1])high=high-1;
+                    low++;
+                    high--;
+                }else if(nums[low]+nums[high]>sum){
+                    high--;
+                }else{
+                    low++;
+                }
+            }
+        }
+    }
+    return result;
+    //using extra space
+    // time com-o(n*2)
+    //space com-o(n)
+//        Set<List<Integer>> res  = new HashSet<>();
+//         if(nums.length==0) return new ArrayList<>(res);
+//         Arrays.sort(nums);
+//         for(int i=0; i<nums.length-2;i++){
+//             int j =i+1;
+//            int  k = nums.length-1;
+//             while(j<k){
+//                 int sum = nums[i]+nums[j]+nums[k];
+//                 if(sum==0)res.add(Arrays.asList(nums[i],nums[j++],nums[k--]));
+//                 else if (sum >0) k--;
+//                 else if (sum<0) j++;
+//             }
 
+//         }
+//         return new ArrayList<>(res);
+}
     public static void main(String[] args) {
         System.out.println(urlify("Mr John Smith "));
 //        System.out.println(Unique("abca"));
