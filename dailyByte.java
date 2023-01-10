@@ -1777,6 +1777,21 @@ public static boolean canCross(int[] stones) {
         }
         return dp[word2.length()][word1.length()];
     }
+//    139. Word Break
+public static boolean wordBreak(String s, List<String> dict) {
+    boolean[] f = new boolean[s.length() + 1];
+    f[0] = true;
+    for(int i=1; i <= s.length(); i++){
+        for(int j=0; j < i; j++){
+            if(f[j] && dict.contains(s.substring(j, i))){
+                f[i] = true;
+                break;
+            }
+        }
+    }
+
+    return f[s.length()];
+}
     public static void main(String[] args) {
 //        System.out.println(maxSub(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
         System.out.println(longCS("abcde","ace"));
