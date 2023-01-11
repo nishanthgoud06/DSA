@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class crackingCoding {
 //    Is Unique: Implement an algorithm to determine if a string has all unique characters. What if you
@@ -101,6 +98,56 @@ public static List<List<Integer>> threeSum(int[] nums) {
 //         }
 //         return new ArrayList<>(res);
 }
+    public static List<Integer> findAnagrams(String s, String p) {
+        Map<Character, Integer> map = new HashMap<>();
+        List<Integer> result = new ArrayList<>();
+        if(s==null || s.length()<p.length()) {
+            return result;
+        }
+
+        for(char ch : p.toCharArray()) {
+            map.put(ch, map.getOrDefault(ch,0)+1);
+        }
+
+        int counter = map.size();
+
+        int end =0;
+        int start=0;
+
+        while(end<s.length()) {
+            char ch = s.charAt(end);
+
+            if(map.containsKey(ch)) {
+                map.put(ch, map.get(ch)-1);
+
+                if(map.get(ch)==0) {
+                    counter--;
+                }
+            }
+
+            while(counter==0) {
+                char startChar = s.charAt(start);
+
+                if(map.containsKey(startChar)) {
+                    map.put(startChar, map.get(startChar)+1);
+
+                    if(map.get(startChar)>0) {
+                        counter++;
+                    }
+                }
+
+                if(end-start+1==p.length()) {
+                    result.add(start);
+                }
+
+                start++;
+            }
+            end++;
+        }
+
+        return result;
+
+    }
     public static void main(String[] args) {
         System.out.println(urlify("Mr John Smith "));
 //        System.out.println(Unique("abca"));
