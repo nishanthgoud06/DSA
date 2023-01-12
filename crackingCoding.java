@@ -148,9 +148,42 @@ public static List<List<Integer>> threeSum(int[] nums) {
         return result;
 
     }
+    public static String decode(String s){
+        String result="";
+        Stack<Integer> numbers=new Stack<>();
+        Stack<String> text=new Stack<>();
+        int index=0;
+        while(index<s.length()){
+            if(Character.isDigit(s.charAt(index))){
+                int num=0;
+                while(Character.isDigit(s.charAt(index))){
+                    num=num*10+s.charAt(index)-'0';
+                    index++;
+                }
+                numbers.push(num);
+            }else if(s.charAt(index)=='['){
+                text.push(result);
+                result="";
+                index++;
+            }else if(s.charAt(index)==']'){
+                int limit=numbers.pop();
+                StringBuilder sb=new StringBuilder(text.pop());
+                for(int i=0;i<limit;i++){
+                    sb.append(result);
+                }
+                result=sb.toString();
+                index++;
+            }else{
+                result+=s.charAt(index);
+                index++;
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(urlify("Mr John Smith "));
-//        System.out.println(Unique("abca"));
-        System.out.println(permu("abcd","dcat"));
+        System.out.println(decode("3[a2[c]]"));
+//        System.out.println(urlify("Mr John Smith "));
+////        System.out.println(Unique("abca"));
+//        System.out.println(permu("abcd","dcat"));
     }
 }
