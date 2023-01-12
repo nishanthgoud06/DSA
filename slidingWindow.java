@@ -66,9 +66,33 @@ public class slidingWindow {
         }
         return max;
     }
+    //713. Subarray Product Less Than K
+    public static int subArrayProduct(int[] arr,int limit){
+        int window_start=0;
+        int product=arr[0];
+        int window_end=1;
+        int result=0;
+        if(product<limit)
+            result++;
+        while(window_end<arr.length){
+            product=product*arr[window_end];
+            if(product<limit){
+                result=result+window_end-window_start+1;
+            }else{
+                while(product>=limit){
+                    product=product/arr[window_start];
+                    window_start++;
+                }
+                result=result+window_end-window_start+1;
+            }
+            window_end++;
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(findLength("AAAHHBBBBBBIBBBC",2));
-        System.out.println(longestSubArrayKDistinct("AAAHHBBBBBBBBBBC",2));
+        System.out.println(subArrayProduct(new int[]{10,5,2,6},100));
+//        System.out.println(findLength("AAAHHBBBBBBIBBBC",2));
+//        System.out.println(longestSubArrayKDistinct("AAAHHBBBBBBBBBBC",2));
 //        System.out.println(smallestSubArray(new int[]{4,2,1,7,8,1,2,8,1,0},8));
 //        System.out.println(MaxSubArray(new int[]{4,2,1,7,8,1,2,8,1,0},3));
     }
