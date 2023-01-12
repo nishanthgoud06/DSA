@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class slidingWindow {
@@ -66,9 +68,88 @@ public class slidingWindow {
         }
         return max;
     }
+    //713. Subarray Product Less Than K
+    public static int subArrayProduct(int[] arr,int limit){
+        int window_start=0;
+        int product=arr[0];
+        int window_end=1;
+        int result=0;
+        if(product<limit)
+            result++;
+        while(window_end<arr.length){
+            product=product*arr[window_end];
+            if(product<limit){
+                result=result+window_end-window_start+1;
+            }else{
+                while(product>=limit){
+                    product=product/arr[window_start];
+                    window_start++;
+                }
+                result=result+window_end-window_start+1;
+            }
+            window_end++;
+        }
+        return result;
+    }
+//    209. Minimum Size Subarray Sum
+//    Given an array of positive integers nums and a positive integer target, return the minimal length of a subarray
+//    whose sum is greater than or equal to target. If there is no such subarray, return 0 instead.
+//    Example 1:
+//    Input: target = 7, nums = [2,3,1,2,4,3]
+    public static int minSub(int target,int[] nums){
+        if(nums.length==0 || nums==null)
+            return 0;
+        int window_start=0,window_end=0,value=0,min=Integer.MAX_VALUE;
+        while(window_end<nums.length){
+            value+=nums[window_end];
+            while(value>=target){
+                min=Math.min(min,window_end-window_start+1);
+                value-=nums[window_start];
+                window_start++;
+            }
+            window_end++;
+        }
+        return min;
+    }
+//    438. Find All Anagrams in a String
+public static List<Integer> findAnagrams(String s, String p) {
+    List<Integer> result=new ArrayList<>();
+    if(p.length()>s.length())
+        return result;
+    HashMap<Character,Integer> hm=new HashMap<>();
+    for(char c:p.toCharArray()){
+        hm.put(c,hm.getOrDefault(c,0)+1);
+    }
+    int count=hm.size();
+    int window_start=0;
+    int window_end=0;
+    while(window_end<s.length()){
+        char c=s.charAt(window_end);
+        if(hm.containsKey(c)){
+            hm.put(c,hm.get(c)-1);
+            if(hm.get(c)==0)
+                count--;
+        }
+        window_end++;
+        while(count==0){
+            char c1=s.charAt(window_start);
+            if(hm.containsKey(c1)){
+                hm.put(c1,hm.get(c1)+1);
+                if(hm.get(c1)>0)
+                    count++;
+            }
+            if(window_end-window_start==p.length())
+                result.add(window_start);
+            window_start++;
+        }
+    }
+    return result;
+}
     public static void main(String[] args) {
-        System.out.println(findLength("AAAHHBBBBBBIBBBC",2));
-        System.out.println(longestSubArrayKDistinct("AAAHHBBBBBBBBBBC",2));
+        System.out.println(minSub(7,new int[]{2,3,1,2,4,3}));
+//        System.out.println(subArrayProduct(new int[]{10,5,2,6},100));
+//        System.out.println(findLength("AAAHHBBBBBBIBBBC",2));
+//        System.out.println(longestSubArrayKDistinct("AAAHHBBBBBBBBBBC",2));
 //        System.out.println(smallestSubArray(new int[]{4,2,1,7,8,1,2,8,1,0},8));
 //        System.out.println(MaxSubArray(new int[]{4,2,1,7,8,1,2,8,1,0},3));
     }
