@@ -2,6 +2,57 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class example {
+    class Node{
+        Node left;
+        Node right;
+        int val;
+        Node next;
+        public Node(int val){
+            this.val=val;
+            this.left=null;
+            this.right=null;
+            this.next=null;
+        }
+        public Node(int _val, Node _left, Node _right, Node _next) {
+            val = _val;
+            left = _left;
+            right = _right;
+            next = _next;
+        }
+    }
+    //117. Populating Next Right Pointers in Each Node II
+    public static Node connect(Node root){
+        if(root==null)
+            return null;
+        Node prev=null;
+        Node current=root;
+        Node head=null;
+        while(current!=null){
+            while(current!=null){
+                if(current.left!=null){
+                    if(prev!=null){
+                        prev=current.left;
+                    }else{
+                        head=current.left;
+                    }
+                    prev=current.left;
+                }
+                if(current.right!=null){
+                    if(prev!=null){
+                        prev.next=current.right;
+                    }else{
+                        head=current.right;
+                    }
+                    prev=current.right;
+                }
+                current=current.next;
+            }
+            current=head;
+            head=null;
+            prev=null;
+        }
+        return root;
+    }
     static int o=1;
     //here we are trying to find the permutation of a string
     private static void permute(String str, int l, int r)
@@ -110,6 +161,7 @@ public class example {
     //how to design it
 
     public static void main(String[] args) {
+        
 //        Powerof2(25);
         permutation("abc","");
         permute("abc",0,2);
