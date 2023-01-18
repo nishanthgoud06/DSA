@@ -161,7 +161,7 @@ public class example {
     //how to design it
 
     public static void main(String[] args) {
-        
+
 //        Powerof2(25);
         permutation("abc","");
         permute("abc",0,2);
