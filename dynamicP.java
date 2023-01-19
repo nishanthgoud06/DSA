@@ -24,8 +24,57 @@ public class dynamicP {
         }
         return dp[house.length];
     }
+    //house robbery-2
+    public static int hourseR2Dp(int[] house){
+        if(house.length==0)
+            return 0;
+        if(house.length==1)
+            return Math.max(house[0],house[1]);
+        return Math.max(house2Helper(house,0,house.length-1),house2Helper(house,1,house.length));
+    }
+    public static int house2Helper(int[] house,int left,int right){
+        int[] dp=new int[right];
+        dp[left]=house[left];
+        dp[left+1]=Math.max(house[left],house[left+1]);
+        for(int i=left+2;i<right;i++){
+            dp[i]=Math.max(dp[i-2]+house[i],dp[i-1]);
+        }
+        return dp[dp.length-1];
+    }
+    //55 jump game
+    //the fisrt approach is useing iteration
+    public static boolean jumpGame(int[] steps){
+        if(steps.length==0)
+            return true;
+        int pos=0;
+        for(int i=0;i<steps.length;i++){
+            if(i>pos)
+                return false;
+            pos=Math.max(pos,steps[i]+i);
+        }
+        return true;
+    }
+    //solving the problrm using dynamic programming
+    public static boolean jumpGame2(int[] steps){
+        if(steps.length==0)
+            return true;
+        boolean[] dp=new boolean[steps.length];
+        dp[0]=true;
+        for(int i=1;i<steps.length;i++){
+            for(int j=0;j<i;j++){
+                if(dp[i-1]&&steps[j]+j>=i) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[steps.length-1];
+    }
     public static void main(String[] args) {
-        System.out.println(houseR1DP(new int[]{1,2}));
-        System.out.println(houseR1(new int[]{1,2}));
+        System.out.println(jumpGame2(new int[]{3,2,1,0,4}));
+//        System.out.println(jumpGame(new int[]{3,2,1,0,4}));
+//        System.out.println(hourseR2Dp(new int[]{1,2,3,1}));
+//        System.out.println(houseR1DP(new int[]{1,2}));
+//        System.out.println(houseR1(new int[]{1,2}));
     }
 }
