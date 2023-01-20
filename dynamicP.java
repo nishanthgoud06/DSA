@@ -89,8 +89,26 @@ public class dynamicP {
         }
         return dp[jump.length-1];
     }
+    //91. Decode Ways
+    public static int decode(String s){
+        if(s.length()==0)
+            return 0;
+        int[] dp=new int[s.length()+1];
+        dp[0]=1;
+        dp[1]=s.charAt(0)=='0'?0:1;
+        for(int i=2;i<=s.length();i++){
+            int num1=Integer.valueOf(s.substring(i-1,i));
+            int num2=Integer.valueOf(s.substring(i-2,i));
+            if(num1>0)
+                dp[i]+=dp[i-1];
+            if(num2>=10&&num2<=26)
+                dp[i]+=dp[i-2];
+        }
+        return dp[s.length()];
+    }
     public static void main(String[] args) {
-        System.out.println(jump2(new int[]{2,3,1,1,2,4,2,0,1,1}));
+        System.out.println(decode("1234432133"));
+//        System.out.println(jump2(new int[]{2,3,1,1,2,4,2,0,1,1}));
 //        System.out.println(jumpGame2(new int[]{3,2,1,0,4}));
 //        System.out.println(jumpGame(new int[]{3,2,1,0,4}));
 //        System.out.println(hourseR2Dp(new int[]{1,2,3,1}));
