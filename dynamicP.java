@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class dynamicP {
     //house robbery
     //recursive approach
@@ -70,8 +72,26 @@ public class dynamicP {
         }
         return dp[steps.length-1];
     }
+    //jump 2
+    public static int jump2(int[] jump){
+        if(jump.length==0)
+            return 0;
+        int[] dp=new int[jump.length+1];
+        Arrays.fill(dp,Integer.MAX_VALUE-1);
+        dp[0]=0;
+        for(int i=1;i<jump.length;i++){
+            for(int j=0;j<i;j++){
+                if(jump[j]+j>=i){
+                    if(dp[i]>dp[j]+1)
+                        dp[i]=dp[j]+1;
+                }
+            }
+        }
+        return dp[jump.length-1];
+    }
     public static void main(String[] args) {
-        System.out.println(jumpGame2(new int[]{3,2,1,0,4}));
+        System.out.println(jump2(new int[]{2,3,1,1,2,4,2,0,1,1}));
+//        System.out.println(jumpGame2(new int[]{3,2,1,0,4}));
 //        System.out.println(jumpGame(new int[]{3,2,1,0,4}));
 //        System.out.println(hourseR2Dp(new int[]{1,2,3,1}));
 //        System.out.println(houseR1DP(new int[]{1,2}));
