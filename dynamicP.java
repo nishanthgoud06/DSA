@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class dynamicP {
     //house robbery
@@ -106,8 +108,30 @@ public class dynamicP {
         }
         return dp[s.length()];
     }
+    //139. Word Break
+    public static boolean wordBreak(String s,List<String> dict){
+        if(s.length()==0)
+            return true;
+        boolean[] dp=new boolean[s.length()+1];
+        dp[0]=true;
+        for(int i=1;i<=s.length();i++){
+            for(int j=0;j<i;j++){
+                if(dp[j]&&dict.contains(s.substring(j,i))){
+                    dp[i]=true;
+                    break;
+                }
+            }
+        }
+        return dp[s.length()];
+    }
     public static void main(String[] args) {
-        System.out.println(decode("1234432133"));
+        List<String> test=new ArrayList<>();
+        test.add("university");
+        test.add("of");
+        test.add("north");
+        test.add("texas");
+        System.out.println(wordBreak("universityofnorthtexas",test));
+//        System.out.println(decode("1234432133"));
 //        System.out.println(jump2(new int[]{2,3,1,1,2,4,2,0,1,1}));
 //        System.out.println(jumpGame2(new int[]{3,2,1,0,4}));
 //        System.out.println(jumpGame(new int[]{3,2,1,0,4}));
