@@ -146,9 +146,9 @@ public static List<Integer> findAnagrams(String s, String p) {
     return result;
 }
     public static void main(String[] args) {
-        System.out.println(minSub(7,new int[]{2,3,1,2,4,3}));
+//        System.out.println(minSub(7,new int[]{2,3,1,2,4,3}));
 //        System.out.println(subArrayProduct(new int[]{10,5,2,6},100));
-//        System.out.println(findLength("AAAHHBBBBBBIBBBC",2));
+        System.out.println(findLength("A",2));
 //        System.out.println(longestSubArrayKDistinct("AAAHHBBBBBBBBBBC",2));
 //        System.out.println(smallestSubArray(new int[]{4,2,1,7,8,1,2,8,1,0},8));
 //        System.out.println(MaxSubArray(new int[]{4,2,1,7,8,1,2,8,1,0},3));

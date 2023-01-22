@@ -124,13 +124,62 @@ public class dynamicP {
         }
         return dp[s.length()];
     }
+    //300. Longest Increasing Subsequence
+    public static int longestSub(int[] nums){
+        if(nums.length==0||nums==null)
+            return 0;
+        int result=0;
+        int[] dp=new int[nums.length];
+        for(int i=0;i<nums.length;i++){
+            dp[i]=1;
+            for(int j=0;j<i;j++){
+                if(nums[i]>nums[j]&&dp[i]<dp[j]+1){
+                    dp[i]=dp[j]+1;
+                }
+            }
+            result=Math.max(result,dp[i]);
+        }
+        return result;
+    }
+//    673. Number of Longest Increasing Subsequence
+    public static int LonGISubSequence(int[] nums){
+        if(nums.length==0||nums==null)
+            return 0;
+        int[] dp=new int[nums.length];
+        int[] count=new int[nums.length];
+        Arrays.fill(dp,1);
+        Arrays.fill(count,1);
+        int max=1;
+        for(int i=0;i<nums.length;i++){
+            for(int j=0;j<i;j++){
+                if(nums[i]>nums[j]){
+                    if(dp[i]<dp[j]+1){
+                        dp[i]=dp[j]+1;
+                        count[i]=count[j];
+                    }else if(dp[i]==dp[j]+1){
+                        count[i]+=count[j];
+                    }
+                }
+                max=Math.max(max,dp[i]);
+            }
+        }
+        int result=0;
+        for(int i=0;i<nums.length;i++){
+            if(dp[i]==max){
+                result+=count[i];
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        List<String> test=new ArrayList<>();
-        test.add("university");
-        test.add("of");
-        test.add("north");
-        test.add("texas");
-        System.out.println(wordBreak("universityofnorthtexas",test));
+        System.out.println(LonGISubSequence(new int[]{1,3,5,4,7}));
+//        System.out.println(longestSub(new int[]{10,9,2,5,3,7,101,18}));
+//        List<String> test=new ArrayList<>();
+//        test.add("university");
+//        test.add("of");
+//        test.add("north");
+//        test.add("texas");
+//        System.out.println(wordBreak("universityofnorthtexas",test));
 //        System.out.println(decode("1234432133"));
 //        System.out.println(jump2(new int[]{2,3,1,1,2,4,2,0,1,1}));
 //        System.out.println(jumpGame2(new int[]{3,2,1,0,4}));
