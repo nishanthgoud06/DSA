@@ -171,8 +171,84 @@ public class dynamicP {
         }
         return result;
     }
+  //  1143. Longest Common Subsequence
+    //top-down approach
+    public static int longestComSub(String s1,String s2){
+        int[][] dp=new int[s1.length()+1][s2.length()+1];
+        for(int i=0;i<=s1.length();i++){
+            dp[i][0]=0;
+        }
+        for(int i=0;i<=s2.length();i++){
+            dp[0][i]=0;
+        }
+        for(int i=1;i<=s1.length();i++){
+            for(int j=1;j<=s2.length();j++){
+                if(s1.charAt(i-1)==s2.charAt(j-1))
+                    dp[i][j]=1+dp[i-1][j-1];
+                else
+                    dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+        return dp[s1.length()][s2.length()];
+    }
+    //bottom-up
+    public static int longestComSub2(String s1,String s2){
+        int[][] dp=new int[s1.length()][s2.length()];
+        return longestComHelper(s1,s2,0,0,dp);
+    }
+    public static int longestComHelper(String s1,String s2,int i,int j,int[][] dp){
+        if(i==s1.length()||j==s2.length())
+            return 0;
+        if(s1.charAt(i)==s2.charAt(j))
+            return dp[i][j]=1+longestComHelper(s1,s2,i+1,j+1,dp);
+        else
+            return dp[i][j]=Math.max(longestComHelper(s1,s2,i+1,j,dp),longestComHelper(s1,s2,i,j+1,dp));
+    }
+    //583. Delete Operation for Two Strings
+    public static int DeleteStr(String s1,String s2){
+        int[][] dp=new int[s1.length()+1][s2.length()+1];
+        for(int i=0;i<=s1.length();i++){
+            dp[i][0]=i;
+        }
+        for(int j=0;j<=s2.length();j++){
+            dp[0][j]=j;
+        }
+        for(int i=1;i<=s1.length();i++){
+            for(int j=1;j<=s2.length();j++){
+                if(s1.charAt(i-1)==s2.charAt(j-1))
+                    dp[i][j]=dp[i-1][j-1];
+                else
+                    dp[i][j]=1+Math.min(dp[i-1][j],dp[i][j-1]);
+            }
+        }
+        return dp[s1.length()][s2.length()];
+    }
+    public static int DeleteStr2(String s1,String s2){
+        int[][] dp=new int[s1.length()+1][s2.length()+1];
+        for(int i=0;i<=s1.length();i++){
+            Arrays.fill(dp[i],-1);
+        }
+        return DeleteStr2Helper(s1,s2,s1.length(),s2.length(),dp);
+    }
+    public static int DeleteStr2Helper(String s1,String s2,int i,int j,int[][] dp){
+        if(i==0)
+            return dp[i][j]=j;
+        if(j==0)
+            return dp[i][j]=i;
+        if(dp[i][j]!=-1)
+            return dp[i][j];
+        if(s1.charAt(i-1)==s2.charAt(j-1))
+            return dp[i][j]=DeleteStr2Helper(s1,s2,i-1,j-1,dp);
+        else
+            return dp[i][j]=1+Math.min(DeleteStr2Helper(s1,s2,i-1,j,dp),DeleteStr2Helper(s1,s2,i,j-1,dp));
+    }
+
     public static void main(String[] args) {
-        System.out.println(LonGISubSequence(new int[]{1,3,5,4,7}));
+        System.out.println(DeleteStr("abc","a"));
+        System.out.println(DeleteStr2("abc","a"));
+//        System.out.println(longestComSub2("abcdes","abc"));
+//        System.out.println(longestComSub("abcdes","abc"));
+//        System.out.println(LonGISubSequence(new int[]{1,3,5,4,7}));
 //        System.out.println(longestSub(new int[]{10,9,2,5,3,7,101,18}));
 //        List<String> test=new ArrayList<>();
 //        test.add("university");
