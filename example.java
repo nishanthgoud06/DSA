@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -159,9 +160,37 @@ public class example {
     //right now i am thinking of implementing this the in the same approach as hashset
     //but i a bit confused on how to handle conlission in hashmap hopefully by 30 min i can figure out
     //how to design it
-
+//2131. Longest Palindrome by Concatenating Two Letter Words?
+    public static int LongPali(String[] words){
+        int result=0,unpair=0;
+        HashMap<String,Integer> hm=new HashMap<>();
+        for(String word:words){
+            if(!hm.containsKey(word))
+                hm.put(word,0);
+            if(word.charAt(0)==word.charAt(1)){
+                if(hm.get(word)>0){
+                    unpair--;
+                    result+=4;
+                }else{
+                    unpair++;
+                    hm.put(word,hm.get(word)+1);
+                }
+            }else{
+                String rev=Character.toString(word.charAt(1))+Character.toString(word.charAt(0));
+                if(hm.containsKey(rev)){
+                    result+=4;
+                    hm.put(rev,hm.get(rev)-1);
+                }else{
+                    hm.put(word,hm.get(word)+1);
+                }
+            }
+        }
+        if(unpair>0)
+            result+=2;
+        return result;
+    }
     public static void main(String[] args) {
-
+        System.out.println(LongPali(new String[]{"aa","bb","ab","ba"}));
 //        Powerof2(25);
         permutation("abc","");
         permute("abc",0,2);
