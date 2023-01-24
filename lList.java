@@ -113,6 +113,7 @@ public class lList {
         odd.next=evenhead;
         return n;
     }
+    
     public static void main(String[] args) {
         node n=new node(8);
         node n1=new node(5,n);
