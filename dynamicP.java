@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class dynamicP {
@@ -242,10 +243,46 @@ public class dynamicP {
         else
             return dp[i][j]=1+Math.min(DeleteStr2Helper(s1,s2,i-1,j,dp),DeleteStr2Helper(s1,s2,i,j-1,dp));
     }
+//coin change
+//now we are going to write the bottom-up approach of this problem
+    public static int coinChange(int[] coins,int amount){
+        int[] dp=new int[amount+1];
+        dp[0]=0;
+        for(int i=1;i<=amount;i++){
+            dp[i]=dp.length;
+            for(int j=0;j<coins.length;j++){
+                if(i>=coins[j])
+                    dp[i]=Math.min(dp[i],dp[i-coins[j]]+1);
+            }
+        }
+        return dp[amount];
+    }
+    //now we are going to write the top-down approach of this problem
+    public static int coinChangeBU(int[] coins,int amount){
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        return coinChangeBUHelper(coins,amount,hm);
+    }
+    public static int coinChangeBUHelper(int[] coins,int amount,HashMap<Integer,Integer> hm){
+        if(amount==0)
+            return 0;
+        int min=Integer.MAX_VALUE;
+        for(int i=0;i<coins.length;i++){
+            if(coins[i]>amount)
+                continue;
+            int val=coinChangeBUHelper(coins,amount-coins[i],hm);
+            if(val<min)
+                min=val;
 
+        }
+        min=min==Integer.MAX_VALUE?min:min+1;
+        hm.put(amount,min);
+        return min;
+    }
     public static void main(String[] args) {
-        System.out.println(DeleteStr("abc","a"));
-        System.out.println(DeleteStr2("abc","a"));
+        System.out.println(coinChangeBU(new int[]{1,5,6,8},11));
+        System.out.println(coinChange(new int[]{1,5,6,8},11));
+//        System.out.println(DeleteStr("abc","a"));
+//        System.out.println(DeleteStr2("abc","a"));
 //        System.out.println(longestComSub2("abcdes","abc"));
 //        System.out.println(longestComSub("abcdes","abc"));
 //        System.out.println(LonGISubSequence(new int[]{1,3,5,4,7}));
