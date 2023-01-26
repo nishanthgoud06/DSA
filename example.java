@@ -1,4 +1,4 @@
-import java.util.HashMap;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -210,8 +210,106 @@ public class example {
         }
         return result;
     }
+    //3Sum
+    //the first approach first we are going to implement is using Two Pointers
+    public static List<List<Integer>> Sum_3(int[] numbers){
+        List<List<Integer>> result=new ArrayList<>();
+        if(numbers.length==0)
+            return result;
+        Arrays.sort(numbers);
+        for(int i=0;i< numbers.length-2;i++){
+            if(i==0||(i>0&&numbers[i]!=numbers[i-1])){
+                int low=i+1;
+                int high=numbers.length-1;
+                int sum=0-numbers[i];
+                while(low<high){
+                    if(sum==numbers[low]+numbers[high]){
+                        result.add(new ArrayList<>(Arrays.asList(numbers[i],numbers[low],numbers[high])));
+                        while(low<high&&numbers[low]==numbers[low+1])low=low+1;
+                        while(low<high&&numbers[high]==numbers[high-1])high=high-1;
+                        low=low+1;
+                        high=high-1;
+                    }else if(numbers[low]+numbers[high]>sum){
+                        high=high-1;
+                    }else{
+                        low=low+1;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    public static List<List<Integer>> sum_3_HashMap(int[] nums){
+        Set<List<Integer>> res  = new HashSet<>();
+         if(nums.length==0) return new ArrayList<>(res);
+         Arrays.sort(nums);
+         for(int i=0; i<nums.length-2;i++){
+             int j =i+1;
+            int  k = nums.length-1;
+             while(j<k){
+                 int sum = nums[i]+nums[j]+nums[k];
+                 if(sum==0)res.add(Arrays.asList(nums[i],nums[j++],nums[k--]));
+                 else if (sum >0) k--;
+                 else if (sum<0) j++;
+             }
+
+         }
+         return new ArrayList<>(res);
+        }
+    //mulitply strings
+    public static String mulStr(String s1,String s2){
+        int len1=s1.length();
+        int len2=s2.length();
+        int[] arr=new int[len1+len2];
+        for(int i=len1-1;i>=0;i--){
+            for(int j=len2-1;j>=0;j--){
+                int mul=(s1.charAt(i)-'0')*(s2.charAt(j)-'0');
+                int pos1=i+j;
+                int pos2=i+j+1;
+                int sum=mul+arr[pos2];
+                arr[pos1]+=sum/10;
+                arr[pos2]=sum%10;
+            }
+        }
+        String result="";
+        for(int i:arr){
+            result+=i;
+        }
+        return result;
+    }
+    //5. Longest Palindromic Substring
+    public static String longPali(String s){
+        if(s.length()<1||s==null)
+            return "";
+        int start=0;
+        int end=0;
+        for(int i=0;i<s.length();i++){
+            int low=longPaliHelper(s,i,i);
+            int high=longPaliHelper(s,i,i+1);
+            int max=Math.max(low,high);
+            if(max>end-start){
+                start=i-((max-1)/2);
+                end=i+max/2;
+            }
+        }
+        return s.substring(start,end+1);
+    }
+    public static int longPaliHelper(String s,int left,int right){
+        if(s==null||left>right){
+            return 0;
+        }
+        while(left>=0&&right<s.length()&&s.charAt(left)==s.charAt(right)){
+            left--;
+            right++;
+        }
+        return right-left-1;
+    }
     public static void main(String[] args) {
-        System.out.println(mutilplyStr("12","5"));
+        System.out.println(longPali("racecar"));
+//        System.out.println(mulStr("5","12"));
+//        System.out.println(Sum_3(new int[]{-1,0,1,2,-1,-4}));
+//        System.out.println(sum_3_HashMap(new int[]{-1,0,1,2,-1,-4}));
+//        System.out.println(mutilplyStr("12","5"));
 //        System.out.println(LongPali(new String[]{"aa","bb","ab","ba"}));
 ////        Powerof2(25);
 //        permutation("abc","");
