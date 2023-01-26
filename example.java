@@ -189,11 +189,33 @@ public class example {
             result+=2;
         return result;
     }
+//    43. Multiply Strings
+    public static String mutilplyStr(String s1,String s2){
+        int num1=s1.length();
+        int num2=s2.length();
+        int[] arr=new int[num1+num2];
+        for(int i=num1-1;i>=0;i--){
+            for(int j=num2-1;j>=0;j--){
+                int mul=(s1.charAt(i)-'0')*(s2.charAt(j)-'0');
+                int pos1=i+j;
+                int pos2=i+j+1;
+                int sum=mul+arr[pos2];
+                arr[pos1]+=sum/10;
+                arr[pos2]=sum%10;
+            }
+        }
+        String result="";
+        for(int i:arr){
+            result+= String.valueOf(i);
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(LongPali(new String[]{"aa","bb","ab","ba"}));
-//        Powerof2(25);
-        permutation("abc","");
-        permute("abc",0,2);
+        System.out.println(mutilplyStr("12","5"));
+//        System.out.println(LongPali(new String[]{"aa","bb","ab","ba"}));
+////        Powerof2(25);
+//        permutation("abc","");
+//        permute("abc",0,2);
 //        //1.extract numbers from text
 //        String text="one1two2THREE3Four4";
 //        String dilimitter="\\d";
