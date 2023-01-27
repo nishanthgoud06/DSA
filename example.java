@@ -304,8 +304,40 @@ public class example {
         }
         return right-left-1;
     }
+    //1706. Where Will the Ball Fall
+    public static int[] ballFall(int[][] wall){
+        if(wall.length==0||wall==null)
+            return null;
+        int row=wall.length;
+        int col=wall[0].length;
+        int[] result=new int[col];
+        Arrays.fill(result,-1);
+        for(int i=0;i<col;i++){
+            int x=0,y=i;
+            while(true){
+                if(x>=row){
+                    if(y<col&&y>=0)
+                        result[i]=1;
+                    break;
+                }else{
+                    if(y+1<col&&wall[x][y]==1&&wall[x][y+1]==1){
+                        x++;
+                        y++;
+                    }else if(y-1>=0&&wall[x][y]==-1&&wall[x][y-1]==-1){
+                        x++;
+                        y--;
+                    }else{
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(longPali("racecar"));
+        int[][] test={{1,1,1,-1,-1},{1,1,1,-1,-1},{-1,-1,-1,1,1},{1,1,1,1,-1},{-1,-1,-1,-1,-1}};
+        System.out.println(Arrays.toString(ballFall(test)));
+//        System.out.println(longPali("racecar"));
 //        System.out.println(mulStr("5","12"));
 //        System.out.println(Sum_3(new int[]{-1,0,1,2,-1,-4}));
 //        System.out.println(sum_3_HashMap(new int[]{-1,0,1,2,-1,-4}));
