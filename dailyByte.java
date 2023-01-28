@@ -1792,9 +1792,78 @@ public static boolean wordBreak(String s, List<String> dict) {
 
     return f[s.length()];
 }
+//    Longest Increasing Subsequence
+    public static int longSub(int[] arr){
+        if(arr.length==1)
+            return 1;
+        if(arr.length==0||arr==null)
+            return 0;
+        int m=0;
+        int[] result=new int[arr.length];
+        for(int i=0;i<arr.length;i++){
+            result[i]=1;
+            for(int j=0;j<i;j++){
+                if(arr[i]>arr[j]){
+                    int max=Math.max(result[j]+1,result[i]);
+                    result[i]=max;
+                }
+            }
+            m=Math.max(m,result[i]);
+        }
+        return m;
+    }
+    //painting houses
+    public static int paintingHouses(int[][] houses){
+        int result=0;
+        int house=-1;
+        for(int i=0;i<houses.length;i++){
+            int min=Integer.MAX_VALUE;
+            for(int j=0;j<houses[0].length;j++){
+                if(min>houses[i][j]&&house!=j){
+                    house=j;
+                    min=houses[i][j];
+                }
+            }
+            result+=min;
+        }
+        return result;
+    }
+    //another approach
+    public static int paintingHouse2(int[][] house){
+        if(house.length==0||house==null)
+            return 0;
+        for(int i=1;i<house.length;i++){
+            house[i][0]+=Math.min(house[i-1][1],house[i-1][2]);
+            house[i][1]+=Math.min(house[i-1][0],house[i-1][2]);
+            house[i][2]+=Math.min(house[i-1][0],house[i-1][1]);
+        }
+        return Math.min(Math.min(house[house.length-1][0],house[house.length-1][1]),house[house.length-1][2]);
+    }
+    //Stairs
+    public static int stairs(int steps){
+        if(steps==0)
+            return 0;
+        if(steps==1)
+            return 1;
+        if(steps==2)
+            return 2;
+        int one=1;
+        int two=2;
+        int result=0;
+        for(int i=2;i<steps;i++){
+            result=one+two;
+            one=two;
+            two=result;
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        int[][] test1={{17,2,17},{16,16,5},{14,3,19}};
+        System.out.println(paintingHouses(test1));
+        System.out.println(paintingHouse2(test1));
+//        System.out.println(longSub(new int[]{1,9,7,4,7,13}));
 //        System.out.println(maxSub(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
-        System.out.println(longCS("abcde","ace"));
+//        System.out.println(longCS("abcde","ace"));
 //        System.out.println(canCross(new int[]{0,1,3,5,6,8,12,17}));
 //        System.out.println(uniquePath(3,7));
 //        System.out.println(Decode("12"));
