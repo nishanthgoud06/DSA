@@ -1857,10 +1857,83 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return result;
     }
+//    Art Gallery Thief
+    public static int artGallery(int[] weight,int[] values,int capacity){
+        int[][] dp=new int[weight.length+1][capacity+1];
+        for(int i=0;i<=weight.length;i++){
+            dp[i][0]=0;
+        }
+        for(int i=0;i<=capacity;i++){
+            dp[0][i]=0;
+        }
+        for(int i=1;i<=weight.length;i++){
+            for(int j=1;j<=capacity;j++){
+                if(weight[i-1]>j)
+                    dp[i][j]=dp[i-1][j];
+                else
+                    dp[i][j]=Math.max(dp[i-1][j],dp[i-1][j-weight[i-1]]+values[i-1]);
+            }
+        }
+        return dp[weight.length][capacity];
+    }
+    public static int knapSack(int limit,int[] weight,int[] values){
+        int[][] result=new int[weight.length+1][limit+1];
+        for(int i=1;i<=weight.length;i++){
+            for(int j=1;j<=limit;j++){
+                if(weight[i-1]>j){
+                    result[i][j]=result[i-1][j];
+                }else{
+                    result[i][j]=Math.max(result[i-1][j],result[i-1][j-weight[i-1]]+values[i-1]);
+                }
+            }
+        }
+        return result[weight.length][limit];
+    }
+    //Buggy Software
+    public static int isBuggy(int version){
+        if(version==0)
+            return 0;
+        int low=1;
+        int high=version;
+        while(low<high){
+            int mid=low+(high-low)/2;
+            if(isBadVersion(mid)==true){
+                high=mid-1;
+            }else
+                low=mid+1;
+        }
+        return low;
+    }
+    public static boolean isBadVersion(int num){
+        int n=(int)Math.floor(Math.random());
+        return num==n;
+    }
+    //Gym Lockers
+    public static int gymlocker(int round){
+        int count=0;
+        if(round==0)
+            return 0;
+        int[] dp=new int[round+1];
+        for(int i=1;i<=round;i++){
+            dp[i]=1;
+        }
+        for(int pass=2;pass<=round;pass++){
+            for(int i=pass;i<=round;i=i+pass){
+                dp[i]=dp[i]==1?0:1;
+            }
+        }
+        for(int i=1;i<=round;i++){
+            if(dp[i]==1)
+                count++;
+        }
+        return count;
+    }
     public static void main(String[] args) {
-        int[][] test1={{17,2,17},{16,16,5},{14,3,19}};
-        System.out.println(paintingHouses(test1));
-        System.out.println(paintingHouse2(test1));
+        System.out.println(gymlocker(9));
+//        System.out.println(artGallery(new int[]{4,1,3},new int[]{4,2,7},10));
+//        int[][] test1={{17,2,17},{16,16,5},{14,3,19}};
+//        System.out.println(paintingHouses(test1));
+//        System.out.println(paintingHouse2(test1));
 //        System.out.println(longSub(new int[]{1,9,7,4,7,13}));
 //        System.out.println(maxSub(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
 //        System.out.println(longCS("abcde","ace"));
