@@ -1928,6 +1928,7 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return count;
     }
+
     public static void main(String[] args) {
         System.out.println(gymlocker(9));
 //        System.out.println(artGallery(new int[]{4,1,3},new int[]{4,2,7},10));
