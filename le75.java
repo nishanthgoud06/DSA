@@ -243,8 +243,23 @@ public class le75 {
         }
         return result[total];
     }
+    //152. Maximum Product Subarray
+    public static int maxSubArray(int[] arr){
+        if(arr.length==0||arr==null)
+            return 0;
+        int max=arr[0],min=arr[0],result=arr[0];
+        int temp_max=0;
+        for(int i=1;i<arr.length;i++){
+            max=Math.max(max*arr[i],Math.max(arr[i],min+arr[i]));
+            min=Math.min(min*arr[i],Math.min(arr[i],max+arr[i]));
+            temp_max=max;
+            result=Math.max(temp_max,result);
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(sunsetSum(new int[]{1,2,3,5}));
+        System.out.println(maxSubArray(new int[]{2,3,-2,4}));
+//        System.out.println(sunsetSum(new int[]{1,2,3,5}));
 //        System.out.println(coinChange(new int[]{1,2,5},11));
 //        System.out.println(coinChange2(new int[]{1,2,5},11));
 //        System.out.println(houseRobbery(new int[]{1,2,3,1}));
