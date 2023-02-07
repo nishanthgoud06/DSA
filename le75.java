@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class le75 {
@@ -257,8 +258,162 @@ public class le75 {
         }
         return result;
     }
+    //Longest Substring Without Repeating Characters
+    //the first approach first we are going to use doesn't use any extra memory space
+    public static int longSub(String s){
+        if(s.length()==0)
+            return 0;
+        int[] arr=new int[128];
+        int start_index=0;
+        int result=0;
+        for(int end_index=0;end_index<s.length();end_index++){
+            start_index=Math.max(start_index,arr[s.charAt(end_index)]);
+            result=Math.max(result,end_index-start_index+1);
+            arr[s.charAt(end_index)]=end_index+1;
+        }
+        return result;
+    }
+    //to optimize time we are going to use the hashSet the time Complexity will improve
+    public static int longSubHash(String s){
+        if(s.length()==0)
+            return 0;
+        HashSet<Character> hashset=new HashSet<>();
+        int start=0,end=0;
+        int result=0;
+        while(end<s.length()){
+            if(!hashset.contains(s.charAt(end))){
+                hashset.add(s.charAt(end));
+                end++;
+                result=Math.max(result,hashset.size());
+            }else{
+                hashset.remove(s.charAt(start));
+                start++;
+            }
+        }
+        return result;
+    }
+    //3sum
+    public static List<List<Integer>> threeSum(int[] arr){
+        List<List<Integer>> result=new ArrayList<>();
+        if(arr.length==0)
+            return result;
+        Arrays.sort(arr);
+        for(int i=0;i<arr.length-1;i++){
+            if(i==0||(i>0&&arr[i]!=arr[i-1])){
+                int j=i+1;
+                int k=arr.length-1;
+                while(j<k){
+                    int sum=0-arr[i];
+                    if(sum==arr[j]+arr[k]){
+                        result.add(Arrays.asList(arr[i],arr[j],arr[k]));
+                        while(j<k&&arr[j]==arr[j+1]) j=j+1;
+                        while(j<k&&arr[k]==arr[k-1]) k=k-1;
+                        j++;
+                        k--;
+                    }else if(sum>arr[j]+arr[k]){
+                        j=j+1;
+                    }else{
+                        k=k-1;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+//    16. 3Sum Closest
+    public static int threeSumCloset(int[] arr,int target){
+        Arrays.sort(arr);
+        int result=arr[0]+arr[1]+arr[arr.length-1];
+        for(int i=0;i<arr.length-2;i++){
+            int j=i+1;
+            int k=arr.length-1;
+            while(j<k){
+                int sum=arr[i]+arr[j]+arr[k];
+                if(sum>target){
+                    k=k-1;
+                }else{
+                    j=j+1;
+                }
+                if(Math.abs(sum-target)<Math.abs(result-target)){
+                    result=sum;
+                }
+            }
+        }
+        return result;
+    }
+    //min stack
+    static class min_node{
+        int val;
+        int min;
+        min_node next;
+        public min_node(int val,int min,min_node next){
+            this.val=val;
+            this.min=min;
+            this.next=next;
+        }
+    }
+    static class min_stack{
+        private static min_node min_node;
+     public static void push(int val){
+         if(min_node==null){
+             min_node=new min_node(val,val,min_node);
+         }else{
+             min_node=new min_node(val,Math.min(min_node.min,val),min_node);
+         }
+     }
+     public static  int top(){
+        return min_node.val;
+     }
+     public static int min(){
+        return min_node.min;
+     }
+    }
+    //max stack
+    static class max_node{
+        int val;
+        int max;
+        max_node next;
+        public max_node(int val,int max,max_node next){
+            this.val=val;
+            this.max=max;
+            this.next=next;
+        }
+    }
+    static class max_stack{
+        private static max_node max_node;
+        public static void push(int val){
+            if(max_node==null){
+                max_node=new max_node(val,val,max_node);
+            }else{
+                max_node=new max_node(val,Math.max(val,max_node.max),max_node);
+            }
+        }
+        public static int top(){
+            return max_node.val;
+        }
+        public static int max(){
+            return max_node.max;
+        }
+    }
     public static void main(String[] args) {
-        System.out.println(maxSubArray(new int[]{2,3,-2,4}));
+//        min_stack min_test=new min_stack();
+//        min_test.push(1);;
+//        min_test.push(2);
+//        min_test.push(-1);
+//        min_test.push(10);
+//        System.out.println(min_test.top());
+//        System.out.println(min_test.min());
+        max_stack max_stack=new max_stack();
+        max_stack.push(1);
+        max_stack.push(2);
+        max_stack.push(-10);
+        System.out.println(max_stack.top());
+        System.out.println(max_stack.max());
+//        System.out.println(threeSumCloset(new int[]{-1,2,1,-4},1));
+//        System.out.println(threeSum(new int[]{-1,0,1,2,-1,-4}));
+//        System.out.println(longSub("abcdab"));
+//        System.out.println(longSubHash("abcdab"));
+//        System.out.println(maxSubArray(new int[]{2,3,-2,4}));
 //        System.out.println(sunsetSum(new int[]{1,2,3,5}));
 //        System.out.println(coinChange(new int[]{1,2,5},11));
 //        System.out.println(coinChange2(new int[]{1,2,5},11));
