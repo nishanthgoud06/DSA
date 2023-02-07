@@ -395,7 +395,93 @@ public class le75 {
             return max_node.max;
         }
     }
+//    208. Implement Trie (Prefix Tree)
+    //case 1 for the first approach i am going to use hashset through the timecomplexity is less we are
+    //going to have more sapce complexity
+
+    static class preT{
+        private static HashSet<String> hashset;
+        public preT(){
+            hashset=new HashSet<>();
+        }
+
+        public static void insert(String word){
+            hashset.add(word);
+        }
+        public static boolean search(String word){
+            return hashset.contains(word);
+        }
+        public static boolean startsWith(String word){
+            for(String s:hashset){
+                if(s.length()<word.length())
+                    continue;
+                if(s.substring(0,word.length()).equals(word))
+                    return true;
+            }
+            return false;
+        }
+    }
+//the second approach that we are going to use is kind of inception movie whre we have boolean value to track the end position;
+    static class PretiNode{
+    static class Preti{
+        Preti[] child;
+        boolean isEnd;
+        public Preti(){
+            child=new Preti[26];
+            isEnd=false;
+        }
+    }
+    private static Preti node;
+    public PretiNode(){
+        node=new Preti();
+    }
+    public static void insert(String word){
+        Preti temp=node;
+        for(int i=0;i<word.length();i++){
+            int c=word.charAt(i)-'a';
+            if(temp.child[c]==null){
+                temp.child[c]=new Preti();
+            }
+            temp=temp.child[c];
+        }
+        temp.isEnd=true;
+    }
+    public static boolean search(String word){
+        Preti temp=node;
+        for(int i=0;i<word.length();i++){
+            int c=word.charAt(i)-'a';
+            if(temp.child[c]==null)
+                return false;
+            temp=temp.child[c];
+        }
+        return temp.isEnd;
+    }
+    public static boolean startsWith(String word){
+        Preti temp=node;
+        for(int i=0;i<word.length();i++){
+            int c=word.charAt(i)-'a';
+            if(temp.child[c]==null)
+                return false;
+            temp=temp.child[c];
+        }
+        return true;
+    }
+    }
     public static void main(String[] args) {
+        preT test1=new preT();
+        test1.insert("apple");
+        System.out.println(test1.search("apple"));
+        System.out.println(test1.search("app"));
+        System.out.println(test1.startsWith("app"));
+        test1.insert("app");
+        System.out.println(test1.search("app"));
+        PretiNode test2=new PretiNode();
+        test2.insert("apple");
+        System.out.println(test2.search("apple"));
+        System.out.println(test2.search("app"));
+        System.out.println(test2.startsWith("app"));
+        test2.insert("app");
+        System.out.println(test2.search("app"));
 //        min_stack min_test=new min_stack();
 //        min_test.push(1);;
 //        min_test.push(2);
@@ -403,12 +489,12 @@ public class le75 {
 //        min_test.push(10);
 //        System.out.println(min_test.top());
 //        System.out.println(min_test.min());
-        max_stack max_stack=new max_stack();
-        max_stack.push(1);
-        max_stack.push(2);
-        max_stack.push(-10);
-        System.out.println(max_stack.top());
-        System.out.println(max_stack.max());
+//        max_stack max_stack=new max_stack();
+//        max_stack.push(1);
+//        max_stack.push(2);
+//        max_stack.push(-10);
+//        System.out.println(max_stack.top());
+//        System.out.println(max_stack.max());
 //        System.out.println(threeSumCloset(new int[]{-1,2,1,-4},1));
 //        System.out.println(threeSum(new int[]{-1,0,1,2,-1,-4}));
 //        System.out.println(longSub("abcdab"));
