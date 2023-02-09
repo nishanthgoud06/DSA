@@ -278,9 +278,33 @@ public class dynamicP {
         hm.put(amount,min);
         return min;
     }
+    //Gym Locker
+    //in this problem statement we are going to solve a problem at each level if the door is closed we open and vice versa.
+    public static int GymLocker(int round){
+        if(round==0)
+            return 0;
+        if(round==1||round==2)
+            return 1;
+        int[] dp=new int[round+1];
+        for(int i=1;i<=round;i++){
+            dp[i]=1;
+        }
+        for(int i=2;i<=round;i++){
+            for(int j=i;j<=round;j+=i){
+                dp[i]=dp[i]==1?0:1;
+            }
+        }
+        int result=0;
+        for(int i=1;i<=round;i++){
+            if(dp[i]==1)
+                result++;
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(coinChangeBU(new int[]{1,5,6,8},11));
-        System.out.println(coinChange(new int[]{1,5,6,8},11));
+        System.out.println(GymLocker(9));
+//        System.out.println(coinChangeBU(new int[]{1,5,6,8},11));
+//        System.out.println(coinChange(new int[]{1,5,6,8},11));
 //        System.out.println(DeleteStr("abc","a"));
 //        System.out.println(DeleteStr2("abc","a"));
 //        System.out.println(longestComSub2("abcdes","abc"));

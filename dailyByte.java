@@ -1928,9 +1928,102 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return count;
     }
-
+    //complement of a number
+    public static int complementNumber(int num){
+        if(num==0)
+            return 1;
+        int i=1;
+        while(i<=num){
+            i=i<<1;
+        }
+        return i-num-1;
+    }
+    //Create Trie
+    static class Trie{
+        static class trie{
+            trie[] child;
+            boolean isEnd;
+            public trie(){
+                child=new trie[26];
+                isEnd=false;
+            }
+        }
+        private static trie node;
+        public Trie(){
+            node=new trie();
+        }
+        public static void insert(String s){
+            trie temp=node;
+            for(int i=0;i<s.length();i++){
+                if(temp.child[s.charAt(i)-'a']==null){
+                    temp.child[s.charAt(i)-'a']=new trie();
+                }
+                temp=temp.child[s.charAt(i)];
+            }
+            temp.isEnd=true;
+        }
+        public static boolean search(String s){
+            trie temp=node;
+            for(int i=0;i<s.length();i++){
+                if(temp.child[s.charAt(i-'a')]==null)
+                    return false;
+                else{
+                    temp=temp.child[s.charAt(i-'a')];
+                }
+            }
+            return temp.isEnd;
+        }
+        public static boolean startsWith(String s){
+            trie temp=node;
+            for(int i=0;i<s.length();i++){
+                int j=s.charAt(i)-'a';
+                if(temp.child[j]==null)
+                    return false;
+                temp=temp.child[j];
+            }
+            return true;
+        }
+    }
+    //finding friend
+    public static int findFriend(int[][] friends){
+        if(friends.length==0)
+            return 0;
+        if(friends.length==1)
+            return 1;
+        boolean[] visited=new boolean[friends.length];
+        int result=0;
+        for(int i=0;i<friends.length;i++){
+            if(!visited[i]){
+                result++;
+                findFriendHelper(i,visited,friends);
+            }
+        }
+        return result;
+    }
+    public static void findFriendHelper(int i,boolean[] visited,int[][] friends){
+        visited[i]=true;
+        for(int j=0;j<friends.length;j++){
+            if(!visited[j]&&friends[i][j]==1){
+                findFriendHelper(j,visited,friends);
+            }
+        }
+    }
+    //Counting Primes
+    public static int countingPrime(int num){
+        if(num<=0)
+            return 0;
+        int result=0;
+        for(int i=1;i<num;i++){
+            if(i%2!=0)
+                result++;
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(gymlocker(9));
+        System.out.println(countingPrime(7));
+//        System.out.println(findFriend(new int[][]{{1,1,0},{1,1,0},{0,0,1}}));
+//        System.out.println(complementNumber(27));
+//        System.out.println(gymlocker(9));
 //        System.out.println(artGallery(new int[]{4,1,3},new int[]{4,2,7},10));
 //        int[][] test1={{17,2,17},{16,16,5},{14,3,19}};
 //        System.out.println(paintingHouses(test1));
