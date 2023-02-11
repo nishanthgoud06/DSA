@@ -145,6 +145,7 @@ public class graphT {
         if(!visited[i+1][j]&&grid[i+1][j]==0) result+=closedIsHelp(grid,i+1,j,visited);
         if(!visited[i][j-1]&&grid[i][j-1]==0) result+=closedIsHelp(grid,i,j-1,visited);
         if(!visited[i][j+1]&&grid[i][j+1]==0) result+=closedIsHelp(grid,i,j+1,visited);
+        return result;
     }
     public static void main(String[] args) {
         System.out.println(noofIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));

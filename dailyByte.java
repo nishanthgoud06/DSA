@@ -2019,6 +2019,8 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return result;
     }
+//    Reverse Vowels
+    
     public static void main(String[] args) {
         System.out.println(countingPrime(7));
 //        System.out.println(findFriend(new int[][]{{1,1,0},{1,1,0},{0,0,1}}));
