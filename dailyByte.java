@@ -2020,9 +2020,86 @@ public static boolean wordBreak(String s, List<String> dict) {
         return result;
     }
 //    Reverse Vowels
-    
+    public static String ReverseVowles(String s){
+        if(s.length()==0)
+            return "";
+        HashSet<Character> hs=new HashSet<>();
+        hs.add('a');
+        hs.add('e');
+        hs.add('i');
+        hs.add('o');
+        hs.add('u');
+        char[] c=s.toCharArray();
+        int low=0,high=c.length-1;
+        while(low<high){
+            while(low<high&&!hs.contains(c[low])){
+                low++;
+            }
+            while(low<high&&!hs.contains(c[high])){
+                high--;
+            }
+            char temp=c[low];
+            c[low]=c[high];
+            c[high]=temp;
+            low++;
+            high--;
+        }
+        return String.valueOf(c);
+    }
+    //Reap Children
+    public static List<Integer> ReapChildren(List<Integer> pid,List<Integer> ppid,int kill){
+        HashMap<Integer,List<Integer>> hm=new HashMap<>();
+        for(int i=0;i<ppid.size();i++){
+            List<Integer> child=hm.getOrDefault(ppid.get(i),new ArrayList<>());
+            child.add(pid.get(i));
+            hm.put(ppid.get(i),child);
+        }
+        List<Integer> result=new ArrayList<>();
+        reapChildrenHelper(kill,hm,result);
+        return result;
+    }
+    public static void reapChildrenHelper(int kill,HashMap<Integer,List<Integer>> hm,List<Integer> result){
+        result.add(kill);
+        for(int i:hm.get(kill)){
+            result.add(i);
+        }
+    }
+    //Character Scramble
+    public static boolean charScramble(String passage,String text){
+        if(passage.length()==0)
+            return true;
+        char[] c=new char[26];
+
+        for(int i=0;i<text.length();i++){
+            c[text.charAt(i)-'a']++;
+        }
+        for(int i=0;i<passage.length();i++){
+            c[passage.charAt(i)-'a']--;
+            if(c[passage.charAt(i)-'a']>0)
+                return false;
+        }
+        return true;
+    }
+    //Subsequence
+    public static boolean isSubSequence(String s,String t){
+        if(s.length()>t.length())
+            return false;
+        char[] c=new char[26];
+        for(int i=0;i<t.length();i++){
+            c[t.charAt(i)-'a']++;
+        }
+        for(int i=0;i<s.length();i++){
+            if(c[s.charAt(i)-'a']<=0)
+                return false;
+        }
+        return true;
+    }
     public static void main(String[] args) {
-        System.out.println(countingPrime(7));
+        System.out.println(isSubSequence("xyz","axbyc"));
+//        System.out.println(charScramble("bat","cat"));
+//        System.out.println(ReapChildren(new ArrayList<>(Arrays.asList(2,4,3,7)),new ArrayList<>(Arrays.asList(0,2,2,3)),3));
+//        System.out.println(ReverseVowles("computer"));
+//        System.out.println(countingPrime(7));
 //        System.out.println(findFriend(new int[][]{{1,1,0},{1,1,0},{0,0,1}}));
 //        System.out.println(complementNumber(27));
 //        System.out.println(gymlocker(9));
