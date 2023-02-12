@@ -2094,6 +2094,7 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return true;
     }
+
     public static void main(String[] args) {
         System.out.println(isSubSequence("xyz","axbyc"));
 //        System.out.println(charScramble("bat","cat"));
