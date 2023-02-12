@@ -2094,9 +2094,68 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return true;
     }
-
+    //Count Islands
+    public static int countIsland(int[][] grid){
+        if(grid.length==0||grid==null)
+            return 0;
+        int result=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    countIslandHelper(i,j,grid);
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+    public static void countIslandHelper(int i,int j,int[][] grid){
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]==0)
+            return;
+        grid[i][j]=0;
+        countIslandHelper(i-1,j,grid);
+        countIslandHelper(i+1,j,grid);
+        countIslandHelper(i,j-1,grid);
+        countIslandHelper(i,j+1,grid);
+    }
+    //compress chars
+    //this is wrong
+    public static int compress(char[] chars) {
+        if(chars.length==0)
+            return 0;
+        int result=0;
+        HashMap<Character,Integer> hm=new HashMap<>();
+        for(char c:chars){
+            hm.put(c,hm.getOrDefault(c,0)+1);
+        }
+        for(Map.Entry<Character,Integer> set:hm.entrySet()){
+            if(set.getValue()>1)
+                result++;
+        }
+        return result+hm.size();
+    }
+    public static int compressAns(char[] chars){
+        int index=0,result=0;
+        while(index<chars.length){
+            char cur=chars[index];
+            int count=0;
+            while(index<chars.length&&chars[index]==cur){
+                count++;
+            }
+            chars[result++]=cur;
+            if(count!=1){
+                for(char c:Integer.toString(count).toCharArray()){
+                    chars[result++]=c;
+                }
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(isSubSequence("xyz","axbyc"));
+        
+//        System.out.println(compress(new char[]{'a', 'b', 'c'}));
+//        System.out.println(countIsland(new int[][]{{11000}}));
+//        System.out.println(isSubSequence("xyz","axbyc"));
 //        System.out.println(charScramble("bat","cat"));
 //        System.out.println(ReapChildren(new ArrayList<>(Arrays.asList(2,4,3,7)),new ArrayList<>(Arrays.asList(0,2,2,3)),3));
 //        System.out.println(ReverseVowles("computer"));
