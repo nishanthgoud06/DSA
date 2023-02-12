@@ -467,21 +467,126 @@ public class le75 {
         return true;
     }
     }
+    //1020. Number of Enclaves
+    public static int Enclaves(int[][] grid){
+        if(grid.length==0||grid==null)
+            return 0;
+        int result=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    result++;
+                    if(EnclavesHelper(grid,i,j)){
+                        result--;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    public static boolean EnclavesHelper(int[][] grid,int i,int j){
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]==0)
+            return false;
+        if(i==0||i==grid.length-1||j==0||j==grid[0].length-1)
+            return true;
+        grid[i][j]=0;
+        boolean result=EnclavesHelper(grid,i-1,j)||EnclavesHelper(grid,i+1,j)||EnclavesHelper(grid,i,j-1)||EnclavesHelper(grid,i,j+1);
+        grid[i][j]=1;
+        return result;
+    }
+    //the above approch would work but for huge input the time limit will excde
+    public static int enclave(int[][] grid){
+        if (grid.length == 0 || grid == null)
+            return 0;
+        int result = 0;
+        boolean[][] visited = new boolean[grid.length][grid[0].length];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1 && !visited[i][j]) {
+                    result++;
+                    if (EnclavesHelperBfs(grid, i, j, visited)) {
+                        result--;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    public static boolean EnclavesHelperBfs(int[][] grid,int i,int j,boolean[][] visited){
+        Queue<int[]> queue=new LinkedList<>();
+        queue.offer(new int[]{i,j});
+        visited[i][j]=true;
+        while(!queue.isEmpty()){
+            int[] cur=queue.poll();
+            int x=cur[0];
+            int y=cur[1];
+            if(x==0||x==grid.length-1||y==0||y==grid[0].length-1)
+                return true;
+            if(x>0&&grid[x-1][y]==1&&!visited[x-1][y]){
+                queue.offer(new int[]{x-1,y});
+                visited[x-1][y]=true;
+            }
+            if(x<grid.length-1&&grid[x+1][y]==1&&!visited[x+1][y]){
+                queue.offer(new int[]{x+1,y});
+                visited[x+1][y]=true;
+            }
+            if(y>0&&grid[x][y-1]==1&&!visited[x][y-1]&&!visited[x][y-1]){
+                queue.offer(new int[]{x,y-1});
+                visited[x][y-1]=true;
+            }
+            if(y<grid[0].length-1&&grid[x][y+1]==1&&!visited[x][y+1]){
+                queue.offer(new int[]{x,y+1});
+                visited[x][y+1]=true;
+            }
+        }
+        return false;
+    }
+//    1905. Count Sub Islands
+    public static int countIsland(int[][] grid1,int[][] grid2){
+        int result=0;
+        for(int i=0;i< grid2.length;i++){
+            for(int j=0;j<grid2[0].length;j++){
+                if(grid2[i][j]==1&&countIslandHelper(grid1,grid2,i,j)){
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+    public static boolean countIslandHelper(int[][] grid1,int[][] grid2,int i,int j){
+        if(i>=0&&i<grid1.length&&j>=0&&j<grid1[0].length&&grid2[i][j]==1){
+            if(grid1[i][j]!=grid2[i][j])
+                return false;
+            grid2[i][j]=-1;
+            boolean top=countIslandHelper(grid1,grid2,i-1,j);
+            boolean bottom=countIslandHelper(grid1,grid2,i+1,j);
+            boolean left=countIslandHelper(grid1,grid2,i,j-1);
+            boolean right=countIslandHelper(grid1,grid2,i,j+1);
+            if(!top||!bottom||!left||!right)
+                return false;
+        }
+        return true;
+    }
     public static void main(String[] args) {
-        preT test1=new preT();
-        test1.insert("apple");
-        System.out.println(test1.search("apple"));
-        System.out.println(test1.search("app"));
-        System.out.println(test1.startsWith("app"));
-        test1.insert("app");
-        System.out.println(test1.search("app"));
-        PretiNode test2=new PretiNode();
-        test2.insert("apple");
-        System.out.println(test2.search("apple"));
-        System.out.println(test2.search("app"));
-        System.out.println(test2.startsWith("app"));
-        test2.insert("app");
-        System.out.println(test2.search("app"));
+        int[][] arr1={{1,1,1,0,0},{0,1,1,1,1},{0,0,0,0,0},{1,0,0,0,0},{1,1,0,1,1}};
+        int[][] arr2={{1,1,1,0,0},{0,0,1,1,1},{0,1,0,0,0},{1,0,1,1,0},{0,1,0,1,0}};
+        System.out.println(countIsland(arr1,arr2));
+//        System.out.println(enclave(new int[][]{{0,0,0,0},{1,0,1,0},{0,1,1,0},{0,0,0,0}}));
+//        System.out.println(enclave(new int[][]{{0,1,1,0},{0,0,1,0},{0,0,1,0},{0,0,0,0}}));
+//        preT test1=new preT();
+//        test1.insert("apple");
+//        System.out.println(test1.search("apple"));
+//        System.out.println(test1.search("app"));
+//        System.out.println(test1.startsWith("app"));
+//        test1.insert("app");
+//        System.out.println(test1.search("app"));
+//        PretiNode test2=new PretiNode();
+//        test2.insert("apple");
+//        System.out.println(test2.search("apple"));
+//        System.out.println(test2.search("app"));
+//        System.out.println(test2.startsWith("app"));
+//        test2.insert("app");
+//        System.out.println(test2.search("app"));
 //        min_stack min_test=new min_stack();
 //        min_test.push(1);;
 //        min_test.push(2);
