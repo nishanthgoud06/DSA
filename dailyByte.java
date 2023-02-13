@@ -2151,8 +2151,85 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return result;
     }
+    //Defanging IPs
+    public static String defanIP(String s){
+        if(s.length()==0)
+            return "";
+        String result="";
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)=='.'){
+                result+="[.]";
+            }else{
+                result+=s.charAt(i);
+            }
+        }
+        return result;
+    }
+    //Removing Vowels
+    public static String removeVowels(String s){
+        if(s.length()==0||s==null)
+            return s;
+        List<Character> vowels=new ArrayList<>();
+        vowels.add('a');
+        vowels.add('e');
+        vowels.add('i');
+        vowels.add('o');
+        vowels.add('u');
+        String result="";
+        for(int i=0;i<s.length();i++){
+            if(!vowels.contains(s.charAt(i))){
+                result+=s.charAt(i);
+            }
+        }
+        return result;
+    }
+    //Minimize Path
+    //first we would solve this is brute force approach
+    public static int minPath(int[][] path){
+        if(path.length==0||path==null)
+            return 0;
+        for(int i=1;i<path.length;i++){
+            path[i][0]+=path[i-1][0];
+        }
+        for(int i=1;i<path[0].length;i++){
+            path[0][i]+=path[0][i-1];
+        }
+       int result=0;
+        for(int i=1;i<path.length;i++){
+            for(int j=1;j<path[0].length;j++){
+                path[i][j]+=Math.min(path[i-1][j],path[i][j-1]);
+            }
+        }
+        return path[path.length-1][path[0].length-1];
+    }
+    //Hamming Distance
+    public static int hammingDistance(int x,int y){
+        int result=0;
+        int xor=x^y;
+        while(xor!=0){
+            result+=(xor&1);
+            xor=xor>>1;
+        }
+        return result;
+    }
+//    Travel to Points
+    public static int travelTopOint(int[][] points){
+        if(points.length==0||points==null)
+            return 0;
+        int max=0;
+        for(int i=0;i<points.length-1;i++){
+            int x=Math.abs(points[i][0]-points[i+1][0]);
+            int y=Math.abs(points[i][1]-points[i+1][1]);
+            max+=Math.max(x,y);
+        }
+        return max;
+    }
     public static void main(String[] args) {
-
+        System.out.println(travelTopOint(new int[][]{{0, 1}, {2, 3}, {4, 0}}));
+//        System.out.println(hammingDistance(2,4));
+//        System.out.println(minPath(new int[][]{{1,1,3},{2,3,1},{4,6,1}}));
+//        System.out.println(removeVowels("byte"));
+//        System.out.println(defanIP("127.0.0.1"));
 //        System.out.println(compress(new char[]{'a', 'b', 'c'}));
 //        System.out.println(countIsland(new int[][]{{11000}}));
 //        System.out.println(isSubSequence("xyz","axbyc"));
