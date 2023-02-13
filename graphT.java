@@ -192,7 +192,7 @@ public class graphT {
         }
         for(int i=0;i<n;i++){
             paciAtlaHelper(grid,0,i,pacific,Integer.MIN_VALUE);
-            paciAtlaHelper(grid,m-1,0,atlantic,Integer.MIN_VALUE);
+            paciAtlaHelper(grid,m-1,i,atlantic,Integer.MIN_VALUE);
         }
         for(int i=0;i<m;i++){
             for(int j=0;j<n;j++){
