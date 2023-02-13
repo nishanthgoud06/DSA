@@ -147,9 +147,43 @@ public class graphT {
         if(!visited[i][j+1]&&grid[i][j+1]==0) result+=closedIsHelp(grid,i,j+1,visited);
         return result;
     }
+    //1162. As Far from Land as Possible
+    public static int farLand(int[][] grid){
+        if(grid.length==0||grid==null)
+            return 0;
+        Queue<Integer> queue=new LinkedList<>();
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    queue.offer(i*grid[0].length+j);
+                }
+            }
+        }
+        if(queue.size()==0||queue.size()==grid.length*grid[0].length)
+            return -1;
+        int result=0;
+        int[][] dir={{-1,0},{1,0},{0,-1},{0,1}};
+        while(!queue.isEmpty()){
+            int index=queue.poll();
+            int x=index/grid[0].length;
+            int y=index%grid[0].length;
+            for(int[] d:dir){
+                int i=x+d[0];
+                int j=y+d[1];
+                if(i>=0&&i<grid.length&&j>=0&&j<grid[0].length&&grid[i][j]==0){
+                    grid[i][j]=1+grid[x][y];
+                    result=Math.max(result,grid[i][j]);
+                    queue.offer(i*grid[0].length+j);
+                }
+            }
+        }
+        return result-1;
+    }
+    public static List<int[]>
     public static void main(String[] args) {
-        System.out.println(noofIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));
-        System.out.println(noOfIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));
+        System.out.println(farLand(new int[][]{{1,0,1},{0,0,0},{1,0,1}}));
+//        System.out.println(noofIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));
+//        System.out.println(noOfIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));
 //        for(int[] i:floodFill(new int[][]{{1,1,1},{1,1,0},{1,0,1}},1,1,2)){
 //            System.out.println(Arrays.toString(i));
 //        }
