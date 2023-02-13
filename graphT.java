@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class graphT {
     //floodfill
@@ -147,9 +145,78 @@ public class graphT {
         if(!visited[i][j+1]&&grid[i][j+1]==0) result+=closedIsHelp(grid,i,j+1,visited);
         return result;
     }
+    //1162. As Far from Land as Possible
+    public static int farLand(int[][] grid){
+        if(grid.length==0||grid==null)
+            return 0;
+        Queue<Integer> queue=new LinkedList<>();
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    queue.offer(i*grid[0].length+j);
+                }
+            }
+        }
+        if(queue.size()==0||queue.size()==grid.length*grid[0].length)
+            return -1;
+        int result=0;
+        int[][] dir={{-1,0},{1,0},{0,-1},{0,1}};
+        while(!queue.isEmpty()){
+            int index=queue.poll();
+            int x=index/grid[0].length;
+            int y=index%grid[0].length;
+            for(int[] d:dir){
+                int i=x+d[0];
+                int j=y+d[1];
+                if(i>=0&&i<grid.length&&j>=0&&j<grid[0].length&&grid[i][j]==0){
+                    grid[i][j]=1+grid[x][y];
+                    result=Math.max(result,grid[i][j]);
+                    queue.offer(i*grid[0].length+j);
+                }
+            }
+        }
+        return result-1;
+    }
+    //417. Pacific Atlantic Water Flow
+    public static List<List<Integer>> paciAtla(int[][] grid){
+        List<List<Integer>> result=new ArrayList<>();
+        if(grid.length==0||grid==null)
+            return result;
+        int m=grid.length;
+        int n=grid[0].length;
+        boolean[][] pacific=new boolean[m][n];
+        boolean[][] atlantic=new boolean[m][n];
+        for(int i=0;i<m;i++){
+            paciAtlaHelper(grid,i,0,pacific,Integer.MIN_VALUE);
+            paciAtlaHelper(grid,i,n-1,atlantic,Integer.MIN_VALUE);
+        }
+        for(int i=0;i<n;i++){
+            paciAtlaHelper(grid,0,i,pacific,Integer.MIN_VALUE);
+            paciAtlaHelper(grid,m-1,0,atlantic,Integer.MIN_VALUE);
+        }
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(pacific[i][j]&&atlantic[i][j]){
+                   result.add(Arrays.asList(i,j));
+                }
+            }
+        }
+        return result;
+    }
+    public static void paciAtlaHelper(int[][] grid,int i,int j,boolean[][] ocean,int max){
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]<max||ocean[i][j])
+            return;
+        ocean[i][j]=true;
+        paciAtlaHelper(grid,i-1,j,ocean,grid[i][j]);
+        paciAtlaHelper(grid,i+1,j,ocean,grid[i][j]);
+        paciAtlaHelper(grid,i,j-1,ocean,grid[i][j]);
+        paciAtlaHelper(grid,i,j+1,ocean,grid[i][j]);
+    }
     public static void main(String[] args) {
-        System.out.println(noofIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));
-        System.out.println(noOfIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));
+        System.out.println(paciAtla(new int[][]{{1,2,2,3,5},{3,2,3,4,4},{2,4,5,3,1},{6,7,1,4,5},{5,1,1,2,4}}));
+//        System.out.println(farLand(new int[][]{{1,0,1},{0,0,0},{1,0,1}}));
+//        System.out.println(noofIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));
+//        System.out.println(noOfIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));
 //        for(int[] i:floodFill(new int[][]{{1,1,1},{1,1,0},{1,0,1}},1,1,2)){
 //            System.out.println(Arrays.toString(i));
 //        }

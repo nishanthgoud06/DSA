@@ -2152,7 +2152,7 @@ public static boolean wordBreak(String s, List<String> dict) {
         return result;
     }
     public static void main(String[] args) {
-        
+
 //        System.out.println(compress(new char[]{'a', 'b', 'c'}));
 //        System.out.println(countIsland(new int[][]{{11000}}));
 //        System.out.println(isSubSequence("xyz","axbyc"));
