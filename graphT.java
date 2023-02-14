@@ -212,8 +212,123 @@ public class graphT {
         paciAtlaHelper(grid,i,j-1,ocean,grid[i][j]);
         paciAtlaHelper(grid,i,j+1,ocean,grid[i][j]);
     }
+//    1091. Shortest Path in Binary Matrix
+    public static int shortPath(int[][] grid){
+        if(grid.length==0||grid==null)
+            return -1;
+        if(grid[0][0]==1||grid[grid.length-1][grid[0].length-1]==1)
+            return -1;
+        int[][] dir={{-1,-1},{-1,0},{-1,1},{0,-1},{0,0},{0,1},{1,-1},{1,0},{1,1}};
+        boolean[][] visited=new boolean[grid.length][grid[0].length];
+        Queue<int[]> queue=new LinkedList<>();
+        queue.offer(new int[]{0,0});
+        visited[0][0]=true;
+        int result=0;
+        while(!queue.isEmpty()){
+            int size= queue.size();
+            for(int i=0;i<size;i++){
+                int[] temp= queue.poll();
+                if(temp[0]==grid.length-1&&temp[1]==grid[0].length-1)
+                    return result+1;
+                for(int j=0;j<8;j++){
+                    int x=temp[0]+dir[j][0];
+                    int y=temp[1]+dir[j][1];
+                    if(x>=0&&x<grid.length&&y>=0&&y<grid[0].length&&grid[x][y]==0&&!visited[x][y]){
+                        visited[x][y]=true;
+                        queue.offer(new int[]{x,y});
+                    }
+                }
+            }
+            result++;
+        }
+        return -1;
+    }
+    //542. 01 Matrix
+    public static int[][] zeroonematrix(int[][] matrix){
+        if(matrix.length==0||matrix==null)
+            return null;
+        Queue<int[]> queue=new LinkedList<>();
+        for(int i=0;i<matrix.length;i++){
+            for(int j=0;j<matrix[0].length;j++){
+                if(matrix[i][j]==0){
+                    queue.offer(new int[] {i,j});
+                }else{
+                    matrix[i][j]=Integer.MAX_VALUE;
+                }
+            }
+        }
+        int[][] dir={{-1,0},{1,0},{0,-1},{0,1}};
+        while(!queue.isEmpty()){
+            int size= queue.size();
+            for(int i=0;i<size;i++){
+                int[] temp=queue.poll();
+                for(int[] d:dir){
+                    int x=temp[0]+d[0];
+                    int y=temp[1]+d[1];
+                    if(x<0||x>=matrix.length||y<0||y>=matrix[0].length||matrix[x][y]<=matrix[temp[0]][temp[1]]+1)
+                        continue;
+                    matrix[x][y]=1+matrix[temp[0]][temp[1]];
+                    queue.offer(new int[]{x,y});
+                }
+            }
+        }
+        return matrix;
+    }
+    //934. Shortest Bridge
+    public static int shortbridge(int[][] grid){
+        if(grid.length==0||grid==null){
+            return 0;
+        }
+        Queue<int[]> queue=new LinkedList<>();
+        boolean found=false;
+        int m=grid.length;
+        int n=grid[0].length;
+        int result=0;
+        boolean[][] visited=new boolean[m][n];
+        int[][] dir={{-1,0},{1,0},{0,-1},{0,1}};
+        for(int i=0;i<m&&!found;i++){
+            for(int j=0;j<n&&!found;j++){
+                if(grid[i][j]==1) {
+                    shortbridgeHelper(i, j, queue, visited, grid);
+                    found = true;
+                }
+            }
+        }
+
+        while(!queue.isEmpty()){
+            int size= queue.size();
+            for(int i=0;i<size;i++){
+                int[] temp=queue.poll();
+                for(int[] d:dir){
+                    int x=temp[0]+d[0];
+                    int y=temp[1]+d[1];
+                    if(x>=0&&x<m&&y>=0&&y<n&&!visited[x][y]){
+                        if(grid[x][y]==1)
+                            return result;
+                        visited[x][y]=true;
+                        queue.offer(new int[]{x,y});
+                    }
+                }
+            }
+            result++;
+        }
+        return -1;
+    }
+    public static void shortbridgeHelper(int i,int j,Queue<int[]> queue,boolean[][] visited,int[][] grid){
+        if(i<0||i>= visited.length||j<0||j>= visited[0].length||visited[i][j]||grid[i][j]==0)
+            return;
+        queue.offer(new int[]{i,j});
+        visited[i][j]=true;
+        shortbridgeHelper(i-1,j,queue,visited,grid);
+        shortbridgeHelper(i+1,j,queue,visited,grid);
+        shortbridgeHelper(i,j-1,queue,visited,grid);
+        shortbridgeHelper(i,j+1,queue,visited,grid);
+    }
     public static void main(String[] args) {
-        System.out.println(paciAtla(new int[][]{{1,2,2,3,5},{3,2,3,4,4},{2,4,5,3,1},{6,7,1,4,5},{5,1,1,2,4}}));
+        System.out.println(shortbridge(new int[][]{{0,1,0},{0,0,0},{0,0,1}}));
+//        System.out.println(Arrays.toString(zeroonematrix(new int[][]{{0,0,0},{0,1,0},{0,0,0}})));
+//        System.out.println(shortPath(new int[][]{{0,1},{1,0}}));
+//        System.out.println(paciAtla(new int[][]{{1,2,2,3,5},{3,2,3,4,4},{2,4,5,3,1},{6,7,1,4,5},{5,1,1,2,4}}));
 //        System.out.println(farLand(new int[][]{{1,0,1},{0,0,0},{1,0,1}}));
 //        System.out.println(noofIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));
 //        System.out.println(noOfIsland(new int[][] {{1,1,1,1,0},{1,1,0,1,0},{1,1,0,0,0},{0,0,0,0,0}}));
