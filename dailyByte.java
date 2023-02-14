@@ -2224,8 +2224,154 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return max;
     }
+    public static int[] rearrangeElment(int[] a){
+        if(a.length==0||a==null)
+            System.out.println("no element");;
+
+        int k=0;
+        for(int i=0;i<a.length;i++){
+            if(a[i]!=0){
+                a[k++]=a[i];
+            }
+        }
+        while(k!=a.length){
+            a[k++]=0;
+        }
+        return a;
+    }
+    //Averages
+    public static List<Double> averages(BST tree){
+        List<Double> result=new ArrayList<>();
+        Queue<BST> queue=new LinkedList<>();
+        queue.offer(tree);
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            int val=0;
+            for(int i=0;i<size;i++){
+                BST temp=queue.poll();
+                val+=temp.val;
+                if(temp.left!=null)
+                    queue.offer(temp.left);
+                if(temp.right!=null)
+                    queue.offer(temp.right);
+            }
+            result.add((double)val/size);
+        }
+        return result;
+    }
+    //Array Shuffle
+    public static int[] shuffleArray(int[] a){
+        int[] result=new int[a.length];
+        if(a.length==0)
+            return result;
+        int k=0;
+        for(int i=0;i<a.length;i++){
+            if(a[i]%2==0){
+                result[k]=a[i];
+                k=k+2;
+            }
+        }
+        k=1;
+        for(int i=0;i<a.length;i++){
+            if(a[i]%2!=0&&k<a.length){
+                result[k]=a[i];
+                k+=2;
+            }
+        }
+        return result;
+    }
+    //Is Monotonic
+    public static boolean monotonic(int[] a){
+        boolean increasing=false;
+        boolean decreasing=false;
+        if(a[0]<a[a.length-1])
+            increasing=true;
+        else
+            decreasing=true;
+        for(int i=0;i<a.length-1;i++){
+            if(increasing){
+                if(a[i]>a[i+1]){
+                    return false;
+                }
+            }
+            if(decreasing){
+                if(a[i]<a[i+1]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    //Diving Deep
+    static class n_array{
+        int val;
+        List<n_array> children;
+        public n_array(int val){
+            this.val=val;
+            this.children=new ArrayList<>();
+        }
+    }
+    //i am thinking of using a dfss
+    public static int DeepDive(n_array root){
+        if(root==null)
+            return 0;
+        int max=0;
+        for(n_array i:root.children){
+            max=Math.max(DeepDive(i),max);
+        }
+        return max+1;
+    }
+    //Keyboard Row
+    public static List<String> keyboardRow(List<String> input){
+        List<String> result=new ArrayList<>();
+        if(input.size()==0)
+            return result;
+        String[] words={"qwertyuiop","asdfghjkl","zxcvbnm"};
+        for(String s:input){
+            boolean singlerow=true;
+            int rowIndex=-1;
+            for(int i=0;i<words.length;i++){
+                if(words[i].indexOf(s.charAt(0))!=-1){
+                    rowIndex=i;
+                    break;
+                }
+            }
+            for(int j=1;j<words.length;j++){
+                if(words[rowIndex].indexOf(s.charAt(j))==-1){
+                    singlerow=false;
+                    break;
+                }
+            }
+            if(singlerow){
+                result.add(s);
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(travelTopOint(new int[][]{{0, 1}, {2, 3}, {4, 0}}));
+        System.out.println(keyboardRow(Arrays.asList("uto","xzy","byte")));
+//        n_array root=new n_array(4);
+//        n_array root1=new n_array(3);
+//        n_array root2=new n_array(9);
+//        n_array root3=new n_array(2);
+//        n_array root4=new n_array(7);
+//        n_array root5=new n_array(2);
+//        root.children.add(root1);
+//        root.children.add(root2);
+//        root.children.add(root3);
+//        root1.children.add(root4);
+//        root3.children.add(root5);
+//        System.out.println(DeepDive(root));
+//        System.out.println(monotonic(new int[]{8, 4, 6}));
+//        System.out.println(Arrays.toString(shuffleArray(new int[]{1,2,3,4})));
+//        BST root=new BST(1);
+//        root.left=new BST(6);
+//        root.right=new BST(8);
+//        root.left.left=new BST(1);
+//        root.left.right=new BST(5);
+//        System.out.println(averages(root));
+//        System.out.println(Arrays.toString(rearrangeElment(new int[]{3, 7, 0, 5, 0, 2})));
+//        System.out.println(travelTopOint(new int[][]{{0, 1}, {2, 3}, {4, 0}}));
 //        System.out.println(hammingDistance(2,4));
 //        System.out.println(minPath(new int[][]{{1,1,3},{2,3,1},{4,6,1}}));
 //        System.out.println(removeVowels("byte"));
