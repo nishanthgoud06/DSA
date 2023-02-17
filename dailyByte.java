@@ -2348,8 +2348,158 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return result;
     }
+    //Flip Flopping Bits
+    public static boolean flipFlop(int number){
+        if(number<=2)
+            return true;
+        int prev=number&1;
+        number=number>>1;
+        while(number!=0){
+            if((number&1)==prev)
+                return false;
+            prev=number&1;
+            number=number>>1;
+        }
+        return true;
+    }
+    //Reverse Number
+    public static int reverseNumber(int number){
+        if(number==0)
+            return number;
+        int reverseNumber=0;
+        while(number!=0){
+            int temp=number%10;
+            reverseNumber=reverseNumber*10+temp;
+            number=number/10;
+        }
+        return reverseNumber;
+    }
+    //No Same Neighbors
+    public static String noSame(String s){
+        if(s.length()==0)
+            return "";
+        HashMap<Character,Integer> hm=new HashMap<>();
+        PriorityQueue<Character> pq=new PriorityQueue<>((a,b)->hm.get(b)-hm.get(a));
+        for(char c:s.toCharArray()){
+            hm.put(c,hm.getOrDefault(c,0)+1);
+        }
+        pq.addAll(hm.keySet());
+        StringBuilder result=new StringBuilder();
+        while(pq.size()>1){
+            char present=pq.remove();
+            char next=pq.remove();
+            result.append(present);
+            result.append(next);
+            hm.put(present,hm.get(present)-1);
+            hm.put(next,hm.get(next)-1);
+            if(hm.get(present)>0){
+                pq.add(present);
+            }
+            if(hm.get(next)>0){
+                pq.add(next);
+            }
+        }
+        if(!pq.isEmpty()){
+            char hope=pq.remove();
+            if(hm.get(hope)>1)
+                return "";
+            result.append(hope);
+        }
+        return result.toString();
+    }
+    //Identical Elements
+    public static boolean identicalEle(int[] arr,int k){
+        if(arr.length<=1)
+            return true;
+        HashMap<Integer,List<Integer>> hm=new HashMap<>();
+        for(int i=0;i<arr.length;i++){
+            if(hm.containsKey(arr[i])){
+                List<Integer> check=hm.get(arr[i]);
+                int leftover=Math.abs(i-check.get(check.size()-1));
+                if(leftover!=k)
+                    return false;
+                check.add(i);
+                hm.put(arr[i],check);
+            }else{
+                List<Integer> temp=new ArrayList<>();
+                temp.add(i);
+                hm.put(arr[i],temp);
+            }
+        }
+        return true;
+    }
+    //sum within bounds
+    public static int SumBound(BST root,int low,int high){
+        if (root == null) {
+            return 0;
+        }
+        int sum = 0;
+        if (root.val >= low && root.val <= high) {
+            sum += root.val;
+        }
+        if (root.val > low) {
+            sum += SumBound(root.left, low, high);
+        }
+        if (root.val < high) {
+            sum += SumBound(root.right, low, high);
+        }
+        if (root.val == low) {
+            sum += SumBound(root.right, low, high);
+        }
+        if (root.val == high) {
+            sum += SumBound(root.left, low, high);
+        }
+        return sum;
+    }
+    //BirthDay
+    public static int satisfied(int[] guest,int[] app){
+        if(guest.length==0)
+            return 0;
+        if(app.length==0)
+            return guest.length;
+        HashSet<Integer> hs=new HashSet<>();
+        for(int i:guest){
+            hs.add(i);
+        }
+        int result=0;
+        for(int i:app){
+            if(hs.contains(i)){
+                result++;
+                hs.remove(i);
+            }
+        }
+        return result;
+    }
+    //subTree
+    public static boolean isSub(BST parent,BST child){
+        if(parent==null)
+            return parent==null&&child==null;
+        if(parent.val==child.val){
+            return isSubHelper(parent,child);
+        }
+        return isSub(parent.left,child)||isSub(parent.right,child);
+    }
+    public static boolean isSubHelper(BST parent,BST child){
+        if(parent==null)
+            return parent==null&&child==null;
+        if(parent.val!=child.val)
+            return false;
+        return isSubHelper(parent.left,child.left)&&isSubHelper(parent.right,child.right);
+    }
     public static void main(String[] args) {
-        System.out.println(keyboardRow(Arrays.asList("uto","xzy","byte")));
+        System.out.println(satisfied(new int[]{3, 4, 5},new int[]{2}));
+//        BST node=new BST(1);
+//        node.left=new BST(7);
+//        node.right=new BST(5);
+//        node.left.left=new BST(4);
+//        node.right.left=new BST(3);
+//        node.right.right=new BST(9);
+//        System.out.println(SumBound(node,3,5));
+//        System.out.println(identicalEle(new int[]{1,2,1,2,1},1));
+//        System.out.println(noSame("aab"));
+//        System.out.println(reverseNumber(-37));
+//        System.out.println(flipFlop(8));
+//        System.out.println(keyboardRow(Arrays.asList("uto","xzy","byte")));
 //        n_array root=new n_array(4);
 //        n_array root1=new n_array(3);
 //        n_array root2=new n_array(9);

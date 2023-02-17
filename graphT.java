@@ -324,8 +324,127 @@ public class graphT {
         shortbridgeHelper(i,j-1,queue,visited,grid);
         shortbridgeHelper(i,j+1,queue,visited,grid);
     }
+    //1926. Nearest Exit from Entrance in Maze
+    public static int maze(char[][] grid,int[] start){
+        if(grid.length==0||grid==null)
+            return 0;
+        Queue<int[]> queue=new LinkedList<>();
+        grid[start[0]][start[1]]='+';
+        queue.offer(new int[]{start[0],start[1]});
+        int[][] dir={{0,-1},{0,1},{1,0},{-1,0}};
+        int result=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            result++;
+            for(int i=0;i<size;i++){
+                int[] temp=queue.poll();
+                for(int[] d:dir){
+                    int x=d[0]+temp[0];
+                    int y=d[1]+temp[1];
+                    if(x<0||x>=grid.length||y<0||y>=grid[0].length)
+                        continue;
+                    if(grid[x][y]=='+')
+                        continue;
+                    if(x==0||x==grid.length-1||y==0||y==grid[i].length-1)
+                        return result;
+                    grid[x][y]='+';
+                    queue.offer(new int[]{x,y});
+                }
+            }
+        }
+        return -1;
+    }
+    //797. All Paths From Source to Target
+    public static List<List<Integer>> sourceToPath(int[][] graph){
+        List<List<Integer>> result=new ArrayList<>();
+        if(graph.length==0||graph==null)
+            return result;
+        List<Integer> temp=new ArrayList<>();
+        temp.add(0);
+        sourceToPathHelper(result,graph,temp,0);
+        return result;
+    }
+    public static void sourceToPathHelper(List<List<Integer>> result,int[][] graph,List<Integer> temp,int index){
+        if(index==graph.length-1){
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+        for(int i:graph[index]){
+            temp.add(i);
+            sourceToPathHelper(result,graph,temp,i);
+            temp.remove(temp.size()-1);
+        }
+    }
+    //841. Keys and Rooms
+    public static boolean KeysRoom(List<List<Integer>> rooms){
+        HashSet<Integer> hs=new HashSet<>();
+        hs.add(0);
+        KeysRoomHelper(rooms,hs,0);
+        return hs.size()==rooms.size();
+    }
+    public static void KeysRoomHelper(List<List<Integer>> rooms,HashSet<Integer> hs,int index){
+        for(int i:rooms.get(index)){
+            if(!hs.contains(i)){
+                hs.add(i);
+                KeysRoomHelper(rooms,hs,i);
+            }
+        }
+    }
+    //547. Number of Provinces
+    public static int provinces(int[][] provience){
+        if(provience.length==0||provience==null)
+            return 0;
+        int result=0;
+        boolean[] visited=new boolean[provience.length];
+        for(int i=0;i<provience.length;i++){
+            if(!visited[i]){
+                provi_helper(provience,i,visited);
+                result++;
+            }
+        }
+        return result;
+    }
+    public static void provi_helper(int[][] provience,int index,boolean[] visited){
+        for(int i=0;i<provience.length;i++){
+            if(!visited[i]&&provience[index][i]==1){
+                visited[i]=true;
+                provi_helper(provience,i,visited);
+            }
+        }
+    }
+//    1319. Number of Operations to Make Network Connected
+    public static int numOfNetwork(int n, int[][] connections){
+        if(connections.length<n-1)
+            return -1;
+        int[] parent=new int[n];
+        for(int i=0;i<n;i++){
+            parent[i]=i;
+        }
+        int components = n;
+        for(int[] c:connections){
+            int a=c[0];
+            int b=c[1];
+            int pa=findParent(parent,a);
+            int pb=findParent(parent,b);
+            if(pa!=pb){
+                parent[pa]=pb;
+                components--;
+            }
+        }
+        return components-1;
+    }
+    public static int findParent(int[] parent,int p){
+        if(parent[p]!=p){
+            return findParent(parent,parent[p]);
+        }
+        return parent[p];
+    }
     public static void main(String[] args) {
-        System.out.println(shortbridge(new int[][]{{0,1,0},{0,0,0},{0,0,1}}));
+        System.out.println(numOfNetwork(4,new int[][]{{0,1},{0,2},{1,2}}));
+//        System.out.println(provinces(new int[][]{{1,0,0},{0,1,0},{0,0,1}}));
+//        System.out.println(sourceToPath(new int[][]{{1,2},{3},{3},{0}}));
+//        System.out.println(maze(new char[][]{{'+','+','.','+'},{'.','.','.','+'},{'+','+','+','.'}},new int[]{1,2}));
+//        System.out.println(shortbridge(new int[][]{{0,1,0},{0,0,0},{0,0,1}}));
 //        System.out.println(Arrays.toString(zeroonematrix(new int[][]{{0,0,0},{0,1,0},{0,0,0}})));
 //        System.out.println(shortPath(new int[][]{{0,1},{1,0}}));
 //        System.out.println(paciAtla(new int[][]{{1,2,2,3,5},{3,2,3,4,4},{2,4,5,3,1},{6,7,1,4,5},{5,1,1,2,4}}));
