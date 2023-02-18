@@ -439,8 +439,48 @@ public class graphT {
         }
         return parent[p];
     }
+    //1376. Time Needed to Inform All Employees
+    public static int Timeneeded(int[] manager,int total,int[] informTime,int headId){
+        int result=0;
+        for(int i=0;i<total;i++){
+            result=Math.max(result,TimeneededHelper(manager,informTime,i));
+        }
+        return result;
+    }
+    public static int TimeneededHelper(int[] manager,int[] informTime,int i){
+        if(manager[i]!=-1){
+            informTime[i]+=TimeneededHelper(manager,informTime,manager[i]);
+            manager[i]=-1;
+        }
+        return informTime[i];
+    }
+//    802. Find Eventual Safe States
+    public static List<Integer> findSafe(int[][] states){
+        List<Integer> result=new ArrayList<>();
+        if(states.length==0||states==null)
+            return result;
+        int[] visited=new int[states.length];
+        for(int i=0;i< states.length;i++){
+            if(findSafeHelper(states,i,visited))
+                result.add(i);
+        }
+        return result;
+    }
+    public static boolean findSafeHelper(int[][] states,int position,int[] visited){
+        if(visited[position]!=0)
+            return visited[position]==1;
+        visited[position]=2;
+        for(int i:states[position]){
+            if(!findSafeHelper(states,i,visited))
+                return false;
+        }
+        visited[position]=1;
+        return true;
+    }
     public static void main(String[] args) {
-        System.out.println(numOfNetwork(4,new int[][]{{0,1},{0,2},{1,2}}));
+        System.out.println(findSafe(new int[][]{{1,2},{2,3},{5},{0},{5},{},{}}));
+//        System.out.println(Timeneeded(new int[]{2,2,-1,2,2,2},6,new int[]{0,0,1,0,0,0},2));
+//        System.out.println(numOfNetwork(4,new int[][]{{0,1},{0,2},{1,2}}));
 //        System.out.println(provinces(new int[][]{{1,0,0},{0,1,0},{0,0,1}}));
 //        System.out.println(sourceToPath(new int[][]{{1,2},{3},{3},{0}}));
 //        System.out.println(maze(new char[][]{{'+','+','.','+'},{'.','.','.','+'},{'+','+','+','.'}},new int[]{1,2}));
