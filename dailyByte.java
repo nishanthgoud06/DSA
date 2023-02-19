@@ -2486,8 +2486,53 @@ public static boolean wordBreak(String s, List<String> dict) {
             return false;
         return isSubHelper(parent.left,child.left)&&isSubHelper(parent.right,child.right);
     }
+    //Birthday Cake
+    public static int birthDay(int[] app,int[] cake){
+        Arrays.sort(app);
+        Arrays.sort(cake);
+        int i=0;
+        int j=0;
+        int result=0;
+        while(i<app.length&&j<cake.length){
+            int person=app[i];
+            int piece=cake[j];
+            while(person>piece&&j<cake.length){
+                j++;
+                piece=cake[j];
+            }
+            if(piece>=person){
+                result++;
+                i++;
+                j++;
+            }
+        }
+        return result;
+    }
+    //Divisible Digits
+    public static List<Integer> divisible(int num){
+        List<Integer> result=new ArrayList<>();
+        for(int i=0;i<num;i++){
+            if(isSlef(i)){
+                result.add(i);
+            }
+        }
+        return result;
+    }
+    public static boolean isSlef(int num){
+        int originalNum = num;
+        while (num != 0) {
+            int digit = num % 10;
+            if (digit == 0 || originalNum % digit != 0) {
+                return false;
+            }
+            num /= 10;
+        }
+        return true;
+    }
     public static void main(String[] args) {
-        System.out.println(satisfied(new int[]{3, 4, 5},new int[]{2}));
+        System.out.println(divisible(17));
+//        System.out.println(birthDay(new int[]{3,4,5},new int[]{2}));
+//        System.out.println(satisfied(new int[]{3, 4, 5},new int[]{2}));
 //        BST node=new BST(1);
 //        node.left=new BST(7);
 //        node.right=new BST(5);
