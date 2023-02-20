@@ -2529,8 +2529,164 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return true;
     }
+    //Pond Size
+    public static int pondSize(int[][] grid){
+        if (grid == null || grid.length == 0)
+            return 0;
+        int max = 0;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 0) {
+                    max = Math.max(max, pondSizeHelper(i, j, grid));
+                }
+            }
+        }
+        return max;
+    }
+    public static int pondSizeHelper(int i,int j,int[][] grid){
+        int size = 0;
+        Stack<int[]> stack = new Stack<>();
+        stack.push(new int[]{i, j});
+
+        while (!stack.isEmpty()) {
+            int[] curr = stack.pop();
+            int x = curr[0];
+            int y = curr[1];
+            if (x >= 0 && x < grid.length && y >= 0 && y < grid[0].length && grid[x][y] == 0) {
+                size++;
+                grid[x][y] = 1;
+                stack.push(new int[]{x - 1, y});
+                stack.push(new int[]{x + 1, y});
+                stack.push(new int[]{x, y - 1});
+                stack.push(new int[]{x, y + 1});
+            }
+        }
+
+        return size;
+    }
+    //Find the Number
+    //here we are find the nth largest number in the array
+    //for this we are not using sorting as it will take nlongn to sort the array
+    //instead we are going to use max heap where the solution can be executed in log n time
+    public static int findtheNumber(int[] numbers,int pos){
+        if(numbers.length==0||numbers==null)
+            return 0;
+        PriorityQueue<Integer> pq=new PriorityQueue<>((a,b)->b-a);
+        for(int i :numbers){
+            pq.offer(i);
+        }
+        while(pos>1){
+            pq.poll();
+            pos=pos-1;
+        }
+        return pq.peek();
+    }
+    //the above approach we are usig loops twice instead lets implement this is 1 for loop
+    public static int findtheNumbers(int[] number,int pos){
+        if(number.length==0||number==null)
+            return 0;
+        PriorityQueue<Integer> pq=new PriorityQueue<>();
+        for(int i:number){
+                pq.offer(i);
+            if(pq.size()>pos){
+                pq.poll();
+            }
+        }
+        return pq.peek();
+    }
+    //Swap Words
+    public static String swapWors(String s){
+        if(s.length()<=1)
+            return s;
+        String[] str=s.split(" ");
+        int i=0,j=str.length-1;
+        while(i<j){
+            String temp=str[i];
+            str[i]=str[j];
+            str[j]=temp;
+            i++;
+            j--;
+        }
+        return String.join(" ",str);
+    }
+    //Products
+    public static int[] products(int[] arr){
+        if(arr.length<=1)
+            return arr;
+        int[] result=new int[arr.length];
+        for(int i=0;i<arr.length;i++){
+            int sum=1;
+            for(int j=0;j<arr.length;j++){
+                if(i==j)
+                    continue;
+                sum*=arr[j];
+            }
+            result[i]=sum;
+        }
+        return result;
+    }
+    //there is a better way to solve this problem
+    public static int[] productMinMax(int[] arr){
+        if(arr.length==0||arr==null)
+            return new int[0];
+        int[] prefix=new int[arr.length];
+        int[] sufix=new int[arr.length];
+        int[] result=new int[arr.length];
+        prefix[0]=1;
+        sufix[arr.length-1]=1;
+        for(int i=1;i<arr.length;i++){
+            prefix[i]=prefix[i-1]*arr[i-1];
+        }
+        for(int i=arr.length-2;i>=0;i--){
+            sufix[i]=sufix[i+1]*arr[i+1];
+        }
+        for(int i=0;i<arr.length;i++){
+            result[i]=prefix[i]*sufix[i];
+        }
+        return result;
+    }
+    //Tree Paths
+    public static int treePath(BST node,int target){
+        if(node==null){
+            return 0;
+        }
+        int[] result=new int[1];
+        return treepathHelper(node,target,  new HashMap<>(),0);
+    }
+    public static int treepathHelper(BST node, int k, Map<Integer, Integer> prefixSums, int currSum){
+        if (node == null) {
+            return 0;
+        }
+
+        currSum += node.val;
+        int numPaths = prefixSums.getOrDefault(currSum - k, 0);
+        if (currSum == k) {
+            numPaths++;
+        }
+
+        prefixSums.put(currSum, prefixSums.getOrDefault(currSum, 0) + 1);
+
+        numPaths += treepathHelper(node.left, k, prefixSums, currSum) + treepathHelper(node.right, k, prefixSums, currSum);
+
+        prefixSums.put(currSum, prefixSums.get(currSum) - 1);
+        if (prefixSums.get(currSum) == 0) {
+            prefixSums.remove(currSum);
+        }
+
+        return numPaths;
+    }
     public static void main(String[] args) {
-        System.out.println(divisible(17));
+        BST node=new BST(2);
+        node.left=new BST(-4);
+        node.right=new BST(9);
+        node.left.left=new BST(2);
+        System.out.println(treePath(node,11));
+//        System.out.println(Arrays.toString(productMinMax(new int[]{1,2,3})));
+//        System.out.println(Arrays.toString(products(new int[]{1,2,3})));
+//        System.out.println(swapWors("The Daily Byte"));
+//        System.out.println(findtheNumbers(new int[]{9, 2, 1, 7, 3, 2},5));
+//        System.out.println(pondSize(new int[][]{{1,0,1},{0,0,0},{1,0,1}}));
+//        System.out.println(divisible(17));
 //        System.out.println(birthDay(new int[]{3,4,5},new int[]{2}));
 //        System.out.println(satisfied(new int[]{3, 4, 5},new int[]{2}));
 //        BST node=new BST(1);
