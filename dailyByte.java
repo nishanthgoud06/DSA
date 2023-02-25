@@ -2518,6 +2518,7 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return result;
     }
+
     public static boolean isSlef(int num){
         int originalNum = num;
         while (num != 0) {
@@ -2675,12 +2676,210 @@ public static boolean wordBreak(String s, List<String> dict) {
 
         return numPaths;
     }
+    //1129. Shortest Path with Alternating Colors
+    public static int[] shortAltColor(int[][] red,int[][] blue,int limit){
+        if((red.length==0&&blue.length==0)||limit==0)
+            return new int[0];
+        List<Integer>[] redList=new ArrayList[limit];
+        List<Integer>[] blueList=new ArrayList[limit];
+        for(int i=0;i<red.length;i++){
+            redList[i]=new ArrayList<>();
+        }
+        for(int i=0;i<blue.length;i++){
+            blueList[i]=new ArrayList<>();
+        }
+        for(int[] i:red){
+            redList[i[0]].add(i[1]);
+        }
+        for(int[] i:blue){
+            blueList[i[0]].add(i[1]);
+        }
+        int[][] dist=new int[limit][limit];
+        for(int i=0;i<limit;i++){
+            Arrays.fill(dist[i],-1);
+        }
+        dist[0][0]=0;
+        dist[0][1]=0;
+        Queue<int[]> queue=new LinkedList<>();
+        queue.offer(new int[]{0,0});//red point of view
+        queue.offer(new int[]{0,1});//blue point of view
+        while(!queue.isEmpty()){
+            int[] temp= queue.poll();
+            int distance=temp[0];
+            int color=temp[1];
+            List<Integer>[] list=color==0?redList:blueList;
+            for(int neighbour:list[distance]){
+                if(dist[neighbour][1-color]==-1){
+                    dist[neighbour][1-color]=dist[distance][color]+1;
+                    queue.offer(new int[]{neighbour,1-color});
+                }
+            }
+        }
+        int[] result=new int[limit];
+        for(int i=0;i<limit;i++){
+            int min=-1;
+            for(int j=0;j<2;j++){
+                if(dist[i][j]!=-1){
+                    if(min==-1||dist[i][j]<min){
+                        result[i]=dist[i][j];
+                    }
+                }
+            }
+            result[i]=min;
+        }
+        return result;
+    }
+    //1466. Reorder Routes to Make All Paths Lead to the City Zero
+    public static int reorder(int[][] roads,int total){
+        HashSet<String> hs=new HashSet<>();
+        HashMap<Integer,Set<Integer>> hm=new HashMap<>();
+        for(int i=0;i<total;i++){
+            hm.put(i,new HashSet<>());
+        }
+        for(int[] i:roads){
+            hs.add(i[0]+";"+i[1]);
+            hm.get(i[0]).add(i[1]);
+            hm.get(i[1]).add(i[0]);
+        }
+        Queue<Integer> queue=new LinkedList<>();
+        queue.offer(0);
+        boolean[] visited=new boolean[total];
+        visited[0]=true;
+        int result=0;
+        while(!queue.isEmpty()){
+            int temp=queue.poll();
+            for(int i:hm.get(temp)){
+                if(visited[i])
+                    continue;
+                if(!hs.contains(i+";"+temp))
+                    result++;
+                queue.offer(i);
+            }
+        }
+        return result;
+    }
+    //Bottom of the Barrel
+    public static int bottomBarrel(BST node){
+        if(node==null)
+            return 0;
+        int[] arr={0,-1};
+        bottomBarrelHelper(node,0,arr);
+        return arr[0];
+    }
+    public static void bottomBarrelHelper(BST node,int level,int[] arr){
+        if(node==null)
+            return;
+        if(node.left!=null&&level>arr[1]){
+            arr[0]=node.left.val;
+            arr[1]=level;
+        }
+        bottomBarrelHelper(node.left,level+1,arr);
+        bottomBarrelHelper(node.right,level+1,arr);
+    }
+    //String Repetition
+    public static boolean StringRep(String s){
+        int len=s.length();
+        for(int i=len/2;i>=1;i--){
+            if(len%i==0){
+                int limit=len/i;
+                String str=s.substring(0,i);
+                StringBuilder sb=new StringBuilder();
+                for(int j=0;j<limit;j++){
+                    sb.append(str);
+                }
+                if(sb.toString().equals(s)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+        public static List<String> repeatedSubstrings(String s) {
+            List<String> res = new ArrayList<>();
+            if (s.length() < 10) {
+                return res;
+            }
+
+            Map<String, Integer> freq = new HashMap<>();
+            for (int i = 0; i <= s.length() - 10; i++) {
+                String substr = s.substring(i, i + 10);
+                if(StringRep(substr)){
+                    freq.put(substr, freq.getOrDefault(substr, 0) + 1);
+                }
+            }
+            for (Map.Entry<String, Integer> entry : freq.entrySet()) {
+                if (entry.getValue() > 1) {
+                    res.add(entry.getKey());
+                }
+            }
+
+            return res;
+        }
+//Setting Sail
+    public static boolean settingSail(int[][] grid,int limit){
+        if(grid.length==0||grid==null||limit==0)
+            return false;
+        //we are going to implememt this using dfs approach
+        int current=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    seetingSailHelper(grid,i,j,current);
+                }
+            }
+        }
+        return current< limit;
+    }
+    public static void seetingSailHelper(int[][] grid,int i,int j,int current){
+        if (i < 0 || i >= grid.length || j < 0 || j >= grid[0].length || grid[i][j] == 0) {
+            return;
+        }
+        grid[i][j]=0;
+        current=current+1;
+        seetingSailHelper(grid,i-1,j,current);
+        seetingSailHelper(grid,i+1,j,current);
+        seetingSailHelper(grid,i,j-1,current);
+        seetingSailHelper(grid,i,j+1,current);
+    }
+    //Unique Characters
+    public static int uniqueChar(String s,int sizeLimit){
+        if(s.length()==0||s==null){
+            return 0;
+        }
+        HashMap<Character,Integer> hm=new HashMap<>();
+        int start=0;
+        int end=0;
+        int result=0;
+        while(end<s.length()){
+            char left_char=s.charAt(end);
+            hm.put(left_char,hm.getOrDefault(left_char,0)+1);
+            end++;
+            while(hm.size()>sizeLimit){
+                char right_char=s.charAt(start);
+                hm.put(right_char,hm.get(right_char)-1);
+                if(hm.get(right_char)==0)
+                    hm.remove(right_char);
+                start++;
+            }
+            result=Math.max(result,end-start);
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        BST node=new BST(2);
-        node.left=new BST(-4);
-        node.right=new BST(9);
-        node.left.left=new BST(2);
-        System.out.println(treePath(node,11));
+        System.out.println(uniqueChar("abcabbbbbbbbbbb",3));
+//        System.out.println(settingSail(new int[][]{{0,0,1},{1,0,0},{0,0,1}},5));
+//        System.out.println(repeatedSubstrings("ABABABABABABBBBBBBBBBB"));
+//        BST node=new BST(8);
+//        node.left=new BST(1);
+//        node.right=new BST(4);
+//        node.right.left=new BST(2);
+//        System.out.println(bottomBarrel(node));
+//        System.out.println(Arrays.toString(shortAltColor(new int[][]{{0,1},{1,2}},new int[0][0],3)));
+//        BST node=new BST(2);
+//        node.left=new BST(-4);
+//        node.right=new BST(9);
+//        node.left.left=new BST(2);
+//        System.out.println(treePath(node,11));
 //        System.out.println(Arrays.toString(productMinMax(new int[]{1,2,3})));
 //        System.out.println(Arrays.toString(products(new int[]{1,2,3})));
 //        System.out.println(swapWors("The Daily Byte"));
