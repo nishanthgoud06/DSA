@@ -2865,8 +2865,85 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return result;
     }
+    //close points
+    public static int[][] closePoints(int[][] points,int k){
+       PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->Integer.compare(closepointshelper(a),closepointshelper(b)));
+       for(int[] i:points){
+           pq.offer(i);
+       }
+       while(pq.size()>k){
+           pq.poll();
+       }
+       int[][] result=new int[k][2];
+       while(!pq.isEmpty()){
+           result[--k]=pq.poll();
+       }
+       return result;
+    }
+    public static int closepointshelper(int[] i){
+        return ((i[0]*i[0])+(i[1]*i[1]));
+    }
+    //the same using list
+    public static List<int[]> pointsClose(int[][] points,int k){
+        if(points.length==0||points==null||k==0)
+            return new ArrayList<>();
+        PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->Integer.compare(closepointshelper(b),closepointshelper(a)));
+        for(int[] i:points){
+            pq.offer(i);
+        }
+        while(pq.size()>k){
+            pq.poll();
+        }
+        List<int[]> result=new ArrayList<>();
+        while(!pq.isEmpty()){
+            result.add(pq.poll());
+        }
+        return result;
+    }
+    //List Sum
+    static class ListNode{
+        ListNode next;
+        int val;
+        public ListNode(int val){
+            this.val=val;
+            this.next=null;
+        }
+        public ListNode(int val,ListNode node){
+            this.val=val;
+            this.next=node;
+        }
+    }
+    public static ListNode ListSum(ListNode list1,ListNode list2){
+        ListNode result=new ListNode(0);
+        ListNode Dummy=result;
+        int carry=0;
+        while(list1!=null&&list2!=null){
+            int element1=list1!=null?list1.val:0;
+            int element2=list2!=null?list2.val:0;
+            int number=element2+element1+carry;
+            int leftover=number%10;
+            carry=number/10;
+            ListNode next=new ListNode(leftover);
+            Dummy.next=next;
+            if(list1.next!=null){
+                list1=list1.next;
+            }
+            if(list2.next!=null){
+                list2=list2.next;
+            }
+            Dummy=Dummy.next;
+        }
+        if(carry>0){
+            ListNode list=new ListNode(carry);
+            Dummy.next=list;
+            Dummy=Dummy.next;
+        }
+        return result.next;
+    }
     public static void main(String[] args) {
-        System.out.println(uniqueChar("abcabbbbbbbbbbb",3));
+        System.out.println(pointsClose(new int[][]{{1,1},{-2,-2}},1));
+//        System.out.println(closePoints(new int[][]{{1,1},{-2,-2}},1));
+//        System.out.println(uniqueChar("abcabbbbbbbbbbb",3));
 //        System.out.println(settingSail(new int[][]{{0,0,1},{1,0,0},{0,0,1}},5));
 //        System.out.println(repeatedSubstrings("ABABABABABABBBBBBBBBBB"));
 //        BST node=new BST(8);
