@@ -2940,8 +2940,35 @@ public static boolean wordBreak(String s, List<String> dict) {
         }
         return result.next;
     }
+    //clean tree
+    public static BST cleanTree(BST node){
+        if(node==null)
+            return new BST();
+        node.left=cleanTree(node.left);
+        node.right=cleanTree(node.right);
+        if(node.left==null&&node.right==null){
+            if(node.val==1){
+                return node;
+            }else{
+                return null;
+            }
+        }
+        if(node.left==null){
+            return node.right;
+        }
+        if(node.right==null){
+            return node.left;
+        }
+
+        return node;
+    }
+
     public static void main(String[] args) {
-        System.out.println(pointsClose(new int[][]{{1,1},{-2,-2}},1));
+        BST node=new BST(1);
+        node.left=new BST(1);
+        node.right=new BST(0);
+        System.out.println(cleanTree(node));
+//        System.out.println(pointsClose(new int[][]{{1,1},{-2,-2}},1));
 //        System.out.println(closePoints(new int[][]{{1,1},{-2,-2}},1));
 //        System.out.println(uniqueChar("abcabbbbbbbbbbb",3));
 //        System.out.println(settingSail(new int[][]{{0,0,1},{1,0,0},{0,0,1}},5));
