@@ -229,14 +229,50 @@ public class gfgBasic {
         result+=values(n.right,Math.max(n.val,max));
         return result;
     }
+    //here we are going to implement Quick sort the fasted sorting algorithm of all the sorting methods
+    //the time complexcity of the algorithm is O{nlogn)
+    public static void swap(int[] arr,int i,int j){
+        //we are going to swap using bit manupilation
+        int temp=arr[i];
+        arr[i]=arr[j];
+        arr[j]=temp;
+    }
+    public static void QuickSort(int[] nums){
+        QuickSortHelper(nums,0,nums.length-1);
+    }
+    public static void QuickSortHelper(int[] nums,int low,int high){
+        if(low<high){
+            int pivot=findingpivot(nums,low,high);
+            QuickSortHelper(nums,low,pivot-1);
+            QuickSortHelper(nums,pivot+1,high);
+        }
+    }
+    public static int findingpivot(int[] nums,int low,int high){
+        int i=low-1;
+        int pivot=nums[high];
+        int j=low;
+        while(j<=high-1){
+            if(nums[j]<pivot){
+                i++;
+                swap(nums,i,j);
+            }
+            j++;
+        }
+        swap(nums,i+1,high);
+        return i+1;
+    }
     public static void main(String[] args) {
-            node n=new node(3);
-            n.left=new node(1);
-            n.left.left=new node(3);
-            n.right=new node(4);
-            n.right.left=new node(1);
-            n.right.right=new node(5);
-        System.out.println(good(n));
+        int[] test={6,7,1,2,5,4};
+        System.out.println("Before "+Arrays.toString(test));
+        QuickSort(test);
+        System.out.println("After "+Arrays.toString(test));
+//            node n=new node(3);
+//            n.left=new node(1);
+//            n.left.left=new node(3);
+//            n.right=new node(4);
+//            n.right.left=new node(1);
+//            n.right.right=new node(5);
+//        System.out.println(good(n));
 //        node n=new node(3);
 //        n.left=new node(9);
 //        n.right=new node(20);
