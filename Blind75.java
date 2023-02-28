@@ -1,3 +1,4 @@
+import java.io.CharConversionException;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -240,9 +241,84 @@ public class Blind75 {
         }
         return result;
     }
+    //Two Pointers
+    //Valid palindrome
+    public static boolean isvalidPalindrom(String s){
+        if(s.length()==0||s==null)
+            return true;
+        StringBuilder sb=new StringBuilder();
+        for(char c:s.toCharArray()){
+            if(Character.isLetterOrDigit(c)){
+                sb.append(Character.toLowerCase(c));
+            }
+        }
+        String str=sb.toString();
+        int i=0,j=str.length()-1;
+        while (i<j){
+            if(str.charAt(i)!=str.charAt(j)){
+                return false;
+            }
+            i++;
+            j--;
+        }
+        return true;
+    }
+    //15. 3Sum
+    //so this problem is similar to binary search
+    public static List<List<Integer>> Sum3(int[] nums){
+        List<List<Integer>> result=new ArrayList<>();
+        if(nums.length==0||nums==null)
+            return result;
+        Arrays.sort(nums);
+        for(int i=0;i<nums.length-1;i++){
+            if(i==0||(i>0&&nums[i]!=nums[i-1])){
+                int j=i+1;
+                int k=nums.length-1;
+                while(j<k){
+                    int sum=0-nums[i];
+                    if(sum==nums[j]+nums[k]){
+                        result.add(Arrays.asList(nums[i],nums[j],nums[k]));
+                        while(j<k&&nums[j]==nums[j+1])j=j+1;
+                        while(j<k&&nums[k]==nums[k-1])k=k-1;
+                        j++;
+                        k--;
+                    }else if(nums[j]+nums[k]>sum){
+                        k=k-1;
+                    }else{
+                        j=j+1;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    //11. Container With Most Water
+    public static int containerWater(int[] nums){
+        if(nums.length==0||nums==null){
+            return 0;
+        }
+        int low=0;
+        int high=nums.length-1;
+        int max=0;
+        while(low<high){
+           max=Math.max(max,Math.min(nums[low],nums[high])*(high-low));
+           if(nums[low]<nums[high])
+               low++;
+           else
+               high--;
+        }
+        return max;
+    }
     public static void main(String[] args) {
+        //test case for container with most water
+        System.out.println(containerWater(new int[]{1,8,6,2,5,4,8,3,7}));
+        //test case for Three sum
+//        System.out.println(Sum3(new int[]{-1,0,1,2,-1,-4}));
+        //test case for valid palindrome
+//        System.out.println(isvalidPalindrom("A man, a plan, a canal: Panama"));
+//        System.out.println(isvalidPalindrom("race a car"));
         //test case most consercative sequence
-        System.out.println(longestConSeq(new int[]{0,3,7,2,5,8,4,6,0,1}));
+//        System.out.println(longestConSeq(new int[]{0,3,7,2,5,8,4,6,0,1}));
         //test caes for the product of the array
 //        System.out.println(Arrays.toString(productOfArray(new int[]{1,2,3,4})));
 //        System.out.println(Arrays.toString(productOfArray1(new int[]{1,2,3,4})));
