@@ -151,8 +151,22 @@ public class gfgEasy {
         }
         return result;
     }
+    //remove duplicates
+    public static int[] removeDuplicates(int[] arr){
+        if(arr.length==0||arr==null)
+            return new int[0];
+        int current=1;
+        Arrays.sort(arr);
+        for(int i=1;i<arr.length;i++){
+            if(arr[i]!=arr[i-1]){
+                arr[current++]=arr[i];
+            }
+        }
+        return Arrays.copyOfRange(arr,0,current);
+    }
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(Limin(new int[] {12, -1, -7, 8, -15, 30, 16, 28},8,3)));
+        System.out.println(Arrays.toString(removeDuplicates(new int[]{3,5,4,1,2,6,4,3,5})));
+//        System.out.println(Arrays.toString(Limin(new int[] {12, -1, -7, 8, -15, 30, 16, 28},8,3)));
 //        System.out.println(Slidemax(new int[] {1, 4, 2, 10, 2, 3, 1, 0, 20},4));
 //        sizeSearch(new int[] {2,-1,-7,8,-15,30,16,28},8,3);
 //        System.out.println(findMinSum(new int[]{4,1,8,7},new int[] {2,3,6,5},4));
