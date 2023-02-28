@@ -2962,12 +2962,75 @@ public static boolean wordBreak(String s, List<String> dict) {
 
         return node;
     }
+//Word Length
+    //get the word length of the last character in the String
+    //normally what i would do is to create an array of String use split and return the last array string length
+    //but in this case i m not allowed to use any split() method
+public static int lastWordLen(String s){
+        if(s.length()==0||s==null)
+            return 0;
+        Queue<Character> queue=new LinkedList<>();
+        int count=0;
+        for(char c:s.toCharArray()){
+            if(c==' '){
+                count=0;
+            }else{
+                count++;
+            }
 
+        }
+        return count;
+}
+//the chaptgpt solution is preety ,uch the same but it thinks my approch will not work for all test cases
+    public static int lenOfTheLast(String s){
+        int length=0;
+        int lastLength=0;
+        for(char c:s.toCharArray()){
+            if(c==' '){
+                if(length>0){
+                    lastLength=length;
+                }
+                length=0;
+            }else{
+                length++;
+            }
+        }
+        if(length>0){
+            return length;
+        }
+        return lastLength;
+    }
+    //Third Largest
+    public static int thirdLargest(int[] nums){
+        if(nums.length==0||nums==null)
+            return 0;
+        HashSet<Integer> hashset=new HashSet<>();
+        PriorityQueue<Integer> pq=new PriorityQueue<>((a,b)->Integer.compare(a,b));
+
+        for(int i:nums){
+            hashset.add(i);
+        }
+        for(int i:hashset){
+            pq.add(i);
+        }
+        if(pq.size()<3){
+            while(pq.size()!=1){
+                pq.poll();
+            }
+        }
+        while(pq.size()>3){
+            pq.poll();
+        }
+        return pq.peek();
+    }
     public static void main(String[] args) {
-        BST node=new BST(1);
-        node.left=new BST(1);
-        node.right=new BST(0);
-        System.out.println(cleanTree(node));
+        System.out.println(thirdLargest(new int[]{9, 5}));
+//        System.out.println(lastWordLen("Hello, World"));
+//        System.out.println(lenOfTheLast("Hello, World"));
+//        BST node=new BST(1);
+//        node.left=new BST(1);
+//        node.right=new BST(0);
+//        System.out.println(cleanTree(node));
 //        System.out.println(pointsClose(new int[][]{{1,1},{-2,-2}},1));
 //        System.out.println(closePoints(new int[][]{{1,1},{-2,-2}},1));
 //        System.out.println(uniqueChar("abcabbbbbbbbbbb",3));
