@@ -309,9 +309,65 @@ public class Blind75 {
         }
         return max;
     }
+    //Sliding window
+    //Best Time to Buy And Sell Stock
+    public static int BestStock(int[] prices){
+        if(prices.length==0||prices==null)
+            return 0;
+        int result=0;
+        int min=Integer.MAX_VALUE;
+        for(int i=0;i< prices.length;i++){
+            if(prices[i]<min){
+                min=prices[i];
+            }else{
+                result=Math.max(result,prices[i]-min);
+            }
+        }
+        return result;
+    }
+    //Longest Substring Without Repeating Characters
+    //for approch one we are going to use array to store the number of times each charcter is repeated
+    public static int subWithoutRepeat(String s){
+        if(s.length()==0)
+            return 0;
+        int[] arr=new int[128];
+        int start=0;
+        int result=0;
+        for(int end=0;end<s.length();end++){
+            start=Math.max(start,arr[s.charAt(end)]);
+            result=Math.max(result,end-start+1);
+            arr[s.charAt(end)]=end+1;
+        }
+        return result;
+    }
+    //now we are going to implement using hashset
+    public static int SubWithoutRepeat(String s){
+        if(s.length()==0)
+            return 0;
+        int end=0;
+        int start=0;
+        int result=0;
+        HashSet<Character> hashSet=new HashSet<>();
+        while(end!=s.length()){
+            if(!hashSet.contains(s.charAt(end))){
+                hashSet.add(s.charAt(end));
+                result=Math.max(result, hashSet.size());
+                end++;
+            }else{
+                start++;
+                hashSet.remove(s.charAt(start));
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for longest substring without repeating character
+        System.out.println(subWithoutRepeat("abcabcbb"));
+        System.out.println(subWithoutRepeat("abcabcbb"));
+        //test case for when to sell the stock for highest profits
+//        System.out.println(BestStock(new int[]{7,1,5,3,6,4}));
         //test case for container with most water
-        System.out.println(containerWater(new int[]{1,8,6,2,5,4,8,3,7}));
+//        System.out.println(containerWater(new int[]{1,8,6,2,5,4,8,3,7}));
         //test case for Three sum
 //        System.out.println(Sum3(new int[]{-1,0,1,2,-1,-4}));
         //test case for valid palindrome
