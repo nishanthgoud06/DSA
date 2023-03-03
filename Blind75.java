@@ -444,10 +444,83 @@ public class Blind75 {
         }
         return minLength==Integer.MAX_VALUE?"":original.substring(minleft,minleft+minLength);
     }
+    //stack problems
+    //there is only one stack problem in the blind 75
+    //valid parantesces
+    public static boolean isvalidPara(String s){
+        if(s.length()==0){
+            return true;
+        }
+        Stack<Character> stack=new Stack<>();
+        for(char c:s.toCharArray()){
+            if(c=='(')
+                stack.push(')');
+            else if(c=='{')
+                stack.push('}');
+            else if(c=='[')
+                stack.push(']');
+            else if(stack.isEmpty()||stack.pop()!=c)
+                return false;
+        }
+        return stack.isEmpty();
+    }
+    //now we are working on Binary Search
+    //153. Find Minimum in Rotated Sorted Array
+    public static int minInRotate(int[] nums){
+        int low=0,high=nums.length-1;
+        while(low<high){
+            int mid=low+(high-low)/2;
+            if(nums[mid]>nums[high])
+                low=mid+1;
+            else if(nums[mid]<nums[high])
+                high=mid;
+        }
+        return nums[high];
+    }
+    //33. Search in Rotated Sorted Array
+    public static int indexSearch(int[] nums,int target){
+        //here we are searching the element in the nums array which is possiblt rotated before passing into the method
+        int low=0;
+        int high=nums.length-1;
+        while(low<high){
+            int mid=low+(high-low)/2;
+            if(nums[mid]>nums[high])
+                low=mid+1;
+            else if(nums[mid]<nums[high])
+                high=mid;
+        }
+        int first_low=0;
+        int first_high=low-1;
+        int second_low=low;
+        int second_high=nums.length-1;
+        if(nums[first_low]<=target && nums[first_high]>=target){
+            low=first_low;
+            high=first_high;
+        }else{
+            low=second_low;
+            high=second_high;
+        }
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            if(nums[mid]==target)
+                return mid;
+            else if(nums[mid]>target)
+                high=mid-1;
+            else
+                low=mid+1;
+        }
+        return -1;
+    }
     public static void main(String[] args) {
+        //test case for finding the index of the target in rotated array
+        System.out.println(indexSearch(new int[]{4,5,6,7,0,1,2},0));
+        //test case for finding min in the rotated array
+//        System.out.println(minInRotate(new int[]{3,4,5,1,2}));
+        //test case for valid paranteces
+//        System.out.println(isvalidPara("{}"));
         //test case for the minimumwindow subString
-        System.out.println(minWindow("ABOBECODEBANC","ABC"));
-        System.out.println(minwinSubString("ABOBECODEBANC","ABC"));
+//        System.out.println(minWindow("ABOBECODEBANC","ABC"));
+//        System.out.println(minwinSubString("ABOBECODEBANC","ABC"));
         //test case for longest subString with repeating charcater untill a certain limit
 //        System.out.println(longrepeatRep("ABAB",2));
         //test case for longest substring without repeating character
