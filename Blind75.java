@@ -360,10 +360,99 @@ public class Blind75 {
         }
         return result;
     }
+    //424. Longest Repeating Character Replacement
+    public static int longrepeatRep(String s,int limit){
+        if(s.length()==0)
+            return 0;
+        int start=0;
+        int result=0;
+        int[] arr=new int[26];
+        int max=0;
+        for(int end=0;end<s.length();end++){
+            arr[s.charAt(end)-'A']++;
+            int current_char_count=arr[s.charAt(end)-'A'];
+            max=Math.max(current_char_count,max);
+            while(end-start-max+1>limit){
+                start++;
+                arr[s.charAt(end)-'A']--;
+            }
+            result=Math.max(result,end-start+1);
+        }
+        return result;
+    }
+    //minimum window SubString
+    //the brute force approch
+    public static String minWindow(String s,String t){
+        String result="";
+        int min_length=Integer.MAX_VALUE;
+        for(int i=0;i<s.length();i++){
+            for(int j=i;j<s.length();j++){
+                String current=s.substring(i,j+1);
+                boolean check=stringContainsAllCharacters(current,t);
+                if(stringContainsAllCharacters(current,t)&&current.length()<min_length){
+                    min_length=current.length();
+                    result=current;
+                }
+            }
+        }
+        return result;
+    }
+    public static boolean stringContainsAllCharacters(String current,String target){
+        HashMap<Character,Integer> hashmap=new HashMap<>();
+        for(char c:target.toCharArray()){
+            hashmap.put(c,hashmap.getOrDefault(c,0)+1);
+        }
+
+        for(char c:current.toCharArray()){
+            if(hashmap.containsKey(c)){
+                hashmap.put(c,hashmap.get(c)-1);
+                if(hashmap.get(c)==0){
+                    hashmap.remove(c);
+                }
+            }
+        }
+        return hashmap.isEmpty();
+    }
+    //the above approcj will not would not work for string with more length
+    //Below we are using array with the time complexicity of o(n)
+    public static String minwinSubString(String original,String target){
+        int[] arr=new int[128];
+        for(char c:target.toCharArray()){
+            arr[c]++;
+        }
+        int size=target.length();
+        int left=0,right=0;
+        int minLength=Integer.MAX_VALUE;
+        int minleft=0;
+        while(right<original.length()){
+            char c=original.charAt(right++);
+            if(arr[c]>0){
+                size--;
+            }
+            arr[c]--;
+            while(size==0){
+                if(right-left<minLength){
+                    minLength=right-left;
+                    minleft=left;
+                }
+                char l=original.charAt(left++);
+                if(arr[l]==0){
+                    size++;
+                }
+                arr[l]++;
+            }
+        }
+        return minLength==Integer.MAX_VALUE?"":original.substring(minleft,minleft+minLength);
+    }
     public static void main(String[] args) {
+        //test case for the minimumwindow subString
+        System.out.println(minWindow("ABOBECODEBANC","ABC"));
+        System.out.println(minwinSubString("ABOBECODEBANC","ABC"));
+        //test case for longest subString with repeating charcater untill a certain limit
+//        System.out.println(longrepeatRep("ABAB",2));
         //test case for longest substring without repeating character
-        System.out.println(subWithoutRepeat("abcabcbb"));
-        System.out.println(subWithoutRepeat("abcabcbb"));
+//        System.out.println(subWithoutRepeat("abcabcbb"));
+//        System.out.println(subWithoutRepeat("abcabcbb"));
         //test case for when to sell the stock for highest profits
 //        System.out.println(BestStock(new int[]{7,1,5,3,6,4}));
         //test case for container with most water
