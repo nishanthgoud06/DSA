@@ -511,9 +511,115 @@ public class Blind75 {
         }
         return -1;
     }
+    //Linked List
+    static class Node{
+        int val;
+        Node next;
+        public Node(int val){
+            this.val=val;
+        }
+        public Node(int val,Node next){
+            this.val=val;
+            this.next=next;
+        }
+        public Node(){
+
+        }
+    }
+    //Reverse a linked list
+    public static Node reverseLink(Node node){
+        if(node==null)
+            return new Node();
+        Node prev=null;
+        while(node!=null){
+            Node current=node.next;
+            node.next=prev;
+            prev=node;
+            node=current;
+        }
+        return prev;
+    }
+    public static void printLinkedList(Node n){
+        while(n!=null){
+            System.out.println(n.val);
+            n=n.next;
+        }
+    }
+    //merge two sorted list
+    public static Node mergeList(Node list1,Node list2){
+        if(list1==null)
+            return list2;
+        if(list2==null)
+            return list1;
+        if(list1.val<list2.val){
+            list1.next=mergeList(list1.next,list2);
+            return list1;
+        }else{
+            list2.next=mergeList(list1,list2.next);
+            return list2;
+        }
+    }
+    //reorder the list
+    public static void reOrder(Node node){
+        if(node==null||node.next==null)
+            return;
+        Node first=node;
+        Node first_end=null;
+        Node second=node;
+        Node second_end=node;
+        while(second_end!=null&&second_end.next!=null){
+            first_end=second;
+            second=second.next;
+            second_end=second_end.next.next;
+        }
+        first_end.next=null;
+        Node sec=reverseLink(second);
+        mergeOfList(first,sec);
+    }
+    public static void mergeOfList(Node list1,Node list2){
+        while(list1!=null){
+            Node list1_next=list1.next;
+            Node list2_next=list2.next;
+            list1.next=list2;
+            if(list1_next==null)
+                break;
+            list2.next=list1_next;
+            list1=list1.next;
+            list2=list2.next;
+        }
+    }
     public static void main(String[] args) {
+        //test case for ListNode reorder
+        Node node=new Node(1);
+        node.next=new Node(2);
+        node.next.next=new Node(3);
+        node.next.next.next=new Node(4);
+        //before
+        printLinkedList(node);
+        //after
+        reOrder(node);
+        System.out.println("/////////////");
+        printLinkedList(node);
+        //test case for merging two sorted linkedlist
+//        Node node=new Node(1);
+//        node.next=new Node(2);
+//        node.next.next=new Node(3);
+//        Node node1=new Node(1);
+//        node1.next=new Node(3);
+//        node1.next.next=new Node(4);
+//        printLinkedList(mergeList(node,node1));
+        //test case for reverse a linkedlist
+//        Node node=new Node(1);
+//        node.next=new Node(2);
+//        node.next.next=new Node(3);
+//        node.next.next.next=new Node(4);
+//        node.next.next.next.next=new Node(5);
+//        //before
+//        printLinkedList(node);
+//        //after
+//        printLinkedList(reverseLink(node));
         //test case for finding the index of the target in rotated array
-        System.out.println(indexSearch(new int[]{4,5,6,7,0,1,2},0));
+//        System.out.println(indexSearch(new int[]{4,5,6,7,0,1,2},0));
         //test case for finding min in the rotated array
 //        System.out.println(minInRotate(new int[]{3,4,5,1,2}));
         //test case for valid paranteces
