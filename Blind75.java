@@ -588,19 +588,129 @@ public class Blind75 {
             list2=list2.next;
         }
     }
+    //19. Remove Nth Node From End of List
+    public static Node removeNth(Node node,int number){
+        Node dummy=new Node(0,node);
+        int size=0;
+        Node test=dummy;
+        while (test!=null){
+            size++;
+            test=test.next;
+        }
+        Node fast=dummy;
+        for(int i=0;i<size-number-1;i++){
+            fast=fast.next;
+        }
+        fast.next=fast.next.next;
+        return dummy.next;
+    }
+    //141. Linked List Cycle
+    public static boolean isCycle(Node node){
+        if(node==null)
+            return false;
+        Node fast=node;
+        Node slow=node;
+        while(fast!=null&&fast.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+            if(slow==fast){
+                return true;
+            }
+        }
+        return false;
+    }
+    //Linked List cycle -II
+    //we need to return the node from which the cycle has started
+    public static Node isCycle2(Node node){
+        if(node==null)
+            return null;
+        Node fast=node;
+        Node slow=node;
+        while(fast!=null&&fast.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+            if(fast==slow){
+                Node slow1=node;
+                while(slow1!=slow){
+                    slow1=slow1.next;
+                    slow=slow.next;
+                }
+                return slow1;
+            }
+        }
+        return null;
+    }
+    //merge k Sorted List
+    //brute force approch
+    public static Node mergek(Node[] lists){
+        if(lists.length==0)
+            return null;
+        if(lists.length==1)
+            return lists[0];
+        Node dummy=new Node(Integer.MIN_VALUE);
+        for(Node node:lists){
+            mergeList(dummy,node);
+        }
+        return dummy.next;
+    }
+    //optimized version
+    public static Node mergeK2(Node[] lists){
+        PriorityQueue<Node> pq=new PriorityQueue<>((a,b)->a.val-b.val);
+        for(Node list:lists){
+            pq.add(list);
+        }
+        Node dummy=new Node(0);
+        Node tail=dummy;
+        while(!pq.isEmpty()){
+            Node node=pq.poll();
+            tail.next=node;
+            tail=node;
+            if(node.next!=null){
+                pq.add(node.next);
+            }
+        }
+        return dummy.next;
+    }
     public static void main(String[] args) {
+        //test case fir merging K sorted List
+        Node node1=new Node(1);
+        node1.next=new Node(4);
+        node1.next.next=new Node(5);
+        Node node2=new Node(1);
+        node2.next=new Node(3);
+        node2.next.next=new Node(4);
+        Node node3=new Node(2);
+        node3.next=new Node(6);
+        Node[] test1={node1,node2,node3};
+//        printLinkedList(mergek(test1));
+        printLinkedList(mergeK2(test1));
+        //test case to check a cycle is present in a linked list or not
+//        Node node=new Node(3);
+//        node.next=new Node(2);
+//        node.next.next=new Node(0);
+//        node.next.next.next=new Node(4);
+//        node.next.next.next.next=node.next;
+//        System.out.println(isCycle(node));
+//        System.out.println(isCycle2(node).val);
+        //test case for remove Nth node from the linked list
+//        Node node=new Node(1);
+//        node.next=new Node(2);
+//        node.next.next=new Node(3);
+//        node.next.next.next=new Node(4);
+//        node.next.next.next.next=new Node(5);
+//        printLinkedList(removeNth(node,2));
         //test case for ListNode reorder
-        Node node=new Node(1);
-        node.next=new Node(2);
-        node.next.next=new Node(3);
-        node.next.next.next=new Node(4);
-        //before
-        printLinkedList(node);
-        //after
-        reOrder(node);
-        System.out.println("/////////////");
-        printLinkedList(node);
-        //test case for merging two sorted linkedlist
+//        Node node=new Node(1);
+//        node.next=new Node(2);
+//        node.next.next=new Node(3);
+//        node.next.next.next=new Node(4);
+//        //before
+//        printLinkedList(node);
+//        //after
+//        reOrder(node);
+//        System.out.println("/////////////");
+//        printLinkedList(node);
+//        //test case for merging two sorted linkedlist
 //        Node node=new Node(1);
 //        node.next=new Node(2);
 //        node.next.next=new Node(3);
