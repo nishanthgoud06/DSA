@@ -671,19 +671,231 @@ public class Blind75 {
         }
         return dummy.next;
     }
+    static class Tree{
+        int val;
+        Tree left;
+        Tree right;
+        public Tree(int val){
+            this.val=val;
+            this.left=null;
+            this.right=null;
+        }
+        public Tree(){}
+        public Tree(int val,Tree left,Tree right){
+            this.val=val;
+            this.left=left;
+            this.right=right;
+        }
+    }
+    //now we are going ton implemente all the blind75 Tree problems
+    //inversted Binary tree
+    public static Tree inverstedTree(Tree tree){
+        if(tree==null)
+            return null;
+        final Tree left=tree.left;
+        final Tree right=tree.right;
+       tree.left=inverstedTree(right);
+       tree.right=inverstedTree(left);
+       return tree;
+    }
+    //Depth of a binary tree
+    public static int depth(Tree tree){
+        if(tree==null)
+            return 0;
+        Queue<Tree> queue=new LinkedList<>();
+        queue.offer(tree);
+        int result=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                Tree temp=queue.poll();
+                if(temp.left!=null)
+                    queue.offer(temp.left);
+                if(temp.right!=null)
+                    queue.offer(temp.right);
+            }
+            result++;
+        }
+        return result;
+    }
+    public static int depth2(Tree tree){
+        if(tree==null)
+            return 0;
+        return Math.max(depth2(tree.left),depth2(tree.right))+1;
+    }
+        public static void preOrder(Tree node){
+            if(node==null)
+                return;
+            preOrder(node.left);
+            System.out.println(node.val);
+            preOrder(node.right);
+        }
+        //same tree
+    public static boolean isSame(Tree tree1,Tree tree2){
+        if(tree1==null||tree2==null)
+            return tree1==tree2;
+        if(tree1==null&&tree2==null)
+            return true;
+        if(tree1.val!=tree2.val)
+            return false;
+        return isSame(tree1.left,tree2.left)&&isSame(tree1.right,tree2.right);
+    }
+    //a method to check whether one is the subtree of other
+    public static boolean isSub(Tree tree1,Tree tree2){
+        if(tree1==null)
+            return tree1==tree2;
+        if(tree1.val== tree2.val){
+            if(isSubhelper(tree1,tree2))
+                return true;
+        }
+        return isSub(tree1.left,tree2)||isSub(tree1.right,tree2);
+    }
+    public static boolean isSubhelper(Tree tree1,Tree tree2){
+        if(tree1==null&&tree2==null)
+            return true;
+        if(tree1==null||tree2==null)
+            return tree1==tree2;
+        if(tree1.val!=tree2.val)
+            return false;
+        return isSubhelper(tree1.left,tree2.left)&&isSubhelper(tree1.right,tree2.right);
+    }
+    //235. Lowest Common Ancestor of a Binary Search Tree
+    public static Integer LCM(Tree tree, int left, int right) {
+        if (tree == null) {
+            return null;
+        }
+        if (tree.val < left && tree.val < right) {
+            return LCM(tree.right, left, right);
+        } else if (tree.val > left && tree.val > right) {
+            return LCM(tree.left, left, right);
+        } else {
+            return tree.val;
+        }
+    }
+    //102. Binary Tree Level Order Traversal
+    public static List<List<Integer>> levelOrder(Tree tree){
+        List<List<Integer>> result=new ArrayList<>();
+        if(tree==null)
+            return result;
+        Queue<Tree> queue=new LinkedList<>();
+        queue.offer(tree);
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            List<Integer> temp=new ArrayList<>();
+            for(int i=0;i<size;i++){
+                Tree t=queue.poll();
+                temp.add(t.val);
+                if(t.left!=null){
+                    queue.offer(t.left);
+                }
+                if(t.right!=null){
+                    queue.offer(t.right);
+                }
+            }
+            result.add(temp);
+        }
+        return result;
+    }
+    //validate a binary search tree
+    public static boolean isValidBST(Tree tree){
+        if(tree==null)
+            return true;
+        return isValidBSTHelper(tree,null,null);
+    }
+    public static boolean isValidBSTHelper(Tree tree,Integer min,Integer max){
+        if(tree==null)
+            return true;
+        if((min!=null&&tree.val<=min)||(max!=null&&tree.val>=max))
+            return false;
+        return isValidBSTHelper(tree.left,min,tree.val)&&isValidBSTHelper(tree.right,tree.val,max);
+    }
+    //Kth smallest element
+    public static int elementK(Tree node,int k){
+        if(node==null)
+            return -1;
+        Stack<Tree> stack=new Stack<>();
+        while(node!=null||!stack.isEmpty()){
+            while(node!=null){
+                stack.push(node);
+                node=node.left;
+            }
+            node=stack.pop();
+            if(--k==0)
+                break;
+            node=node.right;
+        }
+        return node.val;
+    }
     public static void main(String[] args) {
-        //test case fir merging K sorted List
-        Node node1=new Node(1);
-        node1.next=new Node(4);
-        node1.next.next=new Node(5);
-        Node node2=new Node(1);
-        node2.next=new Node(3);
-        node2.next.next=new Node(4);
-        Node node3=new Node(2);
-        node3.next=new Node(6);
-        Node[] test1={node1,node2,node3};
+        //test case for Kth element
+        Tree test=new Tree(3);
+        test.left=new Tree(1);
+        test.right=new Tree(4);
+        test.left.right=new Tree(2);
+        System.out.println(elementK(test,1));
+        //test case for LCM
+//        Tree tree=new Tree(6);
+//        tree.left=new Tree(2);
+//        tree.left.left=new Tree(0);
+//        tree.left.right=new Tree(4);
+//        tree.right=new Tree(8);
+//        tree.right.left=new Tree(7);
+//        tree.right.right=new Tree(9);
+//        tree.left.right.left=new Tree(3);
+//        tree.left.right.right=new Tree(5);
+//        System.out.println(LCM(tree,0,4));
+//        Tree test=new Tree(2);
+//        test.left=new Tree(1);
+//        test.right=new Tree(3);
+//        /test case for valis BST
+//        System.out.println(isValidBST(tree));
+//        System.out.println(isValidBST(test));
+        //test case for level order elements
+//        System.out.println(levelOrder(tree));
+//        //test case for subtree or not
+//        Tree tree1=new Tree(3);
+//        tree1.left=new Tree(4);
+//        tree1.right=new Tree(5);
+//        tree1.left.left=new Tree(1);
+//        tree1.left.right=new Tree(2);
+//        Tree tree2=new Tree(4);
+//        tree2.left=new Tree(1);
+//        tree2.right=new Tree(2);
+//        System.out.println(isSub(tree1,tree2));
+        //test case for whether both trees are same or not
+//        Tree tree1=new Tree(1);
+//        tree1.left=new Tree(2);
+//        tree1.right=new Tree(3);
+//        Tree tree2=new Tree(1);
+//        tree2.left=new Tree(2);
+////        tree2.right=new Tree(3);
+//        System.out.println(isSame(tree1,tree2));
+        //test case for inverted Tree
+//        Tree tree=new Tree(4);
+//        tree.left=new Tree(2);
+//        tree.right=new Tree(7);
+//        tree.left.left=new Tree(1);
+//        tree.left.right=new Tree(3);
+//        tree.right.left=new Tree(6);
+//        tree.right.right=new Tree(9);
+//        preOrder(tree);
+//        inverstedTree(tree);
+//        preOrder(tree);
+        //test case for the depth of the tree
+//        System.out.println(depth(tree));
+//        System.out.println(depth2(tree));
+        //test case for merging K sorted List
+//        Node node1=new Node(1);
+//        node1.next=new Node(4);
+//        node1.next.next=new Node(5);
+//        Node node2=new Node(1);
+//        node2.next=new Node(3);
+//        node2.next.next=new Node(4);
+//        Node node3=new Node(2);
+//        node3.next=new Node(6);
+//        Node[] test1={node1,node2,node3};
 //        printLinkedList(mergek(test1));
-        printLinkedList(mergeK2(test1));
+//        printLinkedList(mergeK2(test1));
         //test case to check a cycle is present in a linked list or not
 //        Node node=new Node(3);
 //        node.next=new Node(2);
