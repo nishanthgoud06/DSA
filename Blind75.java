@@ -1005,8 +1005,63 @@ public class Blind75 {
         }
     }
 
-
+//this is the extension of trie data structure implementation
+    //Design Add And Search Words Data Structure
+    static class tries{
+        class tri{
+            tri[] children;
+            boolean isEnd;
+            public tri(){
+                children=new tri[26];
+                isEnd=false;
+            }
+        }
+        tri node;
+        public tries(){
+            node=new tri();
+        }
+        public void insert(String word){
+            tri temp=node;
+            for(int i=0;i<word.length();i++){
+                int loc=word.charAt(i)-'a';
+                if(temp.children[loc]==null)
+                    temp.children[loc]=new tri();
+                temp=temp.children[loc];
+            }
+            temp.isEnd=true;
+        }
+        public boolean search(String word){
+            tri temp=node;
+            return searchHelper(word,0,temp);
+        }
+        public boolean searchHelper(String word,int index,tri temp){
+            if(index==word.length())
+                return temp.isEnd;
+                if(word.charAt(index)=='.'){
+                    for(int j=0;j<26;j++){
+                        if(temp.children[j]!=null&&searchHelper(word,index+1,temp.children[j]))
+                            return true;
+                    }
+                    return false;
+                }else{
+                    int loc=word.charAt(index)-'a';
+                    if(temp.children[loc]==null)
+                        return false;
+                    return searchHelper(word,index+1,temp.children[loc]);
+                }
+            }
+}
     public static void main(String[] args) {
+        //test case for 211. Design Add and Search Words Data Structure
+        tries test=new tries();
+        test.insert("bad");
+        test.insert("dad");
+        test.insert("mad");
+        System.out.println(test.search("pad"));
+        System.out.println(test.search("bad"));
+        System.out.println(test.search(".ad"));
+        System.out.println(test.search("b.."));
+
         //test case for 208. Implement Trie (Prefix Tree)
 //        trie test=new trie();
 //        test.insert("apple");
