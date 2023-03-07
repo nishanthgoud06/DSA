@@ -937,16 +937,101 @@ public class Blind75 {
         }
         return temp;
     }
+    // now we are implementing
+    //here we are designing trie
+    static class trie{
+        static List<String> collection;
+        public trie(){
+            collection=new ArrayList<>();
+        }
+        public static void insert(String s){
+            collection.add(s);
+        }
+        public static boolean search(String s){
+            return collection.contains(s);
+        }
+        public static boolean startsWith(String s){
+            for(String str:collection){
+                if(str.substring(0,s.length()).equals(s))
+                    return true;
+            }
+            return false;
+        }
+    }
+    //the same we need to implemennt using arrays
+    static class trsNode{
+        static class trs{
+            trs[] collection;
+            boolean isend;
+            public trs(){
+                collection=new trs[26];
+                isend=false;
+            }
+        }
+        private trs node;
+        public trsNode(){
+            node=new trs();
+        }
+        public void insert(String s){
+            trs temp=node;
+            for(int i=0;i<s.length();i++){
+                int index=s.charAt(i)-'a';
+                if(temp.collection[index]==null){
+                    temp.collection[index]=new trs();
+                }
+                temp=temp.collection[index];
+            }
+            temp.isend=true;
+        }
+        public boolean contains(String s){
+            trs temp=node;
+            for(int i=0;i<s.length();i++){
+                int index=s.charAt(i)-'a';
+                if(temp.collection[index]==null)
+                    return false;
+                temp=temp.collection[index];
+            }
+            return temp.isend;
+        }
+        public boolean startsWith(String s){
+            trs temp=node;
+            for(int i=0;i<s.length();i++){
+                int index=s.charAt(i)-'a';
+                if(temp.collection[index]==null)
+                    return false;
+                temp=temp.collection[index];
+            }
+            return true;
+        }
+    }
+
+
     public static void main(String[] args) {
+        //test case for 208. Implement Trie (Prefix Tree)
+//        trie test=new trie();
+//        test.insert("apple");
+//        System.out.println(test.search("apple"));
+//        System.out.println(test.search("app"));
+//        System.out.println(test.startsWith("app"));
+//        test.insert("app");
+//        System.out.println(test.search("app"));
+        //performing the same test but now er are testing it on array design
+//        trsNode test1=new trsNode();
+//        test1.insert("apple");
+//        System.out.println(test1.contains("apple"));
+//        System.out.println(test1.contains("app"));
+//        System.out.println(test1.startsWith("app"));
+//        test1.insert("app");
+//        System.out.println(test1.contains("app"));
         //test case for 297. Serialize and Deserialize Binary Tree
-        Tree tree=new Tree(-10);
-        tree.left=new Tree(9);
-        tree.right=new Tree(20);
-        tree.right.left=new Tree(15);
-        tree.right.right=new Tree(7);
-//        preOrder(tree);
-        System.out.println("testing");
-        System.out.println(serialize(tree));
+//        Tree tree=new Tree(-10);
+//        tree.left=new Tree(9);
+//        tree.right=new Tree(20);
+//        tree.right.left=new Tree(15);
+//        tree.right.right=new Tree(7);
+////        preOrder(tree);
+//        System.out.println("testing");
+//        System.out.println(serialize(tree));
         //test case for Binary Tree Maximum Path Sum
 //        Tree tree=new Tree(-10);
 //        tree.left=new Tree(9);
