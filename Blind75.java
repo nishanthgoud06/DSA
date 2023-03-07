@@ -1051,16 +1051,104 @@ public class Blind75 {
                 }
             }
 }
+//this is not present in blind 75 but the more harder version is aviable in blind 75 but i htough we can first learn
+    //how word search is implemented in the fisrt place
+    //word search
+    public static boolean wordSearch(char[][] collections,String search){
+        if(search.length()==0)
+            return true;
+        for(int i=0;i<collections.length;i++){
+            for(int j=0;j<collections[0].length;j++){
+                if(search.charAt(0)==collections[i][j]&&wordSearchHelper(collections,search,0,0,0))
+                    return true;
+            }
+        }
+        return false;
+    }
+    public static boolean wordSearchHelper(char[][] collections,String search,int Index,int i,int j){
+        if(Index==search.length())
+            return true;
+        if(i<0||j<0||i>=collections.length||j>=collections[0].length||collections[i][j]!=search.charAt(Index)||Index>search.length())
+            return false;
+        char temp=collections[i][j];
+        collections[i][j]=' ';
+        boolean result=wordSearchHelper(collections,search,Index+1,i+1,j)||
+                        wordSearchHelper(collections,search,Index+1,i-1,j)||
+                        wordSearchHelper(collections,search,Index+1,i,j+1)||
+                        wordSearchHelper(collections,search,Index+1,i,j-1);
+        collections[i][j]=temp;
+        return result;
+    }
+    //this is a hard blind75 trees problem
+    static class hard{
+        hardNode node;
+        public hard(){
+            node=new hardNode();
+        }
+        public void insert(String s){
+            hardNode temp=node;
+            for(int i=0;i<s.length();i++){
+                int loc=s.charAt(i)-'a';
+                if(temp.children[loc]==null)
+                    temp.children[loc]=new hardNode();
+                temp=temp.children[loc];
+            }
+            temp.string=s;
+        }
+        class hardNode{
+            hardNode[] children;
+            String string;
+            public hardNode(){
+                children=new hardNode[26];
+                string=null;
+            }
+        }
+    }
+    public static List<String> wordSearch2(char[][] board,String[] words){
+        List<String> result=new ArrayList<>();
+        if(words.length==0)
+            return result;
+        hard node=new hard();
+        for(String word:words){
+            node.insert(word);
+        }
+        for(int i=0;i< board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                wordSearch2Helper(board,node.node,i,j,result);
+            }
+        }
+        return result;
+    }
+    public static void wordSearch2Helper(char[][] board, hard.hardNode temp, int i, int j, List<String> result){
+        char index=board[i][j];
+        if(index=='#'||temp.children[index-'a']==null)
+            return;
+        temp=temp.children[index-'a'];
+        if(temp.string!=null){
+            result.add(temp.string);
+            temp.string=null;
+        }
+        board[i][j]='#';
+        if(i>0) wordSearch2Helper(board,temp,i-1,j,result);
+        if(j>0) wordSearch2Helper(board,temp,i,j-1,result);
+        if(i<board.length-1)wordSearch2Helper(board,temp,i+1,j,result);
+        if(j<board[0].length-1)wordSearch2Helper(board,temp,i,j+1,result);
+        board[i][j]=index;
+    }
     public static void main(String[] args) {
+        //test case for word search 2
+        System.out.println(wordSearch2(new char[][]{{'o','a','a','n'},{'e','t','a','e'},{'i','h','k','r'},{'i','f','l','v'}},new String[]{"oath","pea","eat","rain"}));
+        //test case for word search version 1
+//        System.out.println(wordSearch(new char[][]{{'a','b','c','e'},{'s','f','c','s'},{'a','d','e','e'}},"abcced"));
         //test case for 211. Design Add and Search Words Data Structure
-        tries test=new tries();
-        test.insert("bad");
-        test.insert("dad");
-        test.insert("mad");
-        System.out.println(test.search("pad"));
-        System.out.println(test.search("bad"));
-        System.out.println(test.search(".ad"));
-        System.out.println(test.search("b.."));
+//        tries test=new tries();
+//        test.insert("bad");
+//        test.insert("dad");
+//        test.insert("mad");
+//        System.out.println(test.search("pad"));
+//        System.out.println(test.search("bad"));
+//        System.out.println(test.search(".ad"));
+//        System.out.println(test.search("b.."));
 
         //test case for 208. Implement Trie (Prefix Tree)
 //        trie test=new trie();
