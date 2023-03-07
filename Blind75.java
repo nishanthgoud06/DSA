@@ -826,13 +826,143 @@ public class Blind75 {
         }
         return node.val;
     }
+    //105. Construct Binary Tree from Preorder and Inorder Traversal
+    //this problem is so simple but because of the question i was think of all sort of approchss to implement
+    private int preIndex=0;
+    public Tree preinOrderTrav(int[] preorder,int[] inorder){
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        for(int i=0;i<inorder.length;i++){
+            hm.put(inorder[i],i );
+        }
+        return preinOrderTravHelper(preorder,hm,0,preorder.length-1);
+    }
+    public Tree preinOrderTravHelper(int[] preorder,HashMap<Integer,Integer> hm,int start,int end){
+        if(start>end)
+            return null;
+        int rootVal=preorder[preIndex];
+        Tree tree=new Tree(rootVal);
+        int rootIndex=hm.get(rootVal);
+        tree.left=preinOrderTravHelper(preorder,hm,start,rootIndex-1);
+        tree.right=preinOrderTravHelper(preorder,hm,rootIndex+1,end);
+        return tree;
+    }
+    //Reorder Routes to Make All Paths Lead to the City Zero
+    public static int roadConstruction(int target,int[][] connections,int num_of_roads){
+        HashSet<String> hashset=new HashSet<>();
+        HashMap<Integer,Set<Integer>> hashmap=new HashMap<>();
+        for(int i=0;i<num_of_roads;i++){
+            hashmap.put(i,new HashSet<>());
+        }
+        for(int[] i:connections){
+            hashset.add(i[0]+","+i[1]);
+            hashmap.get(i[1]).add(i[0]);
+            hashmap.get(i[0]).add(i[1]);
+        }
+        boolean[] visited=new boolean[num_of_roads];
+        Queue<Integer> queue=new LinkedList<>();
+        queue.offer(target);
+        int result=0;
+        while(!queue.isEmpty()){
+            int temp= queue.poll();
+            for(int i:hashmap.get(temp)){
+                if(visited[i])
+                    continue;
+                visited[i]=true;
+                if(!hashset.contains(i+","+temp))
+                    result++;
+                queue.offer(i);
+            }
+        }
+        return result;
+    }
+    //this is a hard problem
+    //124. Binary Tree Maximum Path Sum
+    public static int BinaryMaxPathSum(Tree node){
+        if(node==null)
+            return 0;
+        int[] result=new int[1];
+        BinaryMaxPathSumhelper(node,result);
+        return result[0];
+    }
+    public static int BinaryMaxPathSumhelper(Tree node,int[] result){
+        if(node==null)
+            return 0;
+        int left=Math.max(0,BinaryMaxPathSumhelper(node.left,result));
+        int right=Math.max(0,BinaryMaxPathSumhelper(node.right,result));
+        int val=node.val+left+right;
+        result[0]=Math.max(result[0],val);
+        return node.val+Math.max(left,right);
+    }
+    //this is the second hard problem in the class of blind75 trees
+    public static String serialize(Tree node){
+        if(node==null)
+            return "";
+        Queue<Tree> queue=new LinkedList<>();
+        queue.offer(node);
+        StringBuilder sb=new StringBuilder();
+        while(queue.isEmpty()){
+            Tree temp=queue.poll();
+            if(temp==null){
+                sb.append("#,");
+            }else{
+                sb.append(temp.val);
+                queue.offer(temp.left);
+                queue.offer(temp.right);
+            }
+        }
+        return sb.toString();
+    }
+    public static Tree deserialize(String s){
+        if(s==null||s.length()==0)
+            return null;
+        Queue<Tree> queue=new LinkedList<>();
+        String[] stringarray=s.split(",");
+        Tree temp=new Tree(Integer.parseInt(stringarray[0]));
+        queue.offer(temp);
+        int count=1;
+        while(!queue.isEmpty()&&count<stringarray.length){
+            Tree tempo=queue.poll();
+            if(!stringarray[count].equals("#")){
+                Tree temp1=new Tree(Integer.parseInt(stringarray[count]));
+                tempo.left=temp1;
+                queue.offer(temp1);
+            }
+            count++;
+            if(!stringarray[count].equals("#")){
+                Tree temp2=new Tree(Integer.parseInt(stringarray[count]));
+                tempo.right=temp2;
+                queue.offer(temp2);
+            }
+            count++;
+        }
+        return temp;
+    }
     public static void main(String[] args) {
+        //test case for 297. Serialize and Deserialize Binary Tree
+        Tree tree=new Tree(-10);
+        tree.left=new Tree(9);
+        tree.right=new Tree(20);
+        tree.right.left=new Tree(15);
+        tree.right.right=new Tree(7);
+//        preOrder(tree);
+        System.out.println("testing");
+        System.out.println(serialize(tree));
+        //test case for Binary Tree Maximum Path Sum
+//        Tree tree=new Tree(-10);
+//        tree.left=new Tree(9);
+//        tree.right=new Tree(20);
+//        tree.right.left=new Tree(15);
+//        tree.right.right=new Tree(7);
+//        System.out.println(BinaryMaxPathSum(tree));
+        //test case for Reorder Routes to Make All Paths Lead to the City Zero
+//        System.out.println(roadConstruction(0,new int[][]{{0,1},{1,3},{2,3},{4,0},{4,5}},6));
+        //test case
         //test case for Kth element
-        Tree test=new Tree(3);
-        test.left=new Tree(1);
-        test.right=new Tree(4);
-        test.left.right=new Tree(2);
-        System.out.println(elementK(test,1));
+//        Tree test=new Tree(3);
+//        test.left=new Tree(1);
+//        test.right=new Tree(4);
+//        test.left.right=new Tree(2);
+//        System.out.println(elementK(test,1));
         //test case for LCM
 //        Tree tree=new Tree(6);
 //        tree.left=new Tree(2);
