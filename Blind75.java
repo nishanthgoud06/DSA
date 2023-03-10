@@ -1135,9 +1135,59 @@ public class Blind75 {
         if(j<board[0].length-1)wordSearch2Helper(board,temp,i,j+1,result);
         board[i][j]=index;
     }
+    //Backtracking
+    //combination Sum
+    public static List<List<Integer>> combi(int[] numbers,int target){
+        List<List<Integer>> result=new ArrayList<>();
+        if(numbers.length==0)
+            return result;
+        combiHelper(numbers,target,result,0,new ArrayList<>());
+        return result;
+    }
+    public static void combiHelper(int[] numbers,int target,List<List<Integer>> result,int index,List<Integer> temp){
+        if(target==0){
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+        if(target<0){
+            return;
+        }
+        for(int i=index;i<numbers.length;i++){
+            temp.add(numbers[i]);
+            combiHelper(numbers,target-numbers[i],result,i,temp);
+            temp.remove(temp.size()-1);
+        }
+    }
+    //word Search
+    public static boolean wordSearch2(char[][] letters,String word){
+        if(word.length()==0)
+            return true;
+        for(int i=0;i< letters.length;i++){
+            for(int j=0;j<letters[0].length;j++){
+                if(word.charAt(0)==letters[i][j]&&wordSearchHelper2(letters,word,i,j,0))
+                    return true;
+            }
+        }
+        return false;
+    }
+    public static boolean wordSearchHelper2(char[][] letters,String word,int i,int j,int index){
+        if(index==word.length())
+            return true;
+        if(i<0||j<0||i>=letters.length||j>=letters[0].length||word.charAt(index)!=letters[i][j]||index>word.length())
+            return false;
+        boolean result=wordSearchHelper2(letters,word,i+1,j,index+1)||
+                wordSearchHelper2(letters,word,i-1,j,index+1)||
+                wordSearchHelper2(letters,word,i,j+1,index+1)||
+                wordSearchHelper2(letters,word,i,j-1,index+1);
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for Word Search
+        System.out.println(wordSearch2(new char[][]{{'a','b','c','e'},{'s','f','c','s'},{'a','d','e','e'}},"abcced"));
+        //test case for combination Sum
+//        System.out.println(combi(new int[]{2,3,6,7},7));
         //test case for word search 2
-        System.out.println(wordSearch2(new char[][]{{'o','a','a','n'},{'e','t','a','e'},{'i','h','k','r'},{'i','f','l','v'}},new String[]{"oath","pea","eat","rain"}));
+//        System.out.println(wordSearch2(new char[][]{{'o','a','a','n'},{'e','t','a','e'},{'i','h','k','r'},{'i','f','l','v'}},new String[]{"oath","pea","eat","rain"}));
         //test case for word search version 1
 //        System.out.println(wordSearch(new char[][]{{'a','b','c','e'},{'s','f','c','s'},{'a','d','e','e'}},"abcced"));
         //test case for 211. Design Add and Search Words Data Structure
