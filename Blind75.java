@@ -1181,9 +1181,42 @@ public class Blind75 {
                 wordSearchHelper2(letters,word,i,j-1,index+1);
         return result;
     }
+    //hard problem heaps/priorityQueue
+    static class MedianFinder{
+        PriorityQueue<Integer> pq1;
+        PriorityQueue<Integer> pq2;
+        Boolean isEven=true;
+        public MedianFinder(){
+            pq1=new PriorityQueue<>(Collections.reverseOrder());
+            pq2=new PriorityQueue<>();
+        }
+        public void addNum(int num){
+            if(isEven){
+                pq2.offer(num);
+                pq1.offer(pq2.poll());
+            }else{
+                pq1.offer(num);
+                pq2.offer(pq1.poll());
+            }
+            isEven=!(isEven);
+        }
+        public double median(){
+            if(isEven)
+                return (pq1.peek()+pq2.peek())/2.0;
+            else
+                return pq1.peek();
+        }
+    }
     public static void main(String[] args) {
+        //test case for PriorityQueue
+        MedianFinder test=new MedianFinder();
+        test.addNum(1);
+        test.addNum(2);
+        System.out.println(test.median());
+        test.addNum(3);
+        System.out.println(test.median());
         //test case for Word Search
-        System.out.println(wordSearch2(new char[][]{{'a','b','c','e'},{'s','f','c','s'},{'a','d','e','e'}},"abcced"));
+//        System.out.println(wordSearch2(new char[][]{{'a','b','c','e'},{'s','f','c','s'},{'a','d','e','e'}},"abcced"));
         //test case for combination Sum
 //        System.out.println(combi(new int[]{2,3,6,7},7));
         //test case for word search 2
