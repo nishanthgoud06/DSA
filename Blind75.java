@@ -1393,9 +1393,101 @@ public class Blind75 {
         }
         return result==numOfCourses;
     }
+    //Dynamic Programming
+    //70. Climbing Stairs
+
+    public static int climbStairs(int n){
+        int[] result=new int[n];
+        result[0]=1;
+        result[1]=2;
+        for(int i=2;i<n;i++){
+            result[i]=result[i-1]+result[i-2];
+        }
+        return result[n-1];
+    }
+    //if in case we want to implement this without using arrays
+    public static int starisClimb(int n){
+        if(n==0)
+            return 0;
+        else if(n==1)
+            return 1;
+        else if(n==2)
+            return 2;
+        int result=0;
+        int first=1;
+        int second=2;
+        for(int i=2;i<n;i++){
+            result=first+second;
+            first=second;
+            second=result;
+        }
+        return result;
+    }
+    //198. House Robber
+    public static int houseRobber(int[] house){
+        if(house.length==2)
+            return Math.max(house[0],house[1]);
+        int[] dp=new int[house.length+1];
+        dp[0]=0;
+        dp[1]=house[0];
+        for(int i=1;i<house.length;i++){
+            dp[i+1]=Math.max(dp[i],house[i]+dp[i-1]);
+        }
+        return dp[house.length];
+    }
+    //house robber -2
+    public static int houseRobber2(int[] nums){
+        if(nums.length==1)
+            return nums[0];
+        if(nums.length==2)
+            return Math.max(nums[0],nums[1]);
+        return Math.max(houseRobber2Helper(0,nums.length-1,nums),houseRobber2Helper(1,nums.length,nums));
+    }
+    public static int houseRobber2Helper(int left,int right,int[] nums){
+        int[] dp=new int[right];
+        dp[left]=nums[left];
+        dp[left+1]=Math.max(dp[left],dp[left+1]);
+        for(int i=left+2;i<right;i++){
+            dp[i]=Math.max(dp[i-1],dp[i-2]+nums[i]);
+        }
+        return dp[right-1];
+    }
+    //longest palindrome SubString
+    public static String longPali(String s){
+        if(s.length()==0||s==null)
+            return "";
+        int start=0;
+        int end=0;
+        for(int i=0;i<s.length();i++){
+            int low=longPaliHelper(i,i,s);
+            int high=longPaliHelper(i,i+1,s);
+            int max=Math.max(low,high);
+            if(max>end-start){
+                start=i-((max-1)/2);
+                end=i+max/2;
+            }
+        }
+        return s.substring(start,end);
+    }
+    public static int longPaliHelper(int i,int j,String s){
+        if(i>j || s==null)
+            return 0;
+        while(i>=0&&j<s.length()&&s.charAt(i)==s.charAt(j)){
+            i++;
+            j--;
+        }
+        return j-i-1;
+    }
     public static void main(String[] args) {
+        //test case for house robber 2
+        System.out.println(houseRobber2(new int[]{1,2,3,1}));
+        //test case for house Robber
+//        System.out.println(houseRobber(new int[]{1,2,3,1}));
+        //test case for Staris Climber
+//        System.out.println(climbStairs(20));
+//        System.out.println(starisClimb(20));
         //test case for Course Scheduler
-        System.out.println(courseScheduler(4,new int[][]{{1,0},{0,1}}));
+//        System.out.println(courseScheduler(4,new int[][]{{1,0},{0,1}}));
         //test case for Atlantic and Pacific Ocean
 //        System.out.println(pacificAtlantic(new int[][]{{1,2,2,3,5},{3,2,3,4,4},{2,4,5,3,1},{2,4,5,3,1},{5,1,1,2,4}}));
         //test case for 417. Pacific Atlantic Water Flow
