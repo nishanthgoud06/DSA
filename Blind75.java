@@ -1207,14 +1207,225 @@ public class Blind75 {
                 return pq1.peek();
         }
     }
+    //Graphs Blind75
+    //no of island
+    //i would solve this problem in both the approches
+    //the first approch is the dfs approch
+    public static int noOfisland(char[][] grid){
+        if(grid.length==0||grid==null)
+            return 0;
+        int result=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]=='1'){
+                    noOfislandHelper(i,j,grid);
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+    public static void noOfislandHelper(int i,int j,char[][] grid){
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]=='0')
+            return;
+        grid[i][j]='0';
+        noOfislandHelper(i-1,j,grid);
+        noOfislandHelper(i+1,j,grid);
+        noOfislandHelper(i,j-1,grid);
+        noOfislandHelper(i,j+1,grid);
+    }
+    //implemenyting the same problem using bfs  approch
+    static int[][] dir={{1,0},{-1,0},{0,1},{0,-1}};
+    public static int islandNumber(char[][] grid){
+        if(grid.length==0||grid==null)
+            return 0;
+        Queue<int[]> queue=new LinkedList<>();
+        int result=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]=='1'){
+                    queue.offer(new int[]{i,j});
+                    islandHelper(queue,grid);
+                    result++;
+                }
+            }
+        }
+        return result;
+    }
+    public static void islandHelper(Queue<int[]> temp,char[][] grid){
+        while(!temp.isEmpty()){
+            int[] cur=temp.poll();
+            int x=cur[0];
+            int y=cur[1];
+            for(int[] d:dir){
+                int a=x+d[0];
+                int b=y+d[1];
+                if(a>=0&&a<grid.length&&b>=0&&b<grid[0].length&&grid[a][b]=='1'){
+                    grid[a][b]='0';
+                    temp.offer(new int[]{a,b});
+                }
+            }
+        }
+    }
+    //clone graph
+    static class graphNode{
+        int val;
+        List<graphNode> neighbours;
+        public graphNode(){
+            val=0;
+            neighbours=new ArrayList<>();
+        }
+        public graphNode(int val){
+            this.val=val;
+            neighbours=new ArrayList<>();
+        }
+        public graphNode(int val,List<graphNode> neighbours){
+            this.val=val;
+            this.neighbours=neighbours;
+        }
+    }
+    private static HashMap<Integer,graphNode> hashmap=new HashMap<>();
+    public static graphNode cloneGraph(graphNode test){
+        if(test==null)
+            return null;
+        if(hashmap.containsKey(test.val))
+            return hashmap.get(test.val);
+        graphNode n=new graphNode(test.val,new ArrayList<>());
+        hashmap.put(test.val,n);
+        for(graphNode no:test.neighbours){
+            n.neighbours.add(cloneGraph(no));
+        }
+        return n;
+    }
+    public static boolean areEqual(graphNode n, graphNode n1, Set<graphNode> visited) {
+        if (n == null && n1 == null) {
+            return true;
+        }
+        if (n == null || n1 == null) {
+            return false;
+        }
+        if (n.val != n1.val) {
+            return false;
+        }
+        if (visited.contains(n)) {
+            return true;
+        }
+        visited.add(n);
+        int size = n.neighbours.size();
+        if (size != n1.neighbours.size()) {
+            return false;
+        }
+        for (int i = 0; i < size; i++) {
+            if (!areEqual(n.neighbours.get(i), n1.neighbours.get(i), visited)) {
+                return false;
+            }
+        }
+        return true;
+    }
+//417. Pacific Atlantic Water Flow
+    //this is an interseting problem
+    public static List<List<Integer>> pacificAtlantic(int[][] grid){
+        List<List<Integer>> result=new ArrayList<>();
+        if(grid.length==0||grid==null)
+            return result;
+        int len1=grid.length;
+        int len2=grid[0].length;
+        boolean[][] paciVisited=new boolean[len1][len2];
+        boolean[][] atlaVisited=new boolean[len1][len2];
+        for(int i=0;i<len1;i++){
+            paciAtlaHelper(i,0,paciVisited,Integer.MIN_VALUE,grid);
+            paciAtlaHelper(i,len1-1,atlaVisited,Integer.MIN_VALUE,grid);
+        }
+        for(int j=0;j<len2;j++){
+            paciAtlaHelper(0,j,paciVisited,Integer.MIN_VALUE,grid);
+            paciAtlaHelper(len2-1,j,atlaVisited,Integer.MAX_VALUE,grid);
+        }
+        for(int i=0;i<len1;i++){
+            for(int j=0;j<len2;j++){
+                if(paciVisited[i][j]&&atlaVisited[i][j]){
+                    List<Integer> temp=new ArrayList<>();
+                    temp.add(i);
+                    temp.add(j);
+                    result.add(temp);
+                }
+            }
+        }
+        return result;
+    }
+    public static void paciAtlaHelper(int i,int j,boolean[][] visited,int max,int[][] grid){
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||visited[i][j]||grid[i][j]<max)
+            return;
+        visited[i][j]=true;
+        paciAtlaHelper(i+1,j,visited,grid[i][j],grid);
+        paciAtlaHelper(i-1,j,visited,grid[i][j],grid);
+        paciAtlaHelper(i,j+1,visited,grid[i][j],grid);
+        paciAtlaHelper(i,j-1,visited,grid[i][j],grid);
+    }
+    //Course Schedule
+    public static boolean courseScheduler(int numOfCourses,int[][] prereq){
+        if(numOfCourses==0)
+            return true;
+        List<List<Integer>> list=new ArrayList<>();
+        for(int i=0;i<numOfCourses;i++){
+            list.add(new ArrayList<>());
+        }
+        int[] depth=new int[numOfCourses];
+        for(int[] p:prereq){
+            int course=p[0];
+            int pr=p[1];
+            list.get(pr).add(course);
+            depth[course]++;
+        }
+        Queue<Integer> queue=new LinkedList<>();
+        for(int i=0;i<numOfCourses;i++){
+            if(depth[i]==0)
+                queue.offer(i);
+        }
+        int result=0;
+        while(!queue.isEmpty()){
+            int course= queue.poll();
+            result++;
+            for(int i:list.get(course)){
+                if(--depth[i]==0){
+                    queue.offer(i);
+                }
+            }
+        }
+        return result==numOfCourses;
+    }
     public static void main(String[] args) {
+        //test case for Course Scheduler
+        System.out.println(courseScheduler(4,new int[][]{{1,0},{0,1}}));
+        //test case for Atlantic and Pacific Ocean
+//        System.out.println(pacificAtlantic(new int[][]{{1,2,2,3,5},{3,2,3,4,4},{2,4,5,3,1},{2,4,5,3,1},{5,1,1,2,4}}));
+        //test case for 417. Pacific Atlantic Water Flow
+        //test case for cloning a graph
+//        graphNode test1=new graphNode(1);
+//        graphNode test2=new graphNode(2);
+//        graphNode test3=new graphNode(3);
+//        graphNode test4=new graphNode(4);
+//        test1.neighbours.add(test2);
+//        test1.neighbours.add(test4);
+//        test2.neighbours.add(test3);
+//        test2.neighbours.add(test1);
+//        test3.neighbours.add(test2);
+//        test3.neighbours.add(test4);
+//        test4.neighbours.add(test1);
+//        test4.neighbours.add(test3);
+//        System.out.println(areEqual(test1,cloneGraph(test1),new HashSet<>()));
+        //test case for noOfIsland
+//        System.out.println(noOfisland(new char[][]{{'1','1','1','1','0'},{'1','1','0','1','0'},
+//                {'1','1','0','0','0'},{'0','0','0','0','0'}}));
+        //test case 2 for no of Island
+//        System.out.println(islandNumber(new char[][]{{'1','1','1','1','0'},{'1','1','0','1','0'},
+//                {'1','1','0','0','0'},{'0','0','0','0','0'}}));
         //test case for PriorityQueue
-        MedianFinder test=new MedianFinder();
-        test.addNum(1);
-        test.addNum(2);
-        System.out.println(test.median());
-        test.addNum(3);
-        System.out.println(test.median());
+//        MedianFinder test=new MedianFinder();
+//        test.addNum(1);
+//        test.addNum(2);
+//        System.out.println(test.median());
+//        test.addNum(3);
+//        System.out.println(test.median());
         //test case for Word Search
 //        System.out.println(wordSearch2(new char[][]{{'a','b','c','e'},{'s','f','c','s'},{'a','d','e','e'}},"abcced"));
         //test case for combination Sum
