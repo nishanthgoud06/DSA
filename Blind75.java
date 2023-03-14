@@ -1453,34 +1453,217 @@ public class Blind75 {
         return dp[right-1];
     }
     //longest palindrome SubString
+    //instead of solving in dynamic approch we are going to solve using sliding window approch
     public static String longPali(String s){
         if(s.length()==0||s==null)
             return "";
-        int start=0;
-        int end=0;
+        int start=0,end=0;
         for(int i=0;i<s.length();i++){
-            int low=longPaliHelper(i,i,s);
-            int high=longPaliHelper(i,i+1,s);
+            int low=helperLongpali(i,i,s);
+            int high=helperLongpali(i,i+1,s);
             int max=Math.max(low,high);
             if(max>end-start){
                 start=i-((max-1)/2);
-                end=i+max/2;
+                end=i+(max/2);
             }
         }
-        return s.substring(start,end);
+        return s.substring(start,end+1);
     }
-    public static int longPaliHelper(int i,int j,String s){
-        if(i>j || s==null)
+    public static int helperLongpali(int start,int end,String s){
+        if(start>end)
             return 0;
-        while(i>=0&&j<s.length()&&s.charAt(i)==s.charAt(j)){
-            i++;
-            j--;
+        while(start>=0&&end<s.length()&&s.charAt(start)==s.charAt(end)){
+            start--;
+            end++;
         }
-        return j-i-1;
+        return end-start-1;
+    }
+    //now we are going to implement the same problem using dynamic programming
+    public static String longestPali(String s){
+        if(s == null || s.length() == 0) {
+            return "";
+        }
+        int len = s.length();
+        boolean[][] visited = new boolean[len][len];
+        for(int i = 0; i < len; i++) {
+            visited[i][i] = true;
+        }
+        int maxLength = 1;
+        int start = 0;
+        for(int i = 2; i <= len; i++) {
+            for(int j = 0; j < len - i + 1; j++) {
+                int k = j + i - 1;
+                if(s.charAt(j) == s.charAt(k) && (i == 2 || visited[j+1][k-1])) {
+                    visited[j][k] = true;
+                    if(i > maxLength) {
+                        maxLength = i;
+                        start = j;
+                    }
+                }
+            }
+        }
+        return s.substring(start, start + maxLength);
+    }
+    //647. Palindromic Substrings
+    //this is same same the above approch
+    //we are going to use dynamic programming to solve the problem
+    public static int paliSubString(String s){
+        if(s.length()==0)
+            return 0;
+        if(s.length()==1)
+            return 1;
+        int count=0;
+        int length=s.length();
+        boolean[][] dp=new boolean[length][length];
+        for (int i=0;i<length;i++){
+            dp[i][i]=true;
+            count++;
+        }
+        for(int len=2;len<=length;len++){
+            for(int i=0;i<length-len+1;i++){
+                int j=len-i-1;
+                System.out.println(j);
+                if(s.charAt(i)==s.charAt(j)){
+                    if(len==2||dp[i+1][j-1]){
+                        count++;
+                        dp[i][j]=true;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+    //decode ways
+    public static int decodeWays(String s){
+        if(s.length()==0)
+            return 0;
+        int[] dp=new int[s.length()+1];
+        dp[0]=1;
+        dp[1]=s.charAt(0)=='0'?0:1;
+        for(int i=2;i<=s.length();i++){
+            int len1=Integer.valueOf(s.substring(i-1,i));
+            int len2=Integer.valueOf(s.substring(i-2,i));
+            if(len1>0)
+                dp[i]+=dp[i-1];
+            if(len2>=10&&len2<=26)
+                dp[i]+=dp[i-2];
+        }
+        return dp[s.length()];
+    }
+    //coin change
+    //using dynamic programming
+    public static int coinChange(int[] coins,int target){
+        int[] dp=new int[target+1];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[0]=0;
+        for(int i=1;i<=target;i++){
+            for(int j=0;j<coins.length;j++){
+                if(i>=coins[j]){
+                    dp[i]=Math.min(dp[i],dp[i-coins[j]]+1);
+                }
+            }
+        }
+        return dp[target];
+    }
+    //implementing using top down approch
+    public static int changeCoin(int[] coins,int target){
+        if(target==0)
+            return 0;
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        changeCoinHelper(coins,target,hm);
+        return hm.get(target)!=Integer.MAX_VALUE?hm.get(target):-1;
+    }
+    public static int changeCoinHelper(int[] coins,int target,HashMap<Integer,Integer> hm){
+        if(target==0)
+            return 0;
+        if(hm.containsKey(target))
+            return hm.get(target);
+        int min=Integer.MAX_VALUE;
+        for(int i=0;i<coins.length;i++){
+            if(coins[i]>target)
+                continue;
+            int val=changeCoinHelper(coins,target-coins[i],hm);
+            if(val<min){
+                min=val;
+            }
+        }
+        min=(min==Integer.MAX_VALUE?min:min+1);
+        hm.put(target,min);
+        return min;
+    }
+    //max product subArray
+    public static int maxProduct(int[] array){
+        if(array.length==0)
+            return 0;
+        if(array.length==1)
+            return array[0];
+        int[] dp=new int[array.length+1];
+        int max=array[0];
+        int min=array[0];
+        int result=array[0];
+        for(int i=1;i<array.length;i++){
+            int tempmax=Math.max(max*array[i],Math.max(min*array[i],array[i]));
+            min=Math.min(min*array[i],Math.min(max*array[i],array[i]));
+            max=tempmax;
+            result=Math.max(result,max);
+        }
+        return result;
+    }
+    //word break
+    public static boolean wordBreak(List<String> dict,String target){
+        if(target.length()==0)
+            return true;
+        boolean[] dp=new boolean[target.length()+1];
+        dp[0]=true;
+        for(int i=1;i<=target.length();i++){
+            for(int j=0;j< i;j++){
+                if(dict.contains(target.substring(j,i))&&dp[j]){
+                    dp[i]=true;
+                    break;
+                }
+            }
+        }
+        return dp[target.length()];
+    }
+    //300. Longest Increasing Subsequence
+    public static int longSubSequence(int[] nums){
+        if(nums.length==0)
+            return 0;
+        else if(nums.length==1)
+            return 1;
+        int[] dp=new int[nums.length];
+        Arrays.fill(dp,1);
+        int result=0;
+        for(int i=1;i<nums.length;i++){
+            for(int j=0;j<i;j++){
+                if(nums[j]<nums[i]){
+                    int max=Math.max(dp[j]+1,dp[i]);
+                    dp[i]=max;
+                }
+            }
+            result=Math.max(result,dp[i]);
+        }
+        return result;
     }
     public static void main(String[] args) {
+        //longest subSequence
+        System.out.println(longSubSequence(new int[]{10,9,2,5,3,7,101,18}));
+        //word container
+//        System.out.println(wordBreak(Arrays.asList(new String[]{"leet", "code"}),"leetcode"));
+        //Max product
+//        System.out.println(maxProduct(new int[]{2,3,-2,4,-2,0,20}));
+        //coins change
+//        System.out.println(coinChange(new int[]{1,3,5},11));
+//        System.out.println(changeCoin(new int[]{1,3,5},11));
+        //test case for decode ways
+//        System.out.println(decodeWays("226"));
+        //test case for the palidromic subStrinf
+//        System.out.println(paliSubString("aaa"));
+        //test case for longest String palindrome
+//        System.out.println(longPali("babad"));
+//        System.out.println(longestPali("babad"));
         //test case for house robber 2
-        System.out.println(houseRobber2(new int[]{1,2,3,1}));
+//        System.out.println(houseRobber2(new int[]{1,2,3,1}));
         //test case for house Robber
 //        System.out.println(houseRobber(new int[]{1,2,3,1}));
         //test case for Staris Climber
