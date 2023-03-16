@@ -1675,9 +1675,58 @@ public class Blind75 {
         }
         return dp[text1.length()][text2.length()];
     }
+    //Maximum SubArray
+    //blind 75 greedy problem
+    public static int maxSubArray(int[] nums){
+        if(nums.length==0)
+            return 0;
+        int[] result=new int[nums.length];
+        result[0]=nums[0];
+        int max=nums[0];
+        for(int i=1;i<nums.length;i++){
+            result[i]=nums[i]+(result[i-1]>0?result[i-1]:0);
+            max=Math.max(result[i],max);
+        }
+        return max;
+    }
+    //55. Jump Game
+    public static boolean JumpGame(int[] nums){
+        if(nums.length<=1){
+            return true;
+        }
+        int finals=nums.length-1;
+        for(int i=nums.length-1;i>=0;i--){
+            if(i+nums[i]>=finals){
+                finals=i;
+            }
+        }
+        return finals==0;
+    }
+    //implementing the same using back tracking
+    public static boolean jumpGame(int[] nums){
+        if(nums.length==0)
+            return true;
+        return jumpGameHelper(0,nums);
+    }
+    public static boolean jumpGameHelper(int position,int[] nums){
+        if(position==nums.length-1)
+            return true;
+        int range=Math.min(position+nums[position],nums.length-1);
+        for(int pos=range;pos>position;pos--){
+            if(jumpGameHelper(pos,nums)){
+                return true;
+            }
+        }
+        return false;
+    }
     public static void main(String[] args) {
+        //test case for Jump Game
+        System.out.println(JumpGame(new int[]{2,3,1,1,4}));
+        System.out.println(jumpGame(new int[]{2,3,1,1,4}));
+        //test case for MaxSubarray
+//        System.out.println(maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
         //test case for longest common subSequence
-        System.out.println(ongestCommonSub("abcde","ace"));
+//        System.out.println(ongestCommonSub("abcde","ace"));
         //test case for uniquePath
 //        System.out.println(uniquepath(3,7));
         //longest subSequence
