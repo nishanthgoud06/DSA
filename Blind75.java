@@ -1762,9 +1762,26 @@ public class Blind75 {
         result.add(temp);
         return result.toArray(new int[result.size()][2]);
     }
+    //435. Non-overlapping Intervals
+    public static int nonOverInterval(int[][] intervals){
+        if(intervals.length==0||intervals==null)
+            return 0;
+        int count=1;
+        Arrays.sort(intervals,(i0,i1)->Integer.compare(i0[0],i1[0]));
+       int end=intervals[0][1];
+       for(int i=1;i<intervals.length;i++){
+           if(intervals[i][0]>=end){
+               end=intervals[i][1];
+               count++;
+           }
+       }
+       return intervals.length-count;
+    }
     public static void main(String[] args) {
+        //test case for non-over lapping intervals
+        System.out.println(nonOverInterval(new int[][]{{1,2},{2,3},{3,4},{1,3}}));
         //test case for insert interval
-        System.out.println(insertInterval(new int[][]{{1,3},{6,9}},new int[]{2,5}));
+//        System.out.println(insertInterval(new int[][]{{1,3},{6,9}},new int[]{2,5}));
         //test case for Jump Game
 //        System.out.println(JumpGame(new int[]{2,3,1,1,4}));
 //        System.out.println(jumpGame(new int[]{2,3,1,1,4}));
