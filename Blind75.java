@@ -1719,10 +1719,55 @@ public class Blind75 {
         }
         return false;
     }
+    //here we are implementing all the Intervals problems in Blind 75
+    //57. Insert Interval
+    public static List<int[]> insertInterval(int[][] nums,int[] newInterval){
+        List<int[]> result=new ArrayList<>();
+        if(nums.length==0)
+            return result;
+        int[] pre=newInterval;
+        for(int[] current:nums){
+            if(pre[1]<current[0]){
+                result.add(pre);
+                pre=current;
+            }else if(current[1]<pre[0]){
+                result.add(current);
+            }else{
+                pre[0]=Math.min(pre[0],current[0]);
+                pre[1]=Math.max(pre[1],current[1]);
+            }
+        }
+        result.add(pre);
+        return result;
+    }
+    //merge intervals
+    //this problem is similar to the above problem
+    public static int[][] mergeInterval(int[][] intervals){
+        List<int[]> result=new ArrayList<>();
+        if(intervals.length==0)
+            return result.toArray(new int[result.size()][2]);
+        Arrays.sort(intervals,(i0,i1)->Integer.compare(i0[0],i1[1]));
+        int[] temp=intervals[0];
+        for(int[] pos:intervals){
+            if(temp[0]<pos[1]){
+                       result.add(temp);
+                       temp=pos;
+            }else if(pos[1]<temp[0]){
+                result.add(pos);
+            }else{
+                temp[0]=Math.min(pos[0],temp[0]);
+                temp[1]=Math.max(pos[1],temp[1]);
+            }
+        }
+        result.add(temp);
+        return result.toArray(new int[result.size()][2]);
+    }
     public static void main(String[] args) {
+        //test case for insert interval
+        System.out.println(insertInterval(new int[][]{{1,3},{6,9}},new int[]{2,5}));
         //test case for Jump Game
-        System.out.println(JumpGame(new int[]{2,3,1,1,4}));
-        System.out.println(jumpGame(new int[]{2,3,1,1,4}));
+//        System.out.println(JumpGame(new int[]{2,3,1,1,4}));
+//        System.out.println(jumpGame(new int[]{2,3,1,1,4}));
         //test case for MaxSubarray
 //        System.out.println(maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
         //test case for longest common subSequence
