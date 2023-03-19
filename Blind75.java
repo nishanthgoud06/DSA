@@ -1777,9 +1777,66 @@ public class Blind75 {
        }
        return intervals.length-count;
     }
+    //math and geometry
+    //Rotate image
+    public static int[][] rotateImage(int[][] matrix){
+        if(matrix.length==0||matrix==null)
+            return new int[0][0];
+        int n=matrix.length;
+        for(int i=0;i<n;i++){
+            for(int j=i;j<n;j++){
+                int temp=matrix[i][j];
+                matrix[i][j]=matrix[j][i];
+                matrix[j][i]=temp;
+            }
+        }
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n/2;j++){
+                int temp=matrix[i][j];
+                matrix[i][j]=matrix[i][n-1-j];
+                matrix[i][n-1-j]=temp;
+            }
+        }
+        return matrix;
+    }
+    //spiral matrix
+    public static List<Integer> spiralMatrix(int[][] matrix){
+        List<Integer> result=new ArrayList<>();
+        if(matrix.length==0||matrix==null)
+            return result;
+        int top=0;
+        int bottom=matrix.length-1;
+        int left=0;
+        int right=matrix[0].length-1;
+        int counts= matrix.length*matrix[0].length;
+        int count=0;
+        while(result.size()<counts){
+            for(int i=left;i<=right&&result.size()<counts;i++){
+                result.add(matrix[top][i]);
+            }
+            top++;
+            for(int i=top;i<=bottom&&result.size()<counts;i++){
+                result.add(matrix[i][right]);
+            }
+            right--;
+            for(int i=right;i>=left&&result.size()<counts;i--){
+                result.add(matrix[bottom][i]);
+            }
+            bottom--;
+            for(int i=bottom;i>=top&&result.size()<counts;i--){
+                result.add(matrix[i][left]);
+            }
+            left++;
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for spiral matrix
+        System.out.println(spiralMatrix(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
+        //test case for rotate image
+//        System.out.println(rotateImage(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
         //test case for non-over lapping intervals
-        System.out.println(nonOverInterval(new int[][]{{1,2},{2,3},{3,4},{1,3}}));
+//        System.out.println(nonOverInterval(new int[][]{{1,2},{2,3},{3,4},{1,3}}));
         //test case for insert interval
 //        System.out.println(insertInterval(new int[][]{{1,3},{6,9}},new int[]{2,5}));
         //test case for Jump Game
