@@ -1830,9 +1830,22 @@ public class Blind75 {
         }
         return result;
     }
+    //bit manipulation
+    public static int hammingWeight(int n) {
+        int result=0;
+        if(n==0)
+            return result;
+        while(n!=0){
+            result=result+(n&1);
+            n=n>>>1;
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for hamming weight
+        System.out.println(hammingWeight(00000000000000000000000000001011));
         //test case for spiral matrix
-        System.out.println(spiralMatrix(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
+//        System.out.println(spiralMatrix(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
         //test case for rotate image
 //        System.out.println(rotateImage(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
         //test case for non-over lapping intervals
