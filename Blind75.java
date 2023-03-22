@@ -1841,9 +1841,51 @@ public class Blind75 {
         }
         return result;
     }
+    //338. Counting Bits
+    public static int[] countBits(int n){
+        int[] result=new int[n+1];
+        result[0]=0;
+        for(int i=1;i<=n;i++){
+            if(i%2==0){
+                result[i]=result[i/2];
+            }else{
+                result[i]=result[i-1]+1;
+            }
+        }
+        return result;
+    }
+    //Reverse bits
+    public static int reverseBits(int n) {
+        if(n==0)
+            return 0;
+        int result=0;
+        for(int i=0;i<32;i++){
+            result=result<<1;
+            if((n&1)==1)
+                result++;
+            n=n>>1;
+        }
+        return result;
+    }
+    //Missing number
+    public static int MissingNumber(int[] nums){
+        if(nums.length==0)
+            return 0;
+        int missing=nums.length;
+        for(int i=0;i<nums.length;i++){
+            missing=missing^i^nums[i];
+        }
+        return missing;
+    }
     public static void main(String[] args) {
+        //test case for MissingNumber
+        System.out.println(MissingNumber(new int[]{0,1,3}));
+        //test case for revrese Bits
+//        System.out.println(reverseBits(00000010100101000001111010011100));
+        //test case for counting bits
+//        System.out.println(Arrays.toString(countBits(5)));
         //test case for hamming weight
-        System.out.println(hammingWeight(00000000000000000000000000001011));
+//        System.out.println(hammingWeight(00000000000000000000000000001011));
         //test case for spiral matrix
 //        System.out.println(spiralMatrix(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
         //test case for rotate image
