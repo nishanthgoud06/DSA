@@ -1877,9 +1877,21 @@ public class Blind75 {
         }
         return missing;
     }
+    //add two numbers
+    public static int addSum(int a ,int b){
+        while(b!=0){
+            int carry=(a&b)<<1;
+            a=a^b;
+            b=carry;
+        }
+        return a;
+    }
+
     public static void main(String[] args) {
+        //test case for Add Sum
+        System.out.println(addSum(2,3));
         //test case for MissingNumber
-        System.out.println(MissingNumber(new int[]{0,1,3}));
+//        System.out.println(MissingNumber(new int[]{0,1,3}));
         //test case for revrese Bits
 //        System.out.println(reverseBits(00000010100101000001111010011100));
         //test case for counting bits
