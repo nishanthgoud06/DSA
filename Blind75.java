@@ -1886,10 +1886,48 @@ public class Blind75 {
         }
         return a;
     }
-
+//Set matrix to Zero
+    public static void SetmatrixZero(int[][] arr){
+        if(arr.length==0)
+            return;
+        //setting the first row and column of all the row and column where there is zero
+        for(int i=0;i<arr.length;i++){
+            for(int j=0;j<arr[0].length;j++){
+                if(arr[i][j]==0){
+                    arr[i][0]=0;
+                    arr[0][j]=0;
+                }
+            }
+        }
+        for(int i=0;i<arr.length;i++){
+            if(arr[i][0]==0){
+                for(int j=0;j<arr[0].length;j++){
+                    arr[i][j]=0;
+                }
+            }
+        }
+        for(int i=0;i<arr[0].length;i++){
+            if(arr[0][i]==0){
+                for(int j=0;j<arr.length;j++){
+                    arr[i][j]=0;
+                }
+            }
+        }
+    }
+    public static void printMat(int[][] arr){
+        for(int i=0;i<arr.length;i++){
+            for(int j=0;j<arr[0].length;j++){
+                System.out.println((arr[0].length*i+j)+" "+arr[i][j]);
+            }
+        }
+    }
     public static void main(String[] args) {
+        //test case for set matrix to 0
+        int[][] arr=new int[][]{{1,2,3},{4,0,6},{7,8,9}};
+        SetmatrixZero(arr);
+        printMat(arr);
         //test case for Add Sum
-        System.out.println(addSum(2,3));
+//        System.out.println(addSum(2,3));
         //test case for MissingNumber
 //        System.out.println(MissingNumber(new int[]{0,1,3}));
         //test case for revrese Bits
