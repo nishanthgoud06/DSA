@@ -160,17 +160,169 @@ public class LinkedList_cci {
             tail2.next = null;
         return head1;
     }
+    //sum Lists
+    public static node sumList(node list1,node list2){
+        if(list1==null)
+            return list2;
+        if(list2==null)
+            return list1;
+        int carry=0;
+        int sum=0;
+        node result=new node(0);
+        node dummy=result;
+        while(list1!=null&&list2!=null){
+            int val1= list1.val;
+            int val2=list2.val;
+            int total=val1+val2;
+            sum=total%10;
+            dummy.next=new node(sum+carry);
+            dummy=dummy.next;
+            carry=total/10;
+            list1=list1.next;
+            list2=list2.next;
+        }
+        if(carry!=0){
+            node temp=new node(carry);
+            dummy.next=temp;
+        }
+        return result.next;
+    }
+    //palindrome
+    public static boolean isPalindrome(node n){
+        if(n==null||n.next==null)
+            return true;
+        node slow=n;
+        node fast=n;
+        while(fast!=null&&fast.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+        }
+        node prev=null;
+        node current=slow.next;
+        while(current!=null){
+            node next=current.next;
+            current.next=prev;
+            prev=current;
+            current=next;
+        }
+        node part1=n;
+        node part2=prev;
+        while(part2!=null){
+            if(part1.val!= part2.val){
+                return false;
+            }
+            part1=part1.next;
+            part2=part2.next;
+        }
+        return true;
+    }
+    //Intersectionm
+    public static node intersection(node list1,node list2){
+        if(list1==null||list2==null)
+            return null;
+        int count=0;
+        node l1=list1;
+        node l2=list2;
+        int count1=lengthNode(l1);
+        int count2=lengthNode(l2);
+        int diff=Math.abs(count1-count2);
+        System.out.println(diff);
+        if(count1>count2)
+            l1=changeNode(l1,diff);
+        else
+            l2=changeNode(l2,diff);
+        while(l1!=null&&l2!=null){
+            if(l1.val==l2.val)
+                return l2;
+            l1=l1.next;
+            l2=l2.next;
+        }
+        return null;
+    }
+    public static node changeNode(node n,int limit){
+        while(limit>0){
+            n=n.next;
+            limit=limit-1;
+        }
+        return n;
+    }
+    public static int lengthNode(node n){
+        int count=0;
+        while(n!=null){
+            count++;
+            n=n.next;
+        }
+        return count;
+    }
+    //Loop detection
+    public static node loopDetect(node n){
+        if(n ==null)
+            return n;
+        node slow=n;
+        node fast=n;
+        while(fast!=null&&fast.next!=null){
+            slow=slow.next;
+            fast=fast.next.next;
+            if(slow.val== fast.val){
+                break;
+            }
+        }
+        node slow2=n;
+        while(slow2.next.val!=slow.val){
+            slow2=slow2.next;
+        }
+        return slow2;
+    }
     public static void main(String[] args) {
+        //test case for loop detection
+        node n1=new node(1);
+        node n2=new node(2);
+        node n3=new node(3);
+        node n4=new node(4);
+        node n5=new node(5);
+        n1.next=n2;
+        n2.next=n3;
+        n3.next=n4;
+        n4.next=n5;
+        n5.next=n3;
+        System.out.println(loopDetect(n1).val);
+        //test case for intersection
+//        node n1=new node(1);
+//        n1.next=new node(2);
+//        n1.next.next=new node(3);
+//        n1.next.next.next=new node(4);
+//        node n2=new node(5);
+//        n2.next=new node(6);
+//        n2.next.next=new node(7);
+//        n2.next.next.next=new node(3);
+//        n2.next.next.next.next=new node(4);
+//        System.out.println(intersection(n1,n2));
+        //test case for palindrome
+//        node n=new node(1);
+//        n.next=new node(2);
+//        n.next.next=new node(3);
+//        n.next.next.next=new node(3);
+//        n.next.next.next.next=new node(2);
+//        n.next.next.next.next.next=new node(1);
+//        System.out.println(isPalindrome(n));
+        //test case for Sum Lists
+//        node node1=new node(7);
+//        node1.next=new node(1);
+//        node1.next.next=new node(6);
+//        node node2=new node(5);
+//        node2.next=new node(9);
+//        node2.next.next=new node(2);
+//        printList(sumList(node1,node2));
         //test case for partation
-        node n=new node(3);
-        n.next=new node(5);
-        n.next.next=new node(8);
+//        node n=new node(3);
+//        n.next=new node(5);
+//        n.next.next=new node(8);
 //        n.next.next.next=new node(5);
 //        n.next.next.next.next=new node(10);
 //        n.next.next.next.next.next=new node(2);
 //        n.next.next.next.next.next.next=new node(1);
-
-        printList(partition(n,5));
+//
+//        printList(partition(n,5));
         //test case for Return Kth to Last
 //        node n = new node(1);
 //        n.next = new node(2);
