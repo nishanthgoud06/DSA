@@ -267,9 +267,12 @@ public class LinkedList_cci {
                 break;
             }
         }
+        if(fast==null||fast.next==null)
+            return null;
         node slow2=n;
-        while(slow2.next.val!=slow.val){
+        while(slow!=slow2){
             slow2=slow2.next;
+            slow=slow.next;
         }
         return slow2;
     }
