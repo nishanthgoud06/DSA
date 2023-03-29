@@ -1,0 +1,245 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+public class TreesAndGraph {
+    static class Graph{
+        int val;
+        List<Integer>[] adjList;
+        public Graph(int val){
+            this.val=val;
+            adjList=new List[val];
+            for(int i=0;i<val;i++){
+                adjList[i]=new ArrayList<>();
+            }
+        }
+        public void add(int u,int v){
+            adjList[u].add(v);
+        }
+    }
+    //Route Between Nodes
+    public static boolean RBNodes(int i,int j,Graph graph){
+        boolean[] visited=new boolean[graph.val];
+        visited[i]=true;
+        Queue<Integer> queue=new LinkedList<>();
+        queue.offer(i);
+        while(!queue.isEmpty()){
+            int temp=queue.poll();
+            for(int ele: graph.adjList[temp]){
+                if(ele==j){
+                    return true;
+                }
+                if(!visited[ele]){
+                    visited[ele]=true;
+                    queue.offer(ele);
+                }
+            }
+        }
+        return false;
+    }
+    //Minimal Tree
+    static class Tree{
+        int val;
+        Tree left,right;
+        public Tree(int val){
+            this.val=val;
+        }
+        public Tree(int val,Tree left,Tree right){
+            this.val=val;
+            this.left=left;
+            this.right=right;
+        }
+        public Tree(){}
+    }
+    public static void Inorder(Tree node){
+        if(node==null){
+            return;
+        }
+        Inorder(node.left);
+        System.out.println(node.val);
+        Inorder(node.right);
+    }
+    //building the tree
+    public static void insert(Tree tree,int[] arr){
+        insertHelper(tree,0,arr.length-1,arr);
+    }
+    public static void insertHelper(Tree tree, int low, int high, int[] arr){
+        if(low > high)
+            return;
+        int mid = low + (high - low) / 2;
+        tree.val = arr[mid];
+        tree.left = new Tree();
+        tree.right = new Tree();
+        insertHelper(tree.left, low, mid - 1, arr);
+        insertHelper(tree.right, mid + 1, high, arr);
+    }
+
+    public static int height(Tree test){
+        Queue<Tree> queue=new LinkedList<>();
+        queue.offer(test);
+        int result=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                Tree temp=queue.poll();
+                if(temp.left!=null){
+                    queue.offer(temp.left);
+                }
+                if(temp.right!=null){
+                    queue.offer(temp.right);
+                }
+            }
+            result++;
+        }
+        return result;
+    }
+    //List of Depths
+    public static List<List<Integer>> listDepth(Tree node){
+        List<List<Integer>> result=new ArrayList<>();
+        if(node==null)
+            return result;
+        Queue<Tree> queue=new LinkedList<>();
+        queue.offer(node);
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            List<Integer> temp=new ArrayList<>();
+            for(int i=0;i<size;i++){
+                Tree n=queue.poll();
+                temp.add(n.val);
+                if(n.left!=null){
+                    queue.offer(n.left);
+                }
+                if(n.right!=null){
+                    queue.offer(n.right);
+                }
+            }
+            result.add(temp);
+        }
+        return result;
+    }
+    //Check Balanced
+    public static boolean isBalanced(Tree node){
+        if(node==null)
+            return true;
+       int left=isBalancedHelper(node.left);
+       int right=isBalancedHelper(node.right);
+       if(Math.abs(left-right)>1)
+           return false;
+       return isBalanced(node.left)&&isBalanced(node.right);
+    }
+    public static int isBalancedHelper(Tree node){
+        if(node==null)
+            return 0;
+        return Math.max(isBalancedHelper(node.left),isBalancedHelper(node.right))+1;
+    }
+    //Validate BST
+    public static boolean isValidBST(Tree root) {
+        if(root==null)
+            return true;
+        return validCheck(root,null,null);
+    }
+    public static boolean validCheck(Tree root,Integer min,Integer max){
+        if(root==null)
+            return true;
+        if(min!=null&&root.val<=min||max!=null&&root.val>=max)
+            return false;
+        return validCheck(root.left,min,root.val)&&validCheck(root.right,root.val,max);
+    }
+    //Succesor
+    public static int Successor(Tree node,int val){
+        Tree current=node;
+        Tree Successor=null;
+        while(current!=null){
+            if(current.val>val){
+                Successor=current;
+                current=current.left;
+            }else{
+                current=current.right;
+            }
+        }
+        if(Successor==null)
+            return -1;
+        return Successor.val;
+    }
+    //Predecessor
+    public static int Predecessor(Tree node,int val){
+        Tree Pred=null;
+        Tree current=node;
+        while(current!=null){
+            if(current.val<val){
+                Pred=current;
+                current=current.right;
+            }else{
+                current=current.left;
+            }
+        }
+        if(Pred==null)
+            return -1;
+        return Pred.val;
+    }
+    public static Tree getSuc(Tree node){
+        while(node.left!=null){
+            node=node.left;
+        }
+        return node;
+    }
+    //delete a node
+    public static void DeleteNode(Tree node, int val) {
+        if (node == null)
+            return;
+        node = deleteHelper(node, val);
+    }
+
+    public static Tree deleteHelper(Tree node, int val) {
+        if (node == null)
+            return null;
+        if (node.val > val) {
+            node.left = deleteHelper(node.left, val);
+        } else if (node.val < val) {
+            node.right = deleteHelper(node.right, val);
+        } else {
+            if (node.left == null)
+                return node.right;
+            else if (node.right == null)
+                return node.left;
+            else {
+                Tree suc = getSuc(node.right);
+                node.val = suc.val;
+                node.right = deleteHelper(node.right, suc.val);
+            }
+        }
+        return node;
+    }
+
+
+    public static void main(String[] args) {
+        //test case for Successor
+        Tree test=new Tree(5);
+        test.left=new Tree(2);
+        test.left.left=new Tree(1);
+        test.left.right=new Tree(3);
+        test.right=new Tree(7);
+        test.right.left=new Tree(6);
+        test.right.right=new Tree(9);
+//        System.out.println("Succesor"+Successor(test,3));
+//        System.out.println("Pred"+Predecessor(test,3));
+        //test case for deleting a node form the Bst
+        DeleteNode(test,5);
+        Inorder(test);
+        //testcase for minimal Tree
+//        int[] test={1,2,3,6,7,8,9};
+//        Tree testing=new Tree();
+//        insert(testing,test);
+//        System.out.println(listDepth(testing));
+//        System.out.println(isBalanced(testing));
+//        Inorder(testing);
+//        System.out.println(height(testing));
+        //test case for Route Between Nodes
+//        Graph test=new Graph(4);
+//        test.add(0,1);
+//        test.add(1,2);
+//        test.add(2,3);
+//        System.out.println(RBNodes(0,3,test));
+    }
+}
