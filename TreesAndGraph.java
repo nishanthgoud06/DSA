@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class TreesAndGraph {
     static class Graph{
@@ -211,22 +208,50 @@ public class TreesAndGraph {
         }
         return node;
     }
-
-
+//    Build Order
+    public static List<String> Build(String[] Projects,String[][] dependency){
+        List<String> result=new ArrayList<>();
+        HashMap<String,List<String>> hashmap=new HashMap<>();
+        for(String p:Projects){
+            hashmap.put(p,new ArrayList<>());
+        }
+        for(String[] d:dependency){
+            hashmap.get(d[0]).add(d[1]);
+        }
+        Set<String> visited=new HashSet<>();
+        for(String i:Projects){
+            buildHelper(i,result,hashmap,visited);
+        }
+        if(result.size()!=Projects.length)
+            System.out.println("there is a loop in the project");
+        Collections.reverse(result);
+        return result;
+    }
+    public static void buildHelper(String s,List<String> result,HashMap<String,List<String>> hashmap,Set<String> visited){
+        if(visited.contains(s))
+            return;
+        visited.add(s);
+        for(String str:hashmap.get(s)){
+            buildHelper(str,result,hashmap,visited);
+        }
+        result.add(s);
+    }
     public static void main(String[] args) {
+        //test case for project Builder
+        System.out.println(Build(new String[]{"a","b","c","d","e","f"},new String[][]{{"a","d"},{"f","d"},{"b","d"},{"f","a"},{"d","c"}}));
         //test case for Successor
-        Tree test=new Tree(5);
-        test.left=new Tree(2);
-        test.left.left=new Tree(1);
-        test.left.right=new Tree(3);
-        test.right=new Tree(7);
-        test.right.left=new Tree(6);
-        test.right.right=new Tree(9);
+//        Tree test=new Tree(5);
+//        test.left=new Tree(2);
+//        test.left.left=new Tree(1);
+//        test.left.right=new Tree(3);
+//        test.right=new Tree(7);
+//        test.right.left=new Tree(6);
+//        test.right.right=new Tree(9);
 //        System.out.println("Succesor"+Successor(test,3));
 //        System.out.println("Pred"+Predecessor(test,3));
         //test case for deleting a node form the Bst
-        DeleteNode(test,5);
-        Inorder(test);
+//        DeleteNode(test,5);
+//        Inorder(test);
         //testcase for minimal Tree
 //        int[] test={1,2,3,6,7,8,9};
 //        Tree testing=new Tree();
