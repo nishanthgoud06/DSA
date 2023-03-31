@@ -255,6 +255,7 @@ public class TreesAndGraph {
         else
             return right_node;
     }
+
     public static void main(String[] args) {
         //test case for First Common Ancestors
         Tree test=new Tree(2);
