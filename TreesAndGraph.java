@@ -40,7 +40,10 @@ public class TreesAndGraph {
         int val;
         Tree left,right;
         public Tree(int val){
+
             this.val=val;
+            this.left=null;
+            this.right=null;
         }
         public Tree(int val,Tree left,Tree right){
             this.val=val;
@@ -236,9 +239,35 @@ public class TreesAndGraph {
         }
         result.add(s);
     }
+    //First Common Ancestors
+    public static Tree Fcs(Tree tree,Tree left,Tree right){
+        if(tree==null)
+            return null;
+        System.out.println("Visiting node " + tree.val);
+        if(tree.val==left.val||tree.val==right.val)
+            return tree;
+        Tree left_node=Fcs(tree.left,left,right);
+        Tree right_node=Fcs(tree.right,left,right);
+        if(left_node!=null&&right_node!=null){
+            return tree;
+        }else if(left_node!=null)
+            return left_node;
+        else
+            return right_node;
+    }
+
     public static void main(String[] args) {
+        //test case for First Common Ancestors
+        Tree test=new Tree(2);
+        test.left=new Tree(3);
+        test.right=new Tree(5);
+        test.left.left=new Tree(7);
+        test.left.right=new Tree(8);
+        test.right.left=new Tree(9);
+        test.right.right=new Tree(10);
+        System.out.println(Fcs(test,new Tree(9),new Tree(10)).val);
         //test case for project Builder
-        System.out.println(Build(new String[]{"a","b","c","d","e","f"},new String[][]{{"a","d"},{"f","d"},{"b","d"},{"f","a"},{"d","c"}}));
+//        System.out.println(Build(new String[]{"a","b","c","d","e","f"},new String[][]{{"a","d"},{"f","d"},{"b","d"},{"f","a"},{"d","c"}}));
         //test case for Successor
 //        Tree test=new Tree(5);
 //        test.left=new Tree(2);
