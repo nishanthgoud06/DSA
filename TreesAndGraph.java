@@ -255,17 +255,248 @@ public class TreesAndGraph {
         else
             return right_node;
     }
+//Build Order
+    public static List<String> BuildOrder(List<String> Projects,String[][] dependency){
+        List<String> result=new ArrayList<>();
+        if(Projects.isEmpty())
+            return result;
+        HashSet<String> visited=new HashSet<>();
+        HashMap<String,List<String>> hashMap=new HashMap<>();
+        for(int i=0;i<Projects.toArray().length;i++){
+            hashMap.put(Projects.get(i),new ArrayList<>());
+        }
+        for(String[] d:dependency){
+            hashMap.get(d[0]).add(d[1]);
+        }
+        for(String i:Projects){
+            buildOrderHelper(i,hashMap,result,visited);
+        }
 
+        Collections.reverse(result);
+        return result;
+    }
+    public static void buildOrderHelper(String Project,HashMap<String,List<String>> dependency,List<String> result,HashSet<String> Visited){
+        if(Visited.contains(Project))
+            return;
+        Visited.add(Project);
+        for(String i:dependency.get(Project)){
+            buildOrderHelper(i,dependency,result,Visited);
+        }
+        result.add(Project);
+    }
+    //BST Sequence
+    public static List<List<Integer>> BSTsequence(Tree t){
+        List<List<Integer>> result=new ArrayList<>();
+        if(t==null){
+            result.add(new ArrayList<>());
+            return result;
+        }
+        List<Integer> prefix=new ArrayList<>();
+        prefix.add(t.val);
+        List<List<Integer>> left=BSTsequence(t.left);
+        List<List<Integer>> right=BSTsequence(t.right);
+        for(List<Integer> l:left){
+            for(List<Integer> r:right){
+                List<List<Integer>> temp=new ArrayList<>();
+                BSTSequenceHelper(l,r,prefix,temp);
+                result.addAll(temp);
+            }
+        }
+        return result;
+    }
+    public static void BSTSequenceHelper(List<Integer> left,List<Integer> right,List<Integer> prefix,List<List<Integer>> result){
+        if(left.isEmpty()||right.isEmpty()){
+            List<Integer> results=new ArrayList<>(prefix);
+            results.addAll(left);
+            results.addAll(right);
+            result.add(results);
+            return;
+        }
+        int firstHead=left.remove(0);
+        prefix.add(firstHead);
+        BSTSequenceHelper(left,right,prefix,result);
+        prefix.remove(prefix.size()-1);
+        left.add(0,firstHead);
+        int secondHead=right.remove(0);
+        prefix.add(secondHead);
+        BSTSequenceHelper(left,right,prefix,result);
+        prefix.remove(prefix.size()-1);
+        right.add(0,secondHead);
+    }
+    //Check SubTree
+    public static boolean isSub(Tree Big,Tree small){
+        if(Big==null)
+            return false;
+        if(small==null)
+            return true;
+        if(isSubHelper(Big,small))
+            return true;
+        return isSub(Big.left,small)||isSub(Big.right,small);
+    }
+    public static boolean isSubHelper(Tree big,Tree small){
+        if(big==null&&small==null)
+            return true;
+        if(big==null||small==null)
+            return false;
+        if(big.val!= small.val)
+            return false;
+        return isSubHelper(big.left,small.left)&&isSubHelper(big.right,small.right);
+    }
+    static class TreeNode{
+        int val;
+        TreeNode left,right;
+        List<Integer> count=new ArrayList<>();
+        public TreeNode(int val){
+            this.val=val;
+        }
+        TreeNode temp;
+        public void insert(int val){
+            count.add(val);
+            TreeNode t=temp;
+            if(t==null){
+                t=new TreeNode(val);
+            }
+            if(val<t.val){
+                t.left=new TreeNode(val);
+            }else{
+                t.right=new TreeNode(val);
+            }
+        }
+        public boolean find(int val){
+            TreeNode t=temp;
+            if(t==null)
+                return false;
+            while(t!=null){
+                if(t.val==val)
+                    return true;
+                else if(t.val<val){
+                    t=t.left;
+                }else{
+                    t=t.right;
+                }
+            }
+            return  false;
+        }
+        public void delete(int val){
+            TreeNode t=temp;
+            if(t==null)
+                return;
+            deleteHelper(val,t);
+        }
+        public TreeNode suc(TreeNode t){
+            if(t==null)
+                return null;
+            if(t.left!=null){
+                t=t.left;
+            }
+            return t;
+        }
+        public TreeNode deleteHelper(int val,TreeNode t){
+            if(val<t.val){
+                deleteHelper(val,t.left);
+            }else if(val>t.val){
+                deleteHelper(val,t.right);
+            }else{
+                if(t.left==null&& t.right==null){
+                    t=null;
+                } else if (t.left==null) {
+                    t=t.right;
+                }else if(t.right==null){
+                    t=t.left;
+                }else{
+                    TreeNode a=suc(t.right);
+                    t.val=a.val;
+                    t.right=deleteHelper(a.val, t.right);
+                }
+            }
+            return t;
+        }
+        public TreeNode getRandomNode(){
+            Random r=new Random();
+            int val=r.nextInt(count.size());
+            TreeNode t=temp;
+            return getRandomNodeHelper(t,val);
+        }
+        public TreeNode getRandomNodeHelper(TreeNode t, int randomIndex){
+            if(t == null){
+                return null;
+            }
+            int leftCount = t.left == null ? 0 : t.left.count.size();
+            if(randomIndex == leftCount){
+                return t;
+            } else if(randomIndex < leftCount){
+                return getRandomNodeHelper(t.left, randomIndex);
+            } else {
+                return getRandomNodeHelper(t.right, randomIndex - leftCount - 1);
+            }
+        }
+    }
+    //Paths to Sum
+    public static List<List<Integer>> PathSum(Tree t,int val){
+        List<List<Integer>> result=new ArrayList<>();
+        if(t==null||val==0)
+            return result;
+       pathSumHelper(t,val,result,new ArrayList<Integer>());
+       return result;
+    }
+    public static void pathSumHelper(Tree t,int val,List<List<Integer>> result,List<Integer> temp){
+        if (t == null) {
+            return;
+        }
+        temp.add(t.val);
+        if (t.left == null && t.right == null && val == t.val) {
+            result.add(new ArrayList<>(temp));
+        } else {
+            pathSumHelper(t.left, val - t.val, result, temp);
+            pathSumHelper(t.right, val - t.val, result, temp);
+        }
+        temp.remove(temp.size() - 1);
+    }
     public static void main(String[] args) {
+        //test case for path sum
+        Tree test=new Tree(5);
+        test.left=new Tree(4);
+        test.right=new Tree(8);
+        test.left.left=new Tree(11);
+        test.left.left.left=new Tree(7);
+        test.left.left.right=new Tree(2);
+        test.right.left=new Tree(13);
+        test.right.right=new Tree(4);
+        test.right.right.left=new Tree(5);
+        test.right.right.right=new Tree(1);
+        List<List<Integer>> expected1 = new ArrayList<>();
+        expected1.add(Arrays.asList(5, 4, 11, 2));
+        expected1.add(Arrays.asList(5, 8, 4, 5));
+        expected1.add(Arrays.asList(5, 8, 4, 1));
+        List<List<Integer>> result1 = PathSum(test,22);
+        System.out.println(result1);
+        System.out.println("Test case 1: " + result1.equals(expected1));
+        //test case for Random Node
+        //test case for is SubTree
+//        Tree test=new Tree(1);
+//        test.left=new Tree(2);
+//        test.right=new Tree(3);
+//        test.left.left=new Tree(4);
+//        test.left.right=new Tree(5);
+//        Tree test1=new Tree(2);
+//        test1.left=new Tree(4);
+//        test1.right=new Tree(5);
+//        test1.right=new Tree(3);
+//        System.out.println(isSub(test,test1));
+        //test case for BST Sequences
+//        Tree test=new Tree(2);
+//        test.left=new Tree(1);
+//        test.right=new Tree(3);
+//        System.out.println(BSTsequence(test));
         //test case for First Common Ancestors
-        Tree test=new Tree(2);
-        test.left=new Tree(3);
-        test.right=new Tree(5);
-        test.left.left=new Tree(7);
-        test.left.right=new Tree(8);
-        test.right.left=new Tree(9);
-        test.right.right=new Tree(10);
-        System.out.println(Fcs(test,new Tree(9),new Tree(10)).val);
+//        Tree test=new Tree(2);
+//        test.left=new Tree(3);
+//        test.right=new Tree(5);
+//        test.left.left=new Tree(7);
+//        test.left.right=new Tree(8);
+//        test.right.left=new Tree(9);
+//        test.right.right=new Tree(10);
+//        System.out.println(Fcs(test,new Tree(9),new Tree(10)).val);
         //test case for project Builder
 //        System.out.println(Build(new String[]{"a","b","c","d","e","f"},new String[][]{{"a","d"},{"f","d"},{"b","d"},{"f","a"},{"d","c"}}));
         //test case for Successor
