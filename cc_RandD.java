@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class cc_RandD {
     //Triple Step
@@ -103,15 +100,138 @@ public class cc_RandD {
         }
         return result;
     }
+    //recusrsive mutiply
+    public static int mutiply(int a,int b){
+        if(a==0||b==0){
+            return 0;
+        }
+        if(a==1)
+            return b;
+        return mutiply(a-1,b)+b;
+    }
+    //book approch
+    public static int muliplytwo(int a,int b){
+        int small=a<b?a:b;
+        int big=b>a?b:a;
+        return mutiplyhelper(small,big);
+    }
+    public static int mutiplyhelper(int small,int big){
+        if(small==0)
+            return 0;
+        if(small==1)
+            return big;
+        int current=small>>1;
+        int half=mutiplyhelper(current,big);
+        if(small%2==0){
+            return half+half;
+        }else{
+            return half+half+big;
+        }
+    }
+    //towers of hannoi
+    public static void towerOfHannoi(int n,char source,char Destination,char temp){
+       if(n==0){
+           return;
+       }
+       towerOfHannoi(n-1,source,temp,Destination);
+       System.out.println("moving " +n+" the source "+ source+" to "+Destination);
+       towerOfHannoi(n-1,temp,Destination,source);
+    }
+    //String Permutations
+    public static List<String> permutation(String string){
+        List<String> result=new ArrayList<>();
+        if(string.length()==0)
+            return result;
+        permutationhelper(result,string,0);
+        return result;
+    }
+    public static void permutationhelper(List<String> result,String string,int index){
+        if(index==string.length()){
+            result.add(string);
+        }
+        for(int i=index;i<string.length();i++){
+            String str=swap(string,i,index);
+            permutationhelper(result,str,index+1);
+        }
+    }
+    public static String swap(String s,int a,int b){
+        char[] c=s.toCharArray();
+        char temp=c[a];
+        c[a]=c[b];
+        c[b]=temp;
+        return new String(c);
+    }
+    //generate the paras according to the number
+    //we are going to solve this problem in two approches
+    //1.using back tracking
+    public static List<String> genParas(int n){
+        List<String> result=new ArrayList<>();
+        if(n==0){
+            return result;
+        }
+        genParasHelper(n,result,"",0,0);
+        return result;
+    }
+    public static void genParasHelper(int n,List<String> result,String temp,int open,int close){
+        if(temp.length()==n*2){
+            result.add(temp);
+            return;
+        }
+        if(open<n){
+            genParasHelper(n,result,temp+"(",open+1,close);
+        }
+        if(close<open){
+            genParasHelper(n,result,temp+")",open,close+1);
+        }
+    }
+    //using stack
+    public static List<String> genParas2(int n){
+        List<String> result=new ArrayList<>();
+        if(n==0){
+            return result;
+        }
+        Stack<Character> stack=new Stack<>();
+        genParas2Helper(stack,result,n,n);
+        return result;
+    }
+    public static void genParas2Helper(Stack<Character> stack,List<String> result,int start,int end){
+        if(start==0 && end==0){
+            StringBuilder sb=new StringBuilder();
+            for(Character c:stack){
+                sb.append(c);
+            }
+            result.add(sb.toString());
+            return;
+        }
+        if(start>0){
+            stack.push('(');
+            genParas2Helper(stack,result,start-1,end);
+            stack.pop();
+        }
+        if(end>start){
+            stack.push(')');
+            genParas2Helper(stack,result,start,end-1);
+            stack.pop();
+        }
+    }
     public static void main(String[] args) {
+        //test case for Generating Paras
+//        System.out.println(genParas(3));
+        System.out.println(genParas2(3));
+        //test case for permutations
+//        System.out.println(permutation("abc"));
+        //test case for towers of hannoi
+//        towerOfHannoi(3,'A','C','B');
+        //test case for recursive mutiply
+//        System.out.println(mutiply(3,4));
         //test case for Power Set
-        System.out.println(PowerSet(new int[]{1,2,3}));
-        //test case for power Set 2
-        Set<Integer> test=new HashSet<>();
-        test.add(1);
-        test.add(2);
-        test.add(3);
-        System.out.println(PowerSet1(test));
+//        System.out.println(PowerSet(new int[]{1,2,3}));
+//        //test case for power Set 2
+//        Set<Integer> test=new HashSet<>();
+//        test.add(1);
+//        test.add(2);
+//        test.add(3);
+//        System.out.println(PowerSet1(test));
         //test case for magic Index
 //        int[] test1={-40,-20,-1,1,2,3,5,7,9,12,13};
 //        int[] test2={-10,-5,2,2,2,3,4,7,9,12,13};
