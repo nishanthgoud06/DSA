@@ -214,10 +214,199 @@ public class cc_RandD {
             stack.pop();
         }
     }
+    //PAINT FILL
+    public static int[][] paintFill(int[][] grid,int row,int col,int color){
+        int old=grid[row][col];
+        paintFillHelper(grid,row,col,color,old);
+        return grid;
+    }
+    public static void paintFillHelper(int[][] grid,int row,int col,int ncolor,int ocolor){
+        if(row<0||row>=grid.length||col<0||col>=grid[0].length||grid[row][col]==ncolor)
+            return;
+        if(grid[row][col]==ocolor){
+            grid[row][col]=ncolor;
+            paintFillHelper(grid,row-1,col,ncolor,ocolor);
+            paintFillHelper(grid,row+1,col,ncolor,ocolor);
+            paintFillHelper(grid,row,col-1,ncolor,ocolor);
+            paintFillHelper(grid,row,col+1,ncolor,ocolor);
+        }
+    }
+    //Coin Change
+    public static int CoinChange(int[] change,int target){
+        int[] result=new int[target+1];
+        for(int i=0;i<=target;i++){
+            result[i]=Integer.MAX_VALUE - 1;
+        }
+        result[0]=0;
+        for(int i=1;i<=target;i++){
+            for(int j=0;j< change.length;j++){
+                if(change[j]<=i){
+                    result[i]=Math.min(result[i],1+result[i-change[j]]);
+                }
+            }
+        }
+        return result[target];
+    }
+    //coins
+    //given change we need to find the number of ways to represent the target number
+    public static int changeCoin(int[] coins,int target){
+        int[] result=new int[target+1];
+        result[0]=1;
+        for(int i=0;i<coins.length;i++){
+            for(int j=coins[i];j<=target;j++){
+                result[j]+=result[j-coins[i]];
+            }
+        }
+        return result[target];
+    }
+    //N -Queens Problem
+    public static void buildQueen(int n){
+        if(n==0)
+            return;
+        int[] castle=new int[n];
+        queenHelper(castle,n,0);
+    }
+    public static void queenHelper(int[] castle,int n,int row){
+        if(row==n){
+            printCastle(castle);
+            return;
+        }
+        for(int i=0;i<n;i++){
+            castle[row]=i;
+            if(isValidQueen(castle,row)){
+                queenHelper(castle,n,row+1);
+            }
+        }
+    }
+    public static boolean isValidQueen(int[] castle,int row){
+        for(int i=0;i<row;i++){
+            if(castle[row]==castle[i]||Math.abs(castle[row]-castle[i])==Math.abs(row-i)){
+                return false;
+            }
+        }
+        return true;
+    }
+    public static void printCastle(int[] castle){
+        for(int i=0;i<castle.length;i++){
+            for(int j=0;j<castle.length;j++){
+                if(castle[i]==j){
+                    System.out.print("Q");
+                }else{
+                    System.out.print(".");
+                }
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+    //Stack the boxes where the rotation of the box is allowed
+    public static int StackBoxes(Box[] boxes){
+        Box[] newBoxes=new Box[boxes.length*3];
+        generateBoxes(boxes,newBoxes);
+        Arrays.sort(newBoxes);
+        int[] t=new int[newBoxes.length];
+        int[] result=new int[newBoxes.length];
+        for(int i=0;i< newBoxes.length;i++){
+            t[i]=newBoxes[i].height;
+            result[i]=i;
+        }
+        for(int i=1;i< newBoxes.length;i++){
+            for(int j=0;j< newBoxes.length;j++){
+                if(newBoxes[i].length<newBoxes[j].length&&newBoxes[i].width<newBoxes[j].width){
+                    if(t[j]+newBoxes[i].height>t[i]){
+                        t[i]=t[j]+newBoxes[i].height;
+                        result[i]=j;
+                    }
+                }
+            }
+        }
+        int max=Integer.MIN_VALUE;
+        for(int i=0;i< newBoxes.length;i++){
+            if(max<t[i]){
+                max=t[i];
+            }
+        }
+        return max;
+    }
+
+    public static void generateBoxes(Box[] boxes,Box[] newBoxes){
+        int index=0;
+        for(int i=0;i< boxes.length;i++){
+            newBoxes[index++]=Box.Dimensions(boxes[i].height,boxes[i].length,boxes[i].width);
+            newBoxes[index++]=Box.Dimensions(boxes[i].length,boxes[i].height,boxes[i].width);
+            newBoxes[index++]=Box.Dimensions(boxes[i].width,boxes[i].length,boxes[i].height);
+        }
+    }
+    static class Box implements Comparable<Box>{
+        int height;
+        int width;
+        int length;
+        public Box(int height,int width,int length){
+            this.height=height;
+            this.width=width;
+            this.length=length;
+        }
+        public Box(){
+
+        }
+        static Box Dimensions(int height,int side1,int side2){
+            Box box=new Box();
+            box.height=height;
+            if(side1>=side2){
+                box.length=side1;
+                box.width=side2;
+            }else{
+                box.length=side2;
+                box.width=side1;
+            }
+            return box;
+        }
+    @Override
+        public int compareTo(Box B){
+            if(this.length*this.width>=B.length*B.width){
+                return -1;
+            }else{
+                return 1;
+            }
+        }
+
+    }
+    //tallest stack
+    public static int tallestStack(int[][] boxes) {
+        int n = boxes.length;
+        Arrays.sort(boxes, (a, b) -> Integer.compare(a[1], b[1])); // Sort based on height
+
+        int[] dp = new int[n];
+        int max_height = 0;
+        for (int i = 0; i < n; i++) {
+            int max_height_i = 0;
+            for (int j = 0; j < i; j++) {
+                if (boxes[j][0] < boxes[i][0] && boxes[j][1] < boxes[i][1] && boxes[j][2] < boxes[i][2]) {
+                    max_height_i = Math.max(max_height_i, dp[j]);
+                }
+            }
+            dp[i] = max_height_i + boxes[i][1];
+            max_height = Math.max(max_height, dp[i]);
+        }
+        return max_height;
+    }
     public static void main(String[] args) {
+        //test case for tallest Stack
+        System.out.println(tallestStack(new int[][]{{2,1,3},{1,2,3},{3,2,1},{2,3,1}}));
+        //test case for Stack Boxes
+//        Box[] test={new Box(1,2,4),new Box(3,2,5)};
+//        System.out.println(StackBoxes(test));
+        //test case for n queen
+//        buildQueen(4);
+        //test case for Change Coin
+//        System.out.println(changeCoin(new int[]{1,5},100));
+        //test case for coin Change
+//        System.out.println(CoinChange(new int[]{1,5,6,8},11));
+        //test case for Paint Fill
+//        System.out.println(Arrays.toString(new int[][]{{}}));
         //test case for Generating Paras
 //        System.out.println(genParas(3));
-        System.out.println(genParas2(3));
+//        System.out.println(genParas2(3));
         //test case for permutations
 //        System.out.println(permutation("abc"));
         //test case for towers of hannoi
