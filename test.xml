@@ -1,0 +1,4 @@
+<family lastName="Smith">
+    <person firstName="John" age="30" />
+    <person firstName="Mary" age="25" />
+</family>

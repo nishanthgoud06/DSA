@@ -1,4 +1,11 @@
+import java.awt.print.Pageable;
+import java.io.FileNotFoundException;
+import java.security.Key;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class Moderate {
     //number swapper
@@ -276,27 +283,182 @@ public class Moderate {
         }
         return maxAliveYear;
     }
+    //Diving Board
+    public static List<Integer> DivingBoard(int shorter,int longer,int k){
+        List<Integer> result=new ArrayList<>();
+        if(k==0)
+            return result;
+        int j=k;
+        for(int i=0;i<=k;i++){
+            result.add(i*shorter+j*longer);
+            j--;
+        }
+        return result;
+    }
+    //using memorization
+    public static List<Integer> DivingBoard1(int shorter,int longer,int k){
+        if(k==0)
+            return new ArrayList<>();
+        HashSet<Integer> result=new HashSet<>();
+        DivingBoard1Helper(shorter,longer,k,0,result);
+        return new ArrayList<>(result);
+    }
+    public static void  DivingBoard1Helper(int shorter,int longer,int k,int current,HashSet<Integer> result){
+        if(k==0){
+            result.add(current);
+            return;
+        }
+        DivingBoard1Helper(shorter,longer,k-1,current+shorter,result);
+        DivingBoard1Helper(shorter,longer,k-1,current+longer,result);
+    }
+    //using Memo
+    public static int[] DivingBoard2(int shorter,int longer,int K){
+        if(K==0)
+            return new int[0];
+        HashSet<Integer> result=new HashSet<>();
+        HashSet<String> visited=new HashSet<>();
+        DivingBoard2Helper(shorter,longer,K,result,visited,0);
+        return result.stream().mapToInt(Integer::intValue).toArray();
+    }
+    public static void DivingBoard2Helper(int shorter,int longer,int k,HashSet<Integer> result,HashSet<String> visted,int current){
+        if(k==0){
+            result.add(current);
+            return;
+        }
+        String key=k+" "+current;
+        if(visted.contains(key))
+            return;
+        DivingBoard2Helper(shorter,longer,k-1,result,visted,current+shorter);
+        DivingBoard2Helper(shorter,longer,k-1,result,visted,current+longer);
+        visted.add(key);
+    }
+    //Xml Encoding
+    public static String XmlEncoding() throws FileNotFoundException{
+        String filePath = "/Users/nishanthgoud/Documents/DSA/src/test.xml";
+        String result = "";
+        HashMap<String, Integer> hashmap = new HashMap<>();
+        hashmap.put("family", 1);
+        hashmap.put("person", 2);
+        hashmap.put("firstname", 3);
+        hashmap.put("lastname", 4);
+        hashmap.put("state", 5);
+        try (Scanner sc = new Scanner(new File(filePath))) {
+            while (sc.hasNextLine()) {
+                String current = sc.nextLine();
+                current= current.replaceAll("<[^>]*>|&[a-zA-Z]+;", "");
+                System.out.println(current);
+                String[] s=current.split(" ");
+                for(String str:s){
+                    if(hashmap.containsKey(str)){
+                        result+=hashmap.get(str);
+                    }else{
+                        result+=str;
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + filePath);
+        }
+        return result;
+    }
+    static class MasterMind{
+        private int numofguesses;
+        private int codeLimit;
+        private String SecretCode;
+        private boolean hashWon;
+        public MasterMind(int numofguesses,int codeLimit){
+            this.numofguesses=numofguesses;
+            this.codeLimit=codeLimit;
+            this.hashWon=false;
+            this.SecretCode=getSecretCode();
+        }
+        public String getSecretCode(){
+            Random random=new Random();
+            String code="";
+            for(int i=0;i<codeLimit;i++){
+                int num=random.nextInt(10);
+                code+=Integer.toString(num);
+            }
+            return code;
+        }
+        public void play(){
+            System.out.println("Welcome lets play the game");
+            System.out.println("Rules");
+            System.out.println("you need to guess the code of length "+codeLimit+" and you get a total of "+numofguesses+" guesses to make");
+            Scanner sc=new Scanner(System.in);
+            int totalRight=0;
+            int closeAns=0;
+            for(int i=1;i<numofguesses;i++){
+                System.out.println("enter the code");
+                String guess=sc.nextLine();
+                if(guess.length()!=codeLimit){
+                    System.out.println("the length should be of size "+codeLimit);
+                    i--;
+                    continue;
+                }
+                boolean[] checkList=new boolean[codeLimit];
+                if(guess.equals(SecretCode)){
+                    System.out.println("Congrats you have won the game");
+                    hashWon=true;
+                    break;
+                }
+                for(int j=0;j<codeLimit;j++){
+                    char c=guess.charAt(j);
+                    if(c==SecretCode.charAt(j)){
+                        totalRight++;
+                        checkList[j]=true;
+                    }else if(SecretCode.indexOf(c)!=-1&&!checkList[j]){
+                        closeAns++;
+                    }
+                }
+                System.out.println("your guess "+guess);
+                System.out.println("total number of guess that are right are" +totalRight);
+                System.out.println("total number of guess that are close are" +closeAns);
+            }
+            if(!hashWon){
+                System.out.println("Better luck next Time");
+                System.out.println("the code was "+SecretCode);
+            }
+            sc.close();
+        }
+    }
+
     public static void main(String[] args) {
+        //test case for master Mind
+        MasterMind test=new MasterMind(4,4);
+        test.play();
+        //test case for XML encoding
+
+//        try{
+//            System.out.println(XmlEncoding());
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
+        //test case for Diving Board Memorization
+//        System.out.println(DivingBoard2(2,3,3));
+        //test case for Diving Board
+//        System.out.println(DivingBoard(2,3,3));
+//        System.out.println(DivingBoard1(2,3,3));
         //test cases for MaxAlive Year
-        person[] people = new person[10];
-        people[0] = new person(1910, 1920);
-        people[1] = new person(1920, 1930);
-        people[2] = new person(1930, 1940);
-        people[3] = new person(1940, 1950);
-        people[4] = new person(1950, 1960);
-        people[5] = new person(1960, 1970);
-        people[6] = new person(1970, 1980);
-        people[7] = new person(1980, 1990);
-        people[8] = new person(1990, 2000);
-        people[9] = new person(2000, 2010);
-
-        int minYear = 1915;
-        int maxYear = 1995;
-        int expectedOutput = 1920;
-
-        int result = maxAliveyear(people, minYear, maxYear);
-        System.out.println("Expected output: " + expectedOutput);
-        System.out.println("Actual output: " + result);
+//        person[] people = new person[10];
+//        people[0] = new person(1910, 1920);
+//        people[1] = new person(1920, 1930);
+//        people[2] = new person(1930, 1940);
+//        people[3] = new person(1940, 1950);
+//        people[4] = new person(1950, 1960);
+//        people[5] = new person(1960, 1970);
+//        people[6] = new person(1970, 1980);
+//        people[7] = new person(1980, 1990);
+//        people[8] = new person(1990, 2000);
+//        people[9] = new person(2000, 2010);
+//
+//        int minYear = 1915;
+//        int maxYear = 1995;
+//        int expectedOutput = 1920;
+//
+//        int result = maxAliveyear(people, minYear, maxYear);
+//        System.out.println("Expected output: " + expectedOutput);
+//        System.out.println("Actual output: " + result);
         //test case fro minus using +
 //        System.out.println(minus(5,3));
 //        System.out.println(multiply(5,3));
