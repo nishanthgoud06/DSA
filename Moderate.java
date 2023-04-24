@@ -1,5 +1,6 @@
 import java.awt.print.Pageable;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.security.Key;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -422,11 +423,105 @@ public class Moderate {
             sc.close();
         }
     }
-
+    //Sub Sorting
+    public static int[] subSorting(int[] arr){
+        int[] result=new int[2];
+        if(arr.length<=1){
+            return result;
+        }
+        int start=0;
+        int end=0;
+        for(int i=1;i<arr.length;i++){
+            if(arr[i]<arr[i-1]){
+                 start=i-1;
+                while(arr[start-1]>arr[i] && start>0){
+                    start=start-1;
+                }
+            }
+        }
+        result[0]=start;
+        for(int i=arr.length-2;i>=0;i--){
+            if(arr[i]>arr[i+1]){
+                end=i+1;
+                while(arr[end+1]<arr[i] && arr[end]<arr.length-1){
+                    end=end+1;
+                }
+                break;
+            }
+        }
+        result[1]=end;
+        return result;
+    }
+    //chatgpt solution
+    public static int[] sortSub(int[] arr){
+        if(arr.length<=1)
+            return new int[0];
+        int start=0;
+        int max_so_far=arr[0];
+        int end=0;
+        int min_so_far=arr[arr.length-1];
+        for(int i=1;i<arr.length;i++){
+            max_so_far=Math.max(max_so_far,arr[i]);
+            if(arr[i]<max_so_far){
+                end=i;
+            }
+        }
+        for(int i=arr.length-2;i>=0;i--){
+            min_so_far=Math.min(min_so_far,arr[i]);
+            if(min_so_far<arr[i]){
+                start=i;
+            }
+        }
+        return new int[]{start,end};
+    }
+    public static int SeqCon(int[] arr){
+        if(arr.length==0){
+            return -1;
+        }
+        int start=0;
+        int currentSum=0;
+        int result=Integer.MIN_VALUE;
+        for(int end=0;end<arr.length;end++){
+            currentSum+=arr[end];
+            while(currentSum<arr[end]){
+                currentSum-=arr[start];
+                start=start+1;
+            }
+            result=Math.max(result,currentSum);
+        }
+        return result;
+    }
+    //Pattern Matching
+    public static boolean patternMatcher(String pattern,String matcher){
+        if(matcher.length()<pattern.length())
+            return false;
+        int matcherHashValue=0;
+        int currenthashValue=0;
+        for(int i=0;i<matcher.length();i++){
+            matcherHashValue+=matcher.charAt(i);
+            currenthashValue+=pattern.charAt(i);
+        }
+        if(currenthashValue==matcherHashValue)
+            return true;
+        for(int j=matcher.length();j<pattern.length();j++){
+            currenthashValue=currenthashValue+(pattern.charAt(j))-(pattern.charAt(j-3));
+            if(currenthashValue==matcherHashValue)
+                return true;
+        }
+        return false;
+    }
     public static void main(String[] args) {
+        //test case for pattern Matcher
+        System.out.println(patternMatcher("defabcdkfjrkfdlof","abc"));
+        //test case for Contiguous Sequence
+//        System.out.println(SeqCon(new int[]{2,-8,3,-2,4,-10}));
+        //test case for Sub Sort
+//        System.out.println(Arrays.toString(sortSub(new int[]{1,2,4,7,10,7,12,6,7,16,18,19})));
+        //test case for Sub Sort
+//        System.out.println(Arrays.toString(subSorting(new int[]{1,2,4,7,10,7,12,6,7,16,18,19})));
         //test case for master Mind
-        MasterMind test=new MasterMind(4,4);
-        test.play();
+//        MasterMind test=new MasterMind(4,4);
+//        test.play();
         //test case for XML encoding
 
 //        try{
