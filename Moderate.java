@@ -510,9 +510,266 @@ public class Moderate {
         }
         return false;
     }
+    //trying to solve the pattern matching using KPMG algorithm
+    //followed tushar roy youtube video
+    public static boolean kpmg(String text,String pattern){
+        if(text.length()==0&& pattern.length()==0){
+            return true;
+        }
+        if(text.length()==0||pattern.length()==0)
+            return false;
+        //first we need to find the suffix and prefic in the pattern
+        int[] p=findPattern(pattern.toCharArray());
+        char[] textP=text.toCharArray();
+        char[] patternp=pattern.toCharArray();
+        int j=0;
+        for(int i=0;i< textP.length;i++){
+            while(j>0 && textP[i]!=patternp[j]){
+                j=p[j-1];
+            }
+            if(textP[i]==patternp[j]){
+                j++;
+            }
+            if(j==pattern.length())
+                return true;
+        }
+        return false;
+    }
+    public static int[] findPattern(char[] arr){
+        int j=0;
+        int[] result=new int[arr.length];
+        result[0]=0;
+        for(int i=1;i<arr.length;i++){
+            while(j>0 && arr[i]!=arr[j]){
+                j=result[j-1];
+            }
+            if(arr[i]==arr[j]){
+                j++;
+            }
+            result[i]=j;
+        }
+        return result;
+    }
+    //16.19 Pond Size
+    public static List<Integer> pondSize(int[][] arr){
+        List<Integer> result=new ArrayList<>();
+        if(arr.length==0)
+            return result;
+        boolean[][] visited=new boolean[arr.length][arr[0].length];
+        for(int i=0;i<arr.length;i++){
+            for(int j=0;j<arr[0].length;j++){
+                if(arr[i][j]==0&& !visited[i][j]){
+                    result.add(pondSizeHelper(i,j,arr,visited));
+                }
+            }
+        }
+        return result;
+    }
+    //T9
+    public static List<String> T9(String pattern){
+        List<String> result=new ArrayList<>();
+        if(pattern.length()==0)
+            return result;
+        HashMap<Integer,String> cell=new HashMap<>();
+
+        cell.put(2,"abc");
+        cell.put(3,"def");
+        cell.put(4,"ghi");
+        cell.put(5,"jkl");
+        cell.put(6,"mno");
+        cell.put(7,"pqrs");
+        cell.put(8,"tuv");
+        cell.put(9,"wxyz");
+        T9Helper(pattern,cell,0,"",result);
+        return result;
+    }
+    public static void T9Helper(String pattern,HashMap<Integer,String> cell,int index,String Temp,List<String> result){
+        if(index==pattern.length()){
+            result.add(Temp);
+            return;
+        }
+        if(pattern.charAt(index)=='1'||pattern.charAt(index)=='0'){
+            T9Helper(pattern,cell,index+1,Temp,result);
+        } else {
+            String current=cell.get(pattern.charAt(index)-'0');
+            for(int i=0;i<current.length();i++){
+                T9Helper(pattern,cell,index+1,Temp+current.charAt(i),result);
+            }
+        }
+    }
+    public static int pondSizeHelper(int i, int j, int[][] arr, boolean[][] visited) {
+        if (i < 0 || i >= arr.length || j < 0 || j >= arr[0].length || arr[i][j] != 0 || visited[i][j]) {
+            return 0;
+        }
+        visited[i][j] = true;
+        int count = 1;
+        count += pondSizeHelper(i - 1, j, arr, visited);
+        count += pondSizeHelper(i + 1, j, arr, visited);
+        count += pondSizeHelper(i, j - 1, arr, visited);
+        count += pondSizeHelper(i, j + 1, arr, visited);
+        count += pondSizeHelper(i - 1, j - 1, arr, visited);
+        count += pondSizeHelper(i + 1, j + 1, arr, visited);
+        count += pondSizeHelper(i - 1, j + 1, arr, visited);
+        count += pondSizeHelper(i + 1, j - 1, arr, visited);
+        return count;
+    }
+    public static int sum(int[] arr){
+        int result=0;
+        if(arr.length==0)
+            return result;
+        for(int i:arr){
+            result+=i;
+        }
+        return result;
+    }
+    //Swap Sum
+    //in this method we are only finding onr pair we are ignoring mutiple pairs
+    public static List<Integer> swapSum(int[] arr1,int[] arr2){
+        int sum1=sum(arr1);
+        int sum2=sum(arr2);
+        List<Integer> result=new ArrayList<>();
+        if(Math.abs(sum1-sum2)%2!=0)
+            return result;
+        int target=Math.abs(sum1-sum2);
+        System.out.println(target);
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        for(int i:arr1){
+            hm.put(i,i);
+        }
+        for(int i=0;i<arr2.length;i++){
+            if(hm.containsKey(target-arr2[i])){
+                result.add(target-arr2[i]);
+                result.add(arr2[i]);
+                hm.remove(target-arr2[i]);
+
+            }
+        }
+        return result;
+    }
+    //in this methos we are considering mutipl epair that can be swapped to find the equal sum
+    public static List<List<Integer>> swapSum2(int[] arr1, int[] arr2) {
+        int sum1 = sum(arr1);
+        int sum2 = sum(arr2);
+        List<List<Integer>> result = new ArrayList<>();
+        if (Math.abs(sum1 - sum2) % 2 != 0) {
+            return result;
+        }
+        Map<Integer, Integer> hm = new HashMap<>();
+        for (int i : arr1) {
+            hm.put(i, hm.getOrDefault(i, 0) + 1);
+        }
+        int target = Math.abs(sum1 - sum2) / 2;
+        for (int i : arr2) {
+            int comp = Math.abs(target - i);
+            if (hm.containsKey(comp) && hm.get(comp) > 0) {
+                List<Integer> temp = new ArrayList<>();
+                temp.add(comp);
+                temp.add(i);
+                result.add(temp);
+                hm.put(comp, hm.get(comp) - 1);
+            }
+        }
+        return result;
+    }
+    //LRU Cache
+    static class LRUCache{
+        //this problem can be solved usin Hashtable and LinkedList
+        //designing linkedList(doublr)
+        static class node{
+            node next;
+            node prev;
+            int val;
+            int key;
+        }
+        int capacity;
+        int currentCapacity;
+        HashMap<Integer,node> hashMap;
+        final node head=new node();
+        final node tail=new node();
+        public LRUCache(int capacity){
+            this.capacity=capacity;
+            hashMap=new HashMap<>(capacity);
+            head.next=tail;
+            tail.next=head;
+            currentCapacity=0;
+        }
+        public Integer get(int k){
+            node n=hashMap.get(k);
+            if(n==null)
+                return null;
+            movetohead(n);
+            return n.val;
+        }
+        public void put(int key,int value){
+            node n=hashMap.get(key);
+            if(n==null){
+                node n1=new node();
+                n1.key=key;
+                n1.val=value;
+                hashMap.put(key,n1);
+                addtoFront(n1);
+                currentCapacity++;
+                if(currentCapacity>capacity){
+                    removeLRU();
+                }
+            }else{
+                n.val=value;
+                movetohead(n);
+            }
+        }
+        public void addtoFront(node n){
+            head.prev=n;
+            n.next=head.next;
+            head.next.prev=n;
+            head.next=n;
+        }
+        public void movetohead(node n){
+            removeFromList(n);
+            addtoFront(n);
+        }
+        public void removeLRU(){
+            node n=popTail();
+            hashMap.remove(n.key);
+            currentCapacity--;
+        }
+        public node popTail(){
+            node n=tail.prev;
+            removeFromList(n);
+            return n;
+        }
+        public void removeFromList(node n){
+            node savedPrev=n.prev;
+            node savesNext=n.next;
+            savesNext.prev=savedPrev;
+            savedPrev.next=savesNext;
+        }
+    }
+
+    //Langton's Ant
+//    public static
     public static void main(String[] args) {
+        // test case LRU Cache
+        LRUCache test=new LRUCache(2);
+        test.put(1,1);
+        test.put(2,2);
+        System.out.println(test.get(1));
+        test.put(3,3);
+        System.out.println(test.get(2));
+        test.put(4,4);
+        System.out.println(test.get(1));
+        System.out.println(test.get(3));
+        System.out.println(test.get(4));
+        //test case for Swap Sum
+//        System.out.println(swapSum(new int[]{4,1,2,1,1,2},new int[]{3,6,3,3}));
+//        System.out.println(swapSum2(new int[]{4,1,2,1,1,2},new int[]{3,6,3,3}));
+        //test case for T9
+//        System.out.println(T9("023"));
+        //test case for Pond Sizes
+//        System.out.println(pondSize(new int[][]{{0,2,1,0},{0,1,0,1},{1,1,0,1},{0,1,0,1}}));
+        //test case for Pattern Matcher
+//        System.out.println(kpmg("abxabcabcaby","abcaby"));
         //test case for pattern Matcher
-        System.out.println(patternMatcher("defabcdkfjrkfdlof","abc"));
+//        System.out.println(patternMatcher("defabcdkfjrkfdlof","abc"));
         //test case for Contiguous Sequence
 //        System.out.println(SeqCon(new int[]{2,-8,3,-2,4,-10}));
         //test case for Sub Sort
