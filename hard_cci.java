@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class hard_cci {
@@ -175,17 +177,76 @@ public class hard_cci {
     // TODO: 4/25/23 the solution is incomplete need to add the condition in checking missing method
     //  the method need to have different condition based on the size of test case if even the number of 0 is equal to o+1 if odd 1==0
 
-
-    public static void main(String[] args) {
-        //test case for missing number
-        IntegerBit[] test=generateArray(7,5);
-        int[] arr={0,1,2,3,4,6,7};
-        IntegerBit[] test2=new IntegerBit[arr.length];
-        for(int i=0;i<arr.length;i++){
-            test2[i]=new IntegerBit(arr[i]);
+//Letters and Numbers
+    public static String Letters(String s){
+        int count=0;
+        int maxCount=0;
+        int maxStart=0;
+        List<Character> result=new ArrayList<>();
+        char[] arr=s.toCharArray();
+        for(int i=1;i<arr.length;i++){
+            if(arr[i]==arr[i-1]){
+                count++;
+            }else{
+                if(count> maxCount){
+                    maxCount=count;
+                    maxStart=i-count;
+                }
+                count=0;
+            }
         }
-        System.out.println(FindMIssingNumber(test2));
-        System.out.println("the missing number is "+FindMIssingNumber(test));
+        if(maxCount<count){
+            maxStart=s.length()-count;
+        }
+        return s.substring(maxStart,maxStart+maxCount);
+    }
+    //longest common subSequence
+    public static String longestCommonSubSequence(String s1,String s2){
+        if(s1.length()==0||s2.length()==0){
+            return new String();
+        }
+        int m=s1.length();
+        int n=s2.length();
+        int[][] dp=new int[m+1][n+1];
+
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                if(s1.charAt(i-1)==s2.charAt(j-1)){
+                    dp[i][j]=1+dp[i-1][j-1];
+                }else{
+                    dp[i][j]=Math.max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        StringBuilder sb=new StringBuilder();
+        int i=m,j=n;
+        while(i>0&&j>0){
+            if(s1.charAt(i-1)==s2.charAt(j-1)){
+                sb.append(s1.charAt(i-1));
+                i--;
+                j--;
+            }else if(dp[i-1][j]<dp[i][j-1]){
+                j--;
+            }else {
+                i--;
+            }
+        }
+        return sb.reverse().toString();
+    }
+    public static void main(String[] args) {
+        //test case for longest common SubSequence
+        System.out.println(longestCommonSubSequence("abcdaf","acbcf"));
+        //test case for longest subArray of a charcater
+//        System.out.println(Letters("AAAABBCCAAAAAAB"));
+        //test case for missing number
+//        IntegerBit[] test=generateArray(7,5);
+//        int[] arr={0,1,2,3,4,6,7};
+//        IntegerBit[] test2=new IntegerBit[arr.length];
+//        for(int i=0;i<arr.length;i++){
+//            test2[i]=new IntegerBit(arr[i]);
+//        }
+//        System.out.println(FindMIssingNumber(test2));
+//        System.out.println("the missing number is "+FindMIssingNumber(test));
         // test case
 //        int n = 7;
 //        int[] arr = {0, 1, 2, 3, 5, 6, 7}; // missing number is 5
