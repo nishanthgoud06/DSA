@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class hard_cci {
     //Add Without using the Plus Symbol
@@ -233,9 +230,162 @@ public class hard_cci {
         }
         return sb.reverse().toString();
     }
+    //Letters and Words
+    public static char[] LandWors(String s){
+        char[] c=s.toCharArray();
+        for(int len=c.length;len>1;len--){
+            for(int i=0;i<=c.length-len;i++){
+                if(checkthecount(c,i,i+len-1)){
+                    return generatetheArray(c,i,i+len-1);
+                }
+            }
+        }
+        return new char[0];
+    }
+    public static boolean checkthecount(char[] c,int start,int end){
+        int count=0;
+            for(int i=start;i<=end;i++){
+                if(Character.isLetter(c[i]))
+                    count++;
+                else
+                    count--;
+            }
+            return count==0;
+    }
+    public static char[] generatetheArray(char[] c,int start,int end){
+        char[] result=new char[end-start+1];
+        for(int i=start;i<=end;i++){
+            result[i-start]=c[i];
+        }
+        return result;
+    }
+    //implementing using hashMap
+    public static char[] LettersandWords(String s){
+        if(s.length()<1)
+            return new char[0];
+        char[] dict=s.toCharArray();
+        int start=-1;
+        int end=-1;
+        int count=0;
+        int maxLength=0;
+        HashMap<Integer,Integer> hahsmap=new HashMap<>();
+        for(int i=0;i<s.length();i++){
+            if(Character.isLetter(dict[i])){
+                count++;
+            }else if(Character.isDigit(dict[i])){
+                count--;
+            }
+            if(count==0){
+                maxLength=i+1;
+                start=0;
+                end=i;
+            }
+            if(hahsmap.containsKey(count)){
+                int preIndex=hahsmap.get(count);
+                int tempLength=i-preIndex;
+                if(tempLength>maxLength){
+                    maxLength=tempLength;
+                    start=preIndex+1;
+                    end=i;
+                }
+            }else {
+                hahsmap.put(count,i);
+            }
+        }
+        if(start==-1||end==-1){
+            return new char[0];
+        }else {
+            char[] c=new char[end-start+1];
+            for(int i=start;i<=end;i++){
+                c[i-start]=dict[i];
+            }
+            return c;
+        }
+    }
+    //count of 2
+    public static int CountOf2(int n){
+        int count=0;
+        for(int i=2;i<=n;i++){
+            count+=CountOf2Helper(i);
+            }
+        return count;
+
+        }
+
+    public static int CountOf2Helper(int n){
+        int count=0;
+        while(n>0){
+            if(n%10==2){
+                count++;
+            }
+            n=n/10;
+        }
+        return count;
+    }
+    public static Map<String, Integer> getFrequencies(Map<String, Integer> names, String[][] synonyms) {
+        // First, build a graph of name synonyms using a map and union-find algorithm
+        Map<String, String> map = new HashMap<>();
+        for (String[] pair : synonyms) {
+            String name1 = pair[0];
+            String name2 = pair[1];
+            while (map.containsKey(name1)) {
+                name1 = map.get(name1);
+            }
+            while (map.containsKey(name2)) {
+                name2 = map.get(name2);
+            }
+            if (!name1.equals(name2)) {
+                map.put(name1, name2);
+            }
+        }
+        System.out.println(map);
+        Map<String, Set<String>> groups = new HashMap<>();
+        for (String name : names.keySet()) {
+            String root = name;
+            while (map.containsKey(root)) {
+                root = map.get(root);
+            }
+            if (!groups.containsKey(root)) {
+                groups.put(root, new HashSet<String>());
+            }
+            groups.get(root).add(name);
+        }
+
+        // Compute total frequency for each group of synonym names
+        Map<String, Integer> frequencies = new HashMap<>();
+        for (String root : groups.keySet()) {
+            int frequency = 0;
+            for (String name : groups.get(root)) {
+                frequency += names.get(name);
+            }
+            frequencies.put(root, frequency);
+        }
+
+        return frequencies;
+    }
     public static void main(String[] args) {
+        Map<String, Integer> names = new HashMap<>();
+        names.put("John", 15);
+        names.put("Jon", 12);
+        names.put("Chris", 13);
+        names.put("Kris", 4);
+        names.put("Christopher", 19);
+        Map<String, Integer> expected = new HashMap<>();
+        expected.put("John", 27);
+        expected.put("Chris", 36);
+        Map<String, Integer> actual = getFrequencies(names, new String[][]{{"Jon", "John"}, {"John", "Johnny"}, {"Chris", "Kris"}, {"Chris", "Christopher"}});
+        if (actual.equals(expected)) {
+            System.out.println("Test case passed.");
+        } else {
+            System.out.println("Test case failed. Expected " + expected + " but got " + actual + ".");
+        }
+        //test case for count of 2
+//        System.out.println(CountOf2(100));
+        //test case for brute force Letters and character
+//        System.out.println(Arrays.toString(LandWors("a1aa11aa111")));
+//        System.out.println(Arrays.toString(LettersandWords("a1a")));
         //test case for longest common SubSequence
-        System.out.println(longestCommonSubSequence("abcdaf","acbcf"));
+//        System.out.println(longestCommonSubSequence("abcdaf","acbcf"));
         //test case for longest subArray of a charcater
 //        System.out.println(Letters("AAAABBCCAAAAAAB"));
         //test case for missing number
