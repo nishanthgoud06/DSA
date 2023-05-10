@@ -744,7 +744,76 @@ public class Moderate {
             savedPrev.next=savesNext;
         }
     }
-
+    //design a class where you can add,delete,pick a random number with equal popability no duplicated values allowed in the design
+    static class test1{
+        HashSet<Integer> hashset;
+        List<Integer> arraylist;
+        public test1(){
+            hashset=new HashSet<>();
+            arraylist=new ArrayList<>();
+        }
+        //inert method
+        public boolean insert(int val){
+            if(!hashset.contains(val)){
+                hashset.add(val);
+                arraylist.add(val);
+                return true;
+            }
+            return false;
+        }
+        //delete method
+        public boolean delete(int val){
+            if(hashset.contains(val)){
+                int current_index=arraylist.indexOf(val);
+                int last_index=arraylist.size()-1;
+                arraylist.add(current_index,arraylist.get(last_index));
+                arraylist.remove(last_index);
+                hashset.remove(val);
+                return true;
+            }
+            return false;
+        }
+        //random value
+        public int randomValue(){
+            Random rand=new Random();
+            int temp=0;
+            temp=rand.nextInt(hashset.size());
+            return arraylist.get(temp);
+        }
+    }
+    //if the duplicate values are allowed
+    static class test2{
+        List<Integer> arraylist;
+        HashMap<Integer,Integer> hashmap;
+        public test2(){
+            arraylist=new ArrayList<>();
+            hashmap=new HashMap<>();
+        }
+        //add method
+        public void insert(int val){
+            hashmap.put(val,hashmap.getOrDefault(val,0)+1);
+            arraylist.add(val);
+        }
+        //delete method
+        public boolean delete(int val){
+            if(!hashmap.containsKey(val)|| hashmap.get(val)==0){
+                return false;
+            }
+            int current_index=arraylist.indexOf(val);
+            int last_index=arraylist.size()-1;
+            arraylist.add(current_index,arraylist.get(last_index));
+            arraylist.remove(last_index);
+            hashmap.put(val,hashmap.get(val)-1);
+            return true;
+        }
+        //Random number
+        public int randomNumber(){
+            Random rand=new Random();
+            int temp=0;
+            temp=rand.nextInt()*arraylist.size();
+            return arraylist.get(temp);
+        }
+    }
     //Langton's Ant
 //    public static
     public static void main(String[] args) {
