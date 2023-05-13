@@ -814,6 +814,27 @@ public class Moderate {
             return arraylist.get(temp);
         }
     }
+    //different combination of reaching target
+    public static int combitarget(int[] arr1,int[] arr2,int target){
+        Arrays.sort(arr1);
+        Arrays.sort(arr2);
+        int loc1=0;
+        int result=0;
+        int loc2=arr2.length;
+        while(loc1<=arr1.length&&loc2>=0){
+            int sum=arr1[loc1]+arr2[loc2];
+            if(sum==target){
+                result++;
+                loc1++;
+                loc2--;
+            }else if(sum<target){
+                loc1++;
+            }else{
+                loc2--;
+            }
+        }
+        return result;
+    }
     //Langton's Ant
 //    public static
     public static void main(String[] args) {
