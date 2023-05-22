@@ -3023,8 +3023,122 @@ public static int lastWordLen(String s){
         }
         return pq.peek();
     }
+    //now we are going to find whether a graph can be bipartite or not
+    //for this problem we are going to assign colors in 3 different colors
+    //0-no color
+    //1-red color
+    //2-blue-color
+    //the first approch which we arec going to use is the DFS Approch
+    public static boolean isBarpatite(int[][] graph){
+        if(graph.length==0||graph==null){
+            return false;
+        }
+        int[] visited=new int[graph.length];
+        for(int i=0;i<graph.length;i++){
+            if(visited[i]==0 && !isvalidBi(graph,visited,1,i)){
+                return false;
+            }
+        }
+        return true;
+    }
+    public static boolean isvalidBi(int[][] graph,int[] visited,int color,int index){
+        if(visited[index]!=0){
+            return visited[index]==color;
+        }
+        visited[index]=color;
+        for(int i:graph[index]){
+            if(!isvalidBi(graph,visited,-color,i)){
+                return false;
+            }
+        }
+        return true;
+    }
+    //approch using BFS
+    public static boolean isBAp2(int[][] graph){
+        if(graph.length==0||graph==null)
+            return false;
+        int[] visited=new int[graph.length];
+        Queue<Integer> queue=new LinkedList<>();
+        for(int i=0;i<graph.length;i++){
+            if(visited[i]==0){
+                visited[i]=1;
+                queue.offer(i);
+                while(!queue.isEmpty()){
+                    Integer current=queue.poll();
+                    for(int a:graph[current]){
+                        if(visited[a]==visited[current]){
+                          return false;
+                        }else if(visited[a]==0){
+                            queue.add(a);
+                            visited[a]=-visited[current];
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    //apprcoh using union find
+    static class Solution {
+        int[] parent;
+        int[] rank;
+
+        public  boolean unionFinder(int[][] graph) {
+            if (graph == null || graph.length == 0) {
+                return false;
+            }
+
+            int n = graph.length;
+            parent = new int[n];
+            rank = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;
+                rank[i] = 0;
+            }
+
+            for (int i = 0; i < n; i++) {
+                for (int j : graph[i]) {
+                    if (find(i) == find(j)) {
+                        return false;
+                    }
+                    union(i, j);
+                }
+            }
+
+            return true;
+        }
+        public void union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+
+            if (rootX != rootY) {
+                if (rank[rootX] < rank[rootY]) {
+                    parent[rootX] = rootY;
+                } else if (rank[rootX] > rank[rootY]) {
+                    parent[rootY] = rootX;
+                } else {
+                    parent[rootY] = rootX;
+                    rank[rootX]++;
+                }
+            }
+        }
+        public int find(int point) {
+            if (parent[point] == point) {
+                return point;
+            }
+            parent[point] = find(parent[point]);
+            return parent[point];
+        }
+    }
     public static void main(String[] args) {
-        System.out.println(thirdLargest(new int[]{9, 5}));
+        //test case for Given an undirected graph determine whether it is bipartite.
+        System.out.println(isBarpatite(new int[][]{{1,3},{0,2},{1,3},{0,2}}));
+        System.out.println(isBAp2(new int[][] {{1,3},{0,2},{1,3},{0,2}}));
+        //test case for the union finder approch
+        Solution test=new Solution();
+        System.out.println(test.unionFinder(new int[][]{{1,3},{0,2},{1,3},{0,2}}));
+//        System.out.println(thirdLargest(new int[]{9, 5}));
 //        System.out.println(lastWordLen("Hello, World"));
 //        System.out.println(lenOfTheLast("Hello, World"));
 //        BST node=new BST(1);
