@@ -3131,13 +3131,111 @@ public static int lastWordLen(String s){
             return parent[point];
         }
     }
+    //kth smallest element
+    public static int smallestKele(BST node,int K){
+        if(node==null)
+            return -1;
+        List<Integer> element=new ArrayList<>();
+        smallestKeleHelper(node,element);
+        Object[] solution=element.toArray();
+        Arrays.sort(solution);
+        return (int) solution[K-1];
+    }
+    public static void smallestKeleHelper(BST node,List<Integer> element){
+        if(node==null)
+            return;
+        smallestKeleHelper(node.left,element);
+        element.add(node.val);
+        smallestKeleHelper(node.right,element);
+    }
+    //if it is the prefect Binary Search Tree
+    public static int BSTSmallest(BST node,int number){
+        if(node==null)
+            return -1;
+        Stack<BST> stack=new Stack<>();
+        while(node!=null||!stack.isEmpty()){
+            while(node!=null){
+                stack.push(node);
+                node=node.left;
+            }
+            node=stack.pop();
+            if(--number==0)
+                break;
+            node=node.right;
+        }
+        return node.val;
+    }
+    //if its is not a Perfect BST then we can use the quick sort approch to decarse the time complexcity
+    public static int smallBST(BST node, int k) {
+        if (node == null || k <= 0)
+            return -1;
+
+        List<Integer> elements = new ArrayList<>();
+        smallestKeleHelper(node, elements);
+
+        if (k > elements.size())
+            return -1;
+
+        int[] arr = elements.stream().mapToInt(Integer::intValue).toArray();
+        return quickSelect(arr, 0, arr.length - 1, k - 1);
+    }
+
+
+    public static int quickSelect(int[] arr, int low, int high, int k) {
+        if (low == high)
+            return arr[low];
+
+        int pivotIndex = partition(arr, low, high);
+
+        if (pivotIndex == k)
+            return arr[pivotIndex];
+        else if (pivotIndex < k)
+            return quickSelect(arr, pivotIndex + 1, high, k);
+        else
+            return quickSelect(arr, low, pivotIndex - 1, k);
+    }
+
+    public static int partition(int[] arr, int low, int high) {
+        int pivot = arr[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+            if (arr[j] < pivot) {
+                i++;
+                swap(arr, i, j);
+            }
+        }
+
+        swap(arr, i + 1, high);
+        return i + 1;
+    }
+
+    public static void swap(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
     public static void main(String[] args) {
+        //test case for non-prefect binary tree
+        BST test=new BST(1);
+        test.left=new BST(3);
+        test.left.left=new BST(5);
+        test.right=new BST(2);
+        test.right.left=new BST(4);
+        System.out.println(smallBST(test,2));
+        //test case for Kth Smallest element
+//        BST test=new BST(3);
+//        test.left=new BST(1);
+//        test.right=new BST(4);
+//        test.left.right=new BST(2);
+//        System.out.println(smallestKele(test,2));
         //test case for Given an undirected graph determine whether it is bipartite.
-        System.out.println(isBarpatite(new int[][]{{1,3},{0,2},{1,3},{0,2}}));
-        System.out.println(isBAp2(new int[][] {{1,3},{0,2},{1,3},{0,2}}));
-        //test case for the union finder approch
-        Solution test=new Solution();
-        System.out.println(test.unionFinder(new int[][]{{1,3},{0,2},{1,3},{0,2}}));
+//        System.out.println(isBarpatite(new int[][]{{1,3},{0,2},{1,3},{0,2}}));
+//        System.out.println(isBAp2(new int[][] {{1,3},{0,2},{1,3},{0,2}}));
+//        //test case for the union finder approch
+//        Solution test=new Solution();
+//        System.out.println(test.unionFinder(new int[][]{{1,3},{0,2},{1,3},{0,2}}));
 //        System.out.println(thirdLargest(new int[]{9, 5}));
 //        System.out.println(lastWordLen("Hello, World"));
 //        System.out.println(lenOfTheLast("Hello, World"));
