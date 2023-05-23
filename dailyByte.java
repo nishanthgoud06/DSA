@@ -3215,15 +3215,98 @@ public static int lastWordLen(String s){
         arr[i] = arr[j];
         arr[j] = temp;
     }
-
+    //teansponse matrix
+    public static int[][] transpose(int[][] matrix){
+        int m=matrix.length;
+        int n=matrix[0].length;
+        int[][] result=new int[n][m];
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<m;j++){
+                result[i][j]=matrix[j][i];
+            }
+        }
+        return result;
+    }
+    //Infection
+    //using dfs approach
+    public static int getTotalMinutes(int[][] grid){
+        int result=2;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==2){
+                    getTotalMinutesHelper(grid,i,j,2);
+                }
+            }
+        }
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1)
+                    return -1;
+                else
+                    result=Math.max(result,grid[i][j]);
+            }
+        }
+        return result-2;
+    }
+    public static void getTotalMinutesHelper(int[][] grid,int i,int j,int status){
+        if(i<0||j<0||i>=grid.length||j>=grid[0].length||grid[i][j]==0)
+            return;
+        if(grid[i][j]>1&&grid[i][j]<status)
+            return;
+        grid[i][j]=status;
+        status++;
+        getTotalMinutesHelper(grid,i-1,j,status);
+        getTotalMinutesHelper(grid,i+1,j,status);
+        getTotalMinutesHelper(grid,i,j-1,status);
+        getTotalMinutesHelper(grid,i,j+1,status);
+    }
+    //bfs
+    public static int rottern(int[][] grid){
+        if(grid.length==0||grid==null)
+            return -1;
+        Queue<int[]> queue=new LinkedList<>();
+        int count=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    count++;
+                }else if(grid[i][j]==2){
+                    queue.offer(new int[]{i,j});
+                }
+            }
+        }
+        int[][] dir={{-1,0},{1,0},{0,-1},{0,1}};
+        int result=0;
+        while(!queue.isEmpty()){
+            result++;
+            for(int i=0;i< queue.size();i++){
+                int[] current= queue.poll();
+                for(int[] d:dir){
+                    int x=current[0]+d[0];
+                    int y=current[1]+d[1];
+                    if(x<0||y<0||x>=grid.length||y>=grid[0].length||grid[x][y]==0||grid[x][y]==2)
+                        continue;
+                    grid[x][y]=2;
+                    count--;
+                    queue.offer(new int[]{x,y});
+                }
+            }
+        }
+        return result-1;
+    }
     public static void main(String[] args) {
+        //test case for the infection
+        System.out.println(getTotalMinutes(new int[][]{{1,1,1},{1,1,0},{0,1,2}}));
+        System.out.println(rottern(new int[][]{{1,1,1},{1,1,0},{0,1,2}}));
+        //test case for the transpose matrix
+//        System.out.println(transpose(new int[][]{{1,2,3},{4,5,6},{7,8,9}}).toString());
         //test case for non-prefect binary tree
-        BST test=new BST(1);
-        test.left=new BST(3);
-        test.left.left=new BST(5);
-        test.right=new BST(2);
-        test.right.left=new BST(4);
-        System.out.println(smallBST(test,2));
+//        BST test=new BST(1);
+//        test.left=new BST(3);
+//        test.left.left=new BST(5);
+//        test.right=new BST(2);
+//        test.right.left=new BST(4);
+//        System.out.println(smallBST(test,2));
         //test case for Kth Smallest element
 //        BST test=new BST(3);
 //        test.left=new BST(1);
