@@ -3294,10 +3294,58 @@ public static int lastWordLen(String s){
         }
         return result-1;
     }
+    //Link-Up
+    static class Listi{
+        int data;
+        Listi next;
+        public Listi(int data){
+            this.data=data;
+        }
+        public Listi(){}
+    }
+    public static Listi linkUp(Listi node){
+        if(node==null){
+            return new Listi(0);
+        }
+        Listi odd=new Listi();
+        Listi even=new Listi();
+        Listi oddHead = odd;
+        Listi evenHead=even;
+        while(node!=null){
+            int val=node.data;
+            if(val%2==0){
+                even.next=new Listi(val);
+                even=even.next;
+            }else{
+                odd.next=new Listi(val);
+                odd=odd.next;
+            }
+            node=node.next;
+        }
+
+        odd.next = evenHead.next;
+
+        return oddHead.next;
+    }
+    public static void printing(Listi node){
+        while(node!=null){
+            System.out.println(node.data);
+            node=node.next;
+        }
+    }
     public static void main(String[] args) {
+        //test case for ink up
+        Listi test=new Listi(1);
+        test.next=new Listi(2);
+        test.next.next=new Listi(3);
+        test.next.next.next=new Listi(4);
+        test.next.next.next.next=new Listi(5);
+        printing(test);
+        Listi result=linkUp(test);
+        printing(result);
         //test case for the infection
-        System.out.println(getTotalMinutes(new int[][]{{1,1,1},{1,1,0},{0,1,2}}));
-        System.out.println(rottern(new int[][]{{1,1,1},{1,1,0},{0,1,2}}));
+//        System.out.println(getTotalMinutes(new int[][]{{1,1,1},{1,1,0},{0,1,2}}));
+//        System.out.println(rottern(new int[][]{{1,1,1},{1,1,0},{0,1,2}}));
         //test case for the transpose matrix
 //        System.out.println(transpose(new int[][]{{1,2,3},{4,5,6},{7,8,9}}).toString());
         //test case for non-prefect binary tree
