@@ -3327,6 +3327,30 @@ public static int lastWordLen(String s){
 
         return oddHead.next;
     }
+    //Elections
+    //this versions should be used when the requirement is to not use extra memory
+    // if extra space you can use hashmap  with less time complexcity
+    public static int elections(int[] arr){
+        if(arr.length==0||arr==null)
+            return -1;
+        int candidate=0;
+        int count=0;
+        for(int i:arr){
+            if(count==0){
+                candidate=i;
+                count++;
+            }else{
+                count--;
+            }
+        }
+        int percentage=0;
+        for(int i:arr){
+            if(i==candidate){
+                percentage++;
+            }
+        }
+        return percentage>arr.length/2?candidate:-1;
+    }
     public static void printing(Listi node){
         while(node!=null){
             System.out.println(node.data);
@@ -3334,15 +3358,17 @@ public static int lastWordLen(String s){
         }
     }
     public static void main(String[] args) {
+        //tets case for election testing
+        System.out.println(elections(new int[]{1,3,2,3,1,2,3,3,3}));
         //test case for ink up
-        Listi test=new Listi(1);
-        test.next=new Listi(2);
-        test.next.next=new Listi(3);
-        test.next.next.next=new Listi(4);
-        test.next.next.next.next=new Listi(5);
-        printing(test);
-        Listi result=linkUp(test);
-        printing(result);
+//        Listi test=new Listi(1);
+//        test.next=new Listi(2);
+//        test.next.next=new Listi(3);
+//        test.next.next.next=new Listi(4);
+//        test.next.next.next.next=new Listi(5);
+//        printing(test);
+//        Listi result=linkUp(test);
+//        printing(result);
         //test case for the infection
 //        System.out.println(getTotalMinutes(new int[][]{{1,1,1},{1,1,0},{0,1,2}}));
 //        System.out.println(rottern(new int[][]{{1,1,1},{1,1,0},{0,1,2}}));
