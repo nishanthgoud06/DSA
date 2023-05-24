@@ -3456,11 +3456,36 @@ public static int lastWordLen(String s){
         hashset.add(node.val);
         return TreePairHelper(node.left,target,hashset)||TreePairHelper(node.right,target,hashset);
     }
-    public static void main(String[] args) {//test case for Target Pair
-        BST test=new BST(1);
-        test.left=new BST(2);
-        test.right=new BST(3);
-        System.out.println(TreePair(test,6));
+    //unique Characters
+    public static int uniChar(String s){
+        if(s.length()==0||s==null)
+            return 0;
+        int start=0;
+        int end=0;
+        int result=0;
+        int len=s.length();
+        HashSet<Character> hashset=new HashSet<>();
+        while(end<len){
+            if(hashset.contains(s.charAt(end))){
+                hashset.remove(s.charAt(start));
+                start++;
+            }else{
+                int c=end-start+1;
+                hashset.add(s.charAt(end));
+                result=Math.max(c,result);
+                end++;
+            }
+        }
+        return result;
+    }
+    public static void main(String[] args) {
+        //test case for highest Unique Charcter in the STring
+        System.out.println(uniChar("abcdssa"));
+        //test case for Target Pair
+//        BST test=new BST(1);
+//        test.left=new BST(2);
+//        test.right=new BST(3);
+//        System.out.println(TreePair(test,6));
         //test case for Partner
 //        System.out.println(Partbers(new int[]{5, 5, 3, 1, 1, 3, 3}));
         //test case for Visited Rooms
