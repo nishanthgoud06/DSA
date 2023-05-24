@@ -3413,9 +3413,58 @@ public static int lastWordLen(String s){
             }
         }
     }
-    public static void main(String[] args) {
+    //Partners
+    public static int Partbers(int[] nums){
+        if(nums.length==0||nums==null)
+            return 0;
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        for(int i:nums){
+            hm.put(i,hm.getOrDefault(i,0)+1);
+        }
+        int result=0;
+        for(int i:hm.values()){
+            if(i>1){
+                result+=nc2(i,2);
+            }
+        }
+        return result;
+    }
+    public static int nc2(int n,int r){
+
+        int up=fact(n);
+        int down=fact(n-r)*fact(r);
+        return up/down;
+    }
+    public static int fact(int n){
+        if(n==1||n==0)
+            return 1;
+        return n*fact(n-1);
+    }
+    public static boolean TreePair(BST node,int target){
+        if(target==0)
+            return true;
+        HashSet<Integer> hashset=new HashSet<>();
+        return TreePairHelper(node,target,hashset);
+    }
+    public static boolean TreePairHelper(BST node,int target,HashSet<Integer> hashset){
+        if(node == null)
+            return false;
+        int compliment=target-node.val;
+        if(hashset.contains(compliment)){
+            return true;
+        }
+        hashset.add(node.val);
+        return TreePairHelper(node.left,target,hashset)||TreePairHelper(node.right,target,hashset);
+    }
+    public static void main(String[] args) {//test case for Target Pair
+        BST test=new BST(1);
+        test.left=new BST(2);
+        test.right=new BST(3);
+        System.out.println(TreePair(test,6));
+        //test case for Partner
+//        System.out.println(Partbers(new int[]{5, 5, 3, 1, 1, 3, 3}));
         //test case for Visited Rooms
-        System.out.println(lockedRoomDfs(new int[][]{{1},{2},{}}));
+//        System.out.println(lockedRoomDfs(new int[][]{{1},{2},{}}));
         //tets case for election testing
 //        System.out.println(elections(new int[]{1,3,2,3,1,2,3,3,3}));
         //test case for ink up
