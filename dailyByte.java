@@ -3357,9 +3357,67 @@ public static int lastWordLen(String s){
             node=node.next;
         }
     }
+    //Locked Room
+    public static boolean lockedRoom(int[][] rooms){
+        if(rooms.length==0||rooms==null)
+            return true;
+        Queue<Integer> queue=new LinkedList<>();
+        queue.offer(0);
+        boolean[] visited=new boolean[rooms.length];
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                int current=queue.poll();
+                if(visited[current]){
+                    continue;
+                }
+                visited[current]=true;
+                for(int room:rooms[current]){
+                    queue.offer(room);
+                }
+            }
+        }
+        for(int i=0;i<visited.length;i++){
+            if(!visited[i])
+                return false;
+        }
+        return true;
+    }
+    //using the dfs approch
+    public static boolean lockedRoomDfs(int[][] rooms){
+        if(rooms.length==0||rooms==null)
+            return true;
+        boolean[] visited=new boolean[rooms.length];
+        List<Integer> current=new ArrayList<>();
+        current.add(0);
+        lockedRoomDfsHelper(rooms,visited,current);
+        for(int i=0;i<visited.length;i++){
+            if(!visited[i])
+                return false;
+        }
+        return true;
+    }
+    public static void lockedRoomDfsHelper(int[][] rooms, boolean[] visited, List<Integer> current) {
+        if (current.isEmpty()) {
+            return;
+        }
+
+        for (int i = 0; i < current.size(); i++) {
+            int room = current.get(i);
+
+            if (!visited[room]) {
+                visited[room] = true;
+                for (int nextRoom : rooms[room]) {
+                    current.add(nextRoom);
+                }
+            }
+        }
+    }
     public static void main(String[] args) {
+        //test case for Visited Rooms
+        System.out.println(lockedRoomDfs(new int[][]{{1},{2},{}}));
         //tets case for election testing
-        System.out.println(elections(new int[]{1,3,2,3,1,2,3,3,3}));
+//        System.out.println(elections(new int[]{1,3,2,3,1,2,3,3,3}));
         //test case for ink up
 //        Listi test=new Listi(1);
 //        test.next=new Listi(2);
