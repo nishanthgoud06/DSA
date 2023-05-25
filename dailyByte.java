@@ -3520,11 +3520,37 @@ public static int lastWordLen(String s){
         }
         return hashmap.size();
     }
+    //rotate the array in 90 degrees
+    public static int[][] rotateArray(int[][] arr){
+        if(arr.length==0||arr==null)
+            return arr;
+        for(int i=0;i<arr.length/2;i++){
+            for(int j=i;j<arr.length-1-i;j++){
+                int temp=arr[i][j];
+                arr[i][j]=arr[arr.length-1-j][i];
+                arr[arr.length-1-j][i]=arr[arr.length-1-i][arr.length-1-j];
+                arr[arr.length-1-i][arr.length-1-j]=arr[j][arr.length-1-i];
+                arr[j][arr.length-1-i]=temp;
+            }
+        }
+        return arr;
+    }
+    public static void prinninty(int[][] arr){
+        for(int[] i:arr){
+            for(int j:i){
+                System.out.println(j);
+            }
+        }
+    }
     public static void main(String[] args) {
+        //test case for Rotate the array by 90 degrees
+        int[][] temp={{10,11,12},{13,14,15},{16,17,18}};
+//        prinninty(temp);
+        prinninty(rotateArray(temp));
         //test case for Writing emails
-        System.out.println(writeEmail(new String[]{"test.email+kevin@dailybyte.com",
-                "test.e.mail+john.smith@dailybyte.com",
-                "testemail+david@daily.byte.com"}));
+//        System.out.println(writeEmail(new String[]{"test.email+kevin@dailybyte.com",
+//                "test.e.mail+john.smith@dailybyte.com",
+//                "testemail+david@daily.byte.com"}));
         //test case for Longest Conservate Path
 //        BST test=new BST(1);
 //        test.right=new BST(2);
