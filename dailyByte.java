@@ -3413,9 +3413,226 @@ public static int lastWordLen(String s){
             }
         }
     }
+    //Partners
+    public static int Partbers(int[] nums){
+        if(nums.length==0||nums==null)
+            return 0;
+        HashMap<Integer,Integer> hm=new HashMap<>();
+        for(int i:nums){
+            hm.put(i,hm.getOrDefault(i,0)+1);
+        }
+        int result=0;
+        for(int i:hm.values()){
+            if(i>1){
+                result+=nc2(i,2);
+            }
+        }
+        return result;
+    }
+    public static int nc2(int n,int r){
+
+        int up=fact(n);
+        int down=fact(n-r)*fact(r);
+        return up/down;
+    }
+    public static int fact(int n){
+        if(n==1||n==0)
+            return 1;
+        return n*fact(n-1);
+    }
+    public static boolean TreePair(BST node,int target){
+        if(target==0)
+            return true;
+        HashSet<Integer> hashset=new HashSet<>();
+        return TreePairHelper(node,target,hashset);
+    }
+    public static boolean TreePairHelper(BST node,int target,HashSet<Integer> hashset){
+        if(node == null)
+            return false;
+        int compliment=target-node.val;
+        if(hashset.contains(compliment)){
+            return true;
+        }
+        hashset.add(node.val);
+        return TreePairHelper(node.left,target,hashset)||TreePairHelper(node.right,target,hashset);
+    }
+    //unique Characters
+    public static int uniChar(String s){
+        if(s.length()==0||s==null)
+            return 0;
+        int start=0;
+        int end=0;
+        int result=0;
+        int len=s.length();
+        HashSet<Character> hashset=new HashSet<>();
+        while(end<len){
+            if(hashset.contains(s.charAt(end))){
+                hashset.remove(s.charAt(start));
+                start++;
+            }else{
+                int c=end-start+1;
+                hashset.add(s.charAt(end));
+                result=Math.max(c,result);
+                end++;
+            }
+        }
+        return result;
+    }
+    //Longest conservative Path
+    public static int longConPath(BST node){
+        if(node==null)
+            return 0;
+        Queue<BST> queue=new LinkedList<>();
+        queue.offer(node);
+        int result=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                BST temp=queue.poll();
+                if(temp.left!=null)
+                    queue.offer(temp.left);
+                if(temp.right!=null)
+                    queue.offer(temp.right);
+            }
+            result++;
+        }
+        return result;
+    }
+    //google interview question
+    //Writing email
+    public static int writeEmail(String[] emails){
+        if(emails.length==0||emails==null)
+            return 0;
+        HashMap<String,Integer> hashmap=new HashMap<>();
+        for(String email:emails){
+            StringBuilder sb=new StringBuilder();
+            boolean ignore=false;
+            for(char c:email.toCharArray()){
+               if(c=='+'){
+                   ignore=true;
+               }else if(c=='@'){
+                   sb.append(email.substring(email.indexOf('@')));
+               }else if(!ignore && c!='.'){
+                   sb.append(c);
+               }
+            }
+            hashmap.put(sb.toString(),hashmap.getOrDefault(sb.toString(),0)+1);
+        }
+        return hashmap.size();
+    }
+    //rotate the array in 90 degrees
+    public static int[][] rotateArray(int[][] arr){
+        if(arr.length==0||arr==null)
+            return arr;
+        for(int i=0;i<arr.length/2;i++){
+            for(int j=i;j<arr.length-1-i;j++){
+                int temp=arr[i][j];
+                arr[i][j]=arr[arr.length-1-j][i];
+                arr[arr.length-1-j][i]=arr[arr.length-1-i][arr.length-1-j];
+                arr[arr.length-1-i][arr.length-1-j]=arr[j][arr.length-1-i];
+                arr[j][arr.length-1-i]=temp;
+            }
+        }
+        return arr;
+    }
+    public static void prinninty(int[][] arr){
+        for(int[] i:arr){
+            for(int j:i){
+                System.out.println(j);
+            }
+        }
+    }
+    //Shortest Distance
+    public static int[] shortDistance(String s,char c){
+        if(s.length()==0||s==null)
+            return new int[0];
+        List<Integer> temp=new ArrayList<>();
+        int[] result=new int[s.length()];
+        Arrays.fill(result,-1);
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)==c){
+                result[i]=0;
+                temp.add(i);
+            }
+        }
+        int[] position=new int[temp.size()];
+        for(int i=0;i<temp.size();i++){
+            position[i]=temp.get(i);
+        }
+        for(int i=0;i<s.length();i++){
+            if(result[i]!=0){
+                int min=Integer.MAX_VALUE;
+                for(int j=0;j<position.length;j++){
+                    int distance=Math.abs(position[j]-i);
+                    if(min>distance)
+                        min=distance;
+                }
+                result[i]=min;
+            }
+        }
+        return result;
+    }
+    public static int[] shortestDistance(String s, char c) {
+        if (s == null || s.length() == 0)
+            return new int[0];
+
+        int[] result = new int[s.length()];
+        Arrays.fill(result, Integer.MAX_VALUE);
+        int prevIndex = -1;
+
+        // Forward pass
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == c) {
+                prevIndex = i;
+            }
+            if (prevIndex != -1) {
+                result[i] = i - prevIndex;
+            }
+        }
+
+        prevIndex = -1;
+        // Backward pass
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == c) {
+                prevIndex = i;
+            }
+            if (prevIndex != -1) {
+                if (result[i] == 0 || prevIndex - i < result[i]) {
+                    result[i] = prevIndex - i;
+                }
+            }
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
+        //test case for Shortest Distance
+        System.out.println(Arrays.toString(shortDistance("dailybyte",'y')));
+        //test case for Rotate the array by 90 degrees
+//        int[][] temp={{10,11,12},{13,14,15},{16,17,18}};
+//        prinninty(temp);
+//        prinninty(rotateArray(temp));
+        //test case for Writing emails
+//        System.out.println(writeEmail(new String[]{"test.email+kevin@dailybyte.com",
+//                "test.e.mail+john.smith@dailybyte.com",
+//                "testemail+david@daily.byte.com"}));
+        //test case for Longest Conservate Path
+//        BST test=new BST(1);
+//        test.right=new BST(2);
+//        test.right.right=new BST(3);
+//        System.out.println(longConPath(test));
+        //test case for highest Unique Charcter in the STring
+//        System.out.println(uniChar("abcdssa"));
+        //test case for Target Pair
+//        BST test=new BST(1);
+//        test.left=new BST(2);
+//        test.right=new BST(3);
+//        System.out.println(TreePair(test,6));
+        //test case for Partner
+//        System.out.println(Partbers(new int[]{5, 5, 3, 1, 1, 3, 3}));
         //test case for Visited Rooms
-        System.out.println(lockedRoomDfs(new int[][]{{1},{2},{}}));
+//        System.out.println(lockedRoomDfs(new int[][]{{1},{2},{}}));
         //tets case for election testing
 //        System.out.println(elections(new int[]{1,3,2,3,1,2,3,3,3}));
         //test case for ink up
