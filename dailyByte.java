@@ -3542,11 +3542,77 @@ public static int lastWordLen(String s){
             }
         }
     }
+    //Shortest Distance
+    public static int[] shortDistance(String s,char c){
+        if(s.length()==0||s==null)
+            return new int[0];
+        List<Integer> temp=new ArrayList<>();
+        int[] result=new int[s.length()];
+        Arrays.fill(result,-1);
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)==c){
+                result[i]=0;
+                temp.add(i);
+            }
+        }
+        int[] position=new int[temp.size()];
+        for(int i=0;i<temp.size();i++){
+            position[i]=temp.get(i);
+        }
+        for(int i=0;i<s.length();i++){
+            if(result[i]!=0){
+                int min=Integer.MAX_VALUE;
+                for(int j=0;j<position.length;j++){
+                    int distance=Math.abs(position[j]-i);
+                    if(min>distance)
+                        min=distance;
+                }
+                result[i]=min;
+            }
+        }
+        return result;
+    }
+    public static int[] shortestDistance(String s, char c) {
+        if (s == null || s.length() == 0)
+            return new int[0];
+
+        int[] result = new int[s.length()];
+        Arrays.fill(result, Integer.MAX_VALUE);
+        int prevIndex = -1;
+
+        // Forward pass
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == c) {
+                prevIndex = i;
+            }
+            if (prevIndex != -1) {
+                result[i] = i - prevIndex;
+            }
+        }
+
+        prevIndex = -1;
+        // Backward pass
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == c) {
+                prevIndex = i;
+            }
+            if (prevIndex != -1) {
+                if (result[i] == 0 || prevIndex - i < result[i]) {
+                    result[i] = prevIndex - i;
+                }
+            }
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
+        //test case for Shortest Distance
+        System.out.println(Arrays.toString(shortDistance("dailybyte",'y')));
         //test case for Rotate the array by 90 degrees
-        int[][] temp={{10,11,12},{13,14,15},{16,17,18}};
+//        int[][] temp={{10,11,12},{13,14,15},{16,17,18}};
 //        prinninty(temp);
-        prinninty(rotateArray(temp));
+//        prinninty(rotateArray(temp));
         //test case for Writing emails
 //        System.out.println(writeEmail(new String[]{"test.email+kevin@dailybyte.com",
 //                "test.e.mail+john.smith@dailybyte.com",
