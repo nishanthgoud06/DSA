@@ -3478,9 +3478,60 @@ public static int lastWordLen(String s){
         }
         return result;
     }
+    //Longest conservative Path
+    public static int longConPath(BST node){
+        if(node==null)
+            return 0;
+        Queue<BST> queue=new LinkedList<>();
+        queue.offer(node);
+        int result=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                BST temp=queue.poll();
+                if(temp.left!=null)
+                    queue.offer(temp.left);
+                if(temp.right!=null)
+                    queue.offer(temp.right);
+            }
+            result++;
+        }
+        return result;
+    }
+    //google interview question
+    //Writing email
+    public static int writeEmail(String[] emails){
+        if(emails.length==0||emails==null)
+            return 0;
+        HashMap<String,Integer> hashmap=new HashMap<>();
+        for(String email:emails){
+            StringBuilder sb=new StringBuilder();
+            boolean ignore=false;
+            for(char c:email.toCharArray()){
+               if(c=='+'){
+                   ignore=true;
+               }else if(c=='@'){
+                   sb.append(email.substring(email.indexOf('@')));
+               }else if(!ignore && c!='.'){
+                   sb.append(c);
+               }
+            }
+            hashmap.put(sb.toString(),hashmap.getOrDefault(sb.toString(),0)+1);
+        }
+        return hashmap.size();
+    }
     public static void main(String[] args) {
+        //test case for Writing emails
+        System.out.println(writeEmail(new String[]{"test.email+kevin@dailybyte.com",
+                "test.e.mail+john.smith@dailybyte.com",
+                "testemail+david@daily.byte.com"}));
+        //test case for Longest Conservate Path
+//        BST test=new BST(1);
+//        test.right=new BST(2);
+//        test.right.right=new BST(3);
+//        System.out.println(longConPath(test));
         //test case for highest Unique Charcter in the STring
-        System.out.println(uniChar("abcdssa"));
+//        System.out.println(uniChar("abcdssa"));
         //test case for Target Pair
 //        BST test=new BST(1);
 //        test.left=new BST(2);
