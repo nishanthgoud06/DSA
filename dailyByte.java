@@ -3605,10 +3605,64 @@ public static int lastWordLen(String s){
 
         return result;
     }
+    //Counting Words
+    public static List<String> countWord(String[] words,int k){
 
+        if(words.length==0){
+            return new ArrayList<>();
+        }
+        HashMap<String,Integer> hashmap=new HashMap<>();
+        for(String s:words){
+            hashmap.put(s,hashmap.getOrDefault(s,0)+1);
+        }
+        List<String> result=new ArrayList<>(hashmap.keySet());
+        Collections.sort(result,(a,b)->{
+            int freq=hashmap.get(a)-hashmap.get(b);
+            if(freq==0)
+                return a.compareTo(b);
+            return freq;
+        });
+        return result.subList(0,k);
+    }
+    //another approch
+    public static List<String> countWords(String[] words,int k){
+        if(words.length==0)
+            return new ArrayList<>();
+        HashMap<String,Integer> hashmap=new HashMap<>();
+        for(String word:words){
+            hashmap.put(word,hashmap.getOrDefault(word,0)+1);
+        }
+        PriorityQueue<String> pq=new PriorityQueue<>(new compartor(hashmap));
+        for(String s:hashmap.keySet()){
+            pq.offer(s);
+        }
+        List<String> result=new ArrayList<>();
+        while(result.size()<k){
+            String s=pq.poll();
+            result.add(s);
+        }
+        return result;
+    }
+    static class compartor implements Comparator<String>{
+        HashMap<String,Integer> hashmap;
+        public compartor(HashMap<String,Integer> hashmap){
+            this.hashmap=hashmap;
+        }
+        @Override
+        public int compare(String a,String b){
+            int fre=hashmap.get(a)-hashmap.get(b);
+            if(fre==0)
+                return a.compareTo(b);
+            return fre;
+        }
+    }
     public static void main(String[] args) {
+        //test case for COunting word
+        System.out.println(countWord(new String[]{"coding", "is", "fun", "code", "coding", "fun"},2));
+        //implementation 2
+        System.out.println(countWords(new String[]{"coding", "is", "fun", "code", "coding", "fun"},2));
         //test case for Shortest Distance
-        System.out.println(Arrays.toString(shortDistance("dailybyte",'y')));
+//        System.out.println(Arrays.toString(shortDistance("dailybyte",'y')));
         //test case for Rotate the array by 90 degrees
 //        int[][] temp={{10,11,12},{13,14,15},{16,17,18}};
 //        prinninty(temp);
