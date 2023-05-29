@@ -334,9 +334,29 @@ public class example {
         }
         return result;
     }
+    //design of indexOf
+    public static int Indexof(String s1,String s2){
+        if(s2.length()>s1.length()){
+            return -1;
+        }
+        int i=0;
+        while(i<=s1.length()-s2.length()){
+            int j=0;
+            while(j<s2.length() && s1.charAt(i+j)==s2.charAt(j)){
+                j++;
+            }
+            if(j==s2.length()){
+                return i;
+            }else{
+                i+=j+1;
+            }
+        }
+        return -1;
+    }
     public static void main(String[] args) {
-        int[][] test={{1,1,1,-1,-1},{1,1,1,-1,-1},{-1,-1,-1,1,1},{1,1,1,1,-1},{-1,-1,-1,-1,-1}};
-        System.out.println(Arrays.toString(ballFall(test)));
+        System.out.println(Indexof("abcdef","e"));
+//        int[][] test={{1,1,1,-1,-1},{1,1,1,-1,-1},{-1,-1,-1,1,1},{1,1,1,1,-1},{-1,-1,-1,-1,-1}};
+//        System.out.println(Arrays.toString(ballFall(test)));
 //        System.out.println(longPali("racecar"));
 //        System.out.println(mulStr("5","12"));
 //        System.out.println(Sum_3(new int[]{-1,0,1,2,-1,-4}));
