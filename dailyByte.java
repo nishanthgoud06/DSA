@@ -3656,11 +3656,170 @@ public static int lastWordLen(String s){
             return fre;
         }
     }
+    //Cut String
+    public static List<Integer> cutString(String s){
+        if(s.length()==0)
+            return new ArrayList<>();
+        List<Integer> result=new ArrayList<>();
+        for(int i=0;i<s.length();i++){
+            int current='a'-s.charAt(i);
+            int length=0;
+            for(int j=i+1;j<s.length();j++){
+                int next='a'-s.charAt(j);
+                if(current==next){
+                    length=j-i;
+                    i=j;
+                }
+            }
+            result.add(length+1);
+        }
+        return result;
+    }
+    //the above approch is not working in all cases
+    public static List<Integer> Cutstring(String s){
+        if(s.length()==0||s==null)
+            return new ArrayList<>();
+        HashMap<Character,Integer> hashmap=new HashMap<>();
+        for(int i=0;i<s.length();i++){
+            hashmap.put(s.charAt(i),i);
+        }
+        int prev=-1;
+        int max=0;
+        List<Integer> result=new ArrayList<>();
+        for(int i=0;i<s.length();i++){
+            max=Math.max(hashmap.get(s.charAt(i)),max);
+            if(max==i){
+                result.add(max-prev);
+                prev=max;
+            }
+        }
+        return result;
+    }
+    //a good pair
+    public static int[] goodPair(int[] nums,int target){
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i=0;i<nums.length;i++){
+            int compilment=Math.abs(nums[i]-target);
+            if(hashmap.containsKey(compilment)){
+                return new int[]{i+1,hashmap.get(compilment)+1};
+            }
+            hashmap.put(nums[i],i);
+        }
+        return null;
+    }
+    //indexOf
+    public static int indexof(String s1,String s2){
+        if(s2.length()>s1.length())
+            return -1;
+        int len=s2.length();
+        int end=0;
+        while(end<=s1.length()-s2.length()){
+            int start=0;
+            while(start<len && s1.charAt(start+end)==s2.charAt(start)){
+                start++;
+            }
+            if(start==len){
+                return end;
+            }else{
+                end+=start+1;
+            }
+        }
+        return -1;
+    }
+    //Spiral matrix
+    public static List<Integer> spiralMatrix(int[][] arr){
+        int top=0;
+        int bottom=arr.length-1;
+        int left=0;
+        int right=arr[0].length-1;
+        List<Integer> result=new ArrayList<>();
+        int len=arr.length*arr[0].length;
+        while(result.size()<len){
+            for(int i=left;i<=right&& result.size()<len;i++){
+                result.add(arr[top][i]);
+            }
+            top++;
+            for(int i=top;i<=bottom && result.size()<len;i++){
+                result.add(arr[i][right]);
+            }
+            right--;
+            for(int i=right;i>=left && result.size()<len;i--){
+                result.add(arr[bottom][i]);
+            }
+            bottom--;
+            for(int i=bottom;i>=top&& result.size()<len;i--){
+                result.add(arr[i][left]);
+            }
+            left++;
+        }
+        return result;
+    }
+    //Crack the code
+    public static boolean crackCode(String s1,String s2){
+        if(s1.length()==0 && s2.length()==0){
+            return true;
+        }
+        if(s1.length()==0 || s2.length()==0)
+            return false;
+        HashMap<Character,String> hashmap=new HashMap<>();
+        String[] words=s1.split(" ");
+        char[] charArray=s2.toCharArray();
+        if(words.length!=charArray.length)
+            return false;
+        for(int i=0;i<words.length;i++){
+            String current=words[i];
+            char c=charArray[i];
+            if(!hashmap.containsKey(c)){
+                hashmap.put(c,current);
+            }else if(!hashmap.get(c).equals(current)){
+                return false;
+            }
+        }
+        return hashmap.keySet().size() ==s2.chars().distinct().count();
+    }
+    //Max Sum
+    public static int maxSum(BST node){
+        if(node==null)
+            return 0;
+       int[] result=maxSumHelper(node);
+       return result[1];
+    }
+    public static int[] maxSumHelper(BST node){
+        if(node==null){
+            int[] empty={0,Integer.MIN_VALUE};
+            return empty;
+        }
+        int[] leftSum=maxSumHelper(node.left);
+        int[] rightSum=maxSumHelper(node.right);
+        int left=Math.max(leftSum[0],0);
+        int right=Math.max(rightSum[0],0);
+        int currentSum=left+right+node.val;
+        int maxSum=Math.max(Math.max(leftSum[1],rightSum[1]),currentSum);
+        int[] result={currentSum,maxSum};
+        return result;
+    }
     public static void main(String[] args) {
-        //test case for COunting word
-        System.out.println(countWord(new String[]{"coding", "is", "fun", "code", "coding", "fun"},2));
-        //implementation 2
-        System.out.println(countWords(new String[]{"coding", "is", "fun", "code", "coding", "fun"},2));
+        //test case for Max Sum
+        BST node=new BST(1);
+        node.left=new BST(4);
+        node.right=new BST(9);
+        System.out.println(maxSum(node));
+        //test case for Crack the Code
+//        System.out.println(crackCode("the daily Byte","abc"));
+        //test case for Spiral Matrix;
+//        System.out.println(spiralMatrix(new int[][]{{1,2,3},{4,5,6},{7,8,9}}));
+        //test case fior Index Of
+//        System.out.println(indexof("abc","c"));
+        //test case for the good pair
+//        System.out.println(Arrays.toString(goodPair(new int[]{1,2,5,7,9},10)));
+        //test case for cutString
+//        System.out.println(Cutstring("abacdddecn"));
+        //test casec for Cut String
+//        System.out.println(cutString("abacdddecn"));
+//        //test case for Counting word
+//        System.out.println(countWord(new String[]{"coding", "is", "fun", "code", "coding", "fun"},2));
+//        //implementation 2
+//        System.out.println(countWords(new String[]{"coding", "is", "fun", "code", "coding", "fun"},2));
         //test case for Shortest Distance
 //        System.out.println(Arrays.toString(shortDistance("dailybyte",'y')));
         //test case for Rotate the array by 90 degrees
