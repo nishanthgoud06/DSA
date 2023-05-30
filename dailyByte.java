@@ -3798,12 +3798,94 @@ public static int lastWordLen(String s){
         int[] result={currentSum,maxSum};
         return result;
     }
+    //Migic number
+    public static boolean magic(int n){
+        if(n==1)
+            return true;
+        int num=n;
+        while(num!=1 && num!=4){
+            int sum=0;
+            while(num>0){
+                int a=num%10;
+                sum+=a*a;
+                num=num/10;
+            }
+            num=sum;
+        }
+        return num==1;
+    }
+    //Grouped Words
+    public static List<List<String>> groupedWords(String[] words){
+        HashMap<Integer,List<String>> hashmap=new HashMap<>();
+        for(String s:words){
+            int index=0;
+            for(char c:s.toCharArray()){
+                index+='a'-c;
+            }
+                List<String> temp=hashmap.getOrDefault(index,new ArrayList<>());
+                temp.add(s);
+        }
+        List<List<String>> result=new ArrayList<>();
+        for(Map.Entry<Integer,List<String>> entry: hashmap.entrySet()){
+            result.add(entry.getValue());
+        }
+        List<List<String>> result1=new ArrayList<>();
+        HashMap<String,List<String>> hashmap1=new HashMap<>();
+        for(String word:words){
+            String s=getSignature(word);
+            List<String> group=hashmap1.getOrDefault(s,new ArrayList<>());
+            group.add(word);
+            hashmap1.put(s,group);
+        }
+        return new ArrayList<>(hashmap1.values());
+    }
+    public static String getSignature(String s){
+        if(s.length()==0){
+            return new String("zero");
+        }
+        int[] arr=new int[26];
+        for(char c:s.toCharArray()){
+            arr[c-'a']++;
+        }
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<26;i++){
+            if(arr[i]>0){
+                sb.append((char)('a'+i));
+                sb.append(arr[i]);
+            }
+        }
+        return sb.toString();
+    }
+    //Combine Time
+    public static int[][] CombineTime(int[][] times){
+        if(times.length==0||times==null)
+            return new int[0][];
+        Arrays.sort(times,(a,b)->a[0]-b[0]);
+        List<int[]> result=new ArrayList<>();
+        int[] temp=times[0];
+        for(int[] current:times){
+            if(current[0]<=temp[1]){
+                temp[1]=Math.max(current[1],temp[1]);
+            }else if(current[0]>temp[1]){
+                result.add(current);
+                temp=current;
+            }
+        }
+        result.add(temp);
+        return result.toArray(new int[result.size()][]);
+    }
     public static void main(String[] args) {
+        //test case for Combine Times
+        System.out.println(Arrays.deepToString(CombineTime(new int[][]{{1,3},{1,8}})));
+        //test case for Grouped Words
+//        System.out.println(groupedWords(new String[]{"car", "arc", "bee", "eeb", "tea"}));
+        //test case for the magical
+//        System.out.println(magic(22));
         //test case for Max Sum
-        BST node=new BST(1);
-        node.left=new BST(4);
-        node.right=new BST(9);
-        System.out.println(maxSum(node));
+//        BST node=new BST(1);
+//        node.left=new BST(4);
+//        node.right=new BST(9);
+//        System.out.println(maxSum(node));
         //test case for Crack the Code
 //        System.out.println(crackCode("the daily Byte","abc"));
         //test case for Spiral Matrix;
