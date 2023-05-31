@@ -3939,6 +3939,19 @@ public static int lastWordLen(String s){
         }
         result.setLength(result.length()-1);
     }
+//    High Frequency Trading
+    public int maxProfit(int[] prices) {
+        int profit=0;
+        int min=Integer.MAX_VALUE;
+        for(int i=0;i<prices.length;i++){
+            if(min>prices[i]){
+                min=prices[i];
+            }else{
+                profit=Math.max(profit,prices[i]-min);
+            }
+        }
+        return profit;
+    }
     public static void main(String[] args) {
         //test case for Minimum Removal
         System.out.println(miniRemoval("(()()()"));
