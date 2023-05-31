@@ -3874,9 +3874,80 @@ public static int lastWordLen(String s){
         result.add(temp);
         return result.toArray(new int[result.size()][]);
     }
+    //Largest iSland
+    public static int largestIsland(int[][] grid){
+        if(grid.length==0||grid==null)
+            return 0;
+        int result=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    result=Math.max(largestIslandHelper(grid,i,j),result);
+                }
+            }
+        }
+        return result;
+    }
+    public static int largestIslandHelper(int[][] grid,int i,int j){
+        if(i<0||i>=grid.length||j<0||j>=grid[0].length||grid[i][j]==0){
+            return 0;
+        }
+        grid[i][j]=0;
+        return 1+largestIslandHelper(grid,i-1,j)+largestIslandHelper(grid,i+1,j)+largestIslandHelper(grid,i,j-1)+largestIslandHelper(grid,i,j+1);
+    }
+    //To The Third Power
+    public static boolean isThirdPower(int n){
+        if(n==0)
+            return true;
+        return n%3==0;
+    }
+    
+//    Minimum Removal
+    public static List<String> miniRemoval(String s){
+        int removeopen=0,removeclose=0;
+        for(char c:s.toCharArray())
+        {
+            if(c=='('){
+                removeopen++;
+            }else if(c==')'){
+                if(removeopen>0){
+                    removeopen--;
+                }else{
+                    removeclose++;
+                }
+            }
+        }
+        HashSet<String> hashset=new HashSet<>();
+        miniRemovalhelper(s,0,removeopen,removeclose,hashset,0,new StringBuilder());
+        return new ArrayList<>(hashset);
+    }
+    public static void miniRemovalhelper(String s,int index,int opencount,int closecount,HashSet<String> hashset,int count,StringBuilder result){
+        if(opencount==0&&closecount==0&&count==0&&index==s.length()){
+            hashset.add(result.toString());
+            return;
+        }
+        if(opencount<0 || closecount<0|| count<0 ||index>=s.length())
+            return;
+        if(s.charAt(index)=='('){
+            miniRemovalhelper(s,index+1,opencount-1,closecount,hashset,count,result);
+            miniRemovalhelper(s,index+1,opencount,closecount,hashset,count+1,result.append('('));
+        }else if(s.charAt(index)==')'){
+            miniRemovalhelper(s,index+1,opencount,closecount-1,hashset,count,result);
+            miniRemovalhelper(s,index+1,opencount,closecount,hashset,count-1,result.append(')'));
+        }else{
+            miniRemovalhelper(s,index+1,opencount,closecount,hashset,count,result);
+        }
+        result.setLength(result.length()-1);
+    }
     public static void main(String[] args) {
+        //test case for Minimum Removal
+        System.out.println(miniRemoval("(()()()"));
+        //test case for the Third Power
+//        System.out.println(isThirdPower(55));
+        //test case for the Largest Island which are connected
+//        System.out.println(largestIsland(new int[][]{{1,1,0},{1,1,0},{0,0,1}}));
         //test case for Combine Times
-        System.out.println(Arrays.deepToString(CombineTime(new int[][]{{1,3},{1,8}})));
+//        System.out.println(Arrays.deepToString(CombineTime(new int[][]{{1,3},{1,8}})));
         //test case for Grouped Words
 //        System.out.println(groupedWords(new String[]{"car", "arc", "bee", "eeb", "tea"}));
         //test case for the magical
