@@ -3952,9 +3952,81 @@ public static int lastWordLen(String s){
         }
         return profit;
     }
+    //Largest Pool
+    public static int largestPool(int[] pool){
+        if(pool.length==0)
+            return 0;
+        int left=0;
+        int right=pool.length-1;
+        int max=Integer.MIN_VALUE;
+        while(left<right){
+            max=Math.max(max,(Math.min(pool[left],pool[right]))*(right-left));
+            if(pool[left]<pool[right])
+                left++;
+            else
+                right--;
+        }
+        return max;
+    }
+    //Sore Thumb
+    public static int[] soreThumb(int[] nums) {
+        if (nums.length == 0) {
+            return new int[0];
+        }
+
+        HashSet<Integer> soreThumbs = new HashSet<>();
+
+        for (int i = 1; i < nums.length - 1; i++) {
+            if (nums[i] > nums[i - 1] && nums[i] > nums[i + 1]) {
+                soreThumbs.add(i);
+            }
+        }
+
+        // Check for sore thumbs at the first and last index
+        if (nums[0] > nums[1]) {
+            soreThumbs.add(0);
+        }
+        if (nums[nums.length - 1] > nums[nums.length - 2]) {
+            soreThumbs.add(nums.length - 1);
+        }
+
+        return soreThumbs.stream()
+                .mapToInt(Integer::intValue)
+                .toArray();
+    }
+    //Trim Tree
+    public static List<Integer> trimTree(BST node,int[] dead){
+        if(node==null)
+            return new ArrayList<>();
+        BST current=node;
+        List<Integer> result=new ArrayList<>();
+        for(int i:dead){
+            BST check=killit(current,i);
+            if(check.left !=null)
+                result.add(check.left.val);
+            if(check.right!=null)
+                result.add(check.right.val);
+        }
+        return result;
+    }
+    public static BST killit(BST node,int val){
+        if(node.val==val) {
+            return node;
+        }
+        else if(node.val<val){
+            killit(node.right,val);
+        }else{
+            killit(node.left,val);
+        }
+        return null;
+    }
     public static void main(String[] args) {
+        //test caes for sore thumb
+        System.out.println(Arrays.toString(soreThumb(new int[]{5, 2, 4, 6, 3})));
+        //test case for the largest pool
+//        System.out.println(largestPool(new int[]{1,4,4,8,2}));
         //test case for Minimum Removal
-        System.out.println(miniRemoval("(()()()"));
+//        System.out.println(miniRemoval("(()()()"));
         //test case for the Third Power
 //        System.out.println(isThirdPower(55));
         //test case for the Largest Island which are connected
