@@ -3995,34 +3995,115 @@ public static int lastWordLen(String s){
                 .toArray();
     }
     //Trim Tree
-    public static List<Integer> trimTree(BST node,int[] dead){
+    public static List<BST> trimTree(BST node,int[] dead){
+        List<BST> result=new ArrayList<>();
+        List<Integer> deadList=new ArrayList<>();
+        for (int i:dead){
+            deadList.add(i);
+        }
+        if(!deadList.contains(node.val)){
+            result.add(node);
+        }
+        trimTreeHelper(node,deadList,result);
+        return result;
+    }
+    public static BST trimTreeHelper(BST node,List<Integer> deadList,List<BST> result){
         if(node==null)
+            return null;
+        node.left=trimTreeHelper(node.left,deadList,result);
+        node.right=trimTreeHelper(node.right,deadList,result);
+        if(deadList.contains(node.val)){
+            if(node.left!=null && !deadList.contains(node.left.val)){
+                result.add(node.left);
+            }
+            if(node.right!=null && !deadList.contains(node.right.val)){
+                result.add(node.right);
+            }
+        }
+        return node;
+    }
+    //trim the bst with the highest and the lowest value
+    public static BST trimBST(BST node ,int[] values){
+        if(node==null)
+            return null;
+        if(node.val<values[0]){
+            return trimBST(node.left,values);
+        }
+        if(node.val>values[1]){
+            return trimBST(node.right,values);
+        }
+        node.left=trimBST(node.left,values);
+        node.right=trimBST(node.right,values);
+        return node;
+    }
+    public static void preOrder(BST node){
+        if(node==null)
+            return;
+        preOrder(node.left);
+        System.out.println(node.val);
+        preOrder(node.right);
+    }
+    //Triplets
+    public static List<List<Integer>> triplets(int[] arr){
+        if(arr.length<=2){
             return new ArrayList<>();
-        BST current=node;
-        List<Integer> result=new ArrayList<>();
-        for(int i:dead){
-            BST check=killit(current,i);
-            if(check.left !=null)
-                result.add(check.left.val);
-            if(check.right!=null)
-                result.add(check.right.val);
+        }
+        Arrays.sort(arr);
+        List<List<Integer>> result=new ArrayList<>();
+
+        for(int i=0;i<arr.length-2;i++){
+            if(i==0||(i>0&&arr[i]!=arr[i-1])){
+                int j=i+1;
+                int k=arr.length-1;
+                int sum=0-arr[i];
+                while(j<k){
+                    if(sum==arr[j]+arr[k]){
+                        result.add(Arrays.asList(arr[i],arr[j],arr[k]));
+                        while(j<k && arr[j]==arr[j+1]){
+                            j=j+1;
+                        }
+                        while(j<k && arr[k]==arr[k-1]){
+                            k=k-1;
+                        }
+                        j++;
+                        k--;
+                    }else if(sum<arr[j]+arr[k]){
+                        k--;
+                    }else{
+                        j++;
+                    }
+                }
+            }
         }
         return result;
     }
-    public static BST killit(BST node,int val){
-        if(node.val==val) {
-            return node;
-        }
-        else if(node.val<val){
-            killit(node.right,val);
-        }else{
-            killit(node.left,val);
-        }
-        return null;
-    }
     public static void main(String[] args) {
+        //test case for Triplets
+        System.out.println(triplets(new int[]{0, -1, 1, 1, 2, -2}));
+        //test case for the trimming the bst according to the highest and the lowest values
+//        BST test=new BST(5);
+//        test.left=new BST(2);
+//        test.right=new BST(7);
+//        test.left.left=new BST(1);
+//        test.left.right=new BST(3);
+//        test.right.left=new BST(6);
+//        test.right.right=new BST(9);
+//        BST result=trimBST(test,new int[]{2,7});
+//        preOrder(result);
+        //test case for Trim Tree
+//        BST test=new BST(3);
+//        test.left=new BST(1);
+//        test.right=new BST(7);
+//        test.left.left=new BST(2);
+//        test.left.right=new BST(8);
+//        test.right.left=new BST(4);
+//        test.right.right=new BST(6);
+//        List<BST> result=trimTree(test,new int[]{7,8});
+//        for(BST i:result){
+//            System.out.println(i.val);
+//        }
         //test caes for sore thumb
-        System.out.println(Arrays.toString(soreThumb(new int[]{5, 2, 4, 6, 3})));
+//        System.out.println(Arrays.toString(soreThumb(new int[]{5, 2, 4, 6, 3})));
         //test case for the largest pool
 //        System.out.println(largestPool(new int[]{1,4,4,8,2}));
         //test case for Minimum Removal
