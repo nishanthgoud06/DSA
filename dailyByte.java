@@ -4107,9 +4107,117 @@ public static int lastWordLen(String s){
         }
     return result;
     }
+    public static String getColumnTitle(int n) {
+        StringBuilder columnTitle = new StringBuilder();
+
+        while (n > 0) {
+            int remainder = (n - 1) % 26;
+            char ch = (char) ('A' + remainder);
+            columnTitle.insert(0, ch);
+            n = (n - 1) / 26;
+        }
+
+        return columnTitle.toString();
+    }
+    //Minimum Rotations
+//    public static int MinimumRotations(int[] top,int[] bottom){
+//        int[] count=new int[top.length];
+//        for(int i:top){
+//            count[i-1]++;
+//        }
+//        for(int i:bottom){
+//            count[i-1]++;
+//        }
+//        boolean solution=false;
+//        int value=-1;
+//        for(int i=0;i<count.length;i++){
+//            if(count[i]==6){
+//                solution=true;
+//                value=i;
+//            }
+//        }
+//        List<Integer> topPos=new ArrayList<>();
+//        List<Integer> bottomPosition=new ArrayList<>();
+//        for(int i=0;i<top.length;i++){
+//            if(top[i]==value){
+//                topPos.add(i);
+//            }
+//            if(bottom[i]==value){
+//                bottomPosition.add(i);
+//            }
+//        }
+//        boolean result=false;
+//        if(solution){
+//            if(topPos.size()>bottomPosition.size()){
+//                for(int i:topPos){
+//                    swaping(top,bottom,i);
+//                    result=checking(top,value);
+//                }
+//                if(result)
+//                    return top.length-topPos.size();
+//            }else{
+//                for(int i:bottomPosition){
+//                    swaping(bottom,top,i);
+//                    result=checking(bottom,value);
+//                }
+//                if(result)
+//                    return top.length-bottomPosition.size();
+//            }
+//        }
+//        return -1;
+//    }
+//    public static void swaping(int[] a,int[] b,int loc){
+//        int temp=a[loc];
+//        a[loc]=b[loc];
+//        b[loc]=temp;
+//    }
+//    public static boolean checking(int[] arr,int value){
+//        for(int i:arr){
+//            if(i!=value && i!=0)
+//                return false;
+//        }
+//        return true;
+//    }
+    public static int MinimumRotations(int[] top,int[] bottom){
+        HashMap<Integer,Integer> topRow=getOccurance(top);
+        HashMap<Integer,Integer> bottomRow=getOccurance(bottom);
+        int resultTop = checkPossibility(top, topRow, bottomRow);
+        if (resultTop != -1) {
+            return resultTop;
+        }
+
+        // Check if it is possible to make all values in the bottom row the same
+        int resultBottom = checkPossibility(bottom, topRow, bottomRow);
+        if (resultBottom != -1) {
+            return resultBottom;
+        }
+
+        return -1;
+    }
+    public static HashMap<Integer,Integer> getOccurance(int[] arr){
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i:arr){
+            hashmap.put(i,hashmap.getOrDefault(i,0)+1);
+        }
+        return hashmap;
+    }
+    private static int checkPossibility(int[] row, Map<Integer, Integer> countTop, Map<Integer, Integer> countBottom) {
+        int minRotations = Integer.MAX_VALUE;
+        for (int i = 1; i <= 6; i++) {
+            if (countTop.containsKey(i) && countTop.get(i) + countBottom.getOrDefault(i, 0) >= row.length) {
+                int rotations = row.length - Math.max(countTop.get(i), countBottom.getOrDefault(i, 0));
+                minRotations = Math.min(minRotations, rotations);
+            }
+        }
+        return minRotations == Integer.MAX_VALUE ? -1 : minRotations;
+    }
     public static void main(String[] args) {
+        //test case for Minimum Rotations
+        System.out.println(MinimumRotations(new int[]{2,1,2,4,2,2},new int[]{5,2,6,2,3,2}));
+        //test case for Spreadsheet Column
+//        System.out.println(getColumnTitle(28));
         //test case for Expensive Inventory
-        System.out.println(expensiveInventory(new int[]{5,4,3,2,1},new int[]{1,1,2,2,3},2,1));
+//        System.out.println(expensiveInventory(new int[]{5,4,3,2,1},new int[]{1,1,2,2,3},2,1));
         //test case for Triplets
 //        System.out.println(triplets(new int[]{0, -1, 1, 1, 2, -2}));
         //test case for the trimming the bst according to the highest and the lowest values
