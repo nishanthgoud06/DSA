@@ -4077,9 +4077,41 @@ public static int lastWordLen(String s){
         }
         return result;
     }
+    //Expensive Inventory
+    public static int expensiveInventory(int[] values,int[] label,int wanted,int limit){
+        if(values.length==0||label.length==0||wanted==0||limit==0)
+            return 0;
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i=0;i<label.length;i++){
+            if(hashmap.containsKey(label[i])){
+                int max=hashmap.get(label[i]);
+                if(max<values[i]){
+                    hashmap.put(label[i], values[i]);
+                }
+            }else{
+                hashmap.put(label[i],values[i]);
+            }
+        }
+        List<Map.Entry<Integer,Integer>> sortedValues=new ArrayList<>(hashmap.entrySet());
+        Collections.sort(sortedValues, (a, b) -> b.getValue().compareTo(a.getValue()));
+    HashMap<Integer,Integer> labelCount= new HashMap<Integer,Integer>();
+
+        int current=0;
+        int result=0;
+        for(Map.Entry<Integer,Integer> map:sortedValues){
+            if(labelCount.getOrDefault(map.getKey(),0)<limit && current<wanted){
+                result+=map.getValue();
+                labelCount.put(map.getKey(), labelCount.getOrDefault(map.getKey(),0)+1);
+                current++;
+            }
+        }
+    return result;
+    }
     public static void main(String[] args) {
+        //test case for Expensive Inventory
+        System.out.println(expensiveInventory(new int[]{5,4,3,2,1},new int[]{1,1,2,2,3},2,1));
         //test case for Triplets
-        System.out.println(triplets(new int[]{0, -1, 1, 1, 2, -2}));
+//        System.out.println(triplets(new int[]{0, -1, 1, 1, 2, -2}));
         //test case for the trimming the bst according to the highest and the lowest values
 //        BST test=new BST(5);
 //        test.left=new BST(2);
