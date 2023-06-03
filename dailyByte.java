@@ -3952,9 +3952,302 @@ public static int lastWordLen(String s){
         }
         return profit;
     }
+    //Largest Pool
+    public static int largestPool(int[] pool){
+        if(pool.length==0)
+            return 0;
+        int left=0;
+        int right=pool.length-1;
+        int max=Integer.MIN_VALUE;
+        while(left<right){
+            max=Math.max(max,(Math.min(pool[left],pool[right]))*(right-left));
+            if(pool[left]<pool[right])
+                left++;
+            else
+                right--;
+        }
+        return max;
+    }
+    //Sore Thumb
+    public static int[] soreThumb(int[] nums) {
+        if (nums.length == 0) {
+            return new int[0];
+        }
+
+        HashSet<Integer> soreThumbs = new HashSet<>();
+
+        for (int i = 1; i < nums.length - 1; i++) {
+            if (nums[i] > nums[i - 1] && nums[i] > nums[i + 1]) {
+                soreThumbs.add(i);
+            }
+        }
+
+        // Check for sore thumbs at the first and last index
+        if (nums[0] > nums[1]) {
+            soreThumbs.add(0);
+        }
+        if (nums[nums.length - 1] > nums[nums.length - 2]) {
+            soreThumbs.add(nums.length - 1);
+        }
+
+        return soreThumbs.stream()
+                .mapToInt(Integer::intValue)
+                .toArray();
+    }
+    //Trim Tree
+    public static List<BST> trimTree(BST node,int[] dead){
+        List<BST> result=new ArrayList<>();
+        List<Integer> deadList=new ArrayList<>();
+        for (int i:dead){
+            deadList.add(i);
+        }
+        if(!deadList.contains(node.val)){
+            result.add(node);
+        }
+        trimTreeHelper(node,deadList,result);
+        return result;
+    }
+    public static BST trimTreeHelper(BST node,List<Integer> deadList,List<BST> result){
+        if(node==null)
+            return null;
+        node.left=trimTreeHelper(node.left,deadList,result);
+        node.right=trimTreeHelper(node.right,deadList,result);
+        if(deadList.contains(node.val)){
+            if(node.left!=null && !deadList.contains(node.left.val)){
+                result.add(node.left);
+            }
+            if(node.right!=null && !deadList.contains(node.right.val)){
+                result.add(node.right);
+            }
+        }
+        return node;
+    }
+    //trim the bst with the highest and the lowest value
+    public static BST trimBST(BST node ,int[] values){
+        if(node==null)
+            return null;
+        if(node.val<values[0]){
+            return trimBST(node.left,values);
+        }
+        if(node.val>values[1]){
+            return trimBST(node.right,values);
+        }
+        node.left=trimBST(node.left,values);
+        node.right=trimBST(node.right,values);
+        return node;
+    }
+    public static void preOrder(BST node){
+        if(node==null)
+            return;
+        preOrder(node.left);
+        System.out.println(node.val);
+        preOrder(node.right);
+    }
+    //Triplets
+    public static List<List<Integer>> triplets(int[] arr){
+        if(arr.length<=2){
+            return new ArrayList<>();
+        }
+        Arrays.sort(arr);
+        List<List<Integer>> result=new ArrayList<>();
+
+        for(int i=0;i<arr.length-2;i++){
+            if(i==0||(i>0&&arr[i]!=arr[i-1])){
+                int j=i+1;
+                int k=arr.length-1;
+                int sum=0-arr[i];
+                while(j<k){
+                    if(sum==arr[j]+arr[k]){
+                        result.add(Arrays.asList(arr[i],arr[j],arr[k]));
+                        while(j<k && arr[j]==arr[j+1]){
+                            j=j+1;
+                        }
+                        while(j<k && arr[k]==arr[k-1]){
+                            k=k-1;
+                        }
+                        j++;
+                        k--;
+                    }else if(sum<arr[j]+arr[k]){
+                        k--;
+                    }else{
+                        j++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    //Expensive Inventory
+    public static int expensiveInventory(int[] values,int[] label,int wanted,int limit){
+        if(values.length==0||label.length==0||wanted==0||limit==0)
+            return 0;
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i=0;i<label.length;i++){
+            if(hashmap.containsKey(label[i])){
+                int max=hashmap.get(label[i]);
+                if(max<values[i]){
+                    hashmap.put(label[i], values[i]);
+                }
+            }else{
+                hashmap.put(label[i],values[i]);
+            }
+        }
+        List<Map.Entry<Integer,Integer>> sortedValues=new ArrayList<>(hashmap.entrySet());
+        Collections.sort(sortedValues, (a, b) -> b.getValue().compareTo(a.getValue()));
+    HashMap<Integer,Integer> labelCount= new HashMap<Integer,Integer>();
+
+        int current=0;
+        int result=0;
+        for(Map.Entry<Integer,Integer> map:sortedValues){
+            if(labelCount.getOrDefault(map.getKey(),0)<limit && current<wanted){
+                result+=map.getValue();
+                labelCount.put(map.getKey(), labelCount.getOrDefault(map.getKey(),0)+1);
+                current++;
+            }
+        }
+    return result;
+    }
+    public static String getColumnTitle(int n) {
+        StringBuilder columnTitle = new StringBuilder();
+
+        while (n > 0) {
+            int remainder = (n - 1) % 26;
+            char ch = (char) ('A' + remainder);
+            columnTitle.insert(0, ch);
+            n = (n - 1) / 26;
+        }
+
+        return columnTitle.toString();
+    }
+    //Minimum Rotations
+//    public static int MinimumRotations(int[] top,int[] bottom){
+//        int[] count=new int[top.length];
+//        for(int i:top){
+//            count[i-1]++;
+//        }
+//        for(int i:bottom){
+//            count[i-1]++;
+//        }
+//        boolean solution=false;
+//        int value=-1;
+//        for(int i=0;i<count.length;i++){
+//            if(count[i]==6){
+//                solution=true;
+//                value=i;
+//            }
+//        }
+//        List<Integer> topPos=new ArrayList<>();
+//        List<Integer> bottomPosition=new ArrayList<>();
+//        for(int i=0;i<top.length;i++){
+//            if(top[i]==value){
+//                topPos.add(i);
+//            }
+//            if(bottom[i]==value){
+//                bottomPosition.add(i);
+//            }
+//        }
+//        boolean result=false;
+//        if(solution){
+//            if(topPos.size()>bottomPosition.size()){
+//                for(int i:topPos){
+//                    swaping(top,bottom,i);
+//                    result=checking(top,value);
+//                }
+//                if(result)
+//                    return top.length-topPos.size();
+//            }else{
+//                for(int i:bottomPosition){
+//                    swaping(bottom,top,i);
+//                    result=checking(bottom,value);
+//                }
+//                if(result)
+//                    return top.length-bottomPosition.size();
+//            }
+//        }
+//        return -1;
+//    }
+//    public static void swaping(int[] a,int[] b,int loc){
+//        int temp=a[loc];
+//        a[loc]=b[loc];
+//        b[loc]=temp;
+//    }
+//    public static boolean checking(int[] arr,int value){
+//        for(int i:arr){
+//            if(i!=value && i!=0)
+//                return false;
+//        }
+//        return true;
+//    }
+    public static int MinimumRotations(int[] top,int[] bottom){
+        HashMap<Integer,Integer> topRow=getOccurance(top);
+        HashMap<Integer,Integer> bottomRow=getOccurance(bottom);
+        int resultTop = checkPossibility(top, topRow, bottomRow);
+        if (resultTop != -1) {
+            return resultTop;
+        }
+
+        // Check if it is possible to make all values in the bottom row the same
+        int resultBottom = checkPossibility(bottom, topRow, bottomRow);
+        if (resultBottom != -1) {
+            return resultBottom;
+        }
+
+        return -1;
+    }
+    public static HashMap<Integer,Integer> getOccurance(int[] arr){
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i:arr){
+            hashmap.put(i,hashmap.getOrDefault(i,0)+1);
+        }
+        return hashmap;
+    }
+    private static int checkPossibility(int[] row, Map<Integer, Integer> countTop, Map<Integer, Integer> countBottom) {
+        int minRotations = Integer.MAX_VALUE;
+        for (int i = 1; i <= 6; i++) {
+            if (countTop.containsKey(i) && countTop.get(i) + countBottom.getOrDefault(i, 0) >= row.length) {
+                int rotations = row.length - Math.max(countTop.get(i), countBottom.getOrDefault(i, 0));
+                minRotations = Math.min(minRotations, rotations);
+            }
+        }
+        return minRotations == Integer.MAX_VALUE ? -1 : minRotations;
+    }
     public static void main(String[] args) {
+        //test case for Minimum Rotations
+        System.out.println(MinimumRotations(new int[]{2,1,2,4,2,2},new int[]{5,2,6,2,3,2}));
+        //test case for Spreadsheet Column
+//        System.out.println(getColumnTitle(28));
+        //test case for Expensive Inventory
+//        System.out.println(expensiveInventory(new int[]{5,4,3,2,1},new int[]{1,1,2,2,3},2,1));
+        //test case for Triplets
+//        System.out.println(triplets(new int[]{0, -1, 1, 1, 2, -2}));
+        //test case for the trimming the bst according to the highest and the lowest values
+//        BST test=new BST(5);
+//        test.left=new BST(2);
+//        test.right=new BST(7);
+//        test.left.left=new BST(1);
+//        test.left.right=new BST(3);
+//        test.right.left=new BST(6);
+//        test.right.right=new BST(9);
+//        BST result=trimBST(test,new int[]{2,7});
+//        preOrder(result);
+        //test case for Trim Tree
+//        BST test=new BST(3);
+//        test.left=new BST(1);
+//        test.right=new BST(7);
+//        test.left.left=new BST(2);
+//        test.left.right=new BST(8);
+//        test.right.left=new BST(4);
+//        test.right.right=new BST(6);
+//        List<BST> result=trimTree(test,new int[]{7,8});
+//        for(BST i:result){
+//            System.out.println(i.val);
+//        }
+        //test caes for sore thumb
+//        System.out.println(Arrays.toString(soreThumb(new int[]{5, 2, 4, 6, 3})));
+        //test case for the largest pool
+//        System.out.println(largestPool(new int[]{1,4,4,8,2}));
         //test case for Minimum Removal
-        System.out.println(miniRemoval("(()()()"));
+//        System.out.println(miniRemoval("(()()()"));
         //test case for the Third Power
 //        System.out.println(isThirdPower(55));
         //test case for the Largest Island which are connected
