@@ -4211,9 +4211,136 @@ public static int lastWordLen(String s){
         }
         return minRotations == Integer.MAX_VALUE ? -1 : minRotations;
     }
+    //Tree Width
+    public static int widthTree(BST node){
+        if(node==null)
+            return 0;
+        int left=widthTree(node.left);
+        int right=widthTree(node.right);
+        int max=Math.max(left,right);
+        return 1+max;
+    }
+//    Language Encryption
+    public static boolean lexi(String[] arr){
+        if(arr.length==0)
+            return true;
+        for(int i=0;i<arr.length-1;i++){
+            if(arr[i].compareTo(arr[i+1])>0)
+                return false;
+        }
+        return true;
+    }
+    public static boolean languageEncryption(String alphabet,String[] arr){
+        if(arr.length==0)
+            return true;
+        HashMap<Character,Integer> hashset=new HashMap<>();
+        int j=0;
+        for(char c:alphabet.toCharArray()){
+            hashset.put(c,j++);
+        }
+        for(int i=1;i<arr.length;i++){
+            String prev=arr[i-1];
+            String current=arr[i];
+            int len=Math.min(prev.length(),current.length());
+            for(int k=0;k<len;k++){
+                if(hashset.get(prev.charAt(k))>hashset.get(current.charAt(k))){
+                    return false;
+                }
+            }
+            if(prev.length()>current.length())
+                return false;
+        }
+        return true;
+    }
+    //find the result
+    public static int[] resultFind(int[] arr,int target){
+        int start=0,end=0;
+        int sum=0;
+        while(end<arr.length){
+            sum+=arr[end];
+            if(sum>target){
+                sum-=arr[start];
+                start++;
+            }
+            if(sum==target)
+                return new int[]{start,end};
+        }
+        return new int[0];
+    }
+//    K Distinct Character
+    public static int distinctK(String s,int limit){
+        if(s.length()==0 || limit==0)
+            return 0;
+        int start=0,end=0;
+        HashMap<Character,Integer> hashmap=new HashMap<>();
+        int length=0;
+        while(end<s.length()){
+            char c=s.charAt(end);
+            hashmap.put(c,hashmap.getOrDefault(c,0)+1);
+            while(hashmap.size()>limit){
+                char c1=s.charAt(start);
+                hashmap.put(c1, hashmap.get(c1)-1);
+                if(hashmap.get(c1)==0)
+                    hashmap.remove(c1);
+                start++;
+            }
+            length=Math.max(length,end-start+1);
+            end++;
+        }
+        return length;
+    }
+    //Sum to Target
+    public static List<List<Integer>> sumtoTarget(int[] nums,int target){
+        List<List<Integer>> result=new ArrayList<>();
+        if(target==0)
+            return result;
+        sumtoTargethelper(nums,target,new ArrayList<>(),result,0);
+        return result;
+    }
+    public static void sumtoTargethelper(int[] nums,int target,List<Integer> temp,List<List<Integer>> result,int index){
+        if(target==0){
+            result.add(new ArrayList<>(temp));
+        }
+        if(target<0){
+            return;
+        }
+        for(int i=index;i<nums.length;i++){
+            temp.add(nums[i]);
+            sumtoTargethelper(nums,target-nums[i],temp,result,i+1);
+            temp.remove(temp.size()-1);
+        }
+    }
+    //work Schedule
+    public static boolean workSch(int[][] times){
+        if(times.length==0)
+            return true;
+        int[] prev=times[0];
+        for(int i=1;i<times.length;i++){
+            int[] current=times[i];
+            if(current[0]<=prev[1])
+                return false;
+            prev=current;
+        }
+        return true;
+    }
     public static void main(String[] args) {
+        //test case for Work Schdule
+        System.out.println(workSch(new int[][]{{1,3},{5,10},{11,15}}));
+        //test case for sum to target
+//        System.out.println(sumtoTarget(new int[]{8, 2, 2, 4, 5, 6, 3},9));
+        //test case for K distinct elements
+//        System.out.println(distinctK("abccccd",3));
+        //test casec for Language Encryption
+//        System.out.println(languageEncryption("worldabcefghijkmnpqstuvxyz",new String[]{"word","world","row"}));
+        //test case for the width of the tree
+//        BST test=new BST(1);
+//        test.left=new BST(3);
+//        test.right=new BST(9);
+//        test.left.left=new BST(8);
+//        test.left.right=new BST(7);
+//        System.out.println(widthTree(test));
         //test case for Minimum Rotations
-        System.out.println(MinimumRotations(new int[]{2,1,2,4,2,2},new int[]{5,2,6,2,3,2}));
+//        System.out.println(MinimumRotations(new int[]{2,1,2,4,2,2},new int[]{5,2,6,2,3,2}));
         //test case for Spreadsheet Column
 //        System.out.println(getColumnTitle(28));
         //test case for Expensive Inventory
