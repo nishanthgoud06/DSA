@@ -4213,8 +4213,23 @@ public static int lastWordLen(String s){
     }
     
     public static void main(String[] args) {
+        //test case for Work Schdule
+        System.out.println(workSch(new int[][]{{1,3},{5,10},{11,15}}));
+        //test case for sum to target
+//        System.out.println(sumtoTarget(new int[]{8, 2, 2, 4, 5, 6, 3},9));
+        //test case for K distinct elements
+//        System.out.println(distinctK("abccccd",3));
+        //test casec for Language Encryption
+//        System.out.println(languageEncryption("worldabcefghijkmnpqstuvxyz",new String[]{"word","world","row"}));
+        //test case for the width of the tree
+//        BST test=new BST(1);
+//        test.left=new BST(3);
+//        test.right=new BST(9);
+//        test.left.left=new BST(8);
+//        test.left.right=new BST(7);
+//        System.out.println(widthTree(test));
         //test case for Minimum Rotations
-        System.out.println(MinimumRotations(new int[]{2,1,2,4,2,2},new int[]{5,2,6,2,3,2}));
+//        System.out.println(MinimumRotations(new int[]{2,1,2,4,2,2},new int[]{5,2,6,2,3,2}));
         //test case for Spreadsheet Column
 //        System.out.println(getColumnTitle(28));
         //test case for Expensive Inventory
