@@ -4324,9 +4324,177 @@ public static int lastWordLen(String s){
         return true;
     }
     //Calling All Nodes
+    public static List<Integer> callingAnodes(BST node){
+        if(node==null)
+            return new ArrayList<>();
+        List<Integer> result=new ArrayList<>();
+        Stack<BST> stack=new Stack<>();
+        stack.push(node);
+        while(!stack.isEmpty()){
+            int size=stack.size();
+            for(int i=0;i<size;i++){
+                BST current=stack.pop();
+                result.add(current.val);
+                if(current.left!=null){
+                    stack.push(current.left);
+                }
+                if(current.right!=null){
+                    stack.push(current.right);
+                }
+            }
+        }
+        Collections.reverse(result);
+        return result;
+    }
+//    Linked List Palindrome
+    //i am thinking of two approches to solve this problem
+    //approch 1
+    static class Listing{
+        int data;
+        Listing next;
+        static int size=0;
+        public Listing(int data){
+            this.data=data;
+            size++;
+        }
+        public static int size(){
+            return size;
+        }
+
+}
+public static Listing reversit(Listing node){
+        Listing prev=null;
+        while(node!=null){
+            Listing next=node.next;
+            node.next=prev;
+            prev=node;
+            node=next;
+        }
+        return prev;
+    }
+    public static boolean isPali(Listing node) {
+        if (node == null)
+            return true;
+
+        Listing slow = node;
+        Listing fast = node;
+
+        // Find the middle node of the linked list
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        // If the list has odd number of nodes, skip the middle node
+        if (fast != null) {
+            slow = slow.next;
+        }
+
+        // Reverse the second half of the linked list
+        Listing reverse = reversit(slow);
+
+        // Compare the first half with the reversed second half
+        while (reverse != null) {
+            if (node.data != reverse.data) {
+                return false;
+            }
+            node = node.next;
+            reverse = reverse.next;
+        }
+        return true;
+    }
+
+    //approch two
+    public static boolean isPali2(Listing node) {
+        if (node == null)
+            return true;
+
+        int size = node.size();
+        int middle = size / 2;
+        int current = 0;
+        Listing temp = node;
+
+        while (current < middle) {
+            temp = temp.next;
+            current++;
+        }
+
+        if (size % 2 == 1) {
+            temp = temp.next; // Skip the middle node for odd-sized lists
+        }
+
+        Listing tempCopy = temp; // Create a copy of the second half
+        Listing reverse = reversit(tempCopy);
+
+        while (reverse != null) {
+            if (node.data != reverse.data) {
+                return false;
+            }
+            node = node.next;
+            reverse = reverse.next;
+        }
+        return true;
+    }
+    //Find mid of the rotated array
+    public static int findMinofRotated(int[] nums) {
+        int low=0;
+        int high=nums.length-1;
+        while(low<high){
+            int mid=low+(high-low)/2;
+            if(nums[mid]>nums[high]){
+                low=mid+1;
+            }else{
+                high=mid;
+            }
+        }
+        return nums[low];
+    }
+    //STring addition
+    public static String StringAdd(String num1,String num2){
+        int num1l=num1.length()-1;
+        int num2l=num2.length()-1;
+        int carry=0;
+        StringBuilder sb=new StringBuilder();
+        while(num1l>=0||num2l>=0){
+            int a=(num1l>=0)?num1.charAt(num1l)-'0':0;
+            int b=(num2l>=0)?num2.charAt(num2l)-'0':0;
+            int total=a+b+carry;
+            sb.append(total%10);
+            carry=total/10;
+            num1l--;
+            num2l--;
+        }
+        if(carry!=0){
+            sb.append(carry);
+        }
+        return sb.reverse().toString();
+    }
     public static void main(String[] args) {
+        //test case for adding number as string
+        System.out.println(StringAdd("95","7"));
+        //test case for reverse a palindrom or not for a linkedList
+//        Listing test=new Listing(1);
+//        test.next=new Listing(2);
+////        test.next.next=new Listing(1);
+//        System.out.println("for odd case pali-1"+isPali(test));
+//        System.out.println("for odd case pali-2"+isPali2(test));
+//        Listing test1=new Listing(1);
+//        test1.next=new Listing(7);
+//        System.out.println("for even case pali-1"+isPali(test1));
+//        System.out.println("for even case pali-2"+isPali2(test1));
+//        Listing test2=new Listing(1);
+//        test2.next=new Listing(2);
+//        test2.next.next=new Listing(2);
+//        test2.next.next.next=new Listing(1);
+//        System.out.println("for even case pali-1"+ isPali(test2));
+//        System.out.println("for even case pali-2"+ isPali2(test2));
+//        //test case for Calling All nodes
+//        BST test=new BST(1);
+//        test.left=new BST(2);
+//        test.
+//        System.out.println(callingNodes());
         //test case for Work Schdule
-        System.out.println(workSch(new int[][]{{1,3},{5,10},{11,15}}));
+//        System.out.println(workSch(new int[][]{{1,3},{5,10},{11,15}}));
         //test case for sum to target
 //        System.out.println(sumtoTarget(new int[]{8, 2, 2, 4, 5, 6, 3},9));
         //test case for K distinct elements
