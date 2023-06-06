@@ -4323,6 +4323,7 @@ public static int lastWordLen(String s){
         }
         return true;
     }
+    
     public static void main(String[] args) {
         //test case for Work Schdule
         System.out.println(workSch(new int[][]{{1,3},{5,10},{11,15}}));
