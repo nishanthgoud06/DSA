@@ -4211,6 +4211,7 @@ public static int lastWordLen(String s){
         }
         return minRotations == Integer.MAX_VALUE ? -1 : minRotations;
     }
+    
     public static void main(String[] args) {
         //test case for Minimum Rotations
         System.out.println(MinimumRotations(new int[]{2,1,2,4,2,2},new int[]{5,2,6,2,3,2}));
