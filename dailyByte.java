@@ -4355,6 +4355,7 @@ public static int lastWordLen(String s){
         static int size=0;
         public Listing(int data){
             this.data=data;
+            next=null;
             size++;
         }
         public static int size(){
@@ -4469,9 +4470,84 @@ public static Listing reversit(Listing node){
         }
         return sb.reverse().toString();
     }
+    public static Listing listInterection(Listing node1,Listing node2){
+        Listing a=node1;
+        Listing b=node2;
+        while(a!=b){
+            if(a==null){
+                a=node2;
+            }else{
+                a=a.next;
+            }
+            if(b==null){
+                b=node1;
+            }else{
+                b=b.next;
+            }
+        }
+        return a;
+    }
+
+    //Same Value Trees
+    public static int sameValue(BST tree){
+        if(tree == null)
+            return 0;
+        return sameValueHelper(tree)[0];
+    }
+    public static int[] sameValueHelper(BST node){
+        if(node ==null)
+            return new int[]{0,-1};
+        int[] leftResult=sameValueHelper(node.left);
+        int[] rightResult=sameValueHelper(node.right);
+        int result=leftResult[0]+rightResult[0];
+        if((leftResult[1]==-1||node.val==leftResult[1])&&(rightResult[1]==-1||node.val==rightResult[1])){
+            result+=1;
+        }
+        return new int[]{result,node.val};
+    }
+    //Continuous Sums
+    public static int continousSum(int[] nums,int target){
+        int sum=0;
+        int count=0;
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        hashmap.put(0,1);
+        for(int i=0;i<nums.length;i++){
+            sum+=nums[i];
+            if(hashmap.containsKey(sum-target)){
+                count+=hashmap.get(sum-target);
+            }
+            hashmap.put(sum,hashmap.getOrDefault(sum,0)+1);
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
+        //test case for Continous Sums
+        System.out.println(continousSum(new int[]{1,1,4},5));
+        //test case Same Value
+//        BST tree=new BST(2);
+//        tree.left=new BST(5);
+//        tree.right=new BST(7);
+//        tree.left.left=new BST(3);
+//        tree.left.right=new BST(3);
+//        tree.right.right=new BST(7);
+//        System.out.println(sameValue(tree));
+
+        //test case Linked List Intersection
+//        Listing node1=new Listing(1);
+//        node1.next=new Listing(2);
+//        node1.next.next=new Listing(3);
+//        node1.next.next.next=new Listing(4);
+//        node1.next.next.next.next=new Listing(5);
+//        Listing node2=new Listing(0);
+//        node2.next=new Listing(1);
+//        node2.next.next=new Listing(2);
+//        node2.next.next.next=new Listing(3);
+//        node2.next.next.next.next=new Listing(4);
+//        node2.next.next.next.next.next=new Listing(5);
+//        System.out.println(listInterection(node1,node2));
         //test case for adding number as string
-        System.out.println(StringAdd("95","7"));
+//        System.out.println(StringAdd("95","7"));
         //test case for reverse a palindrom or not for a linkedList
 //        Listing test=new Listing(1);
 //        test.next=new Listing(2);
