@@ -4520,10 +4520,129 @@ public static Listing reversit(Listing node){
         }
         return count;
     }
-
+    //Harmonious Values
+    public static int harmoValues(int[] nums){
+        if(nums.length==0||nums==null)
+            return 0;
+        int result=0;
+        int right=0;
+        int left=0;
+        Arrays.sort(nums);
+        while(right<nums.length){
+            int diff=nums[right]-nums[left];
+            if(diff==1){
+                result=Math.max(result,right-left+1);
+                right++;
+            }else if(diff>1){
+                left++;
+            }else{
+                right++;
+            }
+        }
+        return result;
+    }
+//    String Validity
+    public static boolean stringvalidity(String s){
+        if(s.length()==1 || s.length()%2!=0)
+            return false;
+        if(s.length()==0)
+            return true;
+        int open=0,close=0,mixed=0;
+        for(char c:s.toCharArray()){
+            if(c=='('){
+                open++;
+            }else if(c==')'){
+                close++;
+            }else if(c=='*'){
+                mixed++;
+            }else{
+                return false;
+            }
+        }
+        open=open+close;
+        return Math.abs(open-mixed)==0;
+    }
+//    Common Values
+    public static int[] commonValues(int[] num1,int[] num2){
+        if(num1.length==0&&num2.length==0)
+            return new int[0];
+        int pointer1=0,pointer2=0;
+        int[] result=new int[num1.length];
+        int i=0;
+        while(pointer1<num1.length&&pointer2<num2.length){
+            if(num1[pointer1]==num2[pointer2]){
+                result[i]=num1[pointer1];
+                i++;
+                pointer1++;
+                pointer2++;
+            }else if(num1[pointer1]-num2[pointer2]>0){
+                pointer2++;
+            }else{
+                pointer1++;
+            }
+        }
+        return result;
+    }
+    //Microsoft Paint
+    public static int[][] microsoftPaint(int[][] image,int row,int col,int color){
+        if(image[row][col]==color)
+            return image;
+        if(image.length==0||image==null)
+            return image;
+        microsoftPainthelper(image,row,col,color,image[row][col]);
+        return image;
+    }
+    //Most Popular
+    public static String mostpopular(String s,String[] popular){
+        if(popular.length==0)
+            return new String("");
+        String[] words=s.split("[^a-zA-Z]+");
+        HashMap<String,Integer> hashmap=new HashMap<>();
+        for(String str:words){
+            String word=str.toLowerCase();
+            hashmap.put(word,hashmap.getOrDefault(word,0)+1);
+        }
+        List<Map.Entry<String,Integer>> hashmaps=new ArrayList<>(hashmap.entrySet());
+        Collections.sort(hashmaps,new Comparator<Map.Entry<String,Integer>>(){
+                public int compare(Map.Entry<String,Integer> map1,Map.Entry<String,Integer> map2){
+                    return map1.getValue().compareTo(map2.getValue());
+        }
+        });
+    for(String st:popular){
+        if(hashmaps.contains(st)){
+            hashmaps.remove(st);
+        }
+    }
+    return hashmaps.get(hashmaps.size()-1).getKey();
+    }
+    public static void microsoftPainthelper(int[][] image,int row,int col,int color,int old){
+        if(row>=0&&row<image.length&&col>=0&&col<image[0].length&&image[row][col]==old)
+        {
+            image[row][col]=color;
+            microsoftPainthelper(image, row - 1, col, color, old);
+            microsoftPainthelper(image, row + 1, col, color, old);
+            microsoftPainthelper(image, row, col - 1, color, old);
+            microsoftPainthelper(image, row, col + 1, color, old);
+        }
+    }
+    public static void printpaint(int[][] arr){
+        for(int[] i: arr){
+            System.out.println(Arrays.toString(i));
+        }
+    }
     public static void main(String[] args) {
+        //test case for Most Popular
+        System.out.println(mostpopular("The daily, the byte Daily.",new String[]{"the"}));
+        //test case for microsoftPaint
+//        printpaint(microsoftPaint(new int[][]{{0,1,1},{0,1,0},{1,1,1}},1,1,3));
+        //test case for Common Values
+//        System.out.println(Arrays.toString(commonValues(new int[]{1,2,2,3},new int[]{0,2,2,5})));
+        //test case for String Validity
+//        System.out.println(stringvalidity("((*"));
+        //test case for Harmonious Values
+//        System.out.println(harmoValues(new int[]{3, 2, 2, 2, 4, 3, 3}));
         //test case for Continous Sums
-        System.out.println(continousSum(new int[]{1,1,4},5));
+//        System.out.println(continousSum(new int[]{1,1,4},5));
         //test case Same Value
 //        BST tree=new BST(2);
 //        tree.left=new BST(5);
