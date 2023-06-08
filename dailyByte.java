@@ -4505,15 +4505,33 @@ public static Listing reversit(Listing node){
         }
         return new int[]{result,node.val};
     }
+    //Continuous Sums
+    public static int continousSum(int[] nums,int target){
+        int sum=0;
+        int count=0;
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        hashmap.put(0,1);
+        for(int i=0;i<nums.length;i++){
+            sum+=nums[i];
+            if(hashmap.containsKey(sum-target)){
+                count+=hashmap.get(sum-target);
+            }
+            hashmap.put(sum,hashmap.getOrDefault(sum,0)+1);
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
+        //test case for Continous Sums
+        System.out.println(continousSum(new int[]{1,1,4},5));
         //test case Same Value
-        BST tree=new BST(2);
-        tree.left=new BST(5);
-        tree.right=new BST(7);
-        tree.left.left=new BST(3);
-        tree.left.right=new BST(3);
-        tree.right.right=new BST(7);
-        System.out.println(sameValue(tree));
+//        BST tree=new BST(2);
+//        tree.left=new BST(5);
+//        tree.right=new BST(7);
+//        tree.left.left=new BST(3);
+//        tree.left.right=new BST(3);
+//        tree.right.right=new BST(7);
+//        System.out.println(sameValue(tree));
 
         //test case Linked List Intersection
 //        Listing node1=new Listing(1);
