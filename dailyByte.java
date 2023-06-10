@@ -4630,9 +4630,27 @@ public static Listing reversit(Listing node){
             System.out.println(Arrays.toString(i));
         }
     }
+    public static int finalDigit(int num){
+        if(num ==0)
+            return 0;
+        int current=num;
+        while(current%10!=current){
+            int temp =current;
+            int sum=0;
+            while(temp!=0){
+                int t=temp%10;
+                sum+=t;
+                temp=temp/10;
+            }
+            current=sum;
+        }
+        return current;
+    }
     public static void main(String[] args) {
+        //test case for Final Digit
+        System.out.println(finalDigit(8353));
         //test case for Most Popular
-        System.out.println(mostpopular("The daily, the byte Daily.",new String[]{"the"}));
+//        System.out.println(mostpopular("The daily, the byte Daily.",new String[]{"the"}));
         //test case for microsoftPaint
 //        printpaint(microsoftPaint(new int[][]{{0,1,1},{0,1,0},{1,1,1}},1,1,3));
         //test case for Common Values
