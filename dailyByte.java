@@ -4646,9 +4646,137 @@ public static Listing reversit(Listing node){
         }
         return current;
     }
+    //Missing Numbers
+    public static int missingNumber(int[] nums){
+        int total=0;
+        for(int i:nums){
+            total+=i;
+        }
+        int[] actual=new int[nums.length];
+        int sum=0;
+        for(int i=0;i<nums.length;i++){
+            actual[i]=i+1;
+            sum+=i+1;
+        }
+        int index=nums.length-(sum-total);
+        return index==nums.length?-1:actual[index];
+    }
+    //Theft
+    public static int theft(int[] nums){
+        if(nums.length==0||nums==null)
+            return 0;
+        int[] dp=new int[nums.length+1];
+        dp[0]=0;
+        dp[1]=nums[0];
+        for(int i=1;i<nums.length;i++){
+            dp[i+1]=Math.max(dp[i],dp[i-1]+nums[i]);
+        }
+        return dp[nums.length];
+    }
+    //atios
+    public static int atios(String s){
+        if(s.length()==0)
+            return 0;
+        int length=s.length();
+        int result=0;
+        int sign=0;
+        int start=0;
+        while(s.charAt(start)==' ' && start<length){
+            start++;
+        }
+        if(s.charAt(start)=='-'&&start<length){
+            sign=(s.charAt(start)=='-')?-1:1;
+            start++;
+        }
+        while(start<length){
+            int element=s.charAt(start)-'0';
+            if(result>Integer.MAX_VALUE/10||(result==Integer.MAX_VALUE && element>Integer.MAX_VALUE%10))
+                return (sign == -1) ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            result=result*10+element;
+            start=start+1;
+        }
+        return result;
+    }
+    public String countAndSay(int n) {
+        if(n==1){
+            return "1";
+        }
+        String prev=countAndSay(n-1);
+        int count=1;
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<prev.length();i++){
+            char current=prev.charAt(i);
+            if(i<prev.length()-1 && prev.charAt(i+1)==current){
+                count++;
+            }else{
+                sb.append(count).append(current);
+                count=1;
+            }
+        }
+        return sb.toString();
+    }
+    public static List<List<Integer>> premu(int[] nums){
+        List<List<Integer>> result=new ArrayList<>();
+        if(nums.length==0)
+            return result;
+        List<Integer> temp=new ArrayList<>();
+        for(int i:nums){
+            temp.add(i);
+        }
+        premuHelper(result,temp,0);
+        return result;
+    }
+    public static void premuHelper(List<List<Integer>> result,List<Integer> temp,int index){
+        if(index==temp.size()){
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+        for(int i=index;i<temp.size();i++){
+            Collections.swap(temp,index,i);
+            premuHelper(result,temp,index+1);
+            Collections.swap(temp,index,i);
+        }
+    }
+//    53. Maximum Subarray
+    //bruteforce
+    public static int bfmaxSubArray(int[] nums){
+        if(nums.length==0)
+            return 0;
+        int result=nums[0];
+        for(int i=0;i<nums.length;i++){
+            int total=0;
+            for(int j=i;j<nums.length;j++){
+                total+=nums[j];
+                result=Math.max(result,total);
+            }
+        }
+        return result;
+    }
+    public static int maxSubArray(int[] nums){
+        if(nums.length==0)
+            return 0;
+        int[] dp=new int[nums.length];
+        dp[0]=nums[0];
+        int result=nums[0];
+        for(int i=1;i<nums.length;i++){
+            dp[i]=Math.max(nums[i],nums[i]+dp[i-1]);
+            result=Math.max(result,dp[i]);
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
+        //test case for Max SubArray
+        System.out.println(bfmaxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
+        System.out.println(maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
+        //test case for atios
+//        System.out.println(atios("  42"));
+        //test case for Theif
+//        System.out.println(theft(new int[]{1,2,3,4}));
+        //test case for Missing Number
+//        System.out.println(missingNumber(new int[]{3, 2, 4, 1, 5}));
         //test case for Final Digit
-        System.out.println(finalDigit(8353));
+//        System.out.println(finalDigit(8353));
         //test case for Most Popular
 //        System.out.println(mostpopular("The daily, the byte Daily.",new String[]{"the"}));
         //test case for microsoftPaint
