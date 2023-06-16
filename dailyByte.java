@@ -4764,11 +4764,38 @@ public static Listing reversit(Listing node){
         }
         return result;
     }
-
+    //Jump Game
+    public static boolean jumGame(int[] nums){
+        if(nums==null || nums.length==0|| nums.length==1)
+            return true;
+        boolean[] dp=new boolean[nums.length];
+        dp[0]=true;
+        for(int i=0;i<nums.length;i++){
+            if(dp[i]){
+                for(int j=1;j<=nums[i] && i+j<nums.length;j++){
+                    dp[i+j]=true;
+                }
+            }
+        }
+        return dp[nums.length-1];
+    }
+    public static boolean jupGame2(int[] nums){
+        if(nums==null||nums.length==0)
+            return true;
+        int target=nums.length-1;
+        for(int i=nums.length-1;i>=0;i--){
+            if(nums[i]+i>=target){
+                target=i;
+            }
+        }
+        return target==0;
+    }
     public static void main(String[] args) {
+        //test case for Jump Game
+        System.out.println(jumGame(new int[]{3,2,1,0,4}));
         //test case for Max SubArray
-        System.out.println(bfmaxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
-        System.out.println(maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
+//        System.out.println(bfmaxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
+//        System.out.println(maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
         //test case for atios
 //        System.out.println(atios("  42"));
         //test case for Theif
