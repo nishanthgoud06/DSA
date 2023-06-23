@@ -4790,9 +4790,77 @@ public static Listing reversit(Listing node){
         }
         return target==0;
     }
+    //decode ways
+    //bruteforce way to solve the problem
+    public static int decodeWay(String s){
+        return decodewayHelper(s,0);
+    }
+    public static int decodewayHelper(String s,int index){
+        if(index==s.length()){
+            return 1;
+        }
+        if(s.charAt(index)=='0')
+            return 0;
+        int count=0;
+        count+=decodewayHelper(s,index+1);
+        if(index<s.length()-1){
+            int twodigit=Integer.parseInt(s.substring(index,index+2));
+            if(twodigit>=10&&twodigit<=26){
+                count+=decodewayHelper(s,index+2);
+            }
+        }
+        return count;
+    }
+    //dynamic programming way
+    public static int decodenoway(String s){
+        if(s==null||s.length()==0)
+            return 0;
+        int[] dp=new int[s.length()+1];
+        dp[0]=1;
+        dp[1]=s.charAt(0)=='0'?0:1;
+        for(int i=2;i<s.length();i++){
+            int one=Integer.valueOf(s.substring(i-1,i));
+            int two=Integer.parseInt(s.substring(i-2,i));
+            if(one>=1){
+                dp[i]+=dp[i-1];
+            }
+            if(two>=10&& two<=26){
+                dp[i]+=dp[i-2];
+            }
+        }
+        return dp[s.length()];
+    }
+//    Construct Binary Tree from Preorder and Inorder Traversal
+class constructSolution {
+    private int index=0;
+
+    public BST buildTree(int[] preorder, int[] inorder) {
+        if(preorder==null||preorder.length==0||inorder==null||inorder.length==0){
+            return null;
+        }
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i=0;i<inorder.length;i++){
+            hashmap.put(inorder[i],i);
+        }
+        return helper(preorder,0,preorder.length-1,hashmap);
+    }
+    public BST helper(int[] preorder,int left,int right,HashMap<Integer,Integer> hashmap){
+        if(left>right){
+            return null;
+        }
+        BST node=new BST(preorder[index]);
+        int position=hashmap.get(preorder[index]);
+        index++;
+        node.left=helper(preorder,left,position-1,hashmap);
+        node.right=helper(preorder,position+1,right,hashmap);
+        return node;
+    }
+}
     public static void main(String[] args) {
+        //test case for decode way of String
+        System.out.println(decodeWay("123"));
         //test case for Jump Game
-        System.out.println(jumGame(new int[]{3,2,1,0,4}));
+//        System.out.println(jumGame(new int[]{3,2,1,0,4}));
         //test case for Max SubArray
 //        System.out.println(bfmaxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
 //        System.out.println(maxSubArray(new int[]{-2,1,-3,4,-1,2,1,-5,4}));
