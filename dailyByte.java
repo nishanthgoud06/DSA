@@ -4856,9 +4856,112 @@ class constructSolution {
         return node;
     }
 }
+//we are going to cinstruct a BST from sorted array using iteration method;
+    static class dhoni{
+        int left;
+        int right;
+        BST node;
+        public dhoni(int left,int right,BST node){
+            this.left=left;
+            this.right=right;
+            this.node=node;
+        }
+}
+    public static int getMiddle(int low,int high){
+        return low+(high-low)/2;
+    }
+    public static BST sortedBST(int[] nums){
+        Stack<dhoni> stack=new Stack<>();
+        BST node=new BST(nums[getMiddle(0,nums.length-1)]);
+        dhoni csk=new dhoni(0,nums.length-1,node);
+        stack.push(csk);
+        while(!stack.isEmpty()){
+            dhoni temp=stack.pop();
+            int temp_left=temp.left;
+            int temp_rigth=temp.right;
+            BST nodes=temp.node;
+            int mid=getMiddle(temp_left,temp_rigth);
+            if(temp_left<=mid-1){
+                nodes.left=new BST(nums[getMiddle(temp_left,mid-1)]);
+                stack.push(new dhoni(temp_left,mid-1,nodes.left));
+            }
+            if(mid+1<=temp.right){
+                nodes.right=new BST(nums[getMiddle(mid+1,temp_rigth)]);
+                stack.push(new dhoni(mid+1,temp_rigth,nodes.right));
+            }
+        }
+        return node;
+    }
+    public static void preOrderBST(BST node, List<Integer> result) {
+        if (node == null) {
+            return;
+        }
+        result.add(node.val);
+        preOrderBST(node.left, result);
+        preOrderBST(node.right, result);
+    }
+    // Populating Next Right Pointers in Each Node
+    static class BST_1{
+        BST_1 left,right,next;
+        int val;
+        public BST_1(BST_1 left,BST_1 right,int val){
+            this.left=left;
+            this.right=right;
+            this.val=val;
+            next=null;
+        }
+    }
+    public static BST_1 popRightPointer(BST_1 node){
+        if(node==null){
+            return null;
+        }
+        Queue<BST_1> queue=new LinkedList<>();
+        queue.offer(node);
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            BST_1 prev=null;
+            for(int i=0;i<size;i++){
+                BST_1 current=queue.poll();
+                if(prev!=null){
+                    prev.next=current;
+                }
+                if(current.left!=null){
+                    queue.offer(current.left);
+                }
+                if(current.right!=null){
+                    queue.offer(current.right);
+                }
+                prev=current;
+            }
+        }
+        return node;
+    }
+    //using recurion
+    public static BST_1 connect(BST_1 node){
+        if(node==null){
+            return null;
+        }
+        connectHelper(node);
+        return node;
+    }
+    public static void connectHelper(BST_1 node){
+        if(node.left==null||node.right==null)
+            return;
+        node.left.next=node.right;
+        if(node.next!=null){
+            node.right.next=node.next.left;
+        }
+        connectHelper(node.left);
+        connectHelper(node.right);
+    }
     public static void main(String[] args) {
+        //test case for contruct BST using sorted array
+        List<Integer> result=new ArrayList<>();
+        BST node=sortedBST(new int[]{-10,-3,0,5,9});
+        preOrderBST(node,result);
+        System.out.println(result);
         //test case for decode way of String
-        System.out.println(decodeWay("123"));
+//        System.out.println(decodeWay("123"));
         //test case for Jump Game
 //        System.out.println(jumGame(new int[]{3,2,1,0,4}));
         //test case for Max SubArray
