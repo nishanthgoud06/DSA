@@ -4954,12 +4954,91 @@ class constructSolution {
         connectHelper(node.left);
         connectHelper(node.right);
     }
+    //problem related to Binary Serach Tree
+    //target sum from root to leaf
+    //using recursion
+    public static boolean taregtBST(BST node,int target){
+        if(node == null){
+            return false;
+        }
+        return targetBSTHelper(node,target);
+    }
+    public static boolean targetBSTHelper(BST node,int target){
+        if(node==null)
+            return false;
+        if(target==node.val&&node.left==null&&node.right==null){
+            return true;
+        }
+        return targetBSTHelper(node.left,target-node.val)||targetBSTHelper(node.right,target-node.val);
+    }
+    //solving the same problem using iteration
+    public static boolean targetBST(BST node,int target){
+        if(node==null)
+            return false;
+        Stack<BST> stack=new Stack<>();
+        Stack<Integer> numbers=new Stack<>();
+        numbers.push(node.val);
+        stack.push(node);
+        while(!stack.isEmpty()){
+            BST temp=stack.pop();
+            int current_val=numbers.pop();
+            if(temp.val==current_val &&temp.left==null&&temp.right==null){
+                return true;
+            }
+            if(temp.left!=null){
+                numbers.push(target-temp.val);
+                stack.push(temp.left);
+            }
+            if(temp.right!=null){
+                numbers.push(target-temp.val);
+                stack.push(temp.right);
+            }
+        }
+        return false;
+    }
+    //Binary Tree Maximum Path Sum
+//    static int tree_max_path_sum=0;
+    public static int maxPathSum(BST node){
+        if(node==null)
+            return 0;
+        int[] result=new int[1];
+        maxPathSumHelper(node,result);
+        return result[0];
+    }
+    public static int maxPathSumHelper(BST node,int[] result){
+        if(node==null){
+            return 0;
+        }
+        int left=Math.max(0,maxPathSumHelper(node.left,result));
+        int right=Math.max(0,maxPathSumHelper(node.right,result));
+        int current=left+right+node.val;
+        result[0]=Math.max(result[0],current);
+        return node.val+Math.max(left,right);
+    }
     public static void main(String[] args) {
+        //test case for max Sum
+        BST test=new BST(-10);
+        test.left=new BST(9);
+        test.right=new BST(20);
+        test.right.left=new BST(15);
+        test.right.right=new BST(7);
+        System.out.println(maxPathSum(test));
+//        //test case for targetSum of Binary Search Tree
+//        BST test=new BST(5);
+//        test.left=new BST(4);
+//        test.left.left=new BST(11);
+//        test.left.left.left=new BST(7);
+//        test.left.left.right=new BST(2);
+//        test.right=new BST(8);
+//        test.right.left=new BST(13);
+//        test.right.right=new BST(4);
+////        System.out.println(taregtBST(test,22));
+//        System.out.println(taregtBST(test,22));
         //test case for contruct BST using sorted array
-        List<Integer> result=new ArrayList<>();
-        BST node=sortedBST(new int[]{-10,-3,0,5,9});
-        preOrderBST(node,result);
-        System.out.println(result);
+//        List<Integer> result=new ArrayList<>();
+//        BST node=sortedBST(new int[]{-10,-3,0,5,9});
+//        preOrderBST(node,result);
+//        System.out.println(result);
         //test case for decode way of String
 //        System.out.println(decodeWay("123"));
         //test case for Jump Game
