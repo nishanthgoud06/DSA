@@ -5040,28 +5040,102 @@ class constructSolution {
             }
         }
     }
-    public static void main(String[] args) {
-        //test case for Falttern HashMap
-        HashMap<String, Object> dict = new HashMap<>();
-        dict.put("Key1", "1");
+    //next permutation
+    public static int[] nextPermutation(int[] nums) {
+        int n = nums.length;
 
-        HashMap<String, Object> nestedDict = new HashMap<>();
-        nestedDict.put("a", "2");
-        nestedDict.put("b", "3");
-
-        HashMap<String, Object> innerDict = new HashMap<>();
-        innerDict.put("d", "3");
-
-        HashMap<String, Object> emptyDict = new HashMap<>();
-        emptyDict.put("", "1");
-
-        innerDict.put("e", emptyDict);
-        nestedDict.put("c", innerDict);
-        dict.put("Key2", nestedDict);
-        HashMap<String, String> flattened = faltHashMap(dict);
-        for (Map.Entry<String, String> entry : flattened.entrySet()) {
-            System.out.println(entry.getKey() + " : " + entry.getValue());
+        // Step 1: Find the first pair of adjacent elements where the left element is smaller than the right element
+        int i = n - 2;
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            i--;
         }
+
+        // Step 2: If no such pair is found, reverse the entire sequence
+        if (i < 0) {
+            reverse(nums, 0, n - 1);
+            return nums;
+        }
+
+        // Step 3: Find the smallest element to the right of index "i" that is larger than the element at index "i"
+        int j = n - 1;
+        while (j > i && nums[j] <= nums[i]) {
+            j--;
+        }
+
+        // Step 4: Swap the elements at indices "i" and "j"
+        swap(nums, i, j);
+
+        // Step 5: Reverse the subsequence starting from index "i+1" to the end of the sequence
+        reverse(nums, i + 1, n - 1);
+    return nums;
+    }
+
+    private static void reverse(int[] nums, int start, int end) {
+        while (start < end) {
+            swapi(nums, start, end);
+            start++;
+            end--;
+        }
+    }
+
+    private static void swapi(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    //all permutation
+    public static List<int[]> combiint(int[] nums){
+        List<int[]> result=new ArrayList<>();
+        if(nums==null||nums.length==0)
+            return result;
+        combiintHelper(nums,0,result);
+        return result;
+    }
+    public static void combiintHelper(int[] nums,int i,List<int[]> result){
+        if(i<nums.length){
+            result.add(Arrays.copyOf(nums, nums.length));
+        }
+        for(int j=i;j<nums.length;j++){
+            swapp(nums,i,j);
+            combiintHelper(nums,i+1,result);
+            swapp(nums,i,j);
+        }
+    }
+    public static void swapp(int[] nums,int i,int j){
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+    public static void main(String[] args) {
+        //test case for all permutations
+        List<int[]> result=combiint(new int[]{1,2,3});
+        for(int[] i:result){
+            System.out.println(Arrays.toString(i));
+        }
+        //test case for next permutation
+//        System.out.println(Arrays.toString(nextPermutation(new int[]{6,2,3,5,4,1,0})));
+//        System.out.println(Arrays.toString(nextPermutation(new int[]{1,2,3})));
+        //test case for Falttern HashMap
+//        HashMap<String, Object> dict = new HashMap<>();
+//        dict.put("Key1", "1");
+//
+//        HashMap<String, Object> nestedDict = new HashMap<>();
+//        nestedDict.put("a", "2");
+//        nestedDict.put("b", "3");
+//
+//        HashMap<String, Object> innerDict = new HashMap<>();
+//        innerDict.put("d", "3");
+//
+//        HashMap<String, Object> emptyDict = new HashMap<>();
+//        emptyDict.put("", "1");
+//
+//        innerDict.put("e", emptyDict);
+//        nestedDict.put("c", innerDict);
+//        dict.put("Key2", nestedDict);
+//        HashMap<String, String> flattened = faltHashMap(dict);
+//        for (Map.Entry<String, String> entry : flattened.entrySet()) {
+//            System.out.println(entry.getKey() + " : " + entry.getValue());
+//        }
         //test case for max Sum
 //        BST test=new BST(-10);
 //        test.left=new BST(9);
