@@ -4954,12 +4954,211 @@ class constructSolution {
         connectHelper(node.left);
         connectHelper(node.right);
     }
+    //problem related to Binary Serach Tree
+    //target sum from root to leaf
+    //using recursion
+    public static boolean taregtBST(BST node,int target){
+        if(node == null){
+            return false;
+        }
+        return targetBSTHelper(node,target);
+    }
+    public static boolean targetBSTHelper(BST node,int target){
+        if(node==null)
+            return false;
+        if(target==node.val&&node.left==null&&node.right==null){
+            return true;
+        }
+        return targetBSTHelper(node.left,target-node.val)||targetBSTHelper(node.right,target-node.val);
+    }
+    //solving the same problem using iteration
+    public static boolean targetBST(BST node,int target){
+        if(node==null)
+            return false;
+        Stack<BST> stack=new Stack<>();
+        Stack<Integer> numbers=new Stack<>();
+        numbers.push(node.val);
+        stack.push(node);
+        while(!stack.isEmpty()){
+            BST temp=stack.pop();
+            int current_val=numbers.pop();
+            if(temp.val==current_val &&temp.left==null&&temp.right==null){
+                return true;
+            }
+            if(temp.left!=null){
+                numbers.push(target-temp.val);
+                stack.push(temp.left);
+            }
+            if(temp.right!=null){
+                numbers.push(target-temp.val);
+                stack.push(temp.right);
+            }
+        }
+        return false;
+    }
+    //Binary Tree Maximum Path Sum
+//    static int tree_max_path_sum=0;
+    public static int maxPathSum(BST node){
+        if(node==null)
+            return 0;
+        int[] result=new int[1];
+        maxPathSumHelper(node,result);
+        return result[0];
+    }
+    public static int maxPathSumHelper(BST node,int[] result){
+        if(node==null){
+            return 0;
+        }
+        int left=Math.max(0,maxPathSumHelper(node.left,result));
+        int right=Math.max(0,maxPathSumHelper(node.right,result));
+        int current=left+right+node.val;
+        result[0]=Math.max(result[0],current);
+        return node.val+Math.max(left,right);
+    }
+    //flatteren HashMap
+    public static HashMap<String,String> faltHashMap(HashMap<String,Object> hashmap){
+        HashMap<String,String>result=new HashMap<>();
+        if(hashmap==null||hashmap.size()==0){
+            return result;
+        }
+        flatHashMapHelper("",hashmap,result);
+        return result;
+    }
+    public static void flatHashMapHelper(String prefix,HashMap<String,Object> hashmap,HashMap<String,String> result){
+        for(Map.Entry<String,Object> entry:hashmap.entrySet()){
+            String key=entry.getKey();
+            Object value=entry.getValue();
+            if(value instanceof String){
+                String current=prefix.isEmpty()?key:(prefix+"."+key);
+                result.put(current,(String)value);
+            } else if (value instanceof Object) {
+                if(prefix.isEmpty()){
+                    flatHashMapHelper(key,(HashMap<String, Object>) value,result);
+                }else{
+                    flatHashMapHelper(prefix+"."+key,(HashMap<String, Object>) value,result);
+                }
+            }
+        }
+    }
+    //next permutation
+    public static int[] nextPermutation(int[] nums) {
+        int n = nums.length;
+
+        // Step 1: Find the first pair of adjacent elements where the left element is smaller than the right element
+        int i = n - 2;
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            i--;
+        }
+
+        // Step 2: If no such pair is found, reverse the entire sequence
+        if (i < 0) {
+            reverse(nums, 0, n - 1);
+            return nums;
+        }
+
+        // Step 3: Find the smallest element to the right of index "i" that is larger than the element at index "i"
+        int j = n - 1;
+        while (j > i && nums[j] <= nums[i]) {
+            j--;
+        }
+
+        // Step 4: Swap the elements at indices "i" and "j"
+        swap(nums, i, j);
+
+        // Step 5: Reverse the subsequence starting from index "i+1" to the end of the sequence
+        reverse(nums, i + 1, n - 1);
+    return nums;
+    }
+
+    private static void reverse(int[] nums, int start, int end) {
+        while (start < end) {
+            swapi(nums, start, end);
+            start++;
+            end--;
+        }
+    }
+
+    private static void swapi(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+    //all permutation
+    public static List<int[]> combiint(int[] nums){
+        List<int[]> result=new ArrayList<>();
+        if(nums==null||nums.length==0)
+            return result;
+        combiintHelper(nums,0,result);
+        return result;
+    }
+    public static void combiintHelper(int[] nums,int i,List<int[]> result){
+        if(i<nums.length){
+            result.add(Arrays.copyOf(nums, nums.length));
+        }
+        for(int j=i;j<nums.length;j++){
+            swapp(nums,i,j);
+            combiintHelper(nums,i+1,result);
+            swapp(nums,i,j);
+        }
+    }
+    public static void swapp(int[] nums,int i,int j){
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
     public static void main(String[] args) {
+        //test case for all permutations
+        List<int[]> result=combiint(new int[]{1,2,3});
+        for(int[] i:result){
+            System.out.println(Arrays.toString(i));
+        }
+        //test case for next permutation
+//        System.out.println(Arrays.toString(nextPermutation(new int[]{6,2,3,5,4,1,0})));
+//        System.out.println(Arrays.toString(nextPermutation(new int[]{1,2,3})));
+        //test case for Falttern HashMap
+//        HashMap<String, Object> dict = new HashMap<>();
+//        dict.put("Key1", "1");
+//
+//        HashMap<String, Object> nestedDict = new HashMap<>();
+//        nestedDict.put("a", "2");
+//        nestedDict.put("b", "3");
+//
+//        HashMap<String, Object> innerDict = new HashMap<>();
+//        innerDict.put("d", "3");
+//
+//        HashMap<String, Object> emptyDict = new HashMap<>();
+//        emptyDict.put("", "1");
+//
+//        innerDict.put("e", emptyDict);
+//        nestedDict.put("c", innerDict);
+//        dict.put("Key2", nestedDict);
+//        HashMap<String, String> flattened = faltHashMap(dict);
+//        for (Map.Entry<String, String> entry : flattened.entrySet()) {
+//            System.out.println(entry.getKey() + " : " + entry.getValue());
+//        }
+        //test case for max Sum
+//        BST test=new BST(-10);
+//        test.left=new BST(9);
+//        test.right=new BST(20);
+//        test.right.left=new BST(15);
+//        test.right.right=new BST(7);
+//        System.out.println(maxPathSum(test));
+//        //test case for targetSum of Binary Search Tree
+//        BST test=new BST(5);
+//        test.left=new BST(4);
+//        test.left.left=new BST(11);
+//        test.left.left.left=new BST(7);
+//        test.left.left.right=new BST(2);
+//        test.right=new BST(8);
+//        test.right.left=new BST(13);
+//        test.right.right=new BST(4);
+////        System.out.println(taregtBST(test,22));
+//        System.out.println(taregtBST(test,22));
         //test case for contruct BST using sorted array
-        List<Integer> result=new ArrayList<>();
-        BST node=sortedBST(new int[]{-10,-3,0,5,9});
-        preOrderBST(node,result);
-        System.out.println(result);
+//        List<Integer> result=new ArrayList<>();
+//        BST node=sortedBST(new int[]{-10,-3,0,5,9});
+//        preOrderBST(node,result);
+//        System.out.println(result);
         //test case for decode way of String
 //        System.out.println(decodeWay("123"));
         //test case for Jump Game
