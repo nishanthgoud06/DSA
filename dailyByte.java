@@ -5015,14 +5015,60 @@ class constructSolution {
         result[0]=Math.max(result[0],current);
         return node.val+Math.max(left,right);
     }
+    //flatteren HashMap
+    public static HashMap<String,String> faltHashMap(HashMap<String,Object> hashmap){
+        HashMap<String,String>result=new HashMap<>();
+        if(hashmap==null||hashmap.size()==0){
+            return result;
+        }
+        flatHashMapHelper("",hashmap,result);
+        return result;
+    }
+    public static void flatHashMapHelper(String prefix,HashMap<String,Object> hashmap,HashMap<String,String> result){
+        for(Map.Entry<String,Object> entry:hashmap.entrySet()){
+            String key=entry.getKey();
+            Object value=entry.getValue();
+            if(value instanceof String){
+                String current=prefix.isEmpty()?key:(prefix+"."+key);
+                result.put(current,(String)value);
+            } else if (value instanceof Object) {
+                if(prefix.isEmpty()){
+                    flatHashMapHelper(key,(HashMap<String, Object>) value,result);
+                }else{
+                    flatHashMapHelper(prefix+"."+key,(HashMap<String, Object>) value,result);
+                }
+            }
+        }
+    }
     public static void main(String[] args) {
+        //test case for Falttern HashMap
+        HashMap<String, Object> dict = new HashMap<>();
+        dict.put("Key1", "1");
+
+        HashMap<String, Object> nestedDict = new HashMap<>();
+        nestedDict.put("a", "2");
+        nestedDict.put("b", "3");
+
+        HashMap<String, Object> innerDict = new HashMap<>();
+        innerDict.put("d", "3");
+
+        HashMap<String, Object> emptyDict = new HashMap<>();
+        emptyDict.put("", "1");
+
+        innerDict.put("e", emptyDict);
+        nestedDict.put("c", innerDict);
+        dict.put("Key2", nestedDict);
+        HashMap<String, String> flattened = faltHashMap(dict);
+        for (Map.Entry<String, String> entry : flattened.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
         //test case for max Sum
-        BST test=new BST(-10);
-        test.left=new BST(9);
-        test.right=new BST(20);
-        test.right.left=new BST(15);
-        test.right.right=new BST(7);
-        System.out.println(maxPathSum(test));
+//        BST test=new BST(-10);
+//        test.left=new BST(9);
+//        test.right=new BST(20);
+//        test.right.left=new BST(15);
+//        test.right.right=new BST(7);
+//        System.out.println(maxPathSum(test));
 //        //test case for targetSum of Binary Search Tree
 //        BST test=new BST(5);
 //        test.left=new BST(4);
