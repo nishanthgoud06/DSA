@@ -1,3 +1,4 @@
+import java.sql.Array;
 import java.util.*;
 
 public class dailyByte {
@@ -5226,19 +5227,70 @@ class constructSolution {
         }
         return result.next;
     }
-    public static void main(String[] args) {
-        //test cae for List array
-        ListNode one=new ListNode(1);
-        one.next=new ListNode(4);
-        one.next.next=new ListNode(5);
-        ListNode two=new ListNode(1);
-        two.next=new ListNode(3);
-        two.next.next=new ListNode(4);
-        ListNode three=new ListNode(2);
-        three.next=new ListNode(6);
-        ListNode[] arr={one,two,three};
+    //dedetcing whether a cycle is present in the undireted graph or not
+    //if present we nned to print all the cycles in the graph
+    static class graph {
+        static int num;
+        static List<List<Integer>> vertices;
 
-        printit(mergeListArray(arr));
+        public graph(int num) {
+            vertices = new ArrayList<>(num);
+            this.num = num;
+            for (int i = 0; i < num; i++) {
+                vertices.add(new ArrayList<>());
+            }
+        }
+
+        public void addedge(int i, int j) {
+            vertices.get(i).add(j);
+            vertices.get(j).add(i);
+        }
+
+        public static void hasCycle(int current, boolean[] visited,List<List<Integer>> temp, List<Integer> result) {
+            visited[current] = true;
+            result.add(current);
+            for (int i : vertices.get(current)) {
+                if (!visited[i]) {
+                    hasCycle(i, visited, temp, result);
+                } else if (result.size()>2 &&i==result.get(0)) {
+                    temp.add(new ArrayList<>(result));
+                }
+            }
+        }
+            public static List<List<Integer>> findCycle () {
+                List<List<Integer>> result = new ArrayList<>();
+                boolean[] visited = new boolean[num];
+                for (int i = 0; i < num; i++) {
+                    List<Integer> temp = new ArrayList<>();
+                        hasCycle(i,visited,result,temp);
+                }
+                return result;
+            }
+        }
+
+    public static void main(String[] args) {
+        //test case for finding a cycle is present or not
+        graph test=new graph(6);
+        test.addedge(0,1);
+        test.addedge(0,2);
+        test.addedge(1,2);
+        test.addedge(2,3);
+        test.addedge(3,4);
+        test.addedge(3,5);
+        test.addedge(4,5);
+        System.out.println(test.findCycle());
+        //test cae for List array
+//        ListNode one=new ListNode(1);
+//        one.next=new ListNode(4);
+//        one.next.next=new ListNode(5);
+//        ListNode two=new ListNode(1);
+//        two.next=new ListNode(3);
+//        two.next.next=new ListNode(4);
+//        ListNode three=new ListNode(2);
+//        three.next=new ListNode(6);
+//        ListNode[] arr={one,two,three};
+//
+//        printit(mergeListArray(arr));
 //        int[][] test={{1,4,5},{1,3,4},{2,6}};
 //        System.out.println(Arrays.toString(mergearr2(test)));
         //test case for all permutations
