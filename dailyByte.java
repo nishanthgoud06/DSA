@@ -1,3 +1,4 @@
+import java.sql.Array;
 import java.util.*;
 
 public class dailyByte {
@@ -2912,6 +2913,7 @@ public static boolean wordBreak(String s, List<String> dict) {
             this.val=val;
             this.next=node;
         }
+        public ListNode(){}
     }
     public static ListNode ListSum(ListNode list1,ListNode list2){
         ListNode result=new ListNode(0);
@@ -5106,12 +5108,196 @@ class constructSolution {
         nums[i]=nums[j];
         nums[j]=temp;
     }
-    public static void main(String[] args) {
-        //test case for all permutations
-        List<int[]> result=combiint(new int[]{1,2,3});
-        for(int[] i:result){
-            System.out.println(Arrays.toString(i));
+    //different ways of merging mutiple array into single array
+    //approch -1
+    public static int[] mergearr1(int[][] nums){
+        if(nums==null||nums.length==0)
+            return new int[0];
+        PriorityQueue<Integer> pq=new PriorityQueue<>((a,b)->a-b);
+        for(int i=0;i<nums.length;i++){
+            for(int j=0;j<nums[i].length;j++){
+                pq.add(nums[i][j]);
+            }
         }
+        return pq.stream().mapToInt(Integer::intValue).toArray();
+    }
+    //approch-2
+    public static int[] mergearr2(int[][] nums){
+        if(nums==null||nums.length==0){
+            return new int[0];
+        }
+        return mergearr2Helper(nums,0,nums.length-1);
+    }
+    public static int[] mergearr2Helper(int[][] nums,int low,int high){
+        if(low==high){
+            return nums[low];
+        }
+        int mid=low+(high-low)/2;
+        int[] left=mergearr2Helper(nums,low,mid);
+        int[] right=mergearr2Helper(nums,mid+1,high);
+        return mergeit(left,right);
+    }
+    public static int[] mergeit(int[] left,int[] right){
+        int[] result=new int[left.length+right.length];
+        int i=0,j=0,k=0;
+        while(i<left.length&&j<right.length){
+            if(left[i]<=right[j]){
+                result[k]=left[i];
+                k++;
+                i++;
+            }else if(right[j]<left[i]){
+                result[k]=right[j];
+                j++;
+                k++;
+            }
+        }
+        while(i<left.length){
+            result[k++]=left[i];
+            i=i+1;
+        }
+        while(j<right.length){
+            result[k++]=right[j];
+            j=j+1;
+        }
+        return result;
+    }
+    //di the same for ListNode type
+    public static ListNode mergeList(ListNode[] listNodes){
+        if(listNodes==null||listNodes.length==0)
+            return new ListNode();
+        PriorityQueue<ListNode> pq=new PriorityQueue<>((a,b)->a.val-b.val);
+        for(ListNode i:listNodes){
+            pq.offer(i);
+        }
+        ListNode result=new ListNode(0);
+        ListNode current=result;
+        while(!pq.isEmpty()){
+            ListNode temp=pq.poll();
+            current.next=temp;
+            current=current.next;
+            if(temp.next!=null){
+                pq.offer(temp.next);
+            }
+        }
+        return result.next;
+    }
+    public static void printit(ListNode list){
+        while(list!=null){
+            System.out.println(list.val);
+            list=list.next;
+        }
+    }
+    //approch two
+    public static ListNode mergeListArray(ListNode[] list){
+        if(list==null||list.length==0){
+            return new ListNode();
+        }
+        return mergeListArrayhelper(list,0,list.length-1);
+    }
+    public static ListNode mergeListArrayhelper(ListNode[] list,int low,int high){
+        if(low==high)
+            return list[low];
+        int mid=low+(high-low)/2;
+        ListNode left=mergeListArrayhelper(list,low,mid);
+        ListNode right=mergeListArrayhelper(list,mid+1,high);
+        return mergeLists(left,right);
+    }
+    public static ListNode mergeLists(ListNode left,ListNode right){
+        ListNode result=new ListNode(0);
+        ListNode dummy=result;
+        while(left!=null&&right!=null){
+            if(left.val<= right.val){
+                dummy.next=left;
+                left=left.next;
+            }else{
+                dummy.next=right;
+                right=right.next;
+            }
+            dummy=dummy.next;
+        }
+        while(left!=null){
+            dummy.next=left;
+            dummy=dummy.next;
+            left=left.next;
+        }
+        while(right!=null){
+            dummy.next=right;
+            dummy=dummy.next;
+            right=right.next;
+        }
+        return result.next;
+    }
+    //dedetcing whether a cycle is present in the undireted graph or not
+    //if present we nned to print all the cycles in the graph
+    static class graph {
+        static int num;
+        static List<List<Integer>> vertices;
+
+        public graph(int num) {
+            vertices = new ArrayList<>(num);
+            this.num = num;
+            for (int i = 0; i < num; i++) {
+                vertices.add(new ArrayList<>());
+            }
+        }
+
+        public void addedge(int i, int j) {
+            vertices.get(i).add(j);
+            vertices.get(j).add(i);
+        }
+
+        public static void hasCycle(int current, boolean[] visited,List<List<Integer>> temp, List<Integer> result) {
+            visited[current] = true;
+            result.add(current);
+            for (int i : vertices.get(current)) {
+                if (!visited[i]) {
+                    hasCycle(i, visited, temp, result);
+                } else if (result.size()>2 &&i==result.get(0)) {
+                    temp.add(new ArrayList<>(result));
+                }
+            }
+        }
+            public static List<List<Integer>> findCycle () {
+                List<List<Integer>> result = new ArrayList<>();
+                boolean[] visited = new boolean[num];
+                for (int i = 0; i < num; i++) {
+                    List<Integer> temp = new ArrayList<>();
+                        hasCycle(i,visited,result,temp);
+                }
+                return result;
+            }
+        }
+
+    public static void main(String[] args) {
+        //test case for finding a cycle is present or not
+        graph test=new graph(6);
+        test.addedge(0,1);
+        test.addedge(0,2);
+        test.addedge(1,2);
+        test.addedge(2,3);
+        test.addedge(3,4);
+        test.addedge(3,5);
+        test.addedge(4,5);
+        System.out.println(test.findCycle());
+        //test cae for List array
+//        ListNode one=new ListNode(1);
+//        one.next=new ListNode(4);
+//        one.next.next=new ListNode(5);
+//        ListNode two=new ListNode(1);
+//        two.next=new ListNode(3);
+//        two.next.next=new ListNode(4);
+//        ListNode three=new ListNode(2);
+//        three.next=new ListNode(6);
+//        ListNode[] arr={one,two,three};
+//
+//        printit(mergeListArray(arr));
+//        int[][] test={{1,4,5},{1,3,4},{2,6}};
+//        System.out.println(Arrays.toString(mergearr2(test)));
+        //test case for all permutations
+//        List<int[]> result=combiint(new int[]{1,2,3});
+//        for(int[] i:result){
+//            System.out.println(Arrays.toString(i));
+//        }
         //test case for next permutation
 //        System.out.println(Arrays.toString(nextPermutation(new int[]{6,2,3,5,4,1,0})));
 //        System.out.println(Arrays.toString(nextPermutation(new int[]{1,2,3})));
