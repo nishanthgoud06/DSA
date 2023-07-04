@@ -5267,6 +5267,27 @@ class constructSolution {
                 return result;
             }
         }
+    public static int hIndex(int[] citations) {
+        // Step 1: Sort the citations array in non-increasing order
+        Arrays.sort(citations);
+
+        int n = citations.length;
+        int h = 0;
+
+        // Step 2: Traverse the sorted array to find the h-index
+        for (int i = n - 1; i >= 0; i--) {
+            int papersWithAtLeastHCitations = n - i;
+            if (citations[i] >= papersWithAtLeastHCitations) {
+                h = Math.max(h, papersWithAtLeastHCitations);
+            } else {
+                // No need to check further, as the remaining papers have even fewer citations
+                break;
+            }
+        }
+
+        // Step 3: Return the maximum value of h as the h-index
+        return h;
+    }
 
     public static void main(String[] args) {
         //test case for finding a cycle is present or not
