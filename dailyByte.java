@@ -5347,9 +5347,37 @@ class constructSolution {
         }
         return result;
     }
+    //Trapping Rain Water
+    public static int trapRain(int[] nums){
+        if(nums==null||nums.length==0)
+            return 0;
+        int result=0;
+        for(int i=1;i<nums.length-1;i++){
+            int total=0;
+            int left=i-1;
+            int left_Max=0;
+            int right=i+1;
+            int right_Max=0;
+            while(left>=0){
+                left_Max=Math.max(left_Max,nums[left]);
+                left=left-1;
+            }
+            while(right<=nums.length-1){
+                right_Max=Math.max(right_Max,nums[right]);
+                right=right+1;
+            }
+            total=Math.min(left_Max,right_Max);
+            if(total>nums[i]){
+                result+=total-nums[i];
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for Trapping Rain Water
+        System.out.println(trapRain(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
         //test case for Product of Array Except Self
-        System.out.println(Arrays.toString(productArray(new int[]{-1,1,0,-3,3})));
+//        System.out.println(Arrays.toString(productArray(new int[]{-1,1,0,-3,3})));
         //test case for finding a cycle is present or not
 //        graph test=new graph(6);
 //        test.addedge(0,1);
