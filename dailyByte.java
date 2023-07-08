@@ -5288,18 +5288,106 @@ class constructSolution {
         // Step 3: Return the maximum value of h as the h-index
         return h;
     }
-
+    //Product of Array Except Self
+    public static int[] productArray(int[] nums){
+        if(nums==null|| nums.length==0)
+            return new int[0];
+        int[] result=new int[nums.length];
+        int left=1,right=1;
+        for(int i=0;i<nums.length;i++){
+            result[i]=left;
+            left=left*nums[i];
+        }
+        for(int j=nums.length-1;j>=0;j--){
+            result[j]=result[j]*right;
+            right=right*nums[j];
+        }
+        return result;
+    }
+    //Gas Station
+    public static int gasStation(int[] gas,int[] cost){
+        if(gas.length!=cost.length)
+            return -1;
+        int total=0;
+        int total_gas=0;
+        int total_cost=0;
+        int start=0;
+        for(int i=0;i<gas.length;i++){
+            total=total+gas[i]-cost[i];
+            total_gas+=gas[i];
+            total_cost+=cost[i];
+            if(total<0){
+                total=0;
+                start=i+1;
+            }
+        }
+        if(total_gas<total_cost)
+            return -1;
+        return start;
+    }
+//    Candy
+    public static int candy(int[] nums){
+        if(nums==null||nums.length==0)
+            return 0;
+        int[] dp=new int[nums.length];
+        Arrays.fill(dp,1);
+        for(int i=1;i<nums.length;i++){
+            if(nums[i]>nums[i-1]){
+                dp[i]=dp[i-1]+1;
+            }
+        }
+        for(int i=nums.length-2;i>0;i++){
+            if(nums[i]>nums[i+1]){
+                dp[i]=Math.max(dp[i],dp[i+1]+1);
+            }
+        }
+        int result=0;
+        for(int i:dp){
+            result+=i;
+        }
+        return result;
+    }
+    //Trapping Rain Water
+    public static int trapRain(int[] nums){
+        if(nums==null||nums.length==0)
+            return 0;
+        int result=0;
+        for(int i=1;i<nums.length-1;i++){
+            int total=0;
+            int left=i-1;
+            int left_Max=0;
+            int right=i+1;
+            int right_Max=0;
+            while(left>=0){
+                left_Max=Math.max(left_Max,nums[left]);
+                left=left-1;
+            }
+            while(right<=nums.length-1){
+                right_Max=Math.max(right_Max,nums[right]);
+                right=right+1;
+            }
+            total=Math.min(left_Max,right_Max);
+            if(total>nums[i]){
+                result+=total-nums[i];
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for Trapping Rain Water
+        System.out.println(trapRain(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+        //test case for Product of Array Except Self
+//        System.out.println(Arrays.toString(productArray(new int[]{-1,1,0,-3,3})));
         //test case for finding a cycle is present or not
-        graph test=new graph(6);
-        test.addedge(0,1);
-        test.addedge(0,2);
-        test.addedge(1,2);
-        test.addedge(2,3);
-        test.addedge(3,4);
-        test.addedge(3,5);
-        test.addedge(4,5);
-        System.out.println(test.findCycle());
+//        graph test=new graph(6);
+//        test.addedge(0,1);
+//        test.addedge(0,2);
+//        test.addedge(1,2);
+//        test.addedge(2,3);
+//        test.addedge(3,4);
+//        test.addedge(3,5);
+//        test.addedge(4,5);
+//        System.out.println(test.findCycle());
         //test cae for List array
 //        ListNode one=new ListNode(1);
 //        one.next=new ListNode(4);
