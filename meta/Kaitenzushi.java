@@ -1,6 +1,6 @@
 package meta;
 
-import java.util.HashSet;
+import java.util.*;
 
 public class Kaitenzushi {
     public int getMaximumEatenDishCount(int N, int[] D, int K) {
