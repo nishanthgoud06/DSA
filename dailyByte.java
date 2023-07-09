@@ -5373,9 +5373,27 @@ class constructSolution {
         }
         return result;
     }
+//    Least Number of Unique Integers after K Removals
+    public static int uniqueInt(int[] nums,int remove){
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i:nums){
+            hashmap.put(i,hashmap.getOrDefault(i,0)+1);
+        }
+        List<Integer> result=new ArrayList<>(hashmap.values());
+        Collections.sort(result);
+        int i=0;
+        while(remove>=result.get(i)){
+            remove=remove-result.get(i++);
+            if(i==result.size())
+                break;
+        }
+        return result.size()-i;
+    }
     public static void main(String[] args) {
+        //test case for Least Number of Unique Integers after K Removals
+        System.out.println(uniqueInt(new int[]{4,3,1,1,3,3,2},3));
         //test case for Trapping Rain Water
-        System.out.println(trapRain(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+//        System.out.println(trapRain(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
         //test case for Product of Array Except Self
 //        System.out.println(Arrays.toString(productArray(new int[]{-1,1,0,-3,3})));
         //test case for finding a cycle is present or not
