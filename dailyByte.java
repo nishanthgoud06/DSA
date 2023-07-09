@@ -5373,9 +5373,73 @@ class constructSolution {
         }
         return result;
     }
+//    Least Number of Unique Integers after K Removals
+    public static int uniqueInt(int[] nums,int remove){
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i:nums){
+            hashmap.put(i,hashmap.getOrDefault(i,0)+1);
+        }
+        List<Integer> result=new ArrayList<>(hashmap.values());
+        Collections.sort(result);
+        int i=0;
+        while(remove>=result.get(i)){
+            remove=remove-result.get(i++);
+            if(i==result.size())
+                break;
+        }
+        return result.size()-i;
+    }
+    //Reverse Words in a String
+    public static String reverseWords(String s) {
+        if(s==null || s.length()==0)
+            return s;
+        String result="";
+        String[] arr=s.trim().split("\\s+");
+        System.out.println(arr.length);
+        for(int i=arr.length-1;i>=0;i--){
+            if(i==0){
+                result+=arr[i];
+            }else{
+                result+=arr[i]+" ";
+            }
+        }
+        return result;
+    }
+    //Zigzag Conversion
+    public static String zigZag(String s,int steps){
+        if(s==null||s.length()==0||steps==0){
+            return s;
+        }
+        StringBuilder[] step=new StringBuilder[steps];
+        for(int i=0;i<steps;i++){
+            step[i]=new StringBuilder();
+        }
+        char[] c=s.toCharArray();
+        int index=0;
+        int length=c.length;
+        while(index<length){
+            for(int i=0;i<steps && index<length;i++){
+                step[i].append(c[index++]);
+            }
+            for(int i=steps-2;i>0 && index<length;i--){
+                step[i].append(c[index++]);
+            }
+        }
+        StringBuilder result=new StringBuilder();
+        for(int i=0;i<steps;i++){
+            result.append(step[i]);
+        }
+        return result.toString();
+    }
     public static void main(String[] args) {
+        //test case for zigzag
+        System.out.println(zigZag("PAYPALISHIRING",4).equals("PINALSIGYAHRPI"));
+        //test case for
+//        System.out.println(reverseWords("a good   example"));
+        //test case for Least Number of Unique Integers after K Removals
+//        System.out.println(uniqueInt(new int[]{4,3,1,1,3,3,2},3));
         //test case for Trapping Rain Water
-        System.out.println(trapRain(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
+//        System.out.println(trapRain(new int[]{0,1,0,2,1,0,1,3,2,1,2,1}));
         //test case for Product of Array Except Self
 //        System.out.println(Arrays.toString(productArray(new int[]{-1,1,0,-3,3})));
         //test case for finding a cycle is present or not
