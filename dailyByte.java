@@ -5431,9 +5431,39 @@ class constructSolution {
         }
         return result.toString();
     }
+    //Substring with Concatenation of All Words
+    public static List<Integer> subStringConcat(String target,String[] words){
+        List<Integer> result=new ArrayList<>();
+        if(target==null||target.length()==0||words==null || words.length==0)
+            return result;
+        HashMap<String,Integer> hashmap=new HashMap<>();
+        for(String w:words){
+            hashmap.put(w,hashmap.getOrDefault(w,0)+1);
+        }
+        int wordLength=words[0].length();
+        int wordSize=words.length;
+        int totalSize=wordLength*wordSize;
+        for(int i=0;i<target.length()-totalSize;i++){
+            HashMap<String,Integer> current=new HashMap<>();
+            int j=0;
+            while(j<totalSize){
+                String word=target.substring(i+j,i+j+wordLength);
+                if(!hashmap.containsKey(word) || current.getOrDefault(word,0)>=hashmap.get(word)){
+                    break;
+                }
+                current.put(word,current.getOrDefault(word,0)+1);
+            }
+            if(j==totalSize){
+                result.add(i);
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for Substring with Concatenation of All Words
+        System.out.println(subStringConcat("barfoothefoobarman",new String[]{"foo","bar"}));
         //test case for zigzag
-        System.out.println(zigZag("PAYPALISHIRING",4).equals("PINALSIGYAHRPI"));
+//        System.out.println(zigZag("PAYPALISHIRING",4).equals("PINALSIGYAHRPI"));
         //test case for
 //        System.out.println(reverseWords("a good   example"));
         //test case for Least Number of Unique Integers after K Removals
