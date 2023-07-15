@@ -5459,9 +5459,57 @@ class constructSolution {
         }
         return result;
     }
+    // Minimum Number of Arrows to Burst Balloons
+    public static int burstBallon(int[][] points){
+        if(points==null||points.length==0)
+            return 0;
+        int arrow=1;
+        int currentMax=points[0][1];
+        for(int i=1;i<points.length;i++){
+            if(points[i][0]>currentMax){
+                arrow++;
+                currentMax=points[i][1];
+            }
+        }
+        return arrow;
+    }
+    //Split Array into Consecutive Subsequences
+    public boolean isPossible(int[] nums) {
+        Map<Integer, Integer> existingSequences = new HashMap<>();
+        Map<Integer, Integer> createNewSequence = new HashMap<>();
+
+        for (int i : nums) {
+            createNewSequence.put(i, createNewSequence.getOrDefault(i, 0) + 1);
+        }
+
+        for (int i : nums) {
+            if (createNewSequence.get(i) == 0) {
+                continue;
+            }
+
+            if (existingSequences.getOrDefault(i, 0) > 0) {
+                existingSequences.put(i, existingSequences.get(i) - 1);
+                existingSequences.put(i + 1, existingSequences.getOrDefault(i + 1, 0) + 1);
+                createNewSequence.put(i, createNewSequence.get(i) - 1);
+            } else if (createNewSequence.getOrDefault(i, 0) > 0 &&
+                    createNewSequence.getOrDefault(i + 1, 0) > 0 &&
+                    createNewSequence.getOrDefault(i + 2, 0) > 0) {
+                createNewSequence.put(i, createNewSequence.get(i) - 1);
+                createNewSequence.put(i + 1, createNewSequence.get(i + 1) - 1);
+                createNewSequence.put(i + 2, createNewSequence.get(i + 2) - 1);
+                existingSequences.put(i + 3, existingSequences.getOrDefault(i + 3, 0) + 1);
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
     public static void main(String[] args) {
+        //test case for  Minimum Number of Arrows to Burst Balloons
+        System.out.println(burstBallon(new int[][]{{1,2},{2,3},{3,4},{4,5}}));
         //test case for Substring with Concatenation of All Words
-        System.out.println(subStringConcat("barfoothefoobarman",new String[]{"foo","bar"}));
+//        System.out.println(subStringConcat("barfoothefoobarman",new String[]{"foo","bar"}));
         //test case for zigzag
 //        System.out.println(zigZag("PAYPALISHIRING",4).equals("PINALSIGYAHRPI"));
         //test case for
