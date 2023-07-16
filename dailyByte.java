@@ -5505,6 +5505,58 @@ class constructSolution {
 
         return true;
     }
+//    Simplify Path
+    public String simplifyPath(String path) {
+        path=path.trim();
+        String[] str=path.split("/");
+        Deque<String> result = new ArrayDeque<>();
+        for(String s:str){
+            if(s.equals("")||s.equals("."))
+                continue;
+            if(s.equals("..")){
+                if(!result.isEmpty()){
+                    result.removeLast();
+                }
+            }else{
+                result.add(s);
+            }
+        }
+        if(result.isEmpty()){
+            return "/";
+        }
+        StringBuilder sb=new StringBuilder();
+        while(!result.isEmpty()){
+            sb.append("/");
+            sb.append(result.removeFirst());
+        }
+        return sb.toString();
+    }
+    //150. Evaluate Reverse Polish Notation
+    public static int evalRPN(String[] tokens) {
+        Stack<Integer> stack=new Stack<>();
+        for(String str:tokens){
+            if(str.equals("+")){
+                int val1=stack.pop();
+                int val2=stack.pop();
+                stack.push(val2+val1);
+            }else if(str.equals("-")){
+                int val1=stack.pop();
+                int val2=stack.pop();
+                stack.push(val2-val1);
+            }else if(str.equals("/")){
+                int val1=stack.pop();
+                int val2=stack.pop();
+                stack.push(val2/val1);
+            }else if(str.equals("*")){
+                int val1=stack.pop();
+                int val2=stack.pop();
+                stack.push(val1*val2);
+            }else{
+                stack.push(Integer.parseInt(str));
+            }
+        }
+        return stack.peek();
+    }
     public static void main(String[] args) {
         //test case for  Minimum Number of Arrows to Burst Balloons
         System.out.println(burstBallon(new int[][]{{1,2},{2,3},{3,4},{4,5}}));
