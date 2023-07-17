@@ -5557,9 +5557,13 @@ class constructSolution {
         }
         return stack.peek();
     }
+    //leetcode hard basic calculator
     public static void main(String[] args) {
+        //test case for basic Calculator
+        calci test=new calci("(1+(4+5+2)-3)+(6+8)");
+        System.out.println(test.getResult());
         //test case for  Minimum Number of Arrows to Burst Balloons
-        System.out.println(burstBallon(new int[][]{{1,2},{2,3},{3,4},{4,5}}));
+//        System.out.println(burstBallon(new int[][]{{1,2},{2,3},{3,4},{4,5}}));
         //test case for Substring with Concatenation of All Words
 //        System.out.println(subStringConcat("barfoothefoobarman",new String[]{"foo","bar"}));
         //test case for zigzag
