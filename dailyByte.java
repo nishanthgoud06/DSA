@@ -5557,11 +5557,58 @@ class constructSolution {
         }
         return stack.peek();
     }
+    public static ListNode reverseKGroup(ListNode head, int k) {
+        if(head==null || k==0 ||k==1)
+            return head;
+        Stack<ListNode> stack=new Stack<>();
+        ListNode result=new ListNode(0);
+        result.next=head;
+        ListNode dummy=result;
+        ListNode current=head;
+        int count=0;
+        while(current!=null){
+            count++;
+            stack.push(current);
+            current=current.next;
+            if(count==k){
+                while(!stack.isEmpty()){
+                    dummy.next=stack.pop();
+                    dummy=dummy.next;
+                }
+                dummy.next=current;
+                count=0;
+            }
+        }
+        if(count<k){
+            Stack<ListNode> stack1=new Stack<>();
+            while(!stack.isEmpty()){
+                stack1.push(stack.pop());
+            }
+            while(!stack1.isEmpty()){
+                dummy.next=stack1.pop();
+                dummy=dummy.next;
+            }
+        }
+        return result.next;
+    }
+    public static void printList(ListNode list){
+        while(list!=null){
+            System.out.println(list.val);
+            list=list.next;
+        }
+    }
     //leetcode hard basic calculator
     public static void main(String[] args) {
+        //test case for  Reverse Nodes in k-Group
+        ListNode test=new ListNode(1);
+        test.next=new ListNode(2);
+        test.next.next=new ListNode(3);
+        test.next.next.next=new ListNode(4);
+        test.next.next.next.next=new ListNode(5);
+        printList(reverseKGroup(test,2));
         //test case for basic Calculator
-        calci test=new calci("(1+(4+5+2)-3)+(6+8)");
-        System.out.println(test.getResult());
+//        calci test=new calci("(1+(4+5+2)-3)+(6+8)");
+//        System.out.println(test.getResult());
         //test case for  Minimum Number of Arrows to Burst Balloons
 //        System.out.println(burstBallon(new int[][]{{1,2},{2,3},{3,4},{4,5}}));
         //test case for Substring with Concatenation of All Words
