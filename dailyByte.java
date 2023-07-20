@@ -5597,15 +5597,85 @@ class constructSolution {
             list=list.next;
         }
     }
+    //above problem with better time complexcity
+    public static ListNode reverseListNode(ListNode head,int k){
+        if(head==null || k==0)
+            return head;
+        ListNode result=new ListNode();
+        result.next=head;
+        ListNode dummy=result;
+        int count=0;
+        while(dummy.next!=null){
+            count++;
+            dummy=dummy.next;
+        }
+        dummy=result;
+        while (dummy!=null){
+            if(count<k){
+                break;
+            }
+            int val=k-1;
+            ListNode next=dummy.next;
+            ListNode first=dummy.next;
+            ListNode second=first.next;
+            while(val-->0){
+                ListNode temp=second.next;
+                second.next=first;
+                first=second;
+                second=temp;
+            }
+            count-=k;
+            dummy.next=first;
+            next.next=second;
+            dummy=next;
+        }
+        return result.next;
+    }
+    //61. Rotate List
+    public static ListNode rotateList(ListNode node,int k){
+        if(node==null || k==0)
+            return node;
+        int count=0;
+        ListNode temp=node;
+        while(temp!=null){
+            count++;
+            temp=temp.next;
+        }
+        ListNode fast=node;
+        ListNode slow=node;
+        k=k%count;
+        if(k==0)
+            return node;
+        for(int i=0;i<k;i++){
+            fast=fast.next;
+        }
+        while(fast.next!=null){
+            fast=fast.next;
+            slow=slow.next;
+        }
+        ListNode newNode=slow.next;
+        slow.next=null;
+        fast.next=node;
+        return newNode;
+    }
+    //L
     //leetcode hard basic calculator
     public static void main(String[] args) {
-        //test case for  Reverse Nodes in k-Group
+        //test case for Rotate List
         ListNode test=new ListNode(1);
         test.next=new ListNode(2);
         test.next.next=new ListNode(3);
         test.next.next.next=new ListNode(4);
         test.next.next.next.next=new ListNode(5);
-        printList(reverseKGroup(test,2));
+        printList(rotateList(test,2));
+        //test case for  Reverse Nodes in k-Group
+//        ListNode test=new ListNode(1);
+//        test.next=new ListNode(2);
+//        test.next.next=new ListNode(3);
+//        test.next.next.next=new ListNode(4);
+//        test.next.next.next.next=new ListNode(5);
+//        printList(reverseListNode(test,2));
+//        printList(reverseKGroup(test,2));
         //test case for basic Calculator
 //        calci test=new calci("(1+(4+5+2)-3)+(6+8)");
 //        System.out.println(test.getResult());
