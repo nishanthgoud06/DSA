@@ -5557,11 +5557,165 @@ class constructSolution {
         }
         return stack.peek();
     }
+    public static ListNode reverseKGroup(ListNode head, int k) {
+        if(head==null || k==0 ||k==1)
+            return head;
+        Stack<ListNode> stack=new Stack<>();
+        ListNode result=new ListNode(0);
+        result.next=head;
+        ListNode dummy=result;
+        ListNode current=head;
+        int count=0;
+        while(current!=null){
+            count++;
+            stack.push(current);
+            current=current.next;
+            if(count==k){
+                while(!stack.isEmpty()){
+                    dummy.next=stack.pop();
+                    dummy=dummy.next;
+                }
+                dummy.next=current;
+                count=0;
+            }
+        }
+        if(count<k){
+            Stack<ListNode> stack1=new Stack<>();
+            while(!stack.isEmpty()){
+                stack1.push(stack.pop());
+            }
+            while(!stack1.isEmpty()){
+                dummy.next=stack1.pop();
+                dummy=dummy.next;
+            }
+        }
+        return result.next;
+    }
+    public static void printList(ListNode list){
+        while(list!=null){
+            System.out.println(list.val);
+            list=list.next;
+        }
+    }
+    //above problem with better time complexcity
+    public static ListNode reverseListNode(ListNode head,int k){
+        if(head==null || k==0)
+            return head;
+        ListNode result=new ListNode();
+        result.next=head;
+        ListNode dummy=result;
+        int count=0;
+        while(dummy.next!=null){
+            count++;
+            dummy=dummy.next;
+        }
+        dummy=result;
+        while (dummy!=null){
+            if(count<k){
+                break;
+            }
+            int val=k-1;
+            ListNode next=dummy.next;
+            ListNode first=dummy.next;
+            ListNode second=first.next;
+            while(val-->0){
+                ListNode temp=second.next;
+                second.next=first;
+                first=second;
+                second=temp;
+            }
+            count-=k;
+            dummy.next=first;
+            next.next=second;
+            dummy=next;
+        }
+        return result.next;
+    }
+    //61. Rotate List
+    public static ListNode rotateList(ListNode node,int k){
+        if(node==null || k==0)
+            return node;
+        int count=0;
+        ListNode temp=node;
+        while(temp!=null){
+            count++;
+            temp=temp.next;
+        }
+        ListNode fast=node;
+        ListNode slow=node;
+        k=k%count;
+        if(k==0)
+            return node;
+        for(int i=0;i<k;i++){
+            fast=fast.next;
+        }
+        while(fast.next!=null){
+            fast=fast.next;
+            slow=slow.next;
+        }
+        ListNode newNode=slow.next;
+        slow.next=null;
+        fast.next=node;
+        return newNode;
+    }
+
     //leetcode hard basic calculator
+
+
+    //486. Predict the Winner
+    static class pair{
+        int first;
+        int second;
+        public pair() {}
+    }
+    public static boolean predictWinner(int[] arr){
+        if(arr==null ||arr.length==1)
+            return true;
+        int n=arr.length;
+        pair[][] dp=new pair[n][n];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                dp[i][j]=new pair();
+            }
+        }
+        for(int i=0;i<n;i++){
+            dp[i][i].first=arr[i];
+        }
+        for(int length=2;length<n;length++){
+            for(int i=0;i<=n-length;i++){
+                int j=i+length-1;
+                if(arr[i]+dp[i+1][j].second>arr[j]+dp[i][j-1].second){
+                    dp[i][j].first=arr[i]+dp[i+1][j].second;
+                    dp[i][j].second=dp[i+1][j].first;
+                }else{
+                    dp[i][j].first=arr[j]+dp[i][j-1].second;
+                    dp[i][j].second=dp[i][j-1].first;
+                }
+            }
+        }
+        return dp[0][n-1].first>dp[0][n-1].second;
+    }
     public static void main(String[] args) {
+        //test case for predict winner
+        System.out.println(predictWinner(new int[]{1,5,2}));
+        //test case for Rotate List
+//        ListNode test=new ListNode(1);
+//        test.next=new ListNode(2);
+//        test.next.next=new ListNode(3);
+//        test.next.next.next=new ListNode(4);
+//        test.next.next.next.next=new ListNode(5);
+//        printList(rotateList(test,2));
+        //test case for  Reverse Nodes in k-Group
+//        ListNode test=new ListNode(1);
+//        test.next=new ListNode(2);
+//        test.next.next=new ListNode(3);
+//        test.next.next.next=new ListNode(4);
+//        test.next.next.next.next=new ListNode(5);
+//        printList(reverseListNode(test,2));
+//        printList(reverseKGroup(test,2));
         //test case for basic Calculator
-        calci test=new calci("(1+(4+5+2)-3)+(6+8)");
-        System.out.println(test.getResult());
+//        calci test=new calci("(1+(4+5+2)-3)+(6+8)");
+//        System.out.println(test.getResult());
         //test case for  Minimum Number of Arrows to Burst Balloons
 //        System.out.println(burstBallon(new int[][]{{1,2},{2,3},{3,4},{4,5}}));
         //test case for Substring with Concatenation of All Words
