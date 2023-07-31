@@ -5674,16 +5674,14 @@ class constructSolution {
         int n=arr.length;
         pair[][] dp=new pair[n][n];
         for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                dp[i][j]=new pair();
-            }
-        }
-        for(int i=0;i<n;i++){
+            dp[i][i]=new pair();
             dp[i][i].first=arr[i];
+            dp[i][i].second=0;
         }
-        for(int length=2;length<n;length++){
+        for(int length=2;length<=n;length++){
             for(int i=0;i<=n-length;i++){
                 int j=i+length-1;
+                dp[i][j]=new pair();
                 if(arr[i]+dp[i+1][j].second>arr[j]+dp[i][j-1].second){
                     dp[i][j].first=arr[i]+dp[i+1][j].second;
                     dp[i][j].second=dp[i+1][j].first;
@@ -5695,9 +5693,64 @@ class constructSolution {
         }
         return dp[0][n-1].first>dp[0][n-1].second;
     }
+    //hacker rank DeQueue medium  Question
+    //The first line of input contains two integers  n and m
+    // representing the total number of integers and the size of the subarray, respectively.
+    // The next line contains  space separated integers.
+    public static int DequeueProblem(int limit,int[] nums){
+        if(nums==null || nums.length<limit)
+            return 0;
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        int uniqueCount=0;
+        int result=0;
+        for(int i=0;i<nums.length;i++){
+            hashmap.put(nums[i],hashmap.getOrDefault(nums[i],0)+1);
+            if(hashmap.get(nums[i])==1){
+                uniqueCount++;
+            }
+            if(i>=limit){
+                int current=nums[i-limit];
+                hashmap.put(current,hashmap.get(current)-1);
+                if(hashmap.get(current)==0)
+                    uniqueCount--;
+            }
+            if(i>=limit-1){
+                result=Math.max(result,uniqueCount);
+            }
+        }
+    return result;
+    }
+    //using DeQueue
+    public static int usingDequeue(int limit,int[] nums){
+        if(nums==null || nums.length<limit)
+            return 0;
+        Deque<Integer> dequeue=new LinkedList<>();
+        HashSet<Integer> hashset=new HashSet<>();
+        int result=0;
+        for(int i=0;i<nums.length;i++){
+            int element=nums[i];
+            if(dequeue.size()==limit){
+                int removeFirst=dequeue.removeFirst();
+                if(!dequeue.contains(removeFirst)){
+                    hashset.remove(removeFirst);
+                }
+            }
+            dequeue.offer(element);
+            hashset.add(element);
+            if(dequeue.size()==limit){
+                result=Math.max(result,hashset.size());
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for dequeue different methods
+        System.out.println("Test case-1");
+        System.out.println(DequeueProblem(3,new int[]{5,3,5,2,3,2}));
+        System.out.println("Test case-2");
+        System.out.println(usingDequeue(3,new int[]{5,3,5,2,3,2}));
         //test case for predict winner
-        System.out.println(predictWinner(new int[]{1,5,2}));
+//        System.out.println(predictWinner(new int[]{1,5,233,7}));
         //test case for Rotate List
 //        ListNode test=new ListNode(1);
 //        test.next=new ListNode(2);
