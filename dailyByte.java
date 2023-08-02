@@ -5743,12 +5743,79 @@ class constructSolution {
         }
         return result;
     }
+    //add Two Character
+    public static int TwoCharacter(String s){
+        if(s.length()<=1)
+            return 0;
+        int result=0;
+        for(int i=0;i<s.length();i++){
+            for(int j=i+1;j<s.length();j++){
+                String current=formIt(s,s.charAt(i),s.charAt(j));
+                if(isValidString(current)){
+                    result=Math.max(result,current.length());
+                }
+            }
+        }
+        return result;
+    }
+    public static String formIt(String s,char a,char b){
+        StringBuilder sb=new StringBuilder();
+        for(char c:s.toCharArray()){
+            if(c==a||c==b)
+                sb.append(c);
+        }
+        return sb.toString();
+    }
+    public static boolean isValidString(String current){
+        for(int i=1;i<current.length();i++){
+            if(current.charAt(i)==current.charAt(i-1)){
+                return false;
+            }
+        }
+        return true;
+    }
+    //Weighted Uniform String
+    public static List<String> weightUniform(String s,List<Integer> query){
+        List<String> result=new ArrayList<>();
+        if(s==null || s.length()==0)
+            return result;
+        HashSet<Integer> hashset=new HashSet<>();
+        char prev=' ';
+        int count=0;
+        for(char c:s.toCharArray()){
+            if(c!=prev){
+                count=c-'a'+1;
+                prev=c;
+            }else{
+                count+=c-'a'+1;
+            }
+            hashset.add(count);
+        }
+        for(int i:query){
+            if(hashset.contains(i)){
+                result.add("Yes");
+            }else{
+                result.add("No");
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for Weighted Uniform String
+        List<Integer> test=new ArrayList<>();
+        test.add(1);
+        test.add(7);
+        test.add(5);
+        test.add(4);
+        test.add(5);
+        System.out.println(weightUniform("abbcccdddd",test));
+        //test case for add two character
+//        System.out.println(TwoCharacter("beabeefeab"));
         //test case for dequeue different methods
-        System.out.println("Test case-1");
-        System.out.println(DequeueProblem(3,new int[]{5,3,5,2,3,2}));
-        System.out.println("Test case-2");
-        System.out.println(usingDequeue(3,new int[]{5,3,5,2,3,2}));
+//        System.out.println("Test case-1");
+//        System.out.println(DequeueProblem(3,new int[]{5,3,5,2,3,2}));
+//        System.out.println("Test case-2");
+//        System.out.println(usingDequeue(3,new int[]{5,3,5,2,3,2}));
         //test case for predict winner
 //        System.out.println(predictWinner(new int[]{1,5,233,7}));
         //test case for Rotate List
