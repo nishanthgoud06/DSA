@@ -5886,10 +5886,32 @@ class constructSolution {
         }
         return arr;
     }
+    //longest substring with k most distinct characters
+    public static int longestKchar(String s,int limit){
+        if(s.length()==0)
+            return 0;
+        HashMap<Character,Integer> hashmap=new HashMap<>();
+        int end=0,start=0,result=0;
+        while(end<s.length()){
+            hashmap.put(s.charAt(end),hashmap.getOrDefault(s.charAt(end),0)+1);
+            while(hashmap.size()>limit){
+                char left=s.charAt(start);
+                hashmap.put(left,hashmap.get(left)-1);
+                if(hashmap.get(left)==0)
+                    hashmap.remove(left);
+                start++;
+            }
+            result=Math.max(result,end-start+1);
+            end++;
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for longest substring with k most distinct characters
+        System.out.println(longestKchar("eceba",2));
         //test case for counting prime
-        System.out.println(isPrmie2(50));
-        System.out.println(countPrime(50));
+//        System.out.println(isPrmie2(50));
+//        System.out.println(countPrime(50));
         //test case for Weighted Uniform String
 //        List<Integer> test=new ArrayList<>();
 //        test.add(1);
