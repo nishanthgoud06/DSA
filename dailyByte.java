@@ -5800,15 +5800,126 @@ class constructSolution {
         }
         return result;
     }
+    //medium calculator
+    public static int calci(String s){
+        if(s==null ||s.length()==0)
+            return 0;
+        Stack<Integer> stack=new Stack<>();
+        int result=0;
+        int operator='+';
+        for(int i=0;i<s.length();i++){
+            char current=s.charAt(i);
+            if(Character.isDigit(current)){
+                result=result*10+('0'-current);
+            }
+            if(!Character.isDigit(current) && !Character.isSpaceChar(current) || i==s.length()-1){
+                if(operator=='-'){
+                    stack.push(-result);
+                }
+                if(operator=='+'){
+                    stack.push(result);
+                }
+                if(operator=='*'){
+                    stack.push(stack.pop()*result);
+                }
+                if(operator=='*'){
+                    stack.push(stack.pop()/result);
+                }
+                operator=current;
+                result=0;
+            }
+        }
+        int total=0;
+        while(!stack.isEmpty()){
+            total+=stack.pop();
+        }
+        return total;
+    }
+    //Count Prime
+    //my initall thought was you can simply write a helper function where your are
+    // going ton check wheather a number is prime or not
+    //time complexcity of the above approch is o(n * m)
+    //space complexcity is o(1)
+    public static int countPrime(int n){
+        if(n<=1){
+            return 0;
+        }
+        int count=0;
+        for(int i=2;i<n;i++){
+            if(isPrime(i)){
+                count++;
+            }
+        }
+        return count;
+    }
+    public static boolean isPrime(int n){
+        for(int i=2;i<=Math.sqrt(n);i++){
+            if(n%i==0)
+                return false;
+        }
+        return true;
+    }
+    //if we follow the above approch the time complexity is more
+    //by using dynamic programming we can change it to o(n+n)=o(2n)=o(n)
+    public static int isPrmie2(int n){
+        if(n<=1)
+            return 0;
+        boolean[] arr=getDpPrime(n);
+        int count=0;
+        for(int i=2;i<n;i++){
+            if(arr[i])
+                count++;
+        }
+        return count;
+    }
+    public static boolean[] getDpPrime(int n){
+        boolean[] arr=new boolean[n];
+        Arrays.fill(arr,true);
+        arr[0]=false;
+        arr[1]=false;
+        for(int i=2;i*i<n;i++){
+            if(arr[i]){
+                for(int j=i*i;j<n;j=j+i){
+                    arr[j]=false;
+                }
+            }
+        }
+        return arr;
+    }
+    //longest substring with k most distinct characters
+    public static int longestKchar(String s,int limit){
+        if(s.length()==0)
+            return 0;
+        HashMap<Character,Integer> hashmap=new HashMap<>();
+        int end=0,start=0,result=0;
+        while(end<s.length()){
+            hashmap.put(s.charAt(end),hashmap.getOrDefault(s.charAt(end),0)+1);
+            while(hashmap.size()>limit){
+                char left=s.charAt(start);
+                hashmap.put(left,hashmap.get(left)-1);
+                if(hashmap.get(left)==0)
+                    hashmap.remove(left);
+                start++;
+            }
+            result=Math.max(result,end-start+1);
+            end++;
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for longest substring with k most distinct characters
+        System.out.println(longestKchar("eceba",2));
+        //test case for counting prime
+//        System.out.println(isPrmie2(50));
+//        System.out.println(countPrime(50));
         //test case for Weighted Uniform String
-        List<Integer> test=new ArrayList<>();
-        test.add(1);
-        test.add(7);
-        test.add(5);
-        test.add(4);
-        test.add(5);
-        System.out.println(weightUniform("abbcccdddd",test));
+//        List<Integer> test=new ArrayList<>();
+//        test.add(1);
+//        test.add(7);
+//        test.add(5);
+//        test.add(4);
+//        test.add(5);
+//        System.out.println(weightUniform("abbcccdddd",test));
         //test case for add two character
 //        System.out.println(TwoCharacter("beabeefeab"));
         //test case for dequeue different methods
