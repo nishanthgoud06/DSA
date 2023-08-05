@@ -5963,9 +5963,49 @@ class constructSolution {
         visited[i][j]=result+1;
         return visited[i][j];
     }
+    //239. Sliding Window Maximum
+    public static int[] slidingWindow(int[] nums,int limit){
+        if(nums==null || nums.length==0){
+            return new int[0];
+        }
+        int[] result=new int[nums.length-limit+1];
+        Deque<Integer> queue=new ArrayDeque<>();
+        int n=nums.length;
+        for(int i=0;i<nums.length;i++){
+           while(!queue.isEmpty() && queue.peekFirst()<i-limit+1){
+               queue.pollFirst();
+           }
+           while(!queue.isEmpty() && nums[queue.peekLast()]<nums[i]){
+               queue.pollLast();
+           }
+           queue.offerLast(i);
+           if(i>=limit-1){
+               result[i-limit+1]=nums[queue.peekFirst()];
+           }
+        }
+        return result;
+    }
+    //approch 2
+    public static int[] slidingWindow2(int[] nums,int limit){
+        if(nums==null || nums.length==0)
+            return new int[0];
+        PriorityQueue<Integer> pq=new PriorityQueue<>((a,b)->b-a);
+        int[] result=new int[nums.length-limit+1];
+        for(int i=0;i<nums.length;i++){
+            pq.offer(nums[i]);
+            if(i>=limit-1){
+                result[i-limit+1]=pq.peek();
+                pq.remove(nums[i-limit+1]);
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for Sliding Window Maximum
+        System.out.println(Arrays.toString(slidingWindow(new int[]{1,3,-1,-3,5,3,6,7},3)));
+        System.out.println(Arrays.toString(slidingWindow2(new int[]{1,3,-1,-3,5,3,6,7},3)));
         //test case for Longest Path Matrix
-        System.out.println(longestPathMatrix(new int[][]{{9,9,4},{6,6,8},{2,1,1}}));
+//        System.out.println(longestPathMatrix(new int[][]{{9,9,4},{6,6,8},{2,1,1}}));
         //test case for Longest Substring
 //        System.out.println(longestSub("ababbc",2));
         //test case for longest substring with k most distinct characters
