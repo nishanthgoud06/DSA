@@ -6000,10 +6000,72 @@ class constructSolution {
         }
         return result;
     }
+//    Separate the Numbers
+    public static void sepearteNumber(String s){
+        if(s.length()==0)
+            return;
+        for(int i=1;i<s.length()/2;i++){
+            Long first=Long.parseLong(s.substring(0,i));
+            Long current=first;
+            String remain=s.substring(i);
+            boolean valid=true;
+            while(!remain.isEmpty()){
+                Long next=current+1;
+                String nextStr=Long.toString(next);
+                if(remain.startsWith(nextStr)){
+                    current=next;
+                    remain=remain.substring(nextStr.length());
+                }else{
+                    valid=false;
+                    break;
+                }
+            }
+            if(valid && remain.isEmpty()){
+                System.out.println("YES "+first);
+                return;
+            }
+        }
+        System.out.println("NO");
+    }
+    public static double powMath(long x,int n){
+        if(n==0)
+            return 1;
+        if(n<0){
+            x=1/x;
+            n=-(n);
+        }
+        return n%2==0?powMath(x*x,n/2):x*powMath(x*x,n/2);
+    }
+    //approch 2
+    public static double powMath2(long x,int n){
+        if(n==0)
+            return 1;
+        if(x<0){
+            x=1/x;
+            n=(-n);
+        }
+        double result=1;
+        while(n>0){
+            if(n%2==1){
+                result*=x;
+            }
+            x*=2;
+            n=n/2;
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for implementing Math pow
+        System.out.println(powMath(2,3));
+        System.out.println(powMath2(2,3));
+        //test case for Separate the Numbers
+//        sepearteNumber("99910001001");
+//        sepearteNumber("7891011");
+//        sepearteNumber("9899100");
+//        sepearteNumber("999100010001");
         //test case for Sliding Window Maximum
-        System.out.println(Arrays.toString(slidingWindow(new int[]{1,3,-1,-3,5,3,6,7},3)));
-        System.out.println(Arrays.toString(slidingWindow2(new int[]{1,3,-1,-3,5,3,6,7},3)));
+//        System.out.println(Arrays.toString(slidingWindow(new int[]{1,3,-1,-3,5,3,6,7},3)));
+//        System.out.println(Arrays.toString(slidingWindow2(new int[]{1,3,-1,-3,5,3,6,7},3)));
         //test case for Longest Path Matrix
 //        System.out.println(longestPathMatrix(new int[][]{{9,9,4},{6,6,8},{2,1,1}}));
         //test case for Longest Substring
