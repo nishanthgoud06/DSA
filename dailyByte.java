@@ -5906,9 +5906,172 @@ class constructSolution {
         }
         return result;
     }
+    //Longest Substring with At Least K Repeating Characters
+    public static int longestSub(String s,int limit){
+        if(s.length()==0)
+            return 0;
+        HashMap<Character,Integer> hashmap=new HashMap<>();
+        for(char c:s.toCharArray()){
+            hashmap.put(c,hashmap.getOrDefault(c,0)+1);
+        }
+        boolean valid=true;
+        for(Map.Entry<Character,Integer> entry:hashmap.entrySet()){
+            if(entry.getValue()<limit){
+                valid=false;
+            }
+        }
+        if(valid){
+            return s.length();
+        }
+        int end=0,start=0,result=0;
+        while(end<s.length()){
+            if(hashmap.get(s.charAt(end))<limit){
+                result=Math.max(result,longestSub(s.substring(start,end),limit));
+                start=end+1;
+            }
+            end++;
+        }
+        result=Math.max(result,longestSub(s.substring(start),limit));
+        return result;
+    }
+    //329. Longest Increasing Path in a Matrix
+    public static int longestPathMatrix(int[][] matrix){
+        if(matrix==null || matrix.length==0)
+            return 0;
+        int n=matrix.length;
+        int m=matrix[0].length;
+        int[][] visited=new int[n][m];
+        int result=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                result=Math.max(result,helperlongestPathMatrix(i,j,visited,matrix,Integer.MIN_VALUE));
+            }
+        }
+        return result;
+    }
+    static int[][] dir={{0,-1},{0,1},{-1,0},{1,0}};
+    public static int helperlongestPathMatrix(int i,int j,int[][] visited,int[][] matrix,int prev){
+        if(i<0 || i>=matrix.length || j<0 || j>=matrix[0].length ||matrix[i][j]<=prev){
+            return 0;
+        }
+        if(visited[i][j]!=0)
+            return visited[i][j];
+        int result=0;
+        for(int[] d:dir){
+            result=Math.max(result,helperlongestPathMatrix(i+d[0],j+d[1],visited,matrix,matrix[i][j]));
+        }
+        visited[i][j]=result+1;
+        return visited[i][j];
+    }
+    //239. Sliding Window Maximum
+    public static int[] slidingWindow(int[] nums,int limit){
+        if(nums==null || nums.length==0){
+            return new int[0];
+        }
+        int[] result=new int[nums.length-limit+1];
+        Deque<Integer> queue=new ArrayDeque<>();
+        int n=nums.length;
+        for(int i=0;i<nums.length;i++){
+           while(!queue.isEmpty() && queue.peekFirst()<i-limit+1){
+               queue.pollFirst();
+           }
+           while(!queue.isEmpty() && nums[queue.peekLast()]<nums[i]){
+               queue.pollLast();
+           }
+           queue.offerLast(i);
+           if(i>=limit-1){
+               result[i-limit+1]=nums[queue.peekFirst()];
+           }
+        }
+        return result;
+    }
+    //approch 2
+    public static int[] slidingWindow2(int[] nums,int limit){
+        if(nums==null || nums.length==0)
+            return new int[0];
+        PriorityQueue<Integer> pq=new PriorityQueue<>((a,b)->b-a);
+        int[] result=new int[nums.length-limit+1];
+        for(int i=0;i<nums.length;i++){
+            pq.offer(nums[i]);
+            if(i>=limit-1){
+                result[i-limit+1]=pq.peek();
+                pq.remove(nums[i-limit+1]);
+            }
+        }
+        return result;
+    }
+//    Separate the Numbers
+    public static void sepearteNumber(String s){
+        if(s.length()==0)
+            return;
+        for(int i=1;i<s.length()/2;i++){
+            Long first=Long.parseLong(s.substring(0,i));
+            Long current=first;
+            String remain=s.substring(i);
+            boolean valid=true;
+            while(!remain.isEmpty()){
+                Long next=current+1;
+                String nextStr=Long.toString(next);
+                if(remain.startsWith(nextStr)){
+                    current=next;
+                    remain=remain.substring(nextStr.length());
+                }else{
+                    valid=false;
+                    break;
+                }
+            }
+            if(valid && remain.isEmpty()){
+                System.out.println("YES "+first);
+                return;
+            }
+        }
+        System.out.println("NO");
+    }
+    public static double powMath(long x,int n){
+        if(n==0)
+            return 1;
+        if(n<0){
+            x=1/x;
+            n=-(n);
+        }
+        return n%2==0?powMath(x*x,n/2):x*powMath(x*x,n/2);
+    }
+    //approch 2
+    public static double powMath2(long x,int n){
+        if(n==0)
+            return 1;
+        if(x<0){
+            x=1/x;
+            n=(-n);
+        }
+        double result=1;
+        while(n>0){
+            if(n%2==1){
+                result*=x;
+            }
+            x*=2;
+            n=n/2;
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for implementing Math pow
+        System.out.println(powMath(2,3));
+        System.out.println(powMath2(2,3));
+        //test case for Separate the Numbers
+//        sepearteNumber("99910001001");
+//        sepearteNumber("7891011");
+//        sepearteNumber("9899100");
+//        sepearteNumber("999100010001");
+        //test case for Sliding Window Maximum
+//        System.out.println(Arrays.toString(slidingWindow(new int[]{1,3,-1,-3,5,3,6,7},3)));
+//        System.out.println(Arrays.toString(slidingWindow2(new int[]{1,3,-1,-3,5,3,6,7},3)));
+        //test case for Longest Path Matrix
+//        System.out.println(longestPathMatrix(new int[][]{{9,9,4},{6,6,8},{2,1,1}}));
+        //test case for Longest Substring
+//        System.out.println(longestSub("ababbc",2));
         //test case for longest substring with k most distinct characters
-        System.out.println(longestKchar("eceba",2));
+//        System.out.println(longestKchar("eceba",2));
         //test case for counting prime
 //        System.out.println(isPrmie2(50));
 //        System.out.println(countPrime(50));
