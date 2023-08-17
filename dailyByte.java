@@ -6054,10 +6054,63 @@ class constructSolution {
         }
         return result;
     }
-    public static void main(String[] args) {
+    //implementing Djistras Algorithm
+    //finding the Shortest Path from each index from start index 0
+    public static Map<Integer,Integer> dj(int[][] grid){
+        HashMap<Integer,Integer> result=new HashMap<>();
+        if(grid==null||grid.length==0)
+            return result;
+        int length=grid.length;
+        boolean[] visited=new boolean[length];
+        int[] min=new int[length];
+        Arrays.fill(min,Integer.MAX_VALUE);
+        min[0]=0;
+        for(int i=0;i<length-1;i++){
+            int minIndex=findMinIndex(visited,min);
+            System.out.println("minIndex: " + minIndex);
+            visited[minIndex]=true;
+            for(int j=0;j<length;j++){
+                if(!visited[j] && grid[minIndex][j]!=0 && min[minIndex]!=Integer.MAX_VALUE){
+                    int newDistance=min[minIndex]+grid[minIndex][j];
+                        if(newDistance<min[j]){
+                        min[j]=newDistance;
+                        }
+                    }
+            }
+        }
+        for(int i=0;i<min.length;i++){
+            result.put(i,min[i]);
+        }
+        return result;
+    }
+    public static int findMinIndex(boolean[] visited,int[] min){
+        int minIndex=-1;
+        for(int i=0;i<min.length;i++){
+            if(!visited[i] &&(minIndex==-1 ||min[i]<min[minIndex])){
+                minIndex=i;
+            }
+        }
+        return minIndex;
+    }
+     public static void main(String[] args) {
+        //test case for Dj
+         int[][] grid = {
+                 {0, 2, 0, 4, 0},
+                 {2, 0, 3, 0, 0},
+                 {0, 3, 0, 1, 0},
+                 {4, 0, 1, 0, 3},
+                 {0, 0, 0, 3, 0}
+         };
+
+         Map<Integer, Integer> result = dj(grid);
+
+         System.out.println("Vertex \t Minimum Distance");
+         for (Map.Entry<Integer, Integer> entry : result.entrySet()) {
+             System.out.println(entry.getKey() + "\t" + entry.getValue());
+         }
         //test case for implementing Math pow
-        System.out.println(powMath(2,3));
-        System.out.println(powMath2(2,3));
+//        System.out.println(powMath(2,3));
+//        System.out.println(powMath2(2,3));
         //test case for Separate the Numbers
 //        sepearteNumber("99910001001");
 //        sepearteNumber("7891011");
