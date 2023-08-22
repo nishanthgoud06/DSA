@@ -6092,22 +6092,146 @@ class constructSolution {
         }
         return minIndex;
     }
+    //hacker rank problem for The Full Counting Sort
+    public static String fullCountingString(List<List<String>> arr){
+        if(arr==null ||arr.size()==0)
+            return "";
+        StringBuilder[] sb=new StringBuilder[100];
+        for(int i=0;i<arr.size();i++){
+            if(i<arr.size()/2){
+                arr.get(i).set(1,"-");
+            }
+            int index=Integer.parseInt(arr.get(i).get(0));
+            if(sb[index]==null){
+                sb[index]=new StringBuilder();
+            }
+            sb[index].append(arr.get(i).get(1)+" ");
+        }
+        StringBuilder result=new StringBuilder();
+        for(int i=0;i<100;i++){
+            if(sb[i]!=null){
+                result.append(sb[i]);
+            }
+        }
+        return result.toString();
+    }
+    //word Break 2
+    public static List<String> wordBreak2(String s,List<String> wordDict){
+        List<String> result=new ArrayList<>();
+        if(s==null || s.length()==0)
+            return result;
+        helperWordBreak2(result,new StringBuilder(),0,s,wordDict);
+        return result;
+    }
+    public static void helperWordBreak2(List<String> result,StringBuilder sb,int index,String s,List<String> wordDict){
+        if(index==s.length()){
+            result.add(sb.toString());
+            return;
+        }
+        for(String word:wordDict){
+            if(index+word.length()<=s.length() && s.startsWith(word,index)){
+                int length=sb.length();
+                if(length>0){
+                    sb.append(" ");
+                }
+                sb.append(word);
+                helperWordBreak2(result,sb,index+word.length(),s,wordDict);
+                sb.setLength(length);
+            }
+        }
+    }
+    //approch 2
+     public static List<String> wordDict2(String s,List<String> wordDict){
+        List<String> result=new ArrayList<>();
+        if(s==null || s.length()==0)
+            return result;
+        helperwordDict2(result,s,wordDict,0,new StringBuilder());
+        return result;
+     }
+     public static void helperwordDict2(List<String> result,String s,List<String> wordDict,int index,StringBuilder sb){
+        if(index==s.length()){
+            result.add(sb.toString().trim());
+            return;
+        }
+        for(int i=index;i<s.length();i++){
+            String temp=s.substring(index,i+1);
+            if(wordDict.contains(temp)){
+                int length=sb.length();
+                sb.append(temp+" ");
+                helperwordDict2(result,s,wordDict,index+temp.length(),sb);
+                sb.setLength(length);
+            }
+        }
+     }
+     //2452. Words Within Two Edits of Dictionary
+    public static List<String> wordWith2(String[] words,String[] dict){
+        List<String> result=new ArrayList<>();
+        for(String s1:words){
+            for(String s2:dict){
+                if(wordWith2Helper(s1,s2)){
+                    result.add(s1);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+    public static boolean wordWith2Helper(String s1,String s2){
+        int count=0;
+        for(int i=0;i<4;i++){
+            if(s1.charAt(i)!=s2.charAt(i)){
+                count++;
+                if(count>2){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
      public static void main(String[] args) {
+        //test case Words Within Two Edits of Dictionary
+         System.out.println(wordWith2(new String[]{"word","note","ants","wood"},new String[]{"wood","joke","moat"}));
+        //test case for Word Break 2
+//         System.out.println(wordBreak2("catsanddog",Arrays.asList(new String[]{"cat","cats","and","sand","dog"})));
+//         System.out.println(wordDict2("catsanddog",Arrays.asList(new String[]{"cat","cats","and","sand","dog"})));
+        //test case for The Full Counting Sort
+//         List<List<String>> values = new ArrayList<>();
+//         values.add(Arrays.asList("0", "ab"));
+//         values.add(Arrays.asList("6", "cd"));
+//         values.add(Arrays.asList("0", "ef"));
+//         values.add(Arrays.asList("6", "gh"));
+//         values.add(Arrays.asList("4", "ij"));
+//         values.add(Arrays.asList("0", "ab"));
+//         values.add(Arrays.asList("6", "cd"));
+//         values.add(Arrays.asList("0", "ef"));
+//         values.add(Arrays.asList("6", "gh"));
+//         values.add(Arrays.asList("0", "ij"));
+//         values.add(Arrays.asList("4", "that"));
+//         values.add(Arrays.asList("3", "be"));
+//         values.add(Arrays.asList("0", "to"));
+//         values.add(Arrays.asList("1", "be"));
+//         values.add(Arrays.asList("5", "question"));
+//         values.add(Arrays.asList("1", "or"));
+//         values.add(Arrays.asList("2", "not"));
+//         values.add(Arrays.asList("4", "is"));
+//         values.add(Arrays.asList("2", "to"));
+//         values.add(Arrays.asList("4", "the"));
+//         System.out.println(fullCountingString(values));
         //test case for Dj
-         int[][] grid = {
-                 {0, 2, 0, 4, 0},
-                 {2, 0, 3, 0, 0},
-                 {0, 3, 0, 1, 0},
-                 {4, 0, 1, 0, 3},
-                 {0, 0, 0, 3, 0}
-         };
-
-         Map<Integer, Integer> result = dj(grid);
-
-         System.out.println("Vertex \t Minimum Distance");
-         for (Map.Entry<Integer, Integer> entry : result.entrySet()) {
-             System.out.println(entry.getKey() + "\t" + entry.getValue());
-         }
+//         int[][] grid = {
+//                 {0, 2, 0, 4, 0},
+//                 {2, 0, 3, 0, 0},
+//                 {0, 3, 0, 1, 0},
+//                 {4, 0, 1, 0, 3},
+//                 {0, 0, 0, 3, 0}
+//         };
+//
+//         Map<Integer, Integer> result = dj(grid);
+//
+//         System.out.println("Vertex \t Minimum Distance");
+//         for (Map.Entry<Integer, Integer> entry : result.entrySet()) {
+//             System.out.println(entry.getKey() + "\t" + entry.getValue());
+//         }
         //test case for implementing Math pow
 //        System.out.println(powMath(2,3));
 //        System.out.println(powMath2(2,3));
