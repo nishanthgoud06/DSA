@@ -6188,9 +6188,47 @@ class constructSolution {
         }
         return true;
     }
+    //433. Minimum Genetic Mutation
+    public static int minGenMut(String startGene,String end,List<String> Bank){
+        if(Bank.size()==0)
+            return -1;
+        char[] mutations = {'A', 'C', 'G', 'T'};
+        Queue<String> queue=new LinkedList<>();
+        HashSet<String> bank=new HashSet<>(Bank);
+        queue.offer(startGene);
+        int result=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                String current=queue.poll();
+                if(current.equals(end)){
+                    return result;
+                }
+                char[] currentArray=current.toCharArray();
+                for(int j=0;j<currentArray.length;j++){
+                    char originalChar=currentArray[j];
+                    for(char mute:mutations){
+                        if(originalChar!=mute){
+                            currentArray[j]=mute;
+                            String temp=new String(currentArray);
+                            if(bank.contains(temp)){
+                                queue.offer(temp);
+                                bank.remove(temp);
+                            }
+                        }
+                    }
+                    currentArray[j]=originalChar;
+                }
+            }
+            result++;
+        }
+        return -1;
+    }
      public static void main(String[] args) {
+        //test case for Minimum Genetic Mutation
+         System.out.println(minGenMut("AACCGGTT","AAACGGTA",Arrays.asList(new String[]{"AACCGGTA","AACCGCTA","AAACGGTA"})));
         //test case Words Within Two Edits of Dictionary
-         System.out.println(wordWith2(new String[]{"word","note","ants","wood"},new String[]{"wood","joke","moat"}));
+//         System.out.println(wordWith2(new String[]{"word","note","ants","wood"},new String[]{"wood","joke","moat"}));
         //test case for Word Break 2
 //         System.out.println(wordBreak2("catsanddog",Arrays.asList(new String[]{"cat","cats","and","sand","dog"})));
 //         System.out.println(wordDict2("catsanddog",Arrays.asList(new String[]{"cat","cats","and","sand","dog"})));
