@@ -6224,9 +6224,83 @@ class constructSolution {
         }
         return -1;
     }
+    //countStaircaseRows
+    public static int countStaircaseRows(int n){
+        int result=0;
+        int current=1;
+        while(n>=current){
+            n-=current;
+            current++;
+            result++;
+        }
+        return result;
+    }
+    //sherlockAndAnagrams HackerRank
+    public static int sherlockAndAnagrams(String s){
+        if(s==null || s.length()==0)
+            return 0;
+        int result=0;
+        for(int length=1;length<s.length();length++){
+            for(int i=0;i<=s.length()-length;i++){
+                String temp=s.substring(i,i+length);
+                char[] c1=temp.toCharArray();
+                Arrays.sort(c1);
+                for(int j=i+1;j<=s.length()-length;j++){
+                    String temp2=s.substring(j,j+length);
+                    char[] c2=temp2.toCharArray();
+                    Arrays.sort(c2);
+                    if(Arrays.equals(c1,c2)){
+                        result++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    //127. Word Ladder
+    public static int wordLadder(String startString,String endString,List<String> wordList){
+        if(!wordList.contains(endString)){
+            return 0;
+        }
+        HashSet<String> hashset=new HashSet<>(wordList);
+        Queue<String> queue=new LinkedList<>();
+        queue.offer(startString);
+        int result=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                String temp=queue.poll();
+                char[] arr=temp.toCharArray();
+                for(int k=0;k<arr.length;k++){
+                    char arrChar=arr[k];
+                    for(char j='a';j<='z';j++){
+                        if(arrChar==j){
+                            continue;
+                        }
+                        arr[k]=j;
+                        String tempStr=String.valueOf(arr);
+                        if(tempStr.equals(endString)){
+                            return result+1;
+                        }
+                        if(hashset.contains(tempStr)){
+                            hashset.remove(tempStr);
+                            queue.offer(tempStr);
+                        }
+                    }
+                    arr[k]=arrChar;
+                }
+                result++;
+            }
+        }
+        return 0;
+    }
      public static void main(String[] args) {
+        //test case word Ladder
+         System.out.println(wordLadder("hit","cog",Arrays.asList(new String[]{"hot","dot","dog","lot","log","cog"})));
+        //test case for sherlockAndAnagrams
+//         System.out.println(sherlockAndAnagrams("ifailuhkqq"));
         //test case for Minimum Genetic Mutation
-         System.out.println(minGenMut("AACCGGTT","AAACGGTA",Arrays.asList(new String[]{"AACCGGTA","AACCGCTA","AAACGGTA"})));
+//         System.out.println(minGenMut("AACCGGTT","AAACGGTA",Arrays.asList(new String[]{"AACCGGTA","AACCGCTA","AAACGGTA"})));
         //test case Words Within Two Edits of Dictionary
 //         System.out.println(wordWith2(new String[]{"word","note","ants","wood"},new String[]{"wood","joke","moat"}));
         //test case for Word Break 2
