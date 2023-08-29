@@ -6294,9 +6294,127 @@ class constructSolution {
         }
         return 0;
     }
-     public static void main(String[] args) {
+    //68. Text Justification
+    public static List<String> textJustification(List<String> list,int maxWidth){
+        List<String> result=new ArrayList<>();
+        int currentWidth=0;
+        List<String> currentLine=new ArrayList<>();
+        for(String str:list){
+            if(currentWidth+currentLine.size()+str.length()>maxWidth){
+                String justifiedLine = (textJustificationHelper(currentLine,currentWidth,maxWidth));
+                result.add(justifiedLine);
+                currentLine.clear();
+                currentWidth=0;
+            }
+            currentLine.add(str);
+            currentWidth+=str.length();
+        }
+        if(!currentLine.isEmpty()){
+            String lastLine = String.join(" ", currentLine);
+            lastLine += getSpacing(maxWidth - lastLine.length());
+            result.add(lastLine);
+        }
+        return result;
+    }
+
+    public static String textJustificationHelper(List<String> currentLine,int currentWidth,int maxWidth){
+        int totalSpace=maxWidth-currentWidth;
+        int gaps= currentLine.size()-1;
+        int baseSpace=gaps==0?totalSpace:totalSpace/gaps;
+        int extraSpace=gaps==0?0:totalSpace%gaps;
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<currentLine.size();i++){
+            sb.append(currentLine.get(i));
+            if(i<currentLine.size()-1){
+                sb.append(getSpacing(baseSpace));
+                if(extraSpace>0){
+                    sb.append(" ");
+                    extraSpace--;
+                }
+            }
+        }
+        return sb.toString();
+    }
+    public static String getSpacing(int n){
+        StringBuilder sb=new StringBuilder();
+        while(n!=0){
+            sb.append(" ");
+            n--;
+        }
+        return sb.toString();
+    }
+    //Modify Image
+    public static int[][] modifyImage(int[][] array){
+        if(array==null||array.length==0)
+            return new int[0][0];
+        int[][] result=new int[array.length][array[0].length];
+        //-1-1 -10 -11
+        //0-1 00 01
+        //1-1 10 11
+        int[][] dir={{-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1}};
+        for(int i=0;i<array.length;i++){
+            for(int j=0;j<array[0].length;j++){
+                int count=0;
+                int temp=array[i][j];
+                for(int[] d:dir){
+                    int x=i+d[0];
+                    int y=j+d[1];
+                    if(x>=0&&x<array.length&&y>=0&&y<array[0].length){
+                        temp+=array[x][y];
+                        count++;
+                    }
+                }
+                result[i][j]=temp/(count+1);
+            }
+        }
+        return result;
+    }
+    //Bear and Steady Gene
+    public static int bearAndStready(String S){
+        int[] arr=new int[4];
+        for(char c:S.toCharArray()){
+            if(c=='A')
+                arr[0]++;
+            else if(c=='C')
+                arr[1]++;
+            else if(c=='G')
+                arr[2]++;
+            else if(c=='T')
+                arr[3]++;
+        }
+        int left=0,right=0,result=S.length(),limit=S.length()/4;
+        while(right<S.length()){
+            int index=getIndexOfBS(S.charAt(right));
+            arr[index]--;
+            while(left<S.length() && arr[0]<=limit&& arr[1]<=limit&& arr[2]<=limit&& arr[3]<=limit){
+                result=Math.min(result,right-left+1);
+                int leftIndex=getIndexOfBS(S.charAt(left++));
+                arr[leftIndex]++;
+            }
+            right++;
+        }
+        return result;
+    }
+    public static int getIndexOfBS(char c){
+        if(c=='A'){
+            return 0;
+        }else if(c=='C')
+            return 1;
+        else if(c=='G')
+            return 2;
+        else if(c=='T')
+            return 3;
+        return -1;
+    }
+    public static void main(String[] args) {
+        //test case for Bear and Steady Gene
+        System.out.println(bearAndStready("GAAATAAA"));
+        //test case Modify Image
+//        printpaint(modifyImage(new int[][]{{1,3,2},{5, 8, 3},{4, 2, 2}}));
+        //test case fro text judification
+//             System.out.println(textJustification(Arrays.asList(new String[]{"This", "is", "an", "example", "of", "text", "justification."}),16));
         //test case word Ladder
-         System.out.println(wordLadder("hit","cog",Arrays.asList(new String[]{"hot","dot","dog","lot","log","cog"})));
+//         System.out.println(wordLadder("hit","cog",Arrays.asList(new String[]{"hot","dot","dog","lot","log","cog"})));
         //test case for sherlockAndAnagrams
 //         System.out.println(sherlockAndAnagrams("ifailuhkqq"));
         //test case for Minimum Genetic Mutation
