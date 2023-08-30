@@ -6406,9 +6406,51 @@ class constructSolution {
             return 3;
         return -1;
     }
+    //84. Largest Rectangle in Histogram
+    //brute force approch
+    public static int largestRect(int[] arr){
+        if(arr==null||arr.length==0)
+            return 0;
+        if(arr.length==1)
+            return arr[0];
+        Arrays.sort(arr);
+        int max=Integer.MIN_VALUE;
+        for(int i=0;i<arr.length;i++){
+            int remainingBars = arr.length - i;
+            int val = arr[i] * remainingBars; // Calculate the sum directly
+            max = Math.max(max, val);
+        }
+        return max;
+    }
+    //the above approch time complexcity is o(nlogn) for sorting and n for iteratuing through the array
+    //we can achive o(n) with the help of Stack
+    public static int largestRect2(int[] arr){
+        if(arr.length==0)
+            return 0;
+        Stack<Integer> stack=new Stack<>();
+        int max=0;
+        for(int i=0;i<arr.length;i++){
+            while(!stack.isEmpty() && arr[i]<arr[stack.peek()]){
+                int top=arr[stack.pop()];
+                int width=stack.isEmpty()?i:i-stack.peek()-1;
+                max=Math.max(max,top*width);
+                System.out.println(max);
+            }
+            stack.push(i);
+        }
+        while(!stack.isEmpty()){
+            int top=arr[stack.pop()];
+            int width=stack.isEmpty()?arr.length:arr.length-stack.peek()-1;
+            max=Math.max(max,top*width);
+        }
+        return max;
+    }
     public static void main(String[] args) {
+        //test case for Rectangle in Histogram
+//        System.out.println(largestRect(new int[]{2,1,5,6,5,3}));
+        System.out.println(largestRect2(new int[]{2,1}));
         //test case for Bear and Steady Gene
-        System.out.println(bearAndStready("GAAATAAA"));
+//        System.out.println(bearAndStready("GAAATAAA"));
         //test case Modify Image
 //        printpaint(modifyImage(new int[][]{{1,3,2},{5, 8, 3},{4, 2, 2}}));
         //test case fro text judification
