@@ -6445,10 +6445,94 @@ class constructSolution {
         }
         return max;
     }
+//    435. Non-overlapping Intervals
+    public static int nonOver(int[][] nums){
+        if(nums==null ||nums.length==0)
+            return 0;
+        int result=1;
+        Arrays.sort(nums,(a,b)->Integer.compare(a[1],b[1]));
+        int end=nums[0][1];
+        for(int[] i:nums){
+            if(i[0]>=end){
+                result++;
+                end=i[1];
+            }
+        }
+        return nums.length-result;
+    }
+//    Job Sequencing Problem
+    static class Job{
+        int id;
+        int Deadline;
+        int profit;
+        public Job(){}
+        public Job(int id,int Deadline,int profit){
+            this.id=id;
+            this.Deadline=Deadline;
+            this.profit=profit;
+        }
+}
+    public static int[] jobSeq(Job[] jobs){
+        Arrays.sort(jobs,new Comparator<Job>(){
+            public int compare(Job job1,Job job2){
+                return job2.profit-job1.profit;
+            }
+        });
+        int length=jobs.length;
+        int[] values=new int[length+1];
+        int profit=0;
+        int count=0;
+        for(Job job:jobs){
+            for(int i=job.Deadline;i>=1;i--){
+                if(values[i]==0){
+                    values[i]=1;
+                    profit+= job.profit;
+                    count++;
+                    break;
+                }
+            }
+        }
+        return new int[]{profit,count};
+    }
+    //finding the median of the two sorted arrays
+    public static double medianTwoSorted(int[] nums1,int[] nums2){
+        int n=nums1.length;
+        int m=nums2.length;
+        int low=0;
+        int high=n;
+        while(low<=high){
+            int partx=low+(high-low)/2;
+            int party=(n+m+1)/2-partx;
+            int maxLeftX=partx==0?Integer.MIN_VALUE:nums1[partx-1];
+            int minRightx=partx==n?Integer.MAX_VALUE:nums1[partx];
+            int maxLefty=party==0?Integer.MIN_VALUE:nums2[party-1];
+            int minRighty=party==n?Integer.MAX_VALUE:nums2[party];
+            if(maxLeftX<=minRighty && maxLefty<=minRightx){
+                if((n+m)%2==0){
+                    return (double)Math.max(maxLeftX,maxLefty)+Math.min(minRightx,minRighty);
+                }else
+                    return Math.max(maxLefty,maxLeftX);
+            }else if(maxLeftX>minRighty){
+                high=partx-1;
+            }else{
+                low=partx+1;
+            }
+        }
+    throw new IllegalArgumentException();
+    }
     public static void main(String[] args) {
+        System.out.println(medianTwoSorted(new int[]{1,3,8,9,15,},new int[]{7,11,18,19,21,25}));
+        //test case for Job Sequence
+//        Job test=new Job(1,4,20);
+//        Job test1=new Job(2,1,10);
+//        Job test2=new Job(3,1,40);
+//        Job test3=new Job(4,1,30);
+//        System.out.println(Arrays.toString(jobSeq(new Job[]{test,test1,test2,test3})));
+        //test case for 435. Non-overlapping Intervals
+//        System.out.println(nonOver(new int[][]{{1,2},{2,3},{3,4},{1,3}}));
         //test case for Rectangle in Histogram
 //        System.out.println(largestRect(new int[]{2,1,5,6,5,3}));
-        System.out.println(largestRect2(new int[]{2,1}));
+//        System.out.println(largestRect2(new int[]{2,1}));
         //test case for Bear and Steady Gene
 //        System.out.println(bearAndStready("GAAATAAA"));
         //test case Modify Image
