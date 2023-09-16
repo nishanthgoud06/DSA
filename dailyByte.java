@@ -6520,8 +6520,118 @@ class constructSolution {
         }
     throw new IllegalArgumentException();
     }
+    //Shopping Spree
+    public static int[] shoppingSpree(int[] prices){
+        int[] result=new int[prices.length];
+        Stack<Integer> stack=new Stack<>();
+        for(int i=0;i<prices.length;i++){
+            while(stack.isEmpty() && prices[i]<=prices[stack.peek()]){
+                int index=stack.pop();
+                result[index]=prices[index]-prices[i];
+            }
+            stack.push(i);
+        }
+        return result;
+    }
+    //finding the maximum width in the Binary Serach Tree
+    public static int maxWidthBst(BST node){
+        if(node==null)
+            return 0;
+        Queue<Integer> index=new LinkedList<>();
+        Queue<BST> queue=new LinkedList<>();
+        index.offer(1);
+        queue.offer(node);
+        int result=0;
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            int leftIndex=index.peek();
+            for(int i=0;i<size;i++){
+                int currentIndex=index.poll();
+                BST temp=queue.poll();
+                int width=currentIndex-leftIndex+1;
+                result=Math.max(result,width);
+                if(temp.left!=null){
+                    queue.offer(temp.left);
+                    index.offer(width*2);
+                }
+                if(temp.right!=null){
+                    queue.offer(temp.right);
+                    index.offer(width*2+1);
+                }
+            }
+        }
+        return result;
+    }
+//    All Root to Leaf Paths In Binary Tree.
+    public static List<String> pathRootLeaf(BST root){
+        List<String> result=new ArrayList<>();
+        if(root==null)
+            return result;
+        pathRootLeafHelper(root,result,new StringBuilder());
+        return result;
+    }
+    public static void pathRootLeafHelper(BST root,List<String> result,StringBuilder sb){
+        if(root==null)
+            return;
+        sb.append(root.val);
+        if(root.left==null && root.right==null){
+            result.add(sb.toString());
+        }else{
+            sb.append(" ");
+            pathRootLeafHelper(root.left,result,sb);
+            pathRootLeafHelper(root.right,result,sb);
+        }
+        sb.setLength(sb.length()-1);
+        if(root.left!=null && root.right!=null){
+            sb.setLength(sb.length()-1);
+        }
+    }
+//    String to Integer (atoi)
+    public static int Atois(String s){
+        if(s==null||s.length()==0)
+            return 0;
+        int sign=1;
+        int result=0;
+        int start=0;
+        int length=s.length();
+        //we are at the starting point where all the initial spaes are ignored
+        while(start<length &&s.charAt(start)==' '){
+            start++;
+        }
+
+        //we are finding whetahre the inital sign is negative or positive
+        if(start<length){
+            if(s.charAt(start)=='-'){
+                sign=-1;
+                start++;
+            }
+        }
+        //acutual conversion starts here
+        while(start<length){
+            char c=s.charAt(start);
+            if(c>'9'||c<'0')
+                break;
+            int element=c-'0';
+            result=result*10+element;
+            start++;
+        }
+        return sign*result;
+    }
     public static void main(String[] args) {
-        System.out.println(medianTwoSorted(new int[]{1,3,8,9,15,},new int[]{7,11,18,19,21,25}));
+        //test case for c++Atios
+        System.out.println(Atois("4193 with words"));
+        //test case for finding the width
+        //[1,3,2,5,null,null,9,6,null,7]
+//        BST test=new BST(1);
+//        test.left=new BST(3);
+//        test.right=new BST(2);
+//        test.left.left=new BST(5);
+//        test.right.right=new BST(9);
+//        test.left.left.left=new BST(6);
+//        test.right.right.left=new BST(7);
+////        System.out.println(maxWidthBst(test));
+//        System.out.println(pathRootLeaf(test));
+//        System.out.println(medianTwoSorted(new int[]{1,3,8,9,15,},new int[]{7,11,18,19,21,25}));
         //test case for Job Sequence
 //        Job test=new Job(1,4,20);
 //        Job test1=new Job(2,1,10);
