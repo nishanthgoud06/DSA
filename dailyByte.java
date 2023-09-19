@@ -6617,9 +6617,63 @@ class constructSolution {
         }
         return sign*result;
     }
+//    Settling Debts
+    public static int settlingDebts(int[][] transactions){
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int[] T:transactions){
+            int from=T[0];
+            int to=T[1];
+            int amount=T[2];
+            hashmap.put(from,hashmap.getOrDefault(from,0)-amount);
+            hashmap.put(to,hashmap.getOrDefault(to,0)+amount);
+        }
+        int[] report=new int[hashmap.size()];
+        int index=0;
+        for(int i:hashmap.values()){
+            report[index]=i;
+        }
+        return settlingDebtsHelper(report);
+    }
+    //find the missing kth element
+    public static int missKthElement(int[] nums,int k){
+        int low=0;
+        int high=nums.length-1;
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            int missing=nums[mid]-(mid+1);
+            if(missing<k){
+                low=mid+1;
+            }else{
+                high=mid-1;
+            }
+        }
+        return low+k;
+    }
+    public static int settlingDebtsHelper(int[] report){
+        int left=0;
+        int right= report.length-1;
+        int result=0;
+        while(left<right){
+            int left_amount=report[left];
+            int right_amount=report[right];
+            if(left_amount>right_amount){
+                report[left]+=report[right];
+                right--;
+            }else{
+                report[right]+=report[left];
+                left++;
+            }
+            result++;
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case Something's Missing
+        System.out.println(missKthElement(new int[]{1,9,13,22},4));
+        //test case Settling Debts
+//        System.out.println(settlingDebts(new int[][]{{}}));
         //test case for c++Atios
-        System.out.println(Atois("4193 with words"));
+//        System.out.println(Atois("4193 with words"));
         //test case for finding the width
         //[1,3,2,5,null,null,9,6,null,7]
 //        BST test=new BST(1);
