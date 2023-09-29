@@ -6667,9 +6667,141 @@ class constructSolution {
         }
         return result;
     }
+//    Greedy Florist
+    public static int GreddyFlorist(int[] prices,int customers){
+        int result=0;
+        int index=prices.length-1;
+        int infilate=0;
+        while(index>=0){
+            for(int i=0;i<customers && index>=0;i++){
+                result+=(infilate+1)*prices[index];
+            }
+            infilate++;
+        }
+        return result;
+    }
+    //chain size
+    public static int chainSize(String[] words){
+        Arrays.sort(words,(a,b)->a.length()-b.length());
+        HashMap<String,Integer> hashmap=new HashMap<>();
+        int result=0;
+        for(String word:words){
+            int count=1;
+            StringBuilder sb=new StringBuilder(word);
+            for(int i=0;i<word.length();i++){
+                sb.deleteCharAt(i);
+                String key=sb.toString();
+                if(hashmap.containsKey(key)){
+                    count=hashmap.get(key)+1;
+                }
+                result=Math.max(result,count);
+                sb.insert(i,word.charAt(i));
+            }
+            hashmap.put(word,count);
+        }
+        return result;
+    }
+    public static int farFromLand(int[][] grid){
+        if(grid.length==0)
+            return 0;
+        Queue<int[]> queue=new LinkedList<>();
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    queue.offer(new int[]{i,j,0});
+                }
+            }
+        }
+        if(!queue.isEmpty() && queue.size()==grid.length+grid[0].length){
+            return 0;
+        }
+        int result=0;
+        int[][] dir={{-1,0},{1,0},{0,1},{0,-1}};
+        boolean[][] visited=new boolean[grid.length][grid[0].length];
+        while(!queue.isEmpty()){
+            int[] temp=queue.poll();
+            int x=temp[0];
+            int y=temp[1];
+            int count=temp[2];
+            for(int[] d:dir){
+                int new_x=d[0]+x;
+                int new_y=d[1]+y;
+                if(new_x>=0 && new_x<grid.length && new_y>=0 && new_y<grid[0].length && !visited[new_x][new_y]){
+                    visited[new_x][new_y]=true;
+                    queue.offer(new int[]{new_x,new_y,count+1});
+                    result=Math.max(result,count+1);
+                }
+            }
+        }
+        return result;
+    }
+    //1008. Construct Binary Search Tree from Preorder Traversal
+    static class construct{
+        int index=0;
+        public BST bstToPre(int[] preorder){
+            if(preorder.length==0)
+                return new BST();
+            return helper(preorder,Integer.MAX_VALUE);
+        }
+        public BST helper(int[] preorder,int max){
+            if(index== preorder.length || preorder[index]>max)
+                return null;
+            BST result=new BST(preorder[index++]);
+            result.left=helper(preorder,result.val);
+            result.right=helper(preorder,max);
+            return result;
+        }
+    }
+    //Children Sum Property
+    public static boolean childSum(BST node) {
+        if (node == null)
+            return false;
+        Queue<BST> queue = new LinkedList<>();
+        queue.offer(node);
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                BST temp = queue.poll();
+                if (temp.left != null && temp.right != null) {
+                    queue.offer(temp.left);
+                    queue.offer(temp.right);
+                    if(temp.left.val+temp.right.val!=temp.val)
+                        return false;
+                }else if(temp.left!=null){
+                    queue.offer(temp.left);
+                    if(temp.left.val!=temp.val)
+                        return false;
+                }else if(temp.right!=null){
+                    queue.offer(temp.right);
+                    if(temp.right.val!=temp.val){
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
     public static void main(String[] args) {
+        BST test=new BST(4);
+        test.left=new BST(1);
+        test.right=new BST(3);
+        BST test2=new BST(7);
+        test2.left=new BST(3);
+        test2.right=new BST(4);
+        test2.left.left=new BST(3);
+        test2.right.left=new BST(2);
+        test2.right.right=new BST(3);
+        System.out.println(childSum(test));
+        System.out.println(childSum(test2));
+//        int[] preorder={8,5,1,7,10,12};
+//        construct test=new construct();
+//        preOrder(test.bstToPre(preorder));
+        //test case Far From Land
+//        System.out.println(farFromLand(new int[][]{{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}));
+        //test case for Highest Chain Size
+//        System.out.println(chainSize(new String[]{"a","abc"}));
         //test case Something's Missing
-        System.out.println(missKthElement(new int[]{1,9,13,22},4));
+//        System.out.println(missKthElement(new int[]{1,9,13,22},4));
         //test case Settling Debts
 //        System.out.println(settlingDebts(new int[][]{{}}));
         //test case for c++Atios
