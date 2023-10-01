@@ -6781,18 +6781,131 @@ class constructSolution {
         }
         return true;
     }
+    //Even Vowel Substring
+    public static int evenVowel(String s){
+        if(s==null || s.length()==0)
+            return 0;
+        HashSet<Character> hashset=new HashSet<>();
+        hashset.add('a');
+        hashset.add('e');
+        hashset.add('i');
+        hashset.add('o');
+        hashset.add('u');
+        int[] array=new int[5];
+        int end=0;
+        int start=0;
+        int result=0;
+        while(end<s.length()){
+            char ch=s.charAt(end);
+            if(hashset.contains(ch)){
+                array[vowelIndex(ch)]++;
+                while(isEvenCount(array) && start<s.length()){
+                    result=Math.max(result,Math.abs(end-start)+1);
+                    char startChar=s.charAt(start);
+                    if(hashset.contains(startChar)){
+                        array[vowelIndex(startChar)]--;
+                    }
+                    start++;
+                }
+            }
+            end++;
+        }
+        return result;
+    }
+    public static int vowelIndex(char c){
+        return "aeiou".indexOf(c);
+    }
+    public static boolean isEvenCount(int[] array){
+        for(int i:array){
+            if(i%2!=0){
+                return false;
+            }
+        }
+        return true;
+    }
+    //was able to solve the test case where atleat 2 vowel are present refered gfg to learn the best optimal test case
+    public static int evenVowel2(String s){
+        if(s.length()==0)
+            return 0;
+        HashMap<Character,Integer> hashmap=new HashMap<>();
+        HashMap<String,Integer> hashmap2=new HashMap<>();
+        hashmap.put('a',0);
+        hashmap.put('e',1);
+        hashmap.put('i',2);
+        hashmap.put('o',3);
+        hashmap.put('u',4);
+        String str="00000";
+        hashmap2.put(str,-1);
+        int end=0;
+        int result=0;
+        while(end<s.length()){
+            char chracter=s.charAt(end);
+            boolean isVowel=hashmap.containsKey(chracter);
+            if(isVowel){
+                int index=hashmap.get(chracter);
+                if(str.charAt(hashmap.get(chracter))=='0'){
+                    str=str.substring(0,index)+"1"+str.substring(index+1);
+                }else{
+                    str=str.substring(0,index)+"0"+str.substring(index+1);
+                }
+            }
+            boolean index=hashmap2.containsKey(str);
+            if(!index){
+                hashmap2.put(str,end);
+            }else{
+                result=Math.max(result,end-hashmap2.get(str));
+            }
+            end++;
+        }
+        return result;
+    }
+    //Update Products
+    public static int[] updateProducts(int[] nums){
+        if(nums.length==0)
+            return nums;
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i:nums){
+            hashmap.put(i,hashmap.getOrDefault(i,0)+1);
+        }
+        List<Map.Entry<Integer,Integer>> collect=new ArrayList<>(hashmap.entrySet());
+        collect.sort((a,b)->b.getValue()-a.getValue());
+        int left=0,right=1;
+        int[] result=new int[nums.length];
+        for(Map.Entry<Integer,Integer> entry:collect){
+            int element=entry.getKey();
+            int frequency=entry.getValue();
+            while(frequency>0){
+                if(right<nums.length){
+                    result[right]=element;
+                    right+=2;
+                }else{
+                    result[left]=element;
+                    left+=2;
+                }
+                frequency--;
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        BST test=new BST(4);
-        test.left=new BST(1);
-        test.right=new BST(3);
-        BST test2=new BST(7);
-        test2.left=new BST(3);
-        test2.right=new BST(4);
-        test2.left.left=new BST(3);
-        test2.right.left=new BST(2);
-        test2.right.right=new BST(3);
-        System.out.println(childSum(test));
-        System.out.println(childSum(test2));
+        //test case for Update Products
+        System.out.println(Arrays.toString(updateProducts(new int[]{1,1,2,2,3,3})));
+        //test case for Even Vowel SubString
+//        System.out.println(evenVowel2("bbb"));
+//        System.out.println(evenVowel2("aeiouaeioua"));
+        //test case for Even Vowel Substring
+//        System.out.println(evenVowel("bbbb"));
+//        BST test=new BST(4);
+//        test.left=new BST(1);
+//        test.right=new BST(3);
+//        BST test2=new BST(7);
+//        test2.left=new BST(3);
+//        test2.right=new BST(4);
+//        test2.left.left=new BST(3);
+//        test2.right.left=new BST(2);
+//        test2.right.right=new BST(3);
+//        System.out.println(childSum(test));
+//        System.out.println(childSum(test2));
 //        int[] preorder={8,5,1,7,10,12};
 //        construct test=new construct();
 //        preOrder(test.bstToPre(preorder));
