@@ -6887,9 +6887,165 @@ class constructSolution {
         }
         return result;
     }
+    //count Luck
+    //Ron and Hermione are deep in the Forbidden Forest collecting potion ingredients,
+    // and they've managed to lose their way. The path out of the forest is blocked, so
+    // they must make their way to a portkey that will transport them back to Hogwarts.
+    public static boolean countLuck(List<String> matrix,int decision){
+        if(matrix.size()==0)
+            return true;
+        int row=matrix.size();
+        int col=matrix.get(0).length();
+        char[][] grid=new char[row][col];
+        int startRow=0;
+        int startCol=0;
+        int targetRow=0;
+        int targetCol=0;
+        for(int i=0;i<row;i++){
+            for(int j=0;j<col;j++){
+                grid[i][j]=matrix.get(i).charAt(j);
+                if(grid[i][j]=='M'){
+                    startRow=i;
+                    startCol=j;
+                    grid[i][j]='X';
+                }else if(grid[i][j]=='*'){
+                    targetRow=i;
+                    targetCol=j;
+                }
+            }
+        }
+        Queue<int[]> queue=new LinkedList<>();
+        queue.offer(new int[]{startRow,startCol,0});
+        int result=0;
+        int[][] directions={{0,-1},{0,1},{-1,0},{1,0}};
+        while(!queue.isEmpty()){
+            int[] current=queue.poll();
+            int currentRow=current[0];
+            int currentCol=current[1];
+            int currentCount=current[2];
+            int tempCount=0;
+//            System.out.println("Current row " + currentRow);
+//            System.out.println("Current col " + currentCol);
+            if(currentRow==targetRow && currentCol==targetCol)
+                break;
+            for(int[] d:directions){
+                int newX=currentRow+d[0];
+                int newY=currentCol+d[1];
+                if(newX>=0 && newX<row &&newY>=0 && newY<col && grid[newX][newY]!='X'){
+                    tempCount++;
+                    queue.offer(new int[]{newX,newY,currentCount+1});
+                    grid[newX][newY]='X';
+                }
+            }
+//            System.out.println(tempCount);
+            if(tempCount>1){
+                result++;
+            }
+        }
+        System.out.println(result);
+        return result==decision;
+    }
+    //Clockwork
+    public static int clockWork(String[] array){
+        if(array.length==0)
+            return 0;
+        List<Integer> list=new ArrayList<>();
+        for(String s:array){
+            String[] str=s.split("\\:");
+            int hour=Integer.parseInt(str[0]);
+            int min=Integer.parseInt(str[1]);
+            int total=hour*60+min;
+            list.add(total);
+        }
+        list.sort((a,b)->Integer.compare(a,b));
+        int result=Integer.MAX_VALUE;
+        for(int i=1;i<list.size();i++){
+            result=Math.min(result,list.get(i)-list.get(i-1));
+        }
+        int edgeCase=24*60-(list.get(list.size()-1)-list.get(0));
+        result=Math.min(result,edgeCase);
+        return result;
+    }
+//    1373. Maximum Sum BST in Binary Tree
+    //approch 1
+    static class validBST{
+        final BST node;
+        int max;
+        int min;
+        int sum;
+        boolean isValid=true;
+        public validBST(BST node){
+         this.node=node;
+         this.sum=node.val;
+         this.min=node.val;
+         this.max=node.val;
+        }
+    }
+    public static int maxSumBST(BST node){
+        if(node==null)
+            return 0;
+        int[] result = { Integer.MIN_VALUE };
+        helperMaxSumBST(node,result);
+        return result[0];
+    }
+    public static validBST helperMaxSumBST(BST node,int[] result){
+        if(node==null)
+            return null;
+        validBST left=helperMaxSumBST(node.left,result);
+        validBST right=helperMaxSumBST(node.right,result);
+        validBST temp=new validBST(node);
+        if(left!=null){
+            temp.sum+=left.sum;
+            temp.min=Math.min(node.val,left.min);
+            temp.max=Math.max(node.val,left.max);
+            temp.isValid&=left.isValid&(left.max< node.val);
+        }
+        if(right!=null){
+            temp.sum+=right.sum;
+            temp.min=Math.min(temp.min,right.min);
+            temp.max=Math.max(temp.max, right.max);
+            temp.isValid&=right.isValid&(right.min>node.val);
+        }
+        if(temp.isValid){
+            result[0]=Math.max(result[0],temp.sum);
+        }
+        return temp;
+    }
     public static void main(String[] args) {
+        //test case for valid BST highest Sum
+        BST test=new BST(1);
+        test.left=new BST(4);
+        test.left.left=new BST(2);
+        test.left.right=new BST(4);
+        test.right=new BST(3);
+        test.right.left=new BST(2);
+        test.right.right=new BST(5);
+        test.right.right.left=new BST(4);
+        test.right.right.right=new BST(6);
+        System.out.println(maxSumBST(test));
+            //test case for Clock work
+//        System.out.println(clockWork(new String[]{"01:00", "01:10"}));
+//        System.out.println(clockWork(new String[]{"00:00", "12:23", "05:50", "23:12"}));
+//        //test case four Count Luck
+//        List<String> test=new ArrayList<>();
+//        test.add(".X.X......X");
+//        test.add(".X*.X.XXX.X");
+//        test.add(".XX.X.XM...");
+//        test.add("......XXXX.");
+//        List<String> test1=new ArrayList<>();
+//        test1.add(".X.X......X");
+//        test1.add(".X*.X.XXX.X");
+//        test1.add(".XX.X.XM...");
+//        test1.add("......XXXX.");
+//        List<String> test2=new ArrayList<>();
+//        test2.add("*..");
+//        test2.add("X.X");
+//        test2.add("..M");
+//        System.out.println(countLuck(test,3));
+//        System.out.println(countLuck(test1,4));
+//        System.out.println(countLuck(test2,1));
         //test case for Update Products
-        System.out.println(Arrays.toString(updateProducts(new int[]{1,1,2,2,3,3})));
+//        System.out.println(Arrays.toString(updateProducts(new int[]{1,1,2,2,3,3})));
         //test case for Even Vowel SubString
 //        System.out.println(evenVowel2("bbb"));
 //        System.out.println(evenVowel2("aeiouaeioua"));
