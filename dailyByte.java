@@ -7011,18 +7011,62 @@ class constructSolution {
         }
         return temp;
     }
+    //Floor in BST
+    public static int floorBST(BST node,int target){
+        if(node==null)
+            return 0;
+        int floorValue=Integer.MIN_VALUE;
+        while(node!=null){
+            if(node.val==target){
+                return target;
+            }else if(node.val<target){
+                floorValue=Math.max(node.val,floorValue);
+                node=node.right;
+            }else{
+//                floorValue=Math.max(node.val,floorValue);
+                node=node.left;
+            }
+        }
+        return floorValue;
+    }
+    public static int ceilBST(BST node,int target){
+        if(node==null)
+            return 0;
+        int floorValue=Integer.MIN_VALUE;
+        while(node!=null){
+            if(node.val==target){
+                return target;
+            }else if(node.val<target){
+//                floorValue=Math.max(node.val,floorValue);
+                node=node.right;
+            }else{
+                floorValue=Math.max(floorValue,node.val);
+                node=node.left;
+
+            }
+        }
+        return floorValue;
+    }
     public static void main(String[] args) {
-        //test case for valid BST highest Sum
-        BST test=new BST(1);
-        test.left=new BST(4);
+        //test case for Floor value in BST
+        BST test=new BST(10);
+        test.left=new BST(5);
+        test.right=new BST(15);
         test.left.left=new BST(2);
-        test.left.right=new BST(4);
-        test.right=new BST(3);
-        test.right.left=new BST(2);
-        test.right.right=new BST(5);
-        test.right.right.left=new BST(4);
-        test.right.right.right=new BST(6);
-        System.out.println(maxSumBST(test));
+        test.left.right=new BST(6);
+        System.out.println(floorBST(test,7));
+        System.out.println(ceilBST(test,7));
+        //test case for valid BST highest Sum
+//        BST test=new BST(1);
+//        test.left=new BST(4);
+//        test.left.left=new BST(2);
+//        test.left.right=new BST(4);
+//        test.right=new BST(3);
+//        test.right.left=new BST(2);
+//        test.right.right=new BST(5);
+//        test.right.right.left=new BST(4);
+//        test.right.right.right=new BST(6);
+//        System.out.println(maxSumBST(test));
             //test case for Clock work
 //        System.out.println(clockWork(new String[]{"01:00", "01:10"}));
 //        System.out.println(clockWork(new String[]{"00:00", "12:23", "05:50", "23:12"}));
