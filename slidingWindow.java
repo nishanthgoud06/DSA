@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class slidingWindow {
     //normal sliding window problem
@@ -145,10 +142,205 @@ public static List<Integer> findAnagrams(String s, String p) {
     }
     return result;
 }
+//    Given a string s and an integer k, return the length of the longest substring in s you can create that contains a single capital letter. You may apply k operations to s where a single operation consists of selecting one capital letter and modifying it to be another capital letter.
+//            Note: s will only contain uppercase alphabetical characters.
+    public static int charUpdate(String str,int limit){
+        if(str.length()==0 || str==null)
+            return 0;
+        int[] ch=new int[26];
+        int end=0,start=0,result=0,max=0;
+        while(end<str.length()){
+            char endChar=str.charAt(end);
+            ch[endChar-'A']++;
+            max=Math.max(ch[endChar-'A'],max);
+            if(end-start+1-max>limit){
+                char startChar=str.charAt(start);
+                ch[startChar]--;
+                start++;
+            }
+            result=Math.max(result,end-start+1);
+            end++;
+        }
+        return result;
+    }
+//    Find all substrings of a string that are a permutation of another string
+    public static List<String> subStr(String str1,String str2){
+        List<String> result=new ArrayList<>();
+        if(str2.length()==0)
+            return result;
+        int[] ch=new int[26];
+        for(char c:str2.toCharArray()){
+            ch[c-'a']++;
+        }
+        for(int i=0;i<str1.length()-str2.length()+1;i++){
+            int[] ch2=new int[26];
+            String str= str1.substring(i,i+str2.length());
+            for(char c:str.toCharArray()){
+                ch2[c-'a']++;
+            }
+            int count=0;
+            for(char c:str2.toCharArray()){
+                if(ch2[c-'a']==ch[c-'a']){
+                    count++;
+                }
+            }
+            if(count==str2.length()){
+                result.add(str);
+            }
+        }
+        return result;
+    }
+//    Find the longest substring of a string containing distinct characters
+    public static int uniqueSub(String str){
+        if(str.length()==0)
+            return 0;
+        HashSet<Character> hashset=new HashSet<>();
+        int end=0,start=0,result=0;
+        while(end<str.length()){
+            char endChar=str.charAt(end);
+            while(hashset.contains(endChar)){
+                char startChar=str.charAt(start);
+                hashset.remove(startChar);
+                start++;
+            }
+            hashset.add(endChar);
+            result=Math.max(end-start+1,result);
+            end++;
+        }
+        return result;
+    }
+//    Find maximum length sequence of continuous ones
+    public static int maximumLength(int[] nums){
+        if(nums.length==0)
+            return 0;
+        int start=0,end=0,prevIndex=-1,max=0,count=0,result=0;
+        while(end<nums.length){
+            if(nums[end]==0){
+                prevIndex=end;
+                count++;
+            }
+            if(count==2){
+                while(nums[start]!=0){
+                    start++;
+                }
+                count=1;
+            }
+            if(end-start+1>max){
+                max=end-start+1;
+                result=prevIndex;
+            }
+            end++;
+        }
+    return result;
+    }
+    public static List<Integer> seqOne(int[] nums){
+        List<Integer> result=new ArrayList<>();
+        if(nums.length==0)
+            return result;
+        int count=0;
+        for(int i:nums){
+            if(i==0){
+                count++;
+            }
+        }
+        for(int i=0;i<count;i++){
+            result.add(helperseqOne(i,nums));
+        }
+        return result;
+    }
+    public static int helperseqOne(int limit,int[] nums){
+        int end=0,start=0,max=0,result=0,count=0;
+        while(end<nums.length){
+            if(nums[end]==0){
+                count++;
+            }
+            if(count>limit){
+                while(nums[start]!=0){
+                    start++;
+                }
+                start++;
+                count--;
+            }
+            if(end-start+1>max){
+                max=end-start+1;
+            }
+            end++;
+        }
+        return max;
+    }
+//    Find minimum sum subarray of size `k`
+    public static int minSumSubArray(int[] nums,int limit){
+        return 0;
+    }
+    //Find a subarray having the given sum in an integer array
+    public static List<Integer> subArrayTarget(int[] nums,int target){
+        List<Integer> list = new ArrayList<>();
+        int current = 0;
+        int high = 0;
+        for (int low = 0; low < nums.length; low++) {
+            while (high < nums.length && current + nums[high] <= target) {
+                current += nums[high];
+                high++;
+            }
+            if (current == target) {
+                for (int i = low; i < high; i++) {
+                    list.add(nums[i]);
+                }
+                return list;
+            }
+            current -= nums[low];
+        }
+        return list;
+    }
+//    Find the smallest subarray length whose sum of elements is greater than `k`
+    public static int smallestSubtraget(int[] nums,int target){
+        if(nums.length==0)
+            return 0;
+        int start=0,end=0,result=Integer.MAX_VALUE,current=0;
+        while(end<nums.length){
+            current+=nums[end];
+            while(current>target){
+                result=Math.min(result,end-start+1);
+                current-=nums[start];
+                start++;
+            }
+            end++;
+        }
+        return result;
+    }
+    //Find the count of distinct elements in every subarray of size `k`
+    public static List<Integer> distElement(int[] nums,int limit){
+        if(nums.length==0)
+            return null;
+        int start=0,end=0;
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        List<Integer> result=new ArrayList<>();
+        while(end<nums.length){
+            hashmap.put(nums[end],hashmap.getOrDefault(nums[end],0)+1);
+            if((end-start+1)%limit==0){
+                result.add(hashmap.size());
+                int starting=nums[start];
+                hashmap.put(starting,hashmap.get(starting)-1);
+                if(hashmap.get(starting)==0)
+                    hashmap.remove(starting);
+                start++;
+            }
+            end++;
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        System.out.println(distElement(new int[]{2, 1, 2, 3, 2, 1, 4, 5},5));
+//        System.out.println(smallestSubtraget(new int[]{1, 2, 3, 4, 5, 6, 7, 8},21));
+//        System.out.println(subArrayTarget(new int[]{2, 6, 0, 9, 7, 3, 1, 4, 1, 10},15));
+//        System.out.println(seqOne(new int[]{1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0}));
+//        System.out.println(maximumLength(new int[]{0, 0, 1, 0, 1, 1, 1, 0, 1, 1}));
+//        System.out.println(uniqueSub("findlongestsubstring"));
+//        System.out.println(subStr("xyyzxzyzxxyz","xyz"));
+//        System.out.println(charUpdate("AABBB",2));
 //        System.out.println(minSub(7,new int[]{2,3,1,2,4,3}));
 //        System.out.println(subArrayProduct(new int[]{10,5,2,6},100));
-        System.out.println(findLength("A",2));
+//        System.out.println(findLength("A",2));
 //        System.out.println(longestSubArrayKDistinct("AAAHHBBBBBBBBBBC",2));
 //        System.out.println(smallestSubArray(new int[]{4,2,1,7,8,1,2,8,1,0},8));
 //        System.out.println(MaxSubArray(new int[]{4,2,1,7,8,1,2,8,1,0},3));
