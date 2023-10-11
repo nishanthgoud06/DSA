@@ -329,8 +329,110 @@ public static List<Integer> findAnagrams(String s, String p) {
         }
         return result;
     }
+    //Least Unique Elements
+    public static int leastUnique(int[] nums, int limit) {
+        if (nums.length == 0 || limit == 0)
+            return 0;
+
+        HashMap<Integer, Integer> hashmap = new HashMap<>();
+        int uniqueValue = Integer.MAX_VALUE; // Initialize to 0 because no elements are removed initially
+
+        for(int i:nums)
+            hashmap.put(i,hashmap.getOrDefault(i,0)+1);
+//        System.out.println(hashmap);
+        for (int start = 0; start <= nums.length-limit; start++) {
+            int current = start;
+            int count = 0;
+            int end=start;
+            while (current < nums.length && count < limit) {
+                if (hashmap.containsKey(nums[current])) {
+                    hashmap.put(nums[current], hashmap.get(nums[current]) - 1);
+                    if (hashmap.get(nums[current]) == 0) {
+                        hashmap.remove(nums[current]);
+                    }
+                    count++;
+                }
+                current++;
+            }
+            // After removing `limit` elements, update `uniqueValue`
+            System.out.println(hashmap);
+            System.out.println("//");
+            uniqueValue = Math.min(uniqueValue, hashmap.size());
+            int urrent=end;
+            while(urrent<end+limit){
+                hashmap.put(nums[urrent],hashmap.getOrDefault(nums[urrent],0)+1);
+                urrent++;
+            }
+            System.out.println(hashmap);
+            System.out.println("///////");
+        }
+        return uniqueValue;
+    }
+//    Find duplicates within a range `k` in an array
+    public static List<String> findDuplicate(int[] nums,int range){
+        if(nums.length==0 || range==0)
+            return null;
+        List<String> result=new ArrayList<>();
+        HashMap<Integer,Integer> hashMap=new HashMap<>();
+        for(int i=0;i<nums.length;i++){
+            int value=nums[i];
+            hashMap.put(value, hashMap.getOrDefault(value,0)+1);
+            if(hashMap.get(value)>1){
+                result.add(new String("found the duplicate key in the range of "+(i+1) +" and "+(i-range)+" the duplicate value is "+ value));
+            }
+        }
+        return result;
+    }
+//    Print all subarrays of an array having distinct elements
+    public static List<List<Integer>> printAllSub(int[] nums){
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums.length == 0)
+            return result;
+
+        int start = 0;
+        int end = 0;
+        List<Integer> temp = new ArrayList<>();
+
+        while (end < nums.length) {
+            if (!temp.contains(nums[end])) {
+                temp.add(nums[end]);
+                end++;
+            } else {
+                result.add(new ArrayList<>(temp));
+                temp.remove(0);
+                start++;
+            }
+        }
+        return result;
+    }
+//    Find minimum sum subarray of size `k`
+    public static int[] minSum(int[] nums,int k){
+        if(nums.length==0)
+            return nums;
+        int start=0,end=0,min=Integer.MAX_VALUE,current=0,startIndex=0;
+        while(end<nums.length){
+            current+=nums[end];
+            if((end-start+1)%k==0){
+                if(current<min){
+                    min=current;
+                    startIndex=start;
+                }
+                current-=nums[start];
+                start++;
+            }
+            end++;
+        }
+        return Arrays.copyOfRange(nums,startIndex,startIndex+k);
+    }
     public static void main(String[] args) {
-        System.out.println(distElement(new int[]{2, 1, 2, 3, 2, 1, 4, 5},5));
+        System.out.println(Arrays.toString(minSum(new int[]{10, 4, 2, 5, 6, 3, 8, 1},3)));
+//        System.out.println(printAllSub(new int[]{5, 2, 3, 5, 4, 3}));
+//        List<String> test=findDuplicate(new int[]{5, 6, 8, 2, 4, 6, 9},4);
+//        for(String s:test)
+//            System.out.println(s);
+//        System.out.println(leastUnique(new int[]{1,4,3,3},2));
+//        System.out.println(leastUnique(new int[]{3, 1, 2, 2, 3, 4, 4, 5},3));
+//        System.out.println(distElement(new int[]{2, 1, 2, 3, 2, 1, 4, 5},5));
 //        System.out.println(smallestSubtraget(new int[]{1, 2, 3, 4, 5, 6, 7, 8},21));
 //        System.out.println(subArrayTarget(new int[]{2, 6, 0, 9, 7, 3, 1, 4, 1, 10},15));
 //        System.out.println(seqOne(new int[]{1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0}));
