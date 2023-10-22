@@ -144,16 +144,148 @@ public class Graphs {
         }
         return max;
     }
+    //here we are going to do gfg graph problem
+    //detect whether the dirted graph has a cycle or not
+    static class Test{
+        int size;
+        List<List<Integer>> graph;
+        public Test(int size){
+            graph=new ArrayList<>(size);
+            for(int i=0;i<size;i++){
+                graph.add(new ArrayList<>());
+            }
+        }
+        public void addEdge(int parent,int child){
+            graph.get(parent).add(child);
+        }
+    }
+    public static boolean hasCycleDir(Test graph,int size){
+        if(graph.graph.size()==0)
+            return false;
+        boolean[] visited=new boolean[size];
+        boolean[] stack=new boolean[size];
+        for(int i=0;i<size;i++){
+            if(hasCycleDirHelper(graph,visited,stack,i))
+                return true;
+        }
+        return false;
+    }
+    public static boolean hasCycleDirHelper(Test graph,boolean[] visited,boolean[] stack,int vertex){
+        if(stack[vertex])
+            return true;
+        if(visited[vertex])
+            return false;
+        stack[vertex]=true;
+        visited[vertex]=true;
+        for(int i:graph.graph.get(vertex)){
+            if(hasCycleDirHelper(graph,visited,stack,i)){
+                return true;
+            }
+        }
+        stack[vertex]=false;
+        return false;
+    }
+    //detect a cycle in undirected graph
+    //approch-1 using dfs
+    public static boolean hasCycleunDDfs(List<List<Integer>> graph,int size){
+        if(graph.size()==0)
+            return false;
+        boolean[] visited=new boolean[size];
+        for(int i=0;i<size;i++){
+            if(!visited[i] && helperhasCycleunDDfs(graph,visited,i,-1)){
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean helperhasCycleunDDfs(List<List<Integer>> graph,boolean[] visited,int current,int parent){
+        visited[current]=true;
+        for(int i:graph.get(current)){
+            if(!visited[i]){
+                if(helperhasCycleunDDfs(graph,visited,i,current)){
+                    return true;
+                }
+            }else if(i!=parent){
+                return true;
+            }
+        }
+        return false;
+    }
+    //Topological sort
+    public static int[] topoSort(List<List<Integer>> graph,int size){
+        if(size==0)
+            return new int[0];
+        Set<Integer> hashSet=new HashSet<>();
+        Stack<Integer> stack=new Stack<>();
+        for(int i=0;i<size;i++){
+            if(!hashSet.contains(i)){
+                helperTopoSort(hashSet,stack,graph,i);
+            }
+        }
+        int i=0;
+        int[] result=new int[size];
+        while(!stack.isEmpty()){
+            result[i++]=stack.pop();
+        }
+        return result;
+    }
+    public static void helperTopoSort(Set<Integer> hashset,Stack<Integer> stack,List<List<Integer>> graph,int i){
+        if(hashset.contains(i)){
+            return;
+        }
+        hashset.add(i);
+        for(int j:graph.get(i)){
+            helperTopoSort(hashset,stack,graph,j);
+        }
+        stack.push(i);
+    }
     public static void main(String[] args) {
-        int[][] grid = {{0,0,1,0,0,0,0,1,0,0,0,0,0},
-                        {0,0,0,0,0,0,0,1,1,1,0,0,0},
-                        {0,1,1,0,1,0,0,0,0,0,0,0,0},
-                        {0,1,0,0,1,1,0,0,1,0,1,0,0},
-                        {0,1,0,0,1,1,0,0,1,1,1,0,0},
-                        {0,0,0,0,0,0,0,0,0,0,1,0,0},
-                        {0,0,0,0,0,0,0,1,1,1,0,0,0},
-                        {0,0,0,0,0,0,0,1,1,0,0,0,0}};
-        System.out.println(maxArea(grid));
+        //test case for Topological Sort
+        List<List<Integer>> list=new ArrayList<>();
+        for(int i=0;i<4;i++){
+            list.add(new ArrayList<>());
+        }
+        list.get(1).add(0);
+        list.get(2).add(0);
+        list.get(3).add(0);
+        System.out.println(Arrays.toString(topoSort(list,4)));
+        //test case for undirted cycle detection
+        //test case 1
+//        List<List<Integer>> test1=new ArrayList<>();
+//        for(int i=0;i<4;i++){
+//            test1.add(new ArrayList<>());
+//        }
+//        test1.get(0).add(1);
+//        test1.get(1).add(0);
+//        test1.get(1).add(2);
+//        test1.get(2).add(1);
+//        test1.get(0).add(2);
+//        test1.get(2).add(0);
+//        test1.get(2).add(3);
+//        test1.get(3).add(2);
+//        test1.get(0).add(1);
+//        test1.get(1).add(0);
+//        test1.get(2).add(1);
+//        test1.get(1).add(2);
+//        test1.get(1).add(3);
+//        test1.get(3).add(1);
+//        System.out.println(hasCycleunDDfs(test1,4));
+        //test case 2
+//        Test test=new Test(4);
+//        test.addEdge(0,1);
+//        test.addEdge(1,2);
+//        test.addEdge(2,3);
+
+//        System.out.println(hasCycleDir(test,4));
+//        int[][] grid = {{0,0,1,0,0,0,0,1,0,0,0,0,0},
+//                        {0,0,0,0,0,0,0,1,1,1,0,0,0},
+//                        {0,1,1,0,1,0,0,0,0,0,0,0,0},
+//                        {0,1,0,0,1,1,0,0,1,0,1,0,0},
+//                        {0,1,0,0,1,1,0,0,1,1,1,0,0},
+//                        {0,0,0,0,0,0,0,0,0,0,1,0,0},
+//                        {0,0,0,0,0,0,0,1,1,1,0,0,0},
+//                        {0,0,0,0,0,0,0,1,1,0,0,0,0}};
+//        System.out.println(maxArea(grid));
 //        char[][]  grid = {
 //                {'1','1','1','1','0'},
 //                {'1','1','0','1','0'},
