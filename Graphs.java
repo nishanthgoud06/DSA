@@ -239,16 +239,164 @@ public class Graphs {
         }
         stack.push(i);
     }
-    public static void main(String[] args) {
-        //test case for Topological Sort
-        List<List<Integer>> list=new ArrayList<>();
-        for(int i=0;i<4;i++){
-            list.add(new ArrayList<>());
+    static class Tree{
+        int val;
+        Tree left,right;
+        public Tree(int val){
+            this.val=val;
         }
-        list.get(1).add(0);
-        list.get(2).add(0);
-        list.get(3).add(0);
-        System.out.println(Arrays.toString(topoSort(list,4)));
+    }
+    static class Goggle{
+        StringBuilder sb;
+        public Goggle(){
+            sb=new StringBuilder();
+        }
+        public String serializer(Tree node){
+            serializerHelper(node);
+            return sb.toString();
+        }
+        public void serializerHelper(Tree node){
+            if(node==null){
+                sb.append("#"+",");
+                return;
+            }else{
+                sb.append(node.val+",");
+                serializer(node.left);
+                serializer(node.right);
+            }
+        }
+        public Tree deserializer(String s){
+            String[] c=s.split("\\,");
+            return deserializerHelper(c);
+        }
+        public Tree deserializerHelper(String[] c){
+            Tree result=new Tree(Integer.parseInt(c[0]));
+            Queue<Tree> queue=new LinkedList<>();
+            queue.offer(result);
+            int count=1;
+            while(!queue.isEmpty() && count<c.length){
+                Tree current=queue.poll();
+                if(!c[count].equals("#")){
+                    Tree left=new Tree(Integer.parseInt(c[count]));
+                    current.left=left;
+                    queue.offer(left);
+                }
+                count++;
+                if(!c[count].equals("#")){
+                    Tree right=new Tree(Integer.parseInt(c[count]));
+                    current.right=right;
+                    queue.offer(right);
+                }
+                count++;
+            }
+            return result;
+        }
+    }
+    public static void inorder(Tree node){
+        if(node==null)
+            return;
+        inorder(node.left);
+        System.out.println(node.val);
+        inorder(node.right);
+    }
+    //rearrange the array
+    public static int findMissingValue(int[] nums){
+        if(nums.length==0)
+            return -1;
+        int length=nums.length;
+        for(int i=0;i<length;i++){
+            while(1<=nums[i] && nums[i]<=length && nums[i]!=nums[nums[i]-1]){
+                int temp = nums[i];
+                nums[i] = nums[temp - 1];
+                nums[temp - 1] = temp;
+            }
+        }
+        for(int i=0;i<=length;i++){
+            if(nums[i]!=i+1){
+                return i+1;
+            }
+        }
+        return -1;
+    }
+    //Bi-Parttite
+    //DFS approch
+    public static boolean bipartite(int[][] graph){
+        if(graph.length==0)
+            return true;
+        int[] color=new int[graph.length];
+        for(int i=0;i< graph.length;i++){
+            if(color[i]==0 && !helperBipartite(graph,i,color,1)){
+                return false;
+            }
+        }
+        return true;
+    }
+    public static boolean helperBipartite(int[][] graph,int vertex,int[] colors,int color){
+        if(colors[vertex]!=0){
+            return colors[vertex]==color;
+        }
+        colors[vertex]=color;
+        for(int i:graph[vertex]){
+            if(!helperBipartite(graph,i,colors,-color)){
+                return false;
+            }
+        }
+        return true;
+    }
+    //BFS approch
+    public static boolean bipartiteBFS(int[][] graph){
+        if(graph.length==0)
+            return true;
+        int[] color=new int[graph.length];
+        Queue<Integer> queue=new LinkedList<>();
+        for(int i=0;i<graph.length;i++){
+            if(color[i]==0){
+                color[i]=1;
+                queue.offer(i);
+                while(!queue.isEmpty()){
+                    int currentVertex= queue.poll();
+                    for(int vertex:graph[currentVertex]){
+                        if(color[vertex]!=0){
+                            if(color[vertex]==color[currentVertex])
+                                return false;
+                        }else if(color[vertex]==0){
+                            color[vertex]=-color[currentVertex];
+                            queue.offer(vertex);
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+    public static void main(String[] args) {
+        //Bi-partite
+        System.out.println(bipartiteBFS(new int[][]{{1,3},{0,2},{1,3},{0,2}}));
+        System.out.println(bipartiteBFS(new int[][]{{1,2,3},{0,2},{0,1,3},{0,2}}));
+        //test case for Finding missing value in the array in linear time and in constant space
+//        System.out.println(findMissingValue(new int[]{3,4,-1,1}));
+        //test case for Google Problem
+//        Goggle test=new Goggle();
+//        Tree testing=new Tree(5);
+//        testing.left=new Tree(2);
+//        testing.right=new Tree(7);
+//        testing.left.left=new Tree(1);
+//        testing.left.right=new Tree(3);
+//        testing.right.left=new Tree(6);
+//        testing.right.right=new Tree(8);
+//        String serializer=test.serializer(testing);
+//        System.out.println(serializer);
+//        Tree deserializer=test.deserializer(serializer);
+//        inorder(deserializer);
+        //test case for Topological Sort
+//        List<List<Integer>> list=new ArrayList<>();
+//        for(int i=0;i<4;i++){
+//            list.add(new ArrayList<>());
+//        }
+//        list.get(1).add(0);
+//        list.get(2).add(0);
+//        list.get(3).add(0);
+//        System.out.println(Arrays.toString(topoSort(list,4)));
         //test case for undirted cycle detection
         //test case 1
 //        List<List<Integer>> test1=new ArrayList<>();
