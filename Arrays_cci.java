@@ -1,8 +1,5 @@
 import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Arrays_cci {
     //1.1 implement anAlgorithm to determine if a string has all unique character.
@@ -172,10 +169,141 @@ public static int countDiceCombinations(int N, int max, int target) {
         }
         return result;
     }
+    //Same Vowel Count
+    public static boolean samevowel(String s){
+        if(s.length()==0)
+            return true;
+        if(s.length()%2!=0)
+            return false;
+        int length=s.length();
+        int firstEnd=length/2;
+        String firstHalf=s.substring(0,firstEnd);
+        String secondHalf=s.substring(firstEnd,length);
+        return sameVowelHelper1(firstHalf)==sameVowelHelper1(secondHalf);
+    }
+//    1590. Make Sum Divisible by P
+    public static int makeSumDiv(int[] nums,int k){
+        if(nums.length==0)
+            return -1;
+        int[] dp=new int[nums.length+1];
+        for(int i=1;i<=nums.length;i++){
+            dp[i]=dp[i-1]+nums[i-1];
+        }
+        int total=dp[nums.length];
+        for(int i=1;i<nums.length;i++){
+            for(int start=0;start+i<=nums.length;start++){
+                int end=start+i;
+                int subSum=dp[end]-dp[start];
+                int rem=total-subSum;
+                if(rem%k==0){
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+//    Soup or Salad
+    public static int soupSalad(int[] people,int[] sides){
+        if(people.length==0){
+            return 0;
+        }
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i:people){
+            hashmap.put(i,hashmap.getOrDefault(i,0)+1);
+        }
+        int currentSide=0;
+        int satisfied=0;
+            while(currentSide<sides.length && hashmap.containsKey(sides[currentSide])){
+                hashmap.put(sides[currentSide],hashmap.get(sides[currentSide])-1);
+                if(hashmap.get(sides[currentSide])==0){
+                    hashmap.remove(sides[currentSide]);
+                }
+                satisfied++;
+                currentSide++;
+            }
+            return people.length-satisfied;
+        }
+       //Tree Reconstruction
+//    static class Tree{
+//        int val;
+//        Tree left,right;
+//        public Tree(int val){
+//            this.val=val;
+//        }
+//       }
+//    public static Tree treeCon(int[] preorder,int[] inorder){
+//        HashMap<Integer,Integer> hashMap=new HashMap<>();
+//        for(int i=0;i< inorder.length;i++){
+//            hashMap.put(inorder[i],i);
+//        }
+//        return treeConHelper(preorder,hashMap,0,preorder.length);
+//    }
+//    public static void printTreeInorder(Tree node){
+//        if(node==null)
+//            return;
+//        printTreeInorder(node.left);
+//        System.out.println(node.val);
+//        printTreeInorder(node.right);
+//    }
+//    public static Tree treeConHelper(int[] preorder,HashMap<Integer,Integer> hashmap,int left,int right){
+//        if(left>right){
+//            return null;
+//        }
+//        Tree result=new Tree(preorder[left]);
+//        result.left=treeConHelper(preorder,hashmap,left+1,hashmap.get(result.val));
+//        result.right=treeConHelper(preorder,hashmap,hashmap.get(result.val),right);
+//        return result;
+//    }
+    public static int sameVowelHelper1(String s){
+        HashSet<Character> hashset=new HashSet<>();
+        hashset.add('a');
+        hashset.add('e');
+        hashset.add('i');
+        hashset.add('o');
+        hashset.add('u');
+        int count=0;
+        for(char c:s.toCharArray()){
+            if(hashset.contains(c)){
+                count++;
+            }
+        }
+        return count;
+    }
+    //Coffee Shop Customers
+    public static int coffeeShopCustomer(int[] customer,int[] mode,int duriation){
+        if(customer.length==0)
+            return 0;
+        int max=0;
+        int end=0;
+        while(end<mode.length){
+            if(mode[end]==1){
+                int count=0;
+                int current=end;
+                int value=0;
+                while(count!=duriation && current<customer.length){
+                    value+=customer[current];
+                    current++;
+                    count++;
+                }
+                max=Math.max(max,value);
+            }
+            end++;
+        }
+        return max;
+    }
     public static void main(String[] args) {
-        int[] nums = {1, 3, 1, 2, 5};
-        int k = 7;
-        System.out.println(countSubarraysDivisibleByK(nums, k));
+        //test case for Coffee shop customer
+        System.out.println(coffeeShopCustomer(new int[]{5,2,2,2},new int[]{1,0,1,1},2));
+        //test case for constructing a tree based on the inorder and preorder array
+//        printTreeInorder(treeCon(new int[]{1,2,3},new int[]{2,1,3}));
+        //test case for Soup and Salad
+//        System.out.println(soupSalad(new int[]{1,1,1},new int[]{1,1,1}));
+//        System.out.println(makeSumDiv(new int[]{6,3,5,2},9));
+        //test case for Same Vowel
+//        System.out.println(samevowel("computer"));
+//        int[] nums = {1, 3, 1, 2, 5};
+//        int k = 7;
+//        System.out.println(countSubarraysDivisibleByK(nums, k));
 //        System.out.println(kDivide(new int[]{1, 3, 1, 2, 5},7));
 //        System.out.println(countDiceCombinations(1,6,5));
 //        System.out.println(unique("aabca"));
