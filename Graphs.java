@@ -369,10 +369,143 @@ public class Graphs {
         }
         return true;
     }
+    //design google question
+    static class Xor{
+        List<Integer> list;
+        Xor prev;
+        Xor next;
+        public Xor(){
+            list=new ArrayList<>();
+        }
+        public void add(int element){
+            list.add(element);
+        }
+        public int get(int index){
+            return list.get(index);
+        }
+    }
+    //Required Vertices
+    public static List<Integer> reuiredVertices(int[][] edges,int N){
+        List<Integer> result=new ArrayList<>();
+        if(edges.length==0 && N==0)
+            return result;
+        HashMap<Integer,List<Integer>> hashmap=new HashMap<>();
+        for(int i=0;i<N;i++){
+            hashmap.put(i,new ArrayList<>());
+        }
+        int[] count=new int[N];
+        for(int[] edge:edges){
+            int from=edge[0];
+            int to=edge[1];
+            hashmap.get(from).add(to);
+            count[to]++;
+        }
+        for(int i=0;i<N;i++){
+            if(count[i]==0){
+                result.add(i);
+//                queue.offer(i);
+            }
+        }
+        return result;
+    }
+    //encode and decode
+    //111 -3
+    //11-2
+    //1-1
+    public static int encodeAndDecode(String number){
+        if(number.length()==1)
+            return 1;
+        if(number.charAt(0)=='0'){
+            return 0;
+        }
+        int[] dp=new int[number.length()+1];
+        dp[0]=1;
+        dp[1]=1;
+        for(int i=2;i<=number.length();i++){
+            int one=number.charAt(i-1)-'0';
+            int two=number.charAt(i-2)-'0';
+            two*=10+one;
+            if(one>=1){
+                dp[i]+=dp[i-1];
+            }
+            if(two>=10 && two<=26){
+                dp[i]+=dp[i-2];
+            }
+        }
+        return dp[number.length()];
+    }
+    //Magic Tree Nodes
+    public static List<Integer> magicTree(Tree node){
+        List<Integer> result=new ArrayList<>();
+        if(node==null)
+            return result;
+        magicTreeHelper(node,result,-1);
+        return result;
+    }
+    public static void magicTreeHelper(Tree node,List<Integer> result,int max){
+        if(node==null){
+            return;
+        }
+        if(max<node.val){
+            result.add(node.val);
+        }
+        if(node.val>max){
+            max=node.val;
+        }
+        magicTreeHelper(node.left,result,max);
+        magicTreeHelper(node.right,result,max);
+    }
+    //using bfs Approch
+    public static List<Integer> magicTreeBFS(Tree node){
+        if(node==null)
+            return new ArrayList<>();
+        List<Integer> result=new ArrayList<>();
+        Queue<Tree> queue=new LinkedList<>();
+        Queue<Integer> maxValue=new LinkedList<>();
+        queue.offer(node);
+        maxValue.offer(-1);
+        int max=-1;
+        while(!queue.isEmpty()){
+            Tree current=queue.poll();
+            int currentMax=maxValue.poll();
+            if(current.val > currentMax){
+                currentMax= current.val;;
+                result.add(current.val);
+            }
+            if(current.left!=null){
+                queue.offer(current.left);
+                maxValue.offer(currentMax);
+            }
+            if(current.right!=null){
+                queue.offer(current.right);
+                maxValue.offer(currentMax);
+            }
+        }
+        return result;
+    }
+    
     public static void main(String[] args) {
+        //test case for Magic Tree
+        Tree node=new Tree(5);
+        node.left=new Tree(4);
+        node.right=new Tree(9);
+        node.left.left=new Tree(8);
+        node.left.right=new Tree(7);
+        System.out.println(magicTreeBFS(node));
+        //test case for encode and decode
+//        System.out.println(encodeAndDecode("001"));
+        //Required Vertices
+//        System.out.println(reuiredVertices(new int[][]{{3,1},{1,2},{0,2}},4));
+        //Xor Design
+//        Xor test=new Xor();
+//        test.add(1);
+//        test.add(2);
+//        test.add(3);
+//        test.add(4);
+//        System.out.println(test.get(3));
         //Bi-partite
-        System.out.println(bipartiteBFS(new int[][]{{1,3},{0,2},{1,3},{0,2}}));
-        System.out.println(bipartiteBFS(new int[][]{{1,2,3},{0,2},{0,1,3},{0,2}}));
+//        System.out.println(bipartiteBFS(new int[][]{{1,3},{0,2},{1,3},{0,2}}));
+//        System.out.println(bipartiteBFS(new int[][]{{1,2,3},{0,2},{0,1,3},{0,2}}));
         //test case for Finding missing value in the array in linear time and in constant space
 //        System.out.println(findMissingValue(new int[]{3,4,-1,1}));
         //test case for Google Problem
