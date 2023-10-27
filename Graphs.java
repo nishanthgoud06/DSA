@@ -483,15 +483,75 @@ public class Graphs {
         }
         return result;
     }
-    
+//    universal value
+    public static int universalValue(Tree node){
+        if(node==null)
+            return 0;
+        int[] count=new int[1];
+        universalValueHelper(node,count);
+        return count[0];
+    }
+    public static boolean universalValueHelper(Tree node,int[] count){
+        if(node==null){
+            return true;
+        }
+        boolean left=universalValueHelper(node.left,count);
+        boolean right=universalValueHelper(node.right,count);
+        if(left&&right){
+            if((node.left==null||node.left.val==node.val)&&(node.right==null || node.right.val==node.val)){
+                count[0]++;
+                return true;
+            }
+        }
+        return false;
+    }
+    public static int[] sequenceEquation(int[] nums){
+        if(nums.length==0)
+            return new int[0];
+        int[] result=new int[nums.length];
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i=0;i<nums.length;i++){
+            hashmap.put(i+1,nums[i]);
+        }
+        for(int i=1;i<=nums.length;i++){
+            result[i-1]=sequenceEqHelper(i,hashmap,2);
+        }
+        return result;
+    }
+    public static int sequenceEqHelper(int target,HashMap<Integer,Integer> hashmap,int rounds){
+        if(rounds==0){
+            return target;
+        }
+        for(Map.Entry<Integer,Integer> entry:hashmap.entrySet()){
+            if(entry.getValue()==target){
+                return sequenceEqHelper(entry.getKey(),hashmap,rounds-1);
+            }
+        }
+        return -1;
+    }
+    //1328. Break a Palindrome
+    public static String breakpalindrome(String s){
+        return "";
+    }
     public static void main(String[] args) {
+        //Sequence Equation
+        System.out.println(Arrays.toString(sequenceEquation(new int[]{5,2,1,3,4})));
+        //test case for universal Value
+//        Tree node=new Tree(0);
+//        node.left=new Tree(1);
+//        node.right=new Tree(0);
+//        node.right.left=new Tree(1);
+//        node.right.right=new Tree(0);
+//        node.right.left.left=new Tree(1);
+//        node.right.left.right=new Tree(1);
+//        System.out.println(universalValue(node));
         //test case for Magic Tree
-        Tree node=new Tree(5);
-        node.left=new Tree(4);
-        node.right=new Tree(9);
-        node.left.left=new Tree(8);
-        node.left.right=new Tree(7);
-        System.out.println(magicTreeBFS(node));
+//        Tree node=new Tree(5);
+//        node.left=new Tree(4);
+//        node.right=new Tree(9);
+//        node.left.left=new Tree(8);
+//        node.left.right=new Tree(7);
+//        System.out.println(magicTreeBFS(node));
         //test case for encode and decode
 //        System.out.println(encodeAndDecode("001"));
         //Required Vertices
