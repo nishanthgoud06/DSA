@@ -533,9 +533,64 @@ public class Graphs {
     public static String breakpalindrome(String s){
         return "";
     }
+    //621. Task Scheduler
+    public static int taskSch(char[] tasks,int n){
+        if(tasks.length==0)
+            return 0;
+        if(n==0)
+            return tasks.length;
+        int[] array=new int[26];
+        for(char c:tasks){
+            array[c-'A']++;
+        }
+        Arrays.sort(array);
+        int max=array[25]-1;
+        int idle=max*n;
+        for(int i=24;i>=0;i--){
+            idle-=Math.min(array[i],max);
+        }
+        return idle>0?tasks.length+idle:tasks.length;
+    }
+    //non-adjecent max sum
+    public static int nonAdjMaxSum(int[] nums){
+        if(nums.length==0)
+            return 0;
+        int[] dp=new int[nums.length];
+        dp[0]=nums[0];
+        dp[1]=Math.max(dp[0],nums[1]);
+        for(int i=2;i<nums.length;i++){
+            dp[i]=Math.max(dp[i-1],dp[i-2]+nums[i]);
+        }
+        return Math.max(dp[nums.length-1],dp[nums.length-2]);
+    }
+    //Celebrity Gossip
+    public static int celebGossip(int[][] gossips,int n){
+        if(gossips.length==0)
+            return 0;
+        HashMap<Integer,List<Integer>> hashmap=new HashMap<>();
+        for(int[] gossip:gossips){
+            int common=gossip[0];
+            int celeb=gossip[1];
+            if(hashmap.containsKey(celeb)){
+                hashmap.get(celeb).add(common);
+            }else{
+                hashmap.put(celeb,new ArrayList<>());
+                hashmap.get(celeb).add(common);
+            }
+        }
+        for(Map.Entry<Integer,List<Integer>> entry:hashmap.entrySet()){
+            if(entry.getValue().size()==n-1){
+                return entry.getKey();
+            }
+        }
+        return -1;
+    }
     public static void main(String[] args) {
+        //non-Adjecent max Sum
+        System.out.println(nonAdjMaxSum(new int[]{2, 4, 6, 2, 5}));
+        System.out.println(nonAdjMaxSum(new int[]{5, 1, 1, 5}));
         //Sequence Equation
-        System.out.println(Arrays.toString(sequenceEquation(new int[]{5,2,1,3,4})));
+//        System.out.println(Arrays.toString(sequenceEquation(new int[]{5,2,1,3,4})));
         //test case for universal Value
 //        Tree node=new Tree(0);
 //        node.left=new Tree(1);
