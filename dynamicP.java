@@ -1,3 +1,4 @@
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -301,8 +302,102 @@ public class dynamicP {
         }
         return result;
     }
+    //can Sum using memorization
+    public static List<Integer> canSum(int[] nums,int target){
+        HashMap<Integer,List<Integer>> hashmap=new HashMap<>();
+        return canSumHelper(hashmap,nums,target,new ArrayList<>());
+    }
+    public static List<Integer> canSumHelper(HashMap<Integer,List<Integer>> hashmap,int[] nums,int target,List<Integer> temp){
+        if(target<0)
+            return null;
+        if(target==0)
+            return new ArrayList<>(temp);
+        if(hashmap.containsKey(target))
+            return hashmap.get(target);
+        for(int i=0;i<nums.length;i++){
+            temp.add(nums[i]);
+            List<Integer> result=canSumHelper(hashmap,nums,target-nums[i],temp);
+            temp.remove(temp.size()-1);
+            if(result!=null){
+                hashmap.put(target,new ArrayList<>(result));
+                return result;
+            }
+        }
+        hashmap.put(target,null);
+        return null;
+    }
+    //best Sum
+    public static List<Integer> bestSum(int[] nums,int target){
+        if(nums.length==0)
+            return new ArrayList<>();
+        HashMap<Integer,List<Integer>> hashMap=new HashMap<>();
+        return bestSumHelper(nums,target,new ArrayList<>(),hashMap);
+    }
+    public static List<Integer> bestSumHelper(int[] nums,int target,List<Integer> temp,HashMap<Integer,List<Integer>> hashmap){
+        if(target==0)
+            return new ArrayList<>(temp);
+        if(target<0)
+            return null;
+        if(hashmap.containsKey(temp)){
+            return hashmap.get(temp);
+        }
+        List<Integer> less=null;
+        for(int i=0;i< nums.length;i++){
+            temp.add(nums[i]);
+            List<Integer> result=bestSumHelper(nums,target-nums[i],temp,hashmap);
+            temp.remove(temp.size()-1);
+            if(result!=null){
+                if(less==null || result.size()<less.size()){
+                    less=new ArrayList<>(result);
+                }
+                hashmap.put(target,result);
+            }
+        }
+        hashmap.put(target,less);
+        return less;
+    }
+    //i am going to do the bestSUm and canSum in tabulation method
+    public static List<Integer> canSum2(int target,int[] nums){
+        if(target==0)
+            return new ArrayList<>();
+        List<Integer>[] solution=new ArrayList[target+1];
+        solution[0]=new ArrayList<>();
+        for(int i=0;i<=target;i++){
+            if(solution[i]!=null){
+                for(int j:nums){
+                    int next=i+j;
+                    if(next<=target){
+                        solution[next]=new ArrayList<>(solution[i]);
+                        solution[next].add(j);
+                    }
+                }
+            }
+        }
+        return solution[target];
+    }
+    public static List<Integer> bestSum2(int target,int[] nums){
+        if(target==0)
+            return new ArrayList<>();
+        List<Integer>[] array=new ArrayList[target+1];
+        array[0]=new ArrayList<>();
+        for(int i=0;i<=target;i++){
+            if(array[i]!=null){
+                for(int j:nums){
+                    int next=i+j;
+                    if(next<=target && (array[next]==null || array[next].size()>array[i].size()+1)){
+                        array[next]=new ArrayList<>(array[i]);
+                        array[next].add(j);
+                    }
+                }
+            }
+        }
+        return array[target];
+    }
     public static void main(String[] args) {
-        System.out.println(GymLocker(9));
+        System.out.println(bestSum2(8,new int[]{2,3,4}));
+        System.out.println(bestSum(new int[]{2,3,4},8));
+//        System.out.println(canSum(new int[]{2,3,5},8));
+//        System.out.println(GymLocker(9));
 //        System.out.println(coinChangeBU(new int[]{1,5,6,8},11));
 //        System.out.println(coinChange(new int[]{1,5,6,8},11));
 //        System.out.println(DeleteStr("abc","a"));
