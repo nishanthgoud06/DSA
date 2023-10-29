@@ -331,30 +331,31 @@ public class dynamicP {
         if(nums.length==0)
             return new ArrayList<>();
         HashMap<Integer,List<Integer>> hashMap=new HashMap<>();
-        return bestSumHelper(nums,target,new ArrayList<>(),hashMap);
+        return bestSumHelper(nums,target,hashMap);
     }
-    public static List<Integer> bestSumHelper(int[] nums,int target,List<Integer> temp,HashMap<Integer,List<Integer>> hashmap){
-        if(target==0)
-            return new ArrayList<>(temp);
-        if(target<0)
-            return null;
-        if(hashmap.containsKey(temp)){
-            return hashmap.get(temp);
+    public static List<Integer> bestSumHelper(int[] nums, int target, HashMap<Integer, List<Integer>> hashmap) {
+        if (target == 0) {
+            return new ArrayList<>();
         }
-        List<Integer> less=null;
-        for(int i=0;i< nums.length;i++){
-            temp.add(nums[i]);
-            List<Integer> result=bestSumHelper(nums,target-nums[i],temp,hashmap);
-            temp.remove(temp.size()-1);
-            if(result!=null){
-                if(less==null || result.size()<less.size()){
-                    less=new ArrayList<>(result);
+        if (target < 0) {
+            return null;
+        }
+        if (hashmap.containsKey(target)) {
+            return hashmap.get(target);
+        }
+        List<Integer> result = null;
+        for (int num : nums) {
+            List<Integer> current = bestSumHelper(nums, target - num, hashmap);
+            if (current != null) {
+                List<Integer> temp = new ArrayList<>(current);
+                temp.add(num);
+                if (result == null || result.size() > temp.size()) {
+                    result = temp;
                 }
-                hashmap.put(target,result);
             }
         }
-        hashmap.put(target,less);
-        return less;
+        hashmap.put(target, result);
+        return result;
     }
     //i am going to do the bestSUm and canSum in tabulation method
     public static List<Integer> canSum2(int target,int[] nums){
@@ -393,9 +394,173 @@ public class dynamicP {
         }
         return array[target];
     }
+    //canConstruct
+    public static boolean canConstruct(String[] array,String target){
+        if(target.length()==0)
+            return true;
+        return canConHelper(array,target,new StringBuilder());
+    }
+    public static boolean canConHelper(String[] arr,String target,StringBuilder sb){
+        if(target.equals(sb.toString()))
+            return true;
+        if(sb.toString().length()>target.length())
+            return false;
+        for(String s:arr){
+            int length=sb.toString().length();
+            sb.append(s);
+            if(canConHelper(arr,target,sb))
+                return true;
+            sb.setLength(length);
+        }
+        return false;
+    }
+    //using tabulation
+    public static boolean canCon1(String[] words,String target){
+        if(target.length()==0)
+            return true;
+        HashSet<String> hashset=new HashSet<>();
+        return canCon1Helper(words,target,hashset,new StringBuilder());
+    }
+    public static boolean canCon1Helper(String[] words,String target,HashSet<String> hashset,StringBuilder sb){
+        if(sb.toString().equals(target))
+            return true;
+        if(sb.toString().length()>target.length())
+            return false;
+        if(hashset.contains(target))
+            return false;
+        for(String s:words){
+            int length=sb.toString().length();
+            sb.append(s);
+            hashset.add(sb.toString());
+            if(canCon1Helper(words,target,hashset,sb)){
+                return true;
+            }
+            sb.setLength(length);
+        }
+        return false;
+    }
+    //using tabulation
+    public static boolean canCon2(String[] words, String target) {
+        if (target.length() == 0)
+            return true;
+        HashMap<String, Boolean> hashmap = new HashMap<>();
+        return helpercanCon2(words, target, hashmap);
+    }
+
+    public static boolean helpercanCon2(String[] words, String target, HashMap<String, Boolean> hashmap) {
+        if (target.length() == 0)
+            return true;
+        if (hashmap.containsKey(target))
+            return hashmap.get(target);
+        for (String s : words) {
+            if (target.startsWith(s)) {
+                boolean check = helpercanCon2(words, target.substring(s.length()), hashmap);
+                if (check) {
+                    hashmap.put(target, true);
+                    return true;
+                }
+            }
+        }
+        hashmap.put(target, false);
+        return false;
+    }
+    //using memorization
+    public static boolean canCon3(String[] words,String target){
+        if(target.length()==0)
+            return true;
+        boolean[] result=new boolean[target.length()+1];
+        result[0]=true;
+        for(int i=0;i<target.length();i++){
+            if(result[i]){
+                for(String s:words){
+                    if(target.startsWith(s) && i+s.length()<=target.length()){
+                        int next=i+s.length();
+                        result[next]=true;
+                        break;
+                    }
+                }
+            }
+        }
+        return result[target.length()];
+    }
+
+    //count Construct
+    public static int counCon(String[] words,String target){
+        int[] result=new int[1];
+        counConHelper(words,target,result);
+        return result[0];
+    }
+    public static void counConHelper(String[] words,String target,int[] result){
+        if(target.length()==0)
+            result[0]=result[0]+1;
+        for(String s:words){
+            if(target.startsWith(s)){
+                counConHelper(words,target.substring(s.length()),result);
+            }
+        }
+    }
+    //using memorization
+    public static int countCon2(String[] words,String target){
+        HashMap<String,Integer> hashmap=new HashMap<>();
+        return countCon2Helper(words,target,hashmap);
+    }
+    public static int countCon2Helper(String[] words,String target,HashMap<String,Integer> hashmap){
+        if(target.length()==0)
+            return 1;
+        if(hashmap.containsKey(target))
+            return hashmap.get(target);
+        int totalCount=0;
+        for(String s:words){
+            if(target.startsWith(s)){
+                int value=countCon2Helper(words,target.substring(s.length()),hashmap);
+                totalCount+=value;
+            }
+        }
+        hashmap.put(target,totalCount);
+        return totalCount;
+    }
+    //using tabluation
+    public static int countCon3(String[] words,String target){
+        int[] result=new int[target.length()+1];
+        boolean[] reach=new boolean[target.length()+1];
+        reach[0]=true;
+        result[0]=1;
+        for(int i=0;i<target.length();i++){
+            if(reach[i]){
+                for(String s:words){
+                    if(target.startsWith(s,i) && i+s.length()<=target.length()){
+                        reach[i+s.length()]=true;
+                        result[i+s.length()]+=result[i];
+                        // break;
+                    }
+                }
+            }
+        }
+        return result[target.length()];
+    }
+    //allconstrct
+    //bruteForce
+    public static List<List<String>> allCon(String[] words,String target){
+        if(target.length()==0)
+            return new ArrayList<>();
+        List<List<String>> result=new ArrayList<>();
+        allConHelper(words,target,result,new ArrayList<>());
+        return result;
+    }
+    public static void allConHelper(String[] words,String target,List<List<String>> result,List<String> temp){
+        if(target.length()==0)
+            result.add(new ArrayList<>(temp));
+        for(String s:words){
+            if(target.startsWith(s)){
+                temp.add(s);
+                allConHelper(words,target.substring(s.length()),result,temp);
+                temp.remove(temp.size()-1);
+            }
+        }
+    }
     public static void main(String[] args) {
-        System.out.println(bestSum2(8,new int[]{2,3,4}));
-        System.out.println(bestSum(new int[]{2,3,4},8));
+//        System.out.println(bestSum2(100,new int[]{2,3,4,25}));
+        System.out.println(bestSum(new int[]{2,3,4,25},100));
 //        System.out.println(canSum(new int[]{2,3,5},8));
 //        System.out.println(GymLocker(9));
 //        System.out.println(coinChangeBU(new int[]{1,5,6,8},11));
