@@ -291,9 +291,103 @@ public static int countDiceCombinations(int N, int max, int target) {
         }
         return max;
     }
+    //0
+    //abcba
+    //k=2
+    //the longest substring with k
+    public static String longSubString(String s,int k){
+        if(k==0)
+            return "";
+        HashSet<Character> hashSet=new HashSet<>();
+        int result=0;
+        int startIndex=0;
+        int start=0,end=0;
+        while(end<s.length()){
+            char endChar=s.charAt(end);
+            hashSet.add(endChar);
+            if(hashSet.size()>k){
+                while(hashSet.size()>k){
+                    char startChar=s.charAt(start);
+                    hashSet.remove(startChar);
+                    start++;
+                }
+            }
+            int current=end-start+1;
+            if(result<current){
+                result=current;
+                startIndex=start;
+            }
+            end++;
+        }
+        return s.substring(startIndex,startIndex+result);
+    }
+//    This problem was asked by Amazon.
+//
+//    There exists a staircase with N steps, and you can climb up either 1 or 2 steps at a time. Given N, write a function that returns the number of unique ways you can climb the staircase. The order of the steps matters.
+//
+//    For example, if N is 4, then there are 5 unique ways:
+//
+//            1, 1, 1, 1
+//            2, 1, 1
+//            1, 2, 1
+//            1, 1, 2
+//            2, 2
+public static List<List<Integer>> stairCase(int target,List<Integer> ways){
+        List<List<Integer>> result=new ArrayList<>();
+        if(target==0)
+            return result;
+        stairCasehelper(target,ways,result,new ArrayList<>());
+        return result;
+}
+public static void stairCasehelper(int target,List<Integer> ways,List<List<Integer>> result,List<Integer> temp){
+        if(target==0)
+            result.add(new ArrayList<>(temp));
+        if(target<0)
+            return;
+        for(int i:ways){
+            temp.add(i);
+            stairCasehelper(target-i,ways,result,temp);
+            temp.remove(temp.size()-1);
+        }
+}
+//type-1;
+    public static int stairCase1(int target,int[] nums){
+        int[] dp=new int[target+1];
+        dp[0]=1;
+        for(int i=1;i<=target;i++){
+            for(int j:nums){
+                if(i-j>=0){
+                    dp[i]+=dp[i-j];
+                }
+            }
+        }
+        return dp[target];
+    }
+    //Implement an autocomplete system
+    //BruteForce
+    public static List<String> autoComplete(String[] words,String pre){
+        if(words.length==0||pre.length()==0)
+            return new ArrayList<>();
+        int length=pre.length();
+        List<String> result=new ArrayList<>();
+        for(String s:words){
+            String str=s.substring(0,length);
+            if(str.equals(pre)){
+                result.add(s);
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for autocomplete system
+        System.out.println(autoComplete(new String[]{"dog", "deer", "deal"},"de"));
+        //test case for stair case
+//        System.out.println(stairCase(4,Arrays.asList(1,2)));
+//        System.out.println(stairCase1(4,new int[]{1,2}));
+        //the longest substring with k
+//        System.out.println(longSubString("abcba",2));
         //test case for Coffee shop customer
-        System.out.println(coffeeShopCustomer(new int[]{5,2,2,2},new int[]{1,0,1,1},2));
+//        System.out.println(coffeeShopCustomer(new int[]{5,2,2,2},new int[]{1,0,1,1},2));
         //test case for constructing a tree based on the inorder and preorder array
 //        printTreeInorder(treeCon(new int[]{1,2,3},new int[]{2,1,3}));
         //test case for Soup and Salad
