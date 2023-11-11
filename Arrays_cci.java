@@ -378,9 +378,85 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
         }
         return result;
     }
+    //Director of Photography
+//    public static int stackStab(int N,int[] nums){
+//        int[] dp=new int[N+1];
+//        dp[0]=0;
+//        int i=0;
+//        while(i<N){
+//            if(dp[i]<nums[i]){
+//                dp[i+1]=nums[i];
+//            }
+//        }
+//    }
+    //daily coding problem
+    public static List<String> possibleString(List<String> all,String target){
+        if(target.length()==0 && all.size()==0)
+            return new ArrayList<>();
+        List<String> result=new ArrayList<>();
+        int end=0,start=0;
+        while(end<target.length()){
+            String current=target.substring(start,end+1);
+            if(all.contains(current)){
+                result.add(current);
+                start=end+1;
+            }
+            end++;
+        }
+        return start==target.length()?result:new ArrayList<>();
+    }
+    //the maximum values of each subarray of length k
+    public static List<Integer> maxValue(int[] nums,int k){
+        List<Integer> result=new ArrayList<>();
+        for(int i=0;i<=nums.length-k;i++){
+            int max=0;
+            for(int j=i;j<i+k;j++){
+                if(max<nums[j]){
+                    max=nums[j];
+                }
+            }
+            result.add(max);
+        }
+        return result;
+    }
+    //optimmized version
+    public static List<Integer> maxValue2(int[] nums,int k){
+        List<Integer> result=new ArrayList<>();
+        if(nums.length==0 || k==0)
+            return result;
+        int i=0;
+        Deque<Integer> deque=new ArrayDeque<>();
+        while(i<k){
+            if(!deque.isEmpty() && nums[deque.peekFirst()]<nums[i]){
+                deque.pollFirst();
+            }
+            deque.offerLast(i);
+            i++;
+        }
+        System.out.println(deque.peekFirst());
+        while(i< nums.length){
+            result.add(nums[deque.peekFirst()]);
+            while(!deque.isEmpty() && deque.peekFirst()<=i-k){
+                deque.pollFirst();
+            }
+            while(!deque.isEmpty() && nums[deque.peekFirst()]<=nums[i]){
+                deque.pollFirst();
+            }
+            deque.offerLast(i);
+            i++;
+        }
+        result.add(deque.peekFirst());
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for max number in a certain range
+//        System.out.println(maxValue(new int[]{10, 5, 2, 7, 8, 7},3));
+        System.out.println(maxValue2(new int[]{10, 5, 2, 7, 8, 7},3));
+        //test case for find the possible STring combination
+//        System.out.println(possibleString(Arrays.asList(new String[]{"quick","brown","the","fox"}),"thequickbrownfox"));
+//        System.out.println(possibleString(Arrays.asList(new String[]{"bed","bath","bedbath","and","beyond"}),"bedbathandbeyond"));
         //test case for autocomplete system
-        System.out.println(autoComplete(new String[]{"dog", "deer", "deal"},"de"));
+//        System.out.println(autoComplete(new String[]{"dog", "deer", "deal"},"de"));
         //test case for stair case
 //        System.out.println(stairCase(4,Arrays.asList(1,2)));
 //        System.out.println(stairCase1(4,new int[]{1,2}));
