@@ -448,10 +448,111 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
         result.add(deque.peekFirst());
         return result;
     }
+    static class TreeNode{
+        int val;
+        TreeNode left,right,parent;
+        boolean isLocked;
+        public TreeNode(int val,TreeNode left,TreeNode right,TreeNode parent){
+            this.val=val;
+            this.left=left;
+            this.right=right;
+            this.parent=parent;
+            this.isLocked=false;
+        }
+        public boolean currentState(){
+            return isLocked;
+        }
+        
+    }
+    public static int TappedWater(int[] nums){
+        if(nums.length==0||nums==null)
+            return 0;
+        int leftMax=0;
+        int rightMax=0;
+        int left=0;
+        int right=nums.length-1;
+        int result=0;
+        while(left<right){
+            leftMax=Math.max(leftMax,nums[left]);
+            rightMax=Math.max(rightMax,nums[right]);
+            if(nums[left]<nums[right]){
+                result+=Math.max(0,leftMax-nums[left]);
+                left++;
+            }else {
+                result+=Math.max(0,rightMax-nums[right]);
+                right--;
+            }
+        }
+        return result;
+    }
+    //2462. Total Cost to Hire K Workers
+    public static int totalCost(int[] nums,int k,int neighbour){
+        PriorityQueue<Integer> left=new PriorityQueue<>((a,b)->a-b);
+        PriorityQueue<Integer> right=new PriorityQueue<>((a,b)->a-b);
+        int i=0,j=nums.length-1;
+        int count=0,result=0;
+        while(count<k){
+            while(i<=j && left.size()<neighbour){
+                left.offer(nums[i++]);
+            }
+            while(j>=i && right.size()<neighbour){
+                right.offer(nums[j--]);
+            }
+            int lefty=left.size()>0?left.peek():Integer.MAX_VALUE;
+            int righty=right.size()>0?right.peek():Integer.MAX_VALUE;
+            if(lefty<=righty){
+                result+=lefty;
+                left.poll();
+            }else{
+                result+=righty;
+                right.poll();
+            }
+            count++;
+        }
+        return result;
+    }
+    //Compute the running median of a sequence of numbers
+    static class median{
+        private PriorityQueue<Integer> minHeap;
+        private PriorityQueue<Integer> maxHeap;
+        public median(){
+            minHeap=new PriorityQueue<>((a,b)->a-b);
+            maxHeap=new PriorityQueue<>((a,b)->b-a);
+        }
+        public void addElement(int a){
+            if(maxHeap.size()==0 || maxHeap.peek()>=a){
+                maxHeap.add(a);
+            }else {
+                minHeap.add(a);
+            }
+            if(maxHeap.size()>minHeap.size()+1){
+                minHeap.add(maxHeap.poll());
+            }else if(minHeap.size()>maxHeap.size()){
+                maxHeap.add(minHeap.poll());
+            }
+        }
+        public float getMedian(){
+            if(minHeap.size()==maxHeap.size())
+                return (minHeap.peek()+maxHeap.peek())/2;
+            else
+                return maxHeap.peek();
+        }
+    }
     public static void main(String[] args) {
+        //test case for runnibg median
+        median test=new median();
+        test.addElement(1);
+        test.addElement(3);
+        test.addElement(2);
+        System.out.println(test.getMedian());
+        //test case for Total Cost
+//        System.out.println(totalCost(new int[]{17,12,10,2,7,2,11,20,8},3,4));
+        //test casec for TappedWater
+//        System.out.println(TappedWater(new int[]{2,1,2}));
+//        System.out.println(TappedWater(new int[]{3,0,1,3,0,5}));
         //test case for max number in a certain range
 //        System.out.println(maxValue(new int[]{10, 5, 2, 7, 8, 7},3));
-        System.out.println(maxValue2(new int[]{10, 5, 2, 7, 8, 7},3));
+//        System.out.println(maxValue2(new int[]{10, 5, 2, 7, 8, 7},3));
         //test case for find the possible STring combination
 //        System.out.println(possibleString(Arrays.asList(new String[]{"quick","brown","the","fox"}),"thequickbrownfox"));
 //        System.out.println(possibleString(Arrays.asList(new String[]{"bed","bath","bedbath","and","beyond"}),"bedbathandbeyond"));
