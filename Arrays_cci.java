@@ -531,6 +531,7 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
                 maxHeap.add(minHeap.poll());
             }
         }
+
         public float getMedian(){
             if(minHeap.size()==maxHeap.size())
                 return (minHeap.peek()+maxHeap.peek())/2;
@@ -538,13 +539,138 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
                 return maxHeap.peek();
         }
     }
+    //Sort Colors
+    public static char[] sortColors(char[] arr){
+        if(arr.length==0)
+            return arr;
+        int low=0,high=arr.length-1,mid=0;
+        while(mid<=high){
+            if(arr[mid]=='R'){
+                char temp=arr[low];
+                arr[low]=arr[mid];
+                arr[mid]=temp;
+                low++;
+                mid++;
+            }else if(arr[mid]=='G'){
+                mid++;
+            }else{
+                char temp=arr[high];
+                arr[high]=arr[mid];
+                arr[mid]=temp;
+                high--;
+            }
+        }
+        return arr;
+    }
+    static class Node{
+        int val;
+        Node left,right;
+        public Node(int val){
+            this.val=val;
+        }
+        public Node(int val,Node left,Node right){
+            this.val=val;
+            this.left=left;
+            this.right=right;
+        }
+    }
+//    Given the root to a binary search tree, find the second largest node in the tree.
+    public static int secondLargestBST(Node node){
+        if(node==null)
+            return 0;
+        int[] result=new int[2];
+        Arrays.fill(result,Integer.MIN_VALUE);
+        secondLargestBSTHelper(node,result);
+        return result[1];
+    }
+    public static void secondLargestBSTHelper(Node node,int[] arr){
+        if(node==null)
+            return ;
+        secondLargestBSTHelper(node.right,arr);
+        if(node.val>arr[0]){
+            arr[1]=arr[0];
+            arr[0]=node.val;
+        }else if(node.val<arr[0] && node.val>arr[1]){
+            arr[1]=node.val;
+        }
+        secondLargestBSTHelper(node.left,arr);
+    }
+    //findinh the second largest element i the array
+    public static int secondLargest(int[] nums){
+        if(nums.length<2)
+            return Integer.MIN_VALUE;
+        int result=-1,largest=0;
+        for(int i=1;i<nums.length;i++){
+            if(nums[i]>nums[largest]){
+                result=largest;
+                largest=i;
+            }else if(nums[i]<nums[largest]){
+                if(result==-1 || nums[i]>nums[result]){
+                    result=i;
+                }
+            }
+        }
+        return nums[result];
+    }
+//    Best Time to Buy and Sell Stock with Transaction Fee
+    public static int timeAndBuy(int[] nums,int fee){
+        if(nums.length==0)
+            return 0;
+        int[][] dp=new int[nums.length][2];
+        dp[0][0]=0;
+        dp[0][1]=-nums[0]-fee;
+        for (int i = 1; i < nums.length; i++) {
+            dp[i][0]=Math.max(dp[i-1][0],dp[i-1][1]+nums[i]);
+            dp[i][1]=Math.max(dp[i-1][1],dp[i-1][0]-nums[i]-fee);
+        }
+        return dp[nums.length-1][0];
+    }
+    //901. Online Stock Span
+    static class Stonk{
+        Stack<int[]> stack;
+        public Stonk(){
+            stack=new Stack<>();
+        }
+        public int next(int value){
+            int current=1;
+            while(!stack.isEmpty() && value>=stack.peek()[0]){
+                current+=stack.pop()[1];
+            }
+            stack.push(new int[]{value,current});
+            return current;
+        }
+    }
     public static void main(String[] args) {
+        //test case for Online Stock Span
+        Stonk test=new Stonk();
+        System.out.println(test.next(100));
+        System.out.println(test.next(80));
+        System.out.println(test.next(60));
+        System.out.println(test.next(70));
+        System.out.println(test.next(60));
+        System.out.println(test.next(75));
+        System.out.println(test.next(85));
+        //Profit Loss Calculator
+//        System.out.println(timeAndBuy(new int[]{1,3,2,8,4,9},2));
+        //test case for 2nd Largest element in the array
+//        System.out.println(secondLargest(new int[]{7,6,5,10,11,12,8,1}));
+        //test case for fidning the second largest element in the array
+//        Node test=new Node(5);
+//        test.left=new Node(2);
+//        test.right=new Node(7);
+//        test.left.left=new Node(1);
+//        test.left.right=new Node(4);
+//        test.right.left=new Node(6);
+//        test.right.right=new Node(9);
+//        System.out.println(secondLargestBST(test));
+        //test case for Sorting Char Array
+//        System.out.println(Arrays.toString(sortColors(new char[]{'G', 'B', 'R', 'R', 'B', 'R', 'G'})));
         //test case for runnibg median
-        median test=new median();
-        test.addElement(1);
-        test.addElement(3);
-        test.addElement(2);
-        System.out.println(test.getMedian());
+//        median test=new median();
+//        test.addElement(1);
+//        test.addElement(3);
+//        test.addElement(2);
+//        System.out.println(test.getMedian());
         //test case for Total Cost
 //        System.out.println(totalCost(new int[]{17,12,10,2,7,2,11,20,8},3,4));
         //test casec for TappedWater
