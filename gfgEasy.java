@@ -1,6 +1,5 @@
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 
 //in this class we will be executing all the easy level problems by gfg
 public class gfgEasy {
@@ -164,8 +163,65 @@ public class gfgEasy {
         }
         return Arrays.copyOfRange(arr,0,current);
     }
+    //approch-1
+    static class Median{
+        List<Integer> list;
+        public Median(){
+            list=new ArrayList<>();
+        }
+        public void addElement(int val){
+            list.add(val);
+        }
+        public float getMedian(){
+            int middle=list.size();
+            int size=middle/2;
+            Collections.sort(list);
+            if(middle%2==0){
+                return ((float)list.get(size)+(float)list.get(size-1))/2;
+            }else{
+                return list.get(size);
+            }
+        }
+    }
+    //Using PriorityQueue
+    static class Median2{
+        PriorityQueue<Integer> pq1;
+        PriorityQueue<Integer> pq2;
+        public Median2(){
+            pq1=new PriorityQueue<>((a,b)->b-a);
+            pq2=new PriorityQueue<>((a,b)->a-b);
+        }
+        public void addElement(int val){
+            if(pq1.isEmpty()|| pq1.peek()>=val){
+                pq1.offer(val);
+            }else{
+                pq2.offer(val);
+            }
+            if(pq1.size()>pq2.size()+1){
+                pq2.offer(pq1.poll());
+            }else if(pq2.size()> pq1.size()){
+                pq1.offer(pq2.poll());
+            }
+        }
+        public float getMedian(){
+           if(pq1.size()==pq2.size()){
+               return ((float)pq1.peek()+(float)pq2.peek())/2;
+           }else{
+               return pq1.peek();
+           }
+        }
+    }
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(removeDuplicates(new int[]{3,5,4,1,2,6,4,3,5})));
+        Median2 test=new Median2();
+        test.addElement(2);
+        System.out.println(test.getMedian());
+        test.addElement(1);
+        System.out.println(test.getMedian());
+        test.addElement(5);
+        System.out.println(test.getMedian());
+        test.addElement(7);
+        System.out.println(test.getMedian());
+//        System.out.println(Arrays.toString(removeDuplicates(new int[]{3,5,4,1,2,6,4,3,5})));
 //        System.out.println(Arrays.toString(Limin(new int[] {12, -1, -7, 8, -15, 30, 16, 28},8,3)));
 //        System.out.println(Slidemax(new int[] {1, 4, 2, 10, 2, 3, 1, 0, 20},4));
 //        sizeSearch(new int[] {2,-1,-7,8,-15,30,16,28},8,3);

@@ -640,16 +640,44 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
             return current;
         }
     }
+    //Palidrome need to return the earliest lexicographically
+    public static String palindrome(String str){
+        StringBuilder sb1=new StringBuilder(str);
+        StringBuilder sb2=new StringBuilder();
+        int length=str.length()-1;
+        while(length>=0){
+            sb2.append(sb1.charAt(length));
+            if(isPali(sb2.toString()+sb1.toString())){
+                return sb2.toString()+sb1.toString();
+            }
+            length--;
+        }
+        return "";
+    }
+    public static boolean isPali(String s){
+        int low=0,high=s.length()-1;
+        while(low<high){
+            if(s.charAt(low)!=s.charAt(high)){
+                return false;
+            }
+            low++;
+            high--;
+        }
+        return true;
+    }
     public static void main(String[] args) {
+        //test case for Palidrome Problem
+        System.out.println(palindrome("race"));
+        System.out.println(palindrome("google"));
         //test case for Online Stock Span
-        Stonk test=new Stonk();
-        System.out.println(test.next(100));
-        System.out.println(test.next(80));
-        System.out.println(test.next(60));
-        System.out.println(test.next(70));
-        System.out.println(test.next(60));
-        System.out.println(test.next(75));
-        System.out.println(test.next(85));
+//        Stonk test=new Stonk();
+//        System.out.println(test.next(100));
+//        System.out.println(test.next(80));
+//        System.out.println(test.next(60));
+//        System.out.println(test.next(70));
+//        System.out.println(test.next(60));
+//        System.out.println(test.next(75));
+//        System.out.println(test.next(85));
         //Profit Loss Calculator
 //        System.out.println(timeAndBuy(new int[]{1,3,2,8,4,9},2));
         //test case for 2nd Largest element in the array
