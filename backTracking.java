@@ -171,8 +171,55 @@ public class backTracking {
         }
         return result;
     }
-
+    //N-Queens
+    public static List<List<String>> nQuenns(int n){
+        char[][] array=new char[n][n];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                array[i][j]='.';
+            }
+        }
+        List<List<String>> result=new ArrayList<>();
+        nQuennsHelper(result,array,0);
+        return result;
+    }
+    public static void nQuennsHelper(List<List<String>> result,char[][] array,int row){
+        if(row==array.length){
+            result.add(buildGrid(array));
+            return;
+        }
+        for(int col=0;col<array.length;col++){
+            if(isValidGrid(array,row,col)){
+                array[row][col]='Q';
+                nQuennsHelper(result,array,row+1);
+                array[row][col]='.';
+            }
+        }
+    }
+    public static boolean isValidGrid(char[][] array,int row,int col){
+        for(int i=0;i<array.length;i++){
+            if(array[row][i]=='Q' || array[i][col]=='Q')
+                return false;
+        }
+        for(int i=row,j=col;i>=0&&j>=0;i--,j--){
+            if(array[i][j]=='Q')
+                return false;
+        }
+        for(int i=row,j=col;i>=0&&j<array.length;i--,j++){
+            if(array[i][j]=='Q')
+                return false;
+        }
+        return true;
+    }
+    public static List<String> buildGrid(char[][] array){
+        List<String> result=new ArrayList<>();
+        for(char[] c:array){
+            result.add(String.valueOf(c));
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        System.out.println(nQuenns(4));
         System.out.println(life(new int[]{3,3,5,4},5));
 //        System.out.println(palipart("aab"));
 //        System.out.println(combitwo(new int[]{10,1,2,7,6,1,5},8));
