@@ -665,10 +665,149 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
         }
         return true;
     }
+    public static void gridGame(int[][] live,int rounds,int size){
+        if(rounds==0)
+            return;
+        char[][] grid=new char[size][size];
+        Arrays.fill(grid,'.');
+        for(int[] i:live){
+            int row=i[0];
+            int col=i[1];
+            grid[row][col]='*';
+        }
+
+    }
+    public static int noOfNeighbours(char[][] grid,int i,int j){
+        int[][] dir={{0,1},{0,-1},{1,0},{-1,0}};
+        return -1;
+    }
+    public static void printGrid(char[][] grid){
+        for(char[] i:grid){
+            System.out.println(Arrays.asList(i));
+        }
+    }
+    //DailyByte Medium
+    public static int RotatedArray(int[] nums,int target){
+        if(nums.length==0)
+            return -1;
+        int low=0;
+        int high=nums.length-1;
+        while(low<high){
+            int mid=low+(high-low)/2;
+            if(nums[mid]>nums[high]){
+                low=mid+1;
+            }else{
+                high=mid;
+            }
+        }
+        int temp=low;
+        low=0;
+        high=nums.length-1;
+//        System.out.println(temp);
+        if(nums[low]>=target && nums[temp-1]<=target){
+            high=temp-1;
+        }else{
+            low=temp;
+        }
+        while(low<=high){
+            int mid=low+(high-low)/2;
+            if(nums[mid]==target){
+                return mid;
+            }else if(nums[mid]>target){
+                high=mid-1;
+            }else{
+                low=mid+1;
+            }
+        }
+        return -1;
+    }
+    //Url shorten
+    static class UrlShort{
+        HashMap<String,String> hashmap;
+        int length;
+        public UrlShort(int length){
+            this.length=length;
+            hashmap=new HashMap<>();
+        }
+        public String Encode(String url){
+            if(hashmap.containsKey(url)){
+                return hashmap.get(url);
+            }
+            String result=String.valueOf(this.generateKey(url));
+            hashmap.put(url,result);
+            return result;
+        }
+        //we can actually decrease the Decode serach time to O(1) by using another hashmap which stores the value and Key in
+        //where tiny url is the key and the original url as value but we need more storage for that
+        public String Decode(String url){
+            for(Map.Entry<String,String> map:hashmap.entrySet()){
+                if(map.getValue()==url){
+                    return map.getKey();
+                }
+            }
+            return null;
+        }
+        private String generateKey(String url){
+            String alphanumeric="abcdefghijklmnopqurstvwxyz0123456789";
+            StringBuilder result=new StringBuilder(length);
+            Random random=new Random();
+            int current=0;
+            while (current<length){
+                int index=random.nextInt(alphanumeric.length());
+                result.append(alphanumeric.charAt(index));
+                current++;
+            }
+            return result.toString();
+        }
+    }
+//    queue using two stacks
+    static class SQueue{
+        Stack<Integer> stack1;
+        Stack<Integer> stack2;
+        public SQueue(){
+            stack1=new Stack<>();
+            stack2=new Stack<>();
+        }
+        public void push(int value){
+            while(!stack1.isEmpty()){
+                stack2.push(stack1.pop());
+            }
+            stack1.push(value);
+            while(!stack2.isEmpty()){
+                stack1.push(stack2.pop());
+            }
+        }
+        public int pop(){
+            if(stack1.isEmpty())
+                return -1;
+            return stack1.pop();
+        }
+        public int peek(){
+            if(stack1.isEmpty())
+                return -1;
+            return stack1.peek();
+        }
+    }
     public static void main(String[] args) {
+        //test case for Queue using Stack
+        SQueue test=new SQueue();
+        test.push(1);
+        test.push(2);
+        test.push(3);
+        test.push(4);
+        System.out.println(test.pop());
+        System.out.println(test.peek());
+        //test case for urlShortner
+//        UrlShort test=new UrlShort(6);
+//        String key=test.Encode("https://www.youtube.com/watch?v=48lyxeVORsU&ab_channel=JohnCoogan");
+//        System.out.println(key);
+//        String result=test.Decode(key);
+//        System.out.println(result);
+        //test case for finding a target element in the rotated array
+//        System.out.println(RotatedArray(new int[]{13, 18, 25, 2, 8, 10},8));
         //test case for Palidrome Problem
-        System.out.println(palindrome("race"));
-        System.out.println(palindrome("google"));
+//        System.out.println(palindrome("race"));
+//        System.out.println(palindrome("google"));
         //test case for Online Stock Span
 //        Stonk test=new Stonk();
 //        System.out.println(test.next(100));
