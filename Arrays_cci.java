@@ -1,3 +1,4 @@
+import java.security.SecureRandom;
 import java.sql.Array;
 import java.util.*;
 
@@ -788,15 +789,200 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
             return stack1.peek();
         }
     }
+    //Generate Random Number
+    public static int[] shuffleDeck(int[] nums){
+        for(int i=nums.length-1;i>0;i--){
+            int j=shuffleIt(i+1);
+            int temp=nums[i];
+            nums[i]=nums[j];
+            nums[j]=temp;
+        }
+        return nums;
+    }
+    public static int shuffleIt(int i){
+        SecureRandom random=new SecureRandom();
+        return random.nextInt(i)+1;
+    }
+    //Flight Schduler
+    public static List<String> flightSchedule(String[][] travels, String start) {
+        HashMap<String, List<String>> hashmap = new HashMap<>();
+        for (String[] s : travels) {
+            String from = s[0];
+            String to = s[1];
+            if (hashmap.containsKey(from)) {
+                hashmap.get(from).add(to);
+                Collections.sort(hashmap.get(from)); // Sort destinations lexicographically
+            } else {
+                hashmap.put(from, new ArrayList<>());
+                hashmap.get(from).add(to);
+            }
+        }
+
+        List<String> result = new ArrayList<>();
+        if (flightScheduleHelper(result, hashmap, start)) {
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+    public static boolean flightScheduleHelper(List<String> result, HashMap<String, List<String>> hashmap, String start) {
+        if (result.contains(start)) {
+            return false;
+        }
+        result.add(start);
+        if (hashmap.containsKey(start)) {
+            for (String str : hashmap.get(start)) {
+                if (!flightScheduleHelper(result, hashmap, str)) {
+                    return false;
+                }
+            }
+        }
+
+        // Ensure all flights are used in the itinerary
+        return result.size() == hashmap.size() + 1;
+    }
+    //357. Count Numbers with Unique Digits
+    //brute force approch
+    public static int counUni(int n){
+        if(n==0)
+            return 1;
+        int result=0;
+        for(int i=0;i<=Math.pow(10,n);i++){
+            if(counUniHelper(i))
+                result++;
+        }
+        return result;
+    }
+    public static boolean counUniHelper(int n){
+        int[] length=new int[10];
+        while(n>0){
+            int current=n%10;
+            if(length[current]==1)
+                return false;
+            length[current]=1;
+            n=n/10;
+        }
+        return true;
+    }
+    //using Dynamic Programming
+    public static int counUni2(int n){
+        if(n==0)
+            return 1;
+        int[] dp=new int[n+1];
+        dp[0]=1;
+        dp[1]=10;
+        for(int i=2;i<=n;i++){
+            int total=9;
+            int limit=9;
+            for(int j=1;j<i;j++){
+                total*=limit;
+                limit--;
+            }
+            dp[i]=dp[i-1]+total;
+        }
+        return dp[n];
+    }
+    //minimum number of columns that can be removed to ensure that
+    //each row is ordered from top to bottom lexicographically
+    public static int toBeRemoved(char[][] grid){
+        if(grid.length==0||grid==null)
+            return 0;
+        int result=0;
+        int row=grid.length;
+        int col=grid[0].length;
+        for(int i=0;i<col;i++){
+            int prev=Integer.MAX_VALUE;
+            int cole=0;
+            while(cole<row){
+                if(prev<'z'-grid[cole][i]){
+                    result++;
+                    break;
+                }
+                prev='z'-(int)grid[cole][i];
+                cole++;
+            }
+        }
+        return result;
+    }
+    //find the length of the longest increasing subsequence in the array
+    public static int longSub(int[] nums){
+        if(nums==null || nums.length==0)
+            return 0;
+        int length=nums.length;
+        int[] dp=new int[length];
+        Arrays.fill(dp,1);
+        for(int i=0;i<length;i++){
+            for(int j=i+1;j<length;j++){
+                if(nums[j]>nums[i]){
+                    dp[j]=Math.max(1+dp[i],dp[j]);
+                }
+            }
+        }
+        int result=0;
+        for(int i:dp){
+            result=Math.max(result,i);
+        }
+        return result;
+    }
+    //Apple medium problem
+    //brute force
+    public static int solve(int n,int target){
+        if( n==0)
+            return 0;
+        int result=0;
+        int[][] dp=new int[n][n];
+        int value=1;
+        for(int i=0;i<n;i++){
+            dp[0][i]=value;
+            value++;
+        }
+        for(int i=1;i<n;i++){
+            for(int j=0;j<n;j++){
+                dp[i][j]=dp[0][j]+dp[i-1][j];
+                if(dp[i][j]==target){
+                    result++;
+                }
+            }
+        }
+        for(int[] i:dp)
+            System.out.println(Arrays.toString(i));
+        return result;
+    }
     public static void main(String[] args) {
+        System.out.println(solve(6,12));
+        //test case for longest incresing subsequence
+//        System.out.println(longSub(new int[]{0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15}));
+        //test case for counting the removal of colums for lexologocal
+//        char[][] test1={{'c','b','a'},{'d','a','f'},{'g','h','i'},{'z','z','z'}};
+//        char[][] test2={{'a','b','c','d','e','f'}};
+//        char[][] test3={{'z','y','x'},{'w','v','u'},{'t','s','r'}};
+//        System.out.println(toBeRemoved(test1));
+//        System.out.println(toBeRemoved(test2));
+//        System.out.println(toBeRemoved(test3));
+        //test case for OCunt Number with Unique Digits
+//        System.out.println(counUni(9));
+//        System.out.println(counUni2(9));
+        //test case for flight Schedule
+//        String[][] str={{"SFO","HKO"},{"YYZ","SFO"},{"YUL","YYZ"},{"HKO","ORD"}};
+//        System.out.println(flightSchedule(str,"YUL"));
+//        String[][] str1={{"A","B"},{"A","C"},{"B","C"},{"C","A"}};
+//        System.out.println(flightSchedule(str1,"A"));
+        //test case for shuffling the deck
+//        int[] deck=new int[51];
+//        for(int i=0;i<51;i++){
+//            deck[i]=i+1;
+//        }
+//        System.out.println(Arrays.toString(deck));
+//        System.out.println(Arrays.toString(shuffleDeck(deck)));
         //test case for Queue using Stack
-        SQueue test=new SQueue();
-        test.push(1);
-        test.push(2);
-        test.push(3);
-        test.push(4);
-        System.out.println(test.pop());
-        System.out.println(test.peek());
+//        SQueue test=new SQueue();
+//        test.push(1);
+//        test.push(2);
+//        test.push(3);
+//        test.push(4);
+//        System.out.println(test.pop());
+//        System.out.println(test.peek());
         //test case for urlShortner
 //        UrlShort test=new UrlShort(6);
 //        String key=test.Encode("https://www.youtube.com/watch?v=48lyxeVORsU&ab_channel=JohnCoogan");
