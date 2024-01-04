@@ -949,8 +949,100 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
             System.out.println(Arrays.toString(i));
         return result;
     }
+    public static int[][] mergeTime(int[][] nums){
+        if(nums==null || nums.length==0)
+            return new int[0][];
+        Arrays.sort(nums,(a,b)->a[0]-b[0]);
+        int firstStart=nums[0][0];
+        int firstEnd=nums[0][1];
+        List<int[]> result=new ArrayList<>();
+        int j=1;
+        while(j<nums.length){
+            int currentStart=nums[j][0];
+            int currentEnd=nums[j][1];
+            if(currentStart<=firstEnd){
+//                result.add(new int[]{Math.min(currentStart,firstStart),Math.max(firstEnd,currentEnd)});
+                firstStart=Math.min(currentStart,firstStart);
+                firstEnd=Math.max(currentEnd,firstEnd);
+            }else{
+                result.add(new int[]{firstStart,firstEnd});
+                firstStart=currentStart;
+                firstEnd=currentEnd;
+            }
+            j++;
+        }
+        result.add(new int[]{firstStart,firstEnd});
+        int[][] object=new int[result.size()][2];
+        int k=0;
+        for(int[] i:result){
+            object[k++]=i;
+        }
+        return object;
+    }
+    //most frequently-occurring letter along that path.
+    public static int mostFreq(int[][] nums,int n){
+        if(nums==null || nums.length==0)
+            return -1;
+        int[] result=new int[1];
+        HashMap<Integer,List<Integer>> hashmap=new HashMap<>();
+        for(int[] i:nums){
+            int from=i[0];
+            int to=i[1];
+            if(hashmap.containsKey(from)){
+                hashmap.get(from).add(to);
+            }else{
+                hashmap.put(from,new ArrayList<>());
+                hashmap.get(from).add(to);
+            }
+        }
+        boolean[] visited=new boolean[n];
+        for(int i=0;i<n;i++){
+            mostFreqHelper(result,hashmap,i,visited,0);
+        }
+        return result[0]<n?result[0]:-1;
+    }
+    public static void mostFreqHelper(int[] result,HashMap<Integer,List<Integer>> hashmap,int current,boolean[] visited,int value){
+        if(visited[current])
+            return;
+        result[0]=Math.max(result[0],value);
+        visited[current]=true;
+        if(hashmap.containsKey(current)){
+            for(int i:hashmap.get(current)){
+                mostFreqHelper(result,hashmap,i,visited,value+1);
+            }
+        }
+
+        visited[current]=false;
+    }
+    public static int generateRandom(int n){
+        return (int)(Math.random()*n)+1;
+    }
+    public static int perfectNumber(int n){
+        int result=0;
+        for(int i=1;;i++){
+            int current=0;
+            for(int j=i;j>0;j=j/10){
+                current+=j%10;
+            }
+            if(current==10)
+                result++;
+            if(result==n)
+                return i;
+        }
+    }
     public static void main(String[] args) {
-        System.out.println(solve(6,12));
+        System.out.println(perfectNumber(2));
+//        System.out.println(generateRandom(5));
+        //test case for most frequently-occurring letter along that path.
+//        int[][] test={{0,1},{0,2},{2,3},{3,4}};
+//        System.out.println(mostFreq(test,5));
+        //test case for overlapping intervals
+//        int[][] test={{1,3},{5,8},{4,10},{20,25}};
+//        int[][] result=mergeTime(test);
+//        for(int[] i:result){
+//            System.out.println(Arrays.toString(i));
+//        }
+//        System.out.println(solve(6,12));
         //test case for longest incresing subsequence
 //        System.out.println(longSub(new int[]{0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15}));
         //test case for counting the removal of colums for lexologocal
