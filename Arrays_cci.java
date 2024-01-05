@@ -1030,8 +1030,75 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
                 return i;
         }
     }
+    public static int maxProduct3(int[] nums){
+        if(nums==null || nums.length<=2)
+            return Integer.MIN_VALUE;
+        int min1=Integer.MAX_VALUE;
+        int min2=Integer.MAX_VALUE;
+        int max1=Integer.MIN_VALUE;
+        int max2=Integer.MIN_VALUE;
+        int max3=Integer.MIN_VALUE;
+        for(int i:nums){
+            if(i>max1){
+                max3=max2;
+                max2=max1;
+                max1=i;
+            }else if(i>max2){
+                max3=max2;
+                max2=i;
+            }else if(i>max3){
+                max3=max2;
+            }
+
+            if(i<min1){
+                min2=min1;
+                min1=i;
+            }else if(i<min2){
+                min2=i;
+            }
+        }
+        return Math.max(max1*max2*max3,min1*min2*max1);
+    }
+    //maximum sum of any contiguous subarray of the array.
+    public static int maxConSub(int[] nums){
+        if(nums==null || nums.length==0)
+            return 0;
+        int end=0,start=0,result=0,current=0;
+        while(end<nums.length){
+            current+=nums[end];
+            if(current<0){
+                while(current<0){
+                    current-=nums[start];
+                    start++;
+                }
+            }
+            result=Math.max(result,current);
+            end++;
+        }
+        return result;
+    }
+    //the number of ways of starting at the top-left corner and getting to the bottom-right corner.
+    public static int matrixWays(int n,int m){
+        int[][] grid=new int[n+1][m+1];
+        for(int i=0;i<=n;i++){
+            grid[i][0]=1;
+        }
+        for(int i=0;i<=m;i++){
+            grid[0][i]=1;
+        }
+        for(int i=1;i<=m;i++){
+            for(int j=1;j<=n;j++){
+                grid[i][j]=grid[i-1][j]+grid[i][j-1];
+            }
+        }
+        return grid[n-1][m-1];
+    }
     public static void main(String[] args) {
-        System.out.println(perfectNumber(2));
+        System.out.println(matrixWays(5,5));
+//        System.out.println(maxConSub(new int[]{34, -50, 42, 14, -5, 86}));
+//        System.out.println(maxConSub(new int[]{-5, -1, -8, -9}));
+//        System.out.println(maxProduct3(new int[]{-10, -10, 5, 2}));
+//        System.out.println(perfectNumber(2));
 //        System.out.println(generateRandom(5));
         //test case for most frequently-occurring letter along that path.
 //        int[][] test={{0,1},{0,2},{2,3},{3,4}};
