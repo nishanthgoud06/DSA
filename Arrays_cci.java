@@ -1093,8 +1093,127 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
         }
         return grid[n-1][m-1];
     }
+    //determine whether the array could become non-decreasing by modifying at most 1 element.
+    public static boolean nonDe(int[] nums){
+        if(nums.length<=1)
+            return true;
+        boolean used =false;
+        for(int i=1;i<nums.length;i++){
+            if(!(nums[i]>nums[i-1])){
+                if(used)
+                    return false;
+                used=true;
+            }
+        }
+        return true;
+    }
+    static class LinkedList{
+        int val;
+        LinkedList next;
+        public LinkedList(int val){
+            this.val=val;
+        }
+        public LinkedList(int val,LinkedList next){
+            this.val=val;
+            this.next=next;
+        }
+        public LinkedList(){}
+    }
+    //merge LinkedList
+    public static LinkedList mergeIt(LinkedList[] arr){
+        if(arr==null || arr.length==0)
+            return new LinkedList();
+        int i=0,j=arr.length-1;
+        return mergeitH1(arr,i,j);
+    }
+    public static LinkedList mergeitH1(LinkedList[] arr,int i,int j){
+        if (i == j) {
+            return arr[i];
+        }
+
+        int mid = i + (j - i) / 2;
+        LinkedList m1 = mergeitH1(arr, i, mid);
+        LinkedList m2 = mergeitH1(arr, mid + 1, j);
+        return mergeitH2(m1, m2);
+    }
+    public static LinkedList mergeitH2(LinkedList m1,LinkedList m2){
+        LinkedList result=new LinkedList();
+        LinkedList dummy=result;
+        while(m1!=null && m2!=null){
+            if(m1.val<=m2.val){
+                dummy.next=new LinkedList(m1.val);
+                dummy=dummy.next;
+                m1=m1.next;
+            }else{
+                dummy.next=new LinkedList(m2.val);
+                dummy=dummy.next;
+                m2=m2.next;
+            }
+        }
+        while(m1!=null){
+            dummy.next=new LinkedList(m1.val);
+            dummy=dummy.next;
+            m1=m1.next;
+        }
+        while(m2!=null){
+            dummy.next=new LinkedList(m2.val);
+            dummy=dummy.next;
+            m2=m2.next;
+        }
+        return result.next;
+    }
+    //print the spiral
+    public static void printSpiral(int[][] nums){
+        if(nums==null || nums.length==1)
+            return;
+        int startrow=0,endRow=nums.length-1,startcol=0,endCol=nums[0].length-1;
+        int current=0;
+        int total=(endRow+1)*(endCol+1);
+        while(current<total){
+            for(int i=startcol;i<=endCol;i++){
+                System.out.println(nums[startrow][i]);
+                current++;
+            }
+            startrow++;
+            for(int i=startrow;i<=endRow;i++){
+                System.out.println(nums[i][endCol]);
+                current++;
+            }
+            endCol--;
+            for(int i=endCol;i>=startcol;i--){
+                System.out.println(nums[endRow][i]);
+                current++;
+            }
+            endRow--;
+            for(int i=endRow;i>=startrow;i--){
+                System.out.println(nums[i][startcol]);
+                current++;
+            }
+            startcol++;
+        }
+    }
     public static void main(String[] args) {
-        System.out.println(matrixWays(5,5));
+        int[][] test={{1,2,3,4,5},{6,7,8,9,10},{11,12,13,14,15},{16,17,18,19,20}};
+        printSpiral(test);
+//        LinkedList temp1=new LinkedList(1);
+//        temp1.next=new LinkedList(2);
+//        temp1.next.next=new LinkedList(3);
+//        temp1.next.next.next=new LinkedList(4);
+//        LinkedList temp2=new LinkedList(6);
+//        temp2.next=new LinkedList(7);
+//        temp2.next.next=new LinkedList(8);
+//        temp2.next.next.next=new LinkedList(9);
+//        LinkedList temp3=new LinkedList(10);
+//        temp3.next=new LinkedList(11);
+//        temp3.next.next=new LinkedList(12);
+//        temp3.next.next.next=new LinkedList(13);
+//        LinkedList result=mergeIt(new LinkedList[]{temp1,temp2,temp3});
+//        while(result!=null){
+//            System.out.println(result.val);
+//            result=result.next;
+//        }
+//        System.out.println(nonDe(new int[]{10, 5, 7}));
+//        System.out.println(matrixWays(5,5));
 //        System.out.println(maxConSub(new int[]{34, -50, 42, 14, -5, 86}));
 //        System.out.println(maxConSub(new int[]{-5, -1, -8, -9}));
 //        System.out.println(maxProduct3(new int[]{-10, -10, 5, 2}));
