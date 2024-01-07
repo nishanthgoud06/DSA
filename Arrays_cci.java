@@ -1192,9 +1192,107 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
             startcol++;
         }
     }
+    //longest palindromic contiguous substring
+    //Brute Force Approch
+    public static String conSub(String s){
+        if(s.length()==0)
+            return s;
+        int max=0;
+        String result = "";
+        for(int i=0;i<s.length();i++){
+            for(int j=i+1;j<=s.length();j++){
+                if(isPali(s.substring(i,j)) && s.substring(i,j).length()>max){
+                    result=s.substring(i,j);
+                    max=s.substring(i,j).length();
+                }
+            }
+        }
+        return result;
+    }
+    //we are using Dynamic Programming to improve the time complexcity by o(n)
+    public static String conSub1(String s){
+        if(s.length()==0)
+            return s;
+        boolean[][] dp=new boolean[s.length()][s.length()];
+        for(int i=0;i<s.length();i++){
+            dp[i][i]=true;
+        }
+        int startIndex=0;
+        int maxLength=1;
+        for(int len=2;len<s.length();len++){
+            for(int i=0;i<s.length()-len+1;i++){
+                int j=len+i-1;
+                if(s.charAt(i)==s.charAt(j)){
+                    if(len==2||dp[i+1][j-1]){
+                        startIndex=i;
+                        dp[i][j]=true;
+                        maxLength=Math.max(maxLength,len);
+                    }
+                }
+            }
+        }
+        return s.substring(startIndex,startIndex+maxLength);
+    }
+    //Knight tour
+    public static int[][] knightTour(int n) {
+        int[][] result = new int[n][n];
+        boolean[][] visited = new boolean[n][n];
+        knightTourHelper(result, visited, 0, 0, 1, n);
+        return result;
+    }
+
+    public static void knightTourHelper(int[][] result, boolean[][] visited, int i, int j, int strike, int n) {
+        if (i >= 0 && j >= 0 && i < n && j < n && !visited[i][j]) {
+            visited[i][j] = true;
+            result[i][j] = strike;
+
+            // All possible moves for a knight
+            int[] rowMoves = { -2, -1, 1, 2, 2, 1, -1, -2 };
+            int[] colMoves = { 1, 2, 2, 1, -1, -2, -2, -1 };
+
+            for (int k = 0; k < 8; k++) {
+                int nextI = i + rowMoves[k];
+                int nextJ = j + colMoves[k];
+
+                if (nextI >= 0 && nextI < n && nextJ >= 0 && nextJ < n && !visited[nextI][nextJ]) {
+                    knightTourHelper(result, visited, nextI, nextJ, strike + 1, n);
+                }
+            }
+
+            // Backtracking: Undo the changes made during this move
+            visited[i][j] = false;
+        }
+    }
+    //bishops attack
+    public static int bishopsAttack(int[][] positions){
+        if(positions==null || positions.length==0)
+            return 0;
+        int result=0;
+        for(int i=0;i<positions.length;i++){
+            for(int j=i+1;j< positions.length;j++){
+                int startRow=positions[i][0];
+                int startCol=positions[i][1];
+                int endRow=positions[j][0];
+                int endCol=positions[j][1];
+                if(Math.abs(startRow-endRow)==Math.abs(startCol-endCol))
+                    result++;
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        int[][] test={{1,2,3,4,5},{6,7,8,9,10},{11,12,13,14,15},{16,17,18,19,20}};
-        printSpiral(test);
+        System.out.println(bishopsAttack(new int[][]{{0,0},{1,2},{2,2},{4,0}}));
+//        int[][] result=knightTour(3);
+//        for(int i=0;i<result.length;i++){
+//            for(int j=0;j<result.length;j++){
+//                System.out.print(result[i][j]+" ");
+//            }
+//            System.out.println();
+//        };
+        //        System.out.println(conSub1("aabcdcb"))
+//        System.out.println(conSub1("bananas"));
+//        int[][] test={{1,2,3,4,5},{6,7,8,9,10},{11,12,13,14,15},{16,17,18,19,20}};
+//        printSpiral(test);
 //        LinkedList temp1=new LinkedList(1);
 //        temp1.next=new LinkedList(2);
 //        temp1.next.next=new LinkedList(3);
