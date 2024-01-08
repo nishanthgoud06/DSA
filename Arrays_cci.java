@@ -1280,8 +1280,124 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
         }
         return result;
     }
+//    deepest node
+    public static Node deepNode(Node n){
+        if(n==null)
+            return n;
+        Queue<Node> queue=new java.util.LinkedList<>();
+        queue.offer(n);
+        List<Node> result=new ArrayList<>();
+        while(queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                Node current=queue.poll();
+                result.add(current);
+                if(current.left!=null)
+                    queue.offer(current.left);
+                if(current.right!=null)
+                    queue.offer(current.right);
+            }
+        }
+        return result.get(result.size()-1);
+    }
+    //subset of S that adds up to k
+    public static int[] subSetAdd(int[] nums,int k){
+        if(nums==null || nums.length==0)
+            return nums;
+        List<Integer> temp=new ArrayList<>();
+        if(!helper(temp,nums,k,0,0))
+            return new int[0];
+        int[] result=new int[temp.size()];
+        int j=0;
+        for(int i:temp){
+            result[j++]=i;
+        }
+        return result;
+    }
+    public static boolean helper(List<Integer> temp,int[] nums,int target,int index,int total){
+        if(target==total)
+            return true;
+        if(total>target)
+            return false;
+        for(int i=index;i<nums.length;i++){
+            temp.add(nums[i]);
+            if(helper(temp,nums,target,i+1,total+nums[i]))
+                return true;
+            temp.remove(temp.size()-1);
+        }
+        return false;
+    }
+    //Partition to K Equal Sum Subsets
+    public static boolean kEqualSub(int[] nums,int k){
+        int total=0;
+        for(int i:nums)
+            total+=i;
+        if(nums.length<k || total%k!=0)
+            return false;
+        return kEqualSubHelper(nums,k,0,0,total/k);
+    }
+    public static boolean kEqualSubHelper(int[] nums,int k,int index,int sum,int target){
+        if(k<=0)
+            return true;
+        for(int i=index;i<nums.length;i++){
+            if(sum+nums[i]<=target && nums[i]!=0){
+                int temp=nums[i];
+                nums[i]=0;
+                if(sum+temp==target){
+                    if(kEqualSubHelper(nums,k-1,0,0,target))
+                        return true;
+                }else{
+                    if(kEqualSubHelper(nums,k,i+1,sum+temp,target))
+                        return true;
+                }
+                nums[i]=target;
+            }
+        }
+        return false;
+    }
+//    all possible letters the number could represent
+    public static List<String> numCombi(String s){
+        HashMap<Character,String> hashmap=new HashMap<>();
+        hashmap.put('2',"abc");
+        hashmap.put('3',"def");
+        hashmap.put('4',"ghi");
+        hashmap.put('5',"jkl");
+        hashmap.put('6',"mno");
+        hashmap.put('7',"pqrs");
+        hashmap.put('8',"tuv");
+        hashmap.put('9',"wxyz");
+        List<String> result=new ArrayList<>();
+        numCombiHelper(result,hashmap,s,0,"");
+        return result;
+    }
+    public static void numCombiHelper(List<String> result,HashMap<Character,String> hashmap,String number,int index,String current){
+        if(index==number.length()){
+            result.add(new String(current));
+            return;
+        }
+        for(char c:hashmap.get(number.charAt(index)).toCharArray()){
+            numCombiHelper(result,hashmap,number,index+1,current+c);
+        }
+    }
+//    the maximum profit you could have made from buying and selling that stock once
+    public static int maxProfit(int[] nums){
+        if(nums==null || nums.length==0)
+            return 0;
+        int low=Integer.MAX_VALUE;
+        int profit=0;
+        for(int i=0;i<nums.length;i++){
+            low=Math.min(low,nums[i]);
+            profit=Math.max(profit,nums[i]-low);
+        }
+        return profit;
+    }
     public static void main(String[] args) {
-        System.out.println(bishopsAttack(new int[][]{{0,0},{1,2},{2,2},{4,0}}));
+        System.out.println(maxProfit(new int[]{9, 11, 8, 5, 7, 10}));
+//        System.out.println(numCombi("23"));
+//        System.out.println(kEqualSub(new int[]{2,2,2,2,3,4,5},4));
+//        System.out.println(kEqualSub(new int[]{1,1,1,1,2,2,2,2},4));
+//        System.out.println(Arrays.toString(subSetAdd(new int[]{12, 1, 61, 5, 9, 2},24)));
+//        System.out.println(bishopsAttack(new int[][]{{0,0},{1,2},{2,2},{4,0}}));
 //        int[][] result=knightTour(3);
 //        for(int i=0;i<result.length;i++){
 //            for(int j=0;j<result.length;j++){
