@@ -1,3 +1,6 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.sql.Array;
 import java.util.*;
@@ -1391,8 +1394,74 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
         }
         return profit;
     }
+    //Microsoft Easy
+    static class ReadF{
+        private int current;
+        private String Document;
+
+        public ReadF(String Path) throws IOException {
+            Document=Files.readString(Paths.get(Path));
+            current=0;
+        }
+
+        public String read7(){
+            if(current>=Document.length()){
+                return null;
+            }
+            String result=Document.substring(current,Math.min(current+7,Document.length()));
+            current+=7;
+            return result;
+        }
+    }
+    //the word can be found in the matrix by going left-to-right, or up-to-down.
+    public static boolean findWord(char[][] grid,String word){
+        if(word.length()==0)
+            return true;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==word.charAt(0)){
+                    if(findWordH1(grid,i,j,word) || findWordH2(grid,i,j,word))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static boolean findWordH1(char[][] grid,int i,int j,String word){
+        int k=j;
+        int current=0;
+        while(k<grid[0].length && current<word.length()){
+//            System.out.println(grid[k][j]);
+            if(grid[i][k++]!=word.charAt(current++))
+                return false;
+        }
+        return current==word.length();
+    }
+    public static boolean findWordH2(char[][] grid,int i,int j,String word){
+        int k=i;
+        int current=0;
+        while(k<grid.length && current<word.length()){
+            System.out.println(grid[k][j]);
+            if(grid[k][j]!=word.charAt(current))
+                return false;
+            k+=1;
+            current+=1;
+        }
+        return current==word.length();
+    }
     public static void main(String[] args) {
-        System.out.println(maxProfit(new int[]{9, 11, 8, 5, 7, 10}));
+        char[][] test={{'F','A','C','I'},{'O','B','Q','P'},{'A','N','O','B'},{'M','A','S','S'}};
+        System.out.println(findWord(test,"FOAM"));
+//        System.out.println(findWord(test,"MASS"));
+//        try{
+//            ReadF test=new ReadF("src/documents.txt");
+//            System.out.println(test.read7());
+//            System.out.println(test.read7());
+//            System.out.println(test.read7());
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
+//        System.out.println(maxProfit(new int[]{9, 11, 8, 5, 7, 10}));
 //        System.out.println(numCombi("23"));
 //        System.out.println(kEqualSub(new int[]{2,2,2,2,3,4,5},4));
 //        System.out.println(kEqualSub(new int[]{1,1,1,1,2,2,2,2},4));
