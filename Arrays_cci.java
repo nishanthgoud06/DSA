@@ -4,6 +4,7 @@ import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.sql.Array;
 import java.util.*;
+import java.io.*;
 
 public class Arrays_cci {
     //1.1 implement anAlgorithm to determine if a string has all unique character.
@@ -1449,9 +1450,101 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
         }
         return current==word.length();
     }
+//    Suppose an arithmetic expression is given as a binary tree. Each leaf is an integer and each internal node is one of '+', '−', '∗', or '/'.
+    public static int arithDo(Node node){
+        if(node==null)
+            return 0;
+        Queue<Integer> operator=new java.util.LinkedList<>();
+        Stack<Character> operation=new Stack<>();
+        List<Character> list=new ArrayList<>();
+        list.add('+');
+        list.add('-');
+        list.add('/');
+        list.add('*');
+        Queue<Node> queue=new java.util.LinkedList<>();
+        queue.offer(node);
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                Node current=queue.poll();
+                if(Character.isDigit(current.val)){
+//                    System.out.println(current.val-'0');
+                    operator.offer(current.val-'0');
+                } else if(list.contains((char)current.val)){
+                    operation.add((char) current.val);
+                }
+                if(operator.size()>=2 && operation.size()>=1){
+                    int num1 = operator.poll();
+                    int num2 = operator.poll();
+                    char op = operation.pop();
+//                    System.out.println(num1+" "+num2+" "+op);
+                    operator.offer(arithDoHelper(num1, num2, op));
+                }
+                if(current.left!=null){
+                    queue.offer(current.left);
+                }
+                if(current.right!=null)
+                    queue.offer(current.right);
+            }
+        }
+        return operator.size()>0?operator.poll():0;
+    }
+    public static int arithDoHelper(int num1,int num2,char c){
+            if(c=='+')
+                return num1+num2;
+            else if(c=='-')
+                return num1-num2;
+            else if(c=='/')
+                return num2!=0?num1/num2:0;
+            else if(c=='*')
+                return num1*num2;
+            return 0;
+    }
+//implement Stack with max function
+    static class iStack{
+        Queue<Integer> queue1;
+        Queue<Integer> queue2;
+        PriorityQueue<Integer> pq;
+        public iStack(){
+            queue1=new java.util.LinkedList<>();
+            queue2=new java.util.LinkedList<>();
+            pq=new PriorityQueue<>((a,b)->b-a);
+        }
+        public void push(int val){
+            pq.add(val);
+            if(!queue1.isEmpty()){
+                while(!queue1.isEmpty())
+                    queue2.offer(queue1.poll());
+            }
+            queue1.offer(val);
+            while(!queue2.isEmpty())
+                    queue1.offer(queue2.poll());
+        }
+        public int pop(){
+            if(queue1.isEmpty())
+                return Integer.MIN_VALUE;
+            int element=queue1.poll();
+            pq.remove(element);
+            return element;
+        }
+        public int max(){
+            if(pq.size()>0)
+                return pq.peek();
+            return Integer.MIN_VALUE;
+        }
+    }
     public static void main(String[] args) {
-        char[][] test={{'F','A','C','I'},{'O','B','Q','P'},{'A','N','O','B'},{'M','A','S','S'}};
-        System.out.println(findWord(test,"FOAM"));
+        Node root = new Node('*');
+        root.left = new Node('+');
+        root.right = new Node('+');
+        root.left.left = new Node('3');
+        root.left.right = new Node('2');
+        root.right.left = new Node('4');
+        root.right.right = new Node('5');
+        int result = arithDo(root);
+        System.out.println("Result of the Arithmetic Expression: " + result);
+//        char[][] test={{'F','A','C','I'},{'O','B','Q','P'},{'A','N','O','B'},{'M','A','S','S'}};
+//        System.out.println(findWord(test,"FOAM"));
 //        System.out.println(findWord(test,"MASS"));
 //        try{
 //            ReadF test=new ReadF("src/documents.txt");
