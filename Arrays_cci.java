@@ -1533,16 +1533,65 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
             return Integer.MIN_VALUE;
         }
     }
+    public static int MatricIslandCount(int[][] grid){
+        if(grid.length==0)
+            return 0;
+        int result=0;
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==1){
+                    result++;
+                    MatricIslandCountHelper(grid,i,j);
+                }
+            }
+        }
+        return result;
+    }
+    public static void MatricIslandCountHelper(int[][] grid,int i,int j){
+        if(i<0 || j<0 || i>=grid.length || j>=grid[0].length || grid[i][j]==0)
+            return;
+        grid[i][j]=0;
+        MatricIslandCountHelper(grid,i-1,j);
+        MatricIslandCountHelper(grid,i+1,j);
+        MatricIslandCountHelper(grid,i,j-1);
+        MatricIslandCountHelper(grid,i,j+1);
+    }
+    //Invert a binary tree.
+    public static void PreO(Node node){
+        if(node==null)
+            return;
+        PreO(node.left);
+        System.out.println(node.val);
+        PreO(node.right);
+    }
+    public static Node Invert(Node node){
+        if(node==null)
+            return null;
+        final Node left=node.left;
+        final Node right=node.right;
+        node.left=Invert(right);
+        node.right=Invert(left);
+        return node;
+    }
     public static void main(String[] args) {
-        Node root = new Node('*');
-        root.left = new Node('+');
-        root.right = new Node('+');
-        root.left.left = new Node('3');
-        root.left.right = new Node('2');
-        root.right.left = new Node('4');
-        root.right.right = new Node('5');
-        int result = arithDo(root);
-        System.out.println("Result of the Arithmetic Expression: " + result);
+        Node node=new Node(1);
+        node.left=new Node(2);
+        node.right=new Node(3);
+        node.left.left=new Node(4);
+        node.left.right=new Node(5);
+        node.right.left=new Node(6);
+        PreO(node);
+        PreO(Invert(node));
+//        System.out.println(MatricIslandCount(new int[][]{{1,0,0,0,0},{0,0,1,1,0},{0,1,1,0,0},{0,0,0,0,0},{1,1,0,0,1},{1,1,0,0,1}}));
+//        Node root = new Node('*');
+//        root.left = new Node('+');
+//        root.right = new Node('+');
+//        root.left.left = new Node('3');
+//        root.left.right = new Node('2');
+//        root.right.left = new Node('4');
+//        root.right.right = new Node('5');
+//        int result = arithDo(root);
+//        System.out.println("Result of the Arithmetic Expression: " + result);
 //        char[][] test={{'F','A','C','I'},{'O','B','Q','P'},{'A','N','O','B'},{'M','A','S','S'}};
 //        System.out.println(findWord(test,"FOAM"));
 //        System.out.println(findWord(test,"MASS"));
