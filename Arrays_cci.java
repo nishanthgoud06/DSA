@@ -1573,15 +1573,102 @@ public static void stairCasehelper(int target,List<Integer> ways,List<List<Integ
         node.right=Invert(left);
         return node;
     }
+    //whether it can be partitioned into two subsets whose sums are the same.
+    public static boolean subSetSame(int[] nums){
+        if(nums.length<=1)
+            return false;
+        int sum=0;
+        for(int i:nums)
+            sum+=i;
+        if(sum%2!=0)
+            return false;
+        return subsetSameHelper(nums,sum/2,nums.length);
+    }
+    public static boolean subsetSameHelper(int[] nums,int sum,int index){
+        if(sum==0)
+            return true;
+        if(sum!=0 && index==0)
+            return false;
+        return subsetSameHelper(nums,sum,index-1)||subsetSameHelper(nums,sum-nums[index-1],index-1);
+    }
+//    every integer occurs three times except for one integer, which only occurs once, find and return the non-duplicated integer.
+    public static int occurLess3(int[] nums){
+        if(nums.length==0)
+            return 0;
+        int result=0;
+        for(int i=0;i<32;i++){
+            int count=0;
+            for(int j=0;j<nums.length;j++){
+                if(((i>>nums[j])&1)==1){
+                    count++;
+                    count=count%3;
+                }
+            }
+            result|=count<<i;
+        }
+        return result;
+    }
+//    Conway's Game
+public static char[][] conwayGame(char[][] grid) {
+    if (grid == null || grid.length == 0)
+        return grid;
+
+    int m = grid.length;
+    int n = grid[0].length;
+    char[][] result = new char[m][n];
+
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            int count = conwayGameHelper1(i, j, grid);
+            if (grid[i][j] == '*' && count < 2)
+                result[i][j] = '.';
+            else if (grid[i][j] == '*' && (count == 2 || count == 3))
+                result[i][j] = '*';
+            else if (grid[i][j] == '*' && count > 3)
+                result[i][j] = '.';
+            else if (grid[i][j] == '.' && count == 3)
+                result[i][j] = '*';
+            else
+                result[i][j] = grid[i][j];
+        }
+    }
+    return result;
+}
+
+    public static int conwayGameHelper1(int i,int j,char[][] grid){
+        int[] xCoordinates={-1,0,1,-1,0,1,-1,0,1};
+        int[] yCoordinates={-1,-1,-1,0,0,0,1,1,1};
+        int count=0;
+        for(int k=0;k<8;k++){
+            int new_X=i+xCoordinates[k];
+            int new_Y=j+yCoordinates[k];
+            if(new_X>=0 && new_X<grid.length && new_Y>=0 && new_Y<grid[0].length && grid[new_X][new_Y]=='*'){
+                count++;
+            }
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
-        Node node=new Node(1);
-        node.left=new Node(2);
-        node.right=new Node(3);
-        node.left.left=new Node(4);
-        node.left.right=new Node(5);
-        node.right.left=new Node(6);
-        PreO(node);
-        PreO(Invert(node));
+        char[][] test={{'*','.','.','.','.'},{'*','*','.','.','.'},{'.','*','.','.','.'},{'.','.','.','.','.'},{'.','.','.','.','.'}};
+        System.out.println("Before");
+        for(char[] c:test) {
+            System.out.println(Arrays.toString(c));
+        }
+        char[][] result=conwayGame(test);
+        System.out.println("After");
+        for(char[] c:result){
+            System.out.println(Arrays.toString(c));
+        }
+//        System.out.println(subSetSame(new int[]{15, 5, 20, 10, 35}))
+//        Node node=new Node(1);
+//        node.left=new Node(2);
+//        node.right=new Node(3);
+//        node.left.left=new Node(4);
+//        node.left.right=new Node(5);
+//        node.right.left=new Node(6);
+//        PreO(node);
+//        PreO(Invert(node));
 //        System.out.println(MatricIslandCount(new int[][]{{1,0,0,0,0},{0,0,1,1,0},{0,1,1,0,0},{0,0,0,0,0},{1,1,0,0,1},{1,1,0,0,1}}));
 //        Node root = new Node('*');
 //        root.left = new Node('+');
