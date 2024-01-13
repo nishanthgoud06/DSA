@@ -1648,18 +1648,47 @@ public static char[][] conwayGame(char[][] grid) {
         }
         return count;
     }
-
+//    Given a string of parentheses, write a function to compute the minimum number of parentheses to be removed to make the string valid
+    public static int validPara(String str){
+        if(str.length()==0)
+            return 0;
+        Stack<int[]> stack=new Stack<>();
+        HashMap<Character,Character> hashmap=new HashMap<>();
+        hashmap.put(')','(');
+        hashmap.put('}','{');
+        hashmap.put(']','[');
+        boolean[] gotIt=new boolean[str.length()];
+        for(int i=0;i<str.length();i++){
+            char c=str.charAt(i);
+            if(hashmap.containsKey(c)){
+                char expected=hashmap.get(c);
+                if(!stack.isEmpty() && stack.peek()[1]==expected)
+                    stack.pop();
+                else
+                    gotIt[i]=true;
+            }else if(hashmap.containsValue(c)){
+                stack.push(new int[]{i,c});
+            }
+        }
+        int count=0;
+        for(boolean i:gotIt){
+            if(i)
+                count++;
+        }
+        return count;
+    }
     public static void main(String[] args) {
-        char[][] test={{'*','.','.','.','.'},{'*','*','.','.','.'},{'.','*','.','.','.'},{'.','.','.','.','.'},{'.','.','.','.','.'}};
-        System.out.println("Before");
-        for(char[] c:test) {
-            System.out.println(Arrays.toString(c));
-        }
-        char[][] result=conwayGame(test);
-        System.out.println("After");
-        for(char[] c:result){
-            System.out.println(Arrays.toString(c));
-        }
+        System.out.println(validPara("()())()"));
+//        char[][] test={{'*','.','.','.','.'},{'*','*','.','.','.'},{'.','*','.','.','.'},{'.','.','.','.','.'},{'.','.','.','.','.'}};
+//        System.out.println("Before");
+//        for(char[] c:test) {
+//            System.out.println(Arrays.toString(c));
+//        }
+//        char[][] result=conwayGame(test);
+//        System.out.println("After");
+//        for(char[] c:result){
+//            System.out.println(Arrays.toString(c));
+//        }
 //        System.out.println(subSetSame(new int[]{15, 5, 20, 10, 35}))
 //        Node node=new Node(1);
 //        node.left=new Node(2);
