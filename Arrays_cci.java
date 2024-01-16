@@ -1677,8 +1677,43 @@ public static char[][] conwayGame(char[][] grid) {
         }
         return count;
     }
+    //Valid Binary Tree
+    public static boolean isValid(BinarySeachTree node){
+        if(node==null)
+            return false;
+        Queue<BinarySeachTree> queue=new java.util.LinkedList<>();
+        queue.offer(node);
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                BinarySeachTree current=queue.poll();
+                int left=current.left!=null?current.left.val : Integer.MIN_VALUE;
+                int right=current.right!=null?current.right.val : Integer.MAX_VALUE;
+                if(current.val<left || current.val>right){
+                    System.out.println(current.val);
+                    System.out.println(left);
+                    System.out.println(right);
+                    return false;
+                }
+
+                if(current.left!=null)
+                    queue.offer(current.left);
+                if(current.right!=null)
+                    queue.offer(current.right);
+            }
+        }
+        return true;
+    }
     public static void main(String[] args) {
-        System.out.println(validPara("()())()"));
+        BinarySeachTree test=new BinarySeachTree(5);
+        test.left=new BinarySeachTree(3);
+        test.right=new BinarySeachTree(7);
+        test.left.left=new BinarySeachTree(1);
+        test.left.right=new BinarySeachTree(4);
+        test.right.left=new BinarySeachTree(6);
+        test.right.right=new BinarySeachTree(8);
+        System.out.println(isValid(test));
+//        System.out.println(validPara("()())()"));
 //        char[][] test={{'*','.','.','.','.'},{'*','*','.','.','.'},{'.','*','.','.','.'},{'.','.','.','.','.'},{'.','.','.','.','.'}};
 //        System.out.println("Before");
 //        for(char[] c:test) {
