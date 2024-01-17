@@ -1704,15 +1704,47 @@ public static char[][] conwayGame(char[][] grid) {
         }
         return true;
     }
+    //Given an integer n and a list of integers l,
+    // write a function that randomly generates a number from 0 to n-1 that isn't in l (uniform).
+    public static int randomIgnore(int n,List<Integer> list){
+            int[] array = new int[n];
+
+            // Populate the array with numbers from 0 to n-1
+            for (int i = 0; i < n; i++) {
+                array[i] = i;
+            }
+
+            // Exclude numbers in the list by setting corresponding array elements to 0
+            for (int i : list) {
+                array[i] = 0;
+            }
+
+            Random rand = new Random();
+
+            // Find and return a random non-zero element from the array
+            int current;
+            do {
+                current = rand.nextInt(n);
+            } while (array[current] == 0);
+
+            return current;
+        }
+//    Given an undirected graph represented as an adjacency matrix and an integer k,
+//    write a function to determine whether each vertex in the graph can be colored such that no
+//    two adjacent vertices share the same color using at most k colors.
+    public static boolean determineIfPossible(int[][] grid,int k){
+        
+    }
     public static void main(String[] args) {
-        BinarySeachTree test=new BinarySeachTree(5);
-        test.left=new BinarySeachTree(3);
-        test.right=new BinarySeachTree(7);
-        test.left.left=new BinarySeachTree(1);
-        test.left.right=new BinarySeachTree(4);
-        test.right.left=new BinarySeachTree(6);
-        test.right.right=new BinarySeachTree(8);
-        System.out.println(isValid(test));
+        System.out.println(randomIgnore(10,Arrays.asList(0,2,5,7)));
+//        BinarySeachTree test=new BinarySeachTree(5);
+//        test.left=new BinarySeachTree(3);
+//        test.right=new BinarySeachTree(7);
+//        test.left.left=new BinarySeachTree(1);
+//        test.left.right=new BinarySeachTree(4);
+//        test.right.left=new BinarySeachTree(6);
+//        test.right.right=new BinarySeachTree(8);
+//        System.out.println(isValid(test));
 //        System.out.println(validPara("()())()"));
 //        char[][] test={{'*','.','.','.','.'},{'*','*','.','.','.'},{'.','*','.','.','.'},{'.','.','.','.','.'},{'.','.','.','.','.'}};
 //        System.out.println("Before");
