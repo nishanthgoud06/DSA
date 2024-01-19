@@ -1704,15 +1704,72 @@ public static char[][] conwayGame(char[][] grid) {
         }
         return true;
     }
+    //Given an integer n and a list of integers l,
+    // write a function that randomly generates a number from 0 to n-1 that isn't in l (uniform).
+    public static int randomIgnore(int n,List<Integer> list){
+            int[] array = new int[n];
+
+            // Populate the array with numbers from 0 to n-1
+            for (int i = 0; i < n; i++) {
+                array[i] = i;
+            }
+
+            // Exclude numbers in the list by setting corresponding array elements to 0
+            for (int i : list) {
+                array[i] = 0;
+            }
+
+            Random rand = new Random();
+
+            // Find and return a random non-zero element from the array
+            int current;
+            do {
+                current = rand.nextInt(n);
+            } while (array[current] == 0);
+
+            return current;
+        }
+//    Given an undirected graph represented as an adjacency matrix and an integer k,
+//    write a function to determine whether each vertex in the graph can be colored such that no
+//    two adjacent vertices share the same color using at most k colors.
+//    public static boolean determineIfPossible(int[][] grid,int k){
+//
+//    }
+//We're given a hashmap associating each courseId key with a list of courseIds values,
+// which represents that the prerequisites of courseId are courseIds.
+// Return a sorted ordering of courses such that we can finish all courses.
+    public static List<String> course(HashMap<String,List<String>> hashmap){
+        HashSet<String> hashet=new HashSet<>();
+        List<String> result=new ArrayList<>();
+        courseHelper(hashmap,result,hashmap.keySet().iterator().next(),hashet);
+        return result;
+    }
+    public static void courseHelper(HashMap<String,List<String>> hashmap,List<String> result,String current,HashSet<String> hashSet){
+        if(hashSet.contains(current))
+            return;
+        hashSet.add(current);
+        for(String s:hashmap.get(current)){
+            courseHelper(hashmap,result,s,hashSet);
+        }
+        result.add(current);
+    }
+
     public static void main(String[] args) {
-        BinarySeachTree test=new BinarySeachTree(5);
-        test.left=new BinarySeachTree(3);
-        test.right=new BinarySeachTree(7);
-        test.left.left=new BinarySeachTree(1);
-        test.left.right=new BinarySeachTree(4);
-        test.right.left=new BinarySeachTree(6);
-        test.right.right=new BinarySeachTree(8);
-        System.out.println(isValid(test));
+        HashMap<String,List<String>> hashmap=new HashMap<>();
+        String[] s={"CSC300","CSC200","CSC100"};
+        hashmap.put("CSC300",Arrays.asList("CSC100","CSC200"));
+        hashmap.put("CSC200",Arrays.asList("CSC100"));
+        hashmap.put("CSC100",new ArrayList<>());
+        System.out.println(course(hashmap));
+//        System.out.println(randomIgnore(10,Arrays.asList(0,2,5,7)));
+//        BinarySeachTree test=new BinarySeachTree(5);
+//        test.left=new BinarySeachTree(3);
+//        test.right=new BinarySeachTree(7);
+//        test.left.left=new BinarySeachTree(1);
+//        test.left.right=new BinarySeachTree(4);
+//        test.right.left=new BinarySeachTree(6);
+//        test.right.right=new BinarySeachTree(8);
+//        System.out.println(isValid(test));
 //        System.out.println(validPara("()())()"));
 //        char[][] test={{'*','.','.','.','.'},{'*','*','.','.','.'},{'.','*','.','.','.'},{'.','.','.','.','.'},{'.','.','.','.','.'}};
 //        System.out.println("Before");
