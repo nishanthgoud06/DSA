@@ -1732,11 +1732,36 @@ public static char[][] conwayGame(char[][] grid) {
 //    Given an undirected graph represented as an adjacency matrix and an integer k,
 //    write a function to determine whether each vertex in the graph can be colored such that no
 //    two adjacent vertices share the same color using at most k colors.
-    public static boolean determineIfPossible(int[][] grid,int k){
-        
+//    public static boolean determineIfPossible(int[][] grid,int k){
+//
+//    }
+//We're given a hashmap associating each courseId key with a list of courseIds values,
+// which represents that the prerequisites of courseId are courseIds.
+// Return a sorted ordering of courses such that we can finish all courses.
+    public static List<String> course(HashMap<String,List<String>> hashmap){
+        HashSet<String> hashet=new HashSet<>();
+        List<String> result=new ArrayList<>();
+        courseHelper(hashmap,result,hashmap.keySet().iterator().next(),hashet);
+        return result;
     }
+    public static void courseHelper(HashMap<String,List<String>> hashmap,List<String> result,String current,HashSet<String> hashSet){
+        if(hashSet.contains(current))
+            return;
+        hashSet.add(current);
+        for(String s:hashmap.get(current)){
+            courseHelper(hashmap,result,s,hashSet);
+        }
+        result.add(current);
+    }
+
     public static void main(String[] args) {
-        System.out.println(randomIgnore(10,Arrays.asList(0,2,5,7)));
+        HashMap<String,List<String>> hashmap=new HashMap<>();
+        String[] s={"CSC300","CSC200","CSC100"};
+        hashmap.put("CSC300",Arrays.asList("CSC100","CSC200"));
+        hashmap.put("CSC200",Arrays.asList("CSC100"));
+        hashmap.put("CSC100",new ArrayList<>());
+        System.out.println(course(hashmap));
+//        System.out.println(randomIgnore(10,Arrays.asList(0,2,5,7)));
 //        BinarySeachTree test=new BinarySeachTree(5);
 //        test.left=new BinarySeachTree(3);
 //        test.right=new BinarySeachTree(7);
