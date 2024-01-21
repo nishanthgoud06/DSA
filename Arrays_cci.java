@@ -1799,8 +1799,32 @@ public static char[][] conwayGame(char[][] grid) {
             }
         }
     }
+//    Given an absolute file path (Unix-style), shorten it to the format /<dir1>/<dir2>/<dir3>/....
+    public static String filePath(String str){
+        if(str.length()==0)
+            return str;
+        Stack<String> stack=new Stack<>();
+        String[] strArray=str.split("/");
+        for(String s:strArray){
+            if(s.equals("..")){
+                if(!stack.isEmpty())
+                    stack.pop();
+            }else if(!s.equals(".") &&!s.isEmpty()){
+                stack.push(s);
+            }
+        }
+        StringBuilder sb=new StringBuilder("/");
+        while(!stack.isEmpty()){
+            sb.insert(1,stack.pop());
+            sb.insert(1,"/");
+        }
+        if(sb.length()>1)
+            sb.delete(0,1);
+        return sb.toString();
+    }
     public static void main(String[] args) {
-        System.out.println(collectCoin(new int[]{10, 50, 100},new int[]{1, 2, 1}));
+        System.out.println(filePath("/home/a/./x/../b//c/"));
+//        System.out.println(collectCoin(new int[]{10, 50, 100},new int[]{1, 2, 1}));
 //        HashMap<String,List<String>> hashmap=new HashMap<>();
 //        String[] s={"CSC300","CSC200","CSC100"};
 //        hashmap.put("CSC300",Arrays.asList("CSC100","CSC200"));
