@@ -1753,14 +1753,84 @@ public static char[][] conwayGame(char[][] grid) {
         }
         result.add(current);
     }
-
-    public static void main(String[] args) {
+    //The dishes inside each list should be sorted lexicographically,
+    //and the result array should be sorted lexicographically by the names of the ingredients.
+    public static String[][] dishes(String[][] dish){
         HashMap<String,List<String>> hashmap=new HashMap<>();
-        String[] s={"CSC300","CSC200","CSC100"};
-        hashmap.put("CSC300",Arrays.asList("CSC100","CSC200"));
-        hashmap.put("CSC200",Arrays.asList("CSC100"));
-        hashmap.put("CSC100",new ArrayList<>());
-        System.out.println(course(hashmap));
+        for(String[] s:dish){
+            String key=s[0];
+            for(int i=1;i<s.length;i++){
+                String ing=s[i];
+                if(hashmap.containsKey(ing)){
+                    hashmap.get(ing).add(key);
+                }
+            }
+        }
+        List<String[]> result=new ArrayList<>();
+        for(Map.Entry<String,List<String>> entry:hashmap.entrySet()){
+            if(entry.getValue().size()>=2){
+                List<String> dishes=entry.getValue();
+                Collections.sort(dishes);
+                String[] inside=new String[dishes.size()+1];
+                inside[0]=entry.getKey();
+                for(int i=1;i<inside.length;i++){
+                    inside[i]=dishes.get(i-1);
+                }
+                result.add(inside);
+            }
+        }
+        result.sort(Comparator.comparing(arr->arr[0]));
+        return result.toArray(new String[0][0]);
+    }
+//    You have a collection of coins, and you know the values of the coins and the quantity of each type of coin in it.
+//    You want to know how many distinct sums you can make from non-empty groupings of these coins.
+    public static int collectCoin(int[] nums,int[] quantity){
+        if(nums.length==0)
+            return 0;
+        HashSet<Integer> hashSet=new HashSet<>();
+        collectCoinHelper(nums,quantity,0,0,hashSet);
+        return hashSet.size()-1;
+    }
+    public static void collectCoinHelper(int[] nums,int[] quantity,int current,int index,HashSet<Integer> hashset){
+        hashset.add(current);
+        for(int i=index;i<nums.length;i++){
+            for(int j=1;j<=quantity[i];j++){
+                collectCoinHelper(nums,quantity,current+j*nums[i],i+1,hashset);
+            }
+        }
+    }
+//    Given an absolute file path (Unix-style), shorten it to the format /<dir1>/<dir2>/<dir3>/....
+    public static String filePath(String str){
+        if(str.length()==0)
+            return str;
+        Stack<String> stack=new Stack<>();
+        String[] strArray=str.split("/");
+        for(String s:strArray){
+            if(s.equals("..")){
+                if(!stack.isEmpty())
+                    stack.pop();
+            }else if(!s.equals(".") &&!s.isEmpty()){
+                stack.push(s);
+            }
+        }
+        StringBuilder sb=new StringBuilder("/");
+        while(!stack.isEmpty()){
+            sb.insert(1,stack.pop());
+            sb.insert(1,"/");
+        }
+        if(sb.length()>1)
+            sb.delete(0,1);
+        return sb.toString();
+    }
+    public static void main(String[] args) {
+        System.out.println(filePath("/home/a/./x/../b//c/"));
+//        System.out.println(collectCoin(new int[]{10, 50, 100},new int[]{1, 2, 1}));
+//        HashMap<String,List<String>> hashmap=new HashMap<>();
+//        String[] s={"CSC300","CSC200","CSC100"};
+//        hashmap.put("CSC300",Arrays.asList("CSC100","CSC200"));
+//        hashmap.put("CSC200",Arrays.asList("CSC100"));
+//        hashmap.put("CSC100",new ArrayList<>());
+//        System.out.println(course(hashmap));
 //        System.out.println(randomIgnore(10,Arrays.asList(0,2,5,7)));
 //        BinarySeachTree test=new BinarySeachTree(5);
 //        test.left=new BinarySeachTree(3);
