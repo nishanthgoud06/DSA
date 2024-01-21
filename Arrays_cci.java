@@ -1822,8 +1822,64 @@ public static char[][] conwayGame(char[][] grid) {
             sb.delete(0,1);
         return sb.toString();
     }
+    //Decode String
+    public static String decodeStr(String str){
+        if(str.length()==0)
+            return str;
+        Stack<Integer> numbers=new Stack<>();
+        Stack<String> strs=new Stack<>();
+        int index=0;
+        int num=0;
+        String s="";
+        while(index<str.length()){
+            if(Character.isDigit(str.charAt(index))){
+                while(Character.isDigit(str.charAt(index))){
+                    num=num*10+str.charAt(index)-'0';
+                    index++;
+                }
+                numbers.push(num);
+                num=0;
+            }else if(Character.isLetter(str.charAt(index))){
+                s=s+str.charAt(index);
+                index++;
+            }else if(str.charAt(index)=='['){
+                strs.push(s);
+                index++;
+                s="";
+            }else{
+                int limit=numbers.pop();
+                StringBuilder sb=new StringBuilder(strs.pop());
+                while(limit>0){
+                    sb.append(s);
+                    limit--;
+                }
+                s=sb.toString();
+                index++;
+            }
+        }
+        return s;
+    }
+//    find the next larger element for each element of the array
+    public static int[] nextLar(int[] nums){
+        if(nums==null || nums.length==0)
+            return nums;
+        Stack<Integer> stack=new Stack<>();
+        int[] result=new int[nums.length];
+        for(int i=0;i<nums.length;i++){
+            while(!stack.isEmpty() && nums[stack.peek()]<nums[i]){
+                result[stack.pop()]=nums[i];
+            }
+            stack.push(i);
+        }
+        while(!stack.isEmpty()){
+            result[stack.pop()]=-1;
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(filePath("/home/a/./x/../b//c/"));
+        System.out.println(Arrays.toString(nextLar(new int[]{6,7,3,8})));
+//        System.out.println(decodeStr("3[a2[c]]"));
+//        System.out.println(filePath("/home/a/./x/../b//c/"));
 //        System.out.println(collectCoin(new int[]{10, 50, 100},new int[]{1, 2, 1}));
 //        HashMap<String,List<String>> hashmap=new HashMap<>();
 //        String[] s={"CSC300","CSC200","CSC100"};
