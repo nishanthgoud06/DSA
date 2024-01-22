@@ -1876,8 +1876,44 @@ public static char[][] conwayGame(char[][] grid) {
         }
         return result;
     }
+//    single point of failure.
+    public static int singleFailure(int[][] connections){
+        int length=connections.length;
+        int result=0;
+        for(int i=0;i<length;i++){
+            for(int j=i+1;j<length;j++){
+                if(connections[i][j]==1){
+                    connections[i][j]=0;
+                    connections[j][i]=0;
+                    if(!singleFailure1(connections,length))
+                        result++;
+                    connections[i][j]=1;
+                    connections[j][i]=1;
+                }
+            }
+        }
+        return result;
+    }
+    public static boolean singleFailure1(int[][] connections,int length){
+        boolean[] visited=new boolean[length];
+        singleFailure2(connections,visited,0);
+        for(boolean b:visited){
+            if(!b)
+                return false;
+        }
+        return true;
+    }
+    public static void singleFailure2(int[][] connections,boolean[] visited,int index){
+        visited[index]=true;
+        for(int i=0;i<connections.length;i++){
+            if(!visited[i] && connections[index][0]==1)
+                singleFailure2(connections,visited,i);
+        }
+    }
     public static void main(String[] args) {
-        System.out.println(Arrays.toString(nextLar(new int[]{6,7,3,8})));
+        int[][] test={{0,1,1,1,1},{1,0,0,0,0},{1,0,0,0,0},{1,0,0,0,0},{1,0,0,0,0}};
+        System.out.println(singleFailure(test));
+//        System.out.println(Arrays.toString(nextLar(new int[]{6,7,3,8})));
 //        System.out.println(decodeStr("3[a2[c]]"));
 //        System.out.println(filePath("/home/a/./x/../b//c/"));
 //        System.out.println(collectCoin(new int[]{10, 50, 100},new int[]{1, 2, 1}));
