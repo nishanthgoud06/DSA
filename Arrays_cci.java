@@ -1910,9 +1910,111 @@ public static char[][] conwayGame(char[][] grid) {
                 singleFailure2(connections,visited,i);
         }
     }
+    //find if a array can be sorted
+    public static boolean sortArray(int[] nums){
+        if(nums==null || nums.length==0)
+            return true;
+        int i=0,j=1;
+        while(j<nums.length){
+            if(sortArray1(nums[i])==sortArray1(nums[j])){
+                if(nums[i]>nums[j]){
+                    int temp=nums[i];
+                    nums[i]=nums[j];
+                    nums[j]=temp;
+                    i=0;
+                    j=1;
+                }else{
+                    i++;
+                    j++;
+                }
+            }else{
+                i++;
+                j++;
+            }
+        }
+        for(int k=0;k<nums.length-1;k++){
+            if(nums[k]>nums[k+1])
+                return false;
+        }
+        return true;
+    }
+    public static int sortArray1(int num){
+        int count=0;
+        while(num>0){
+            count+=num&1;
+            num=num>>1;
+        }
+        return count;
+    }
+//    3012. Minimize Length of Array Using Operations
+//    initally i thought like with the use of PQ we can i find the solution
+//    but after viewing the already submitted solution with GCD we can find the solution
+    public static int minimumArrayLength(int[] nums) {
+        if (nums == null || nums.length == 0)
+            return 0;
+        return Math.min(minimumArrayLength1(nums),minimumArrayLength2(nums));
+    }
+    public static int minimumArrayLength1(int[] nums){
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        List<Integer> zeros = new ArrayList<>();
+        for (int i : nums) {
+            pq.offer(i);
+        }
+        while (pq.size() >= 2) {
+            int i = pq.poll();
+            int j = pq.poll();
+            if (i > 0 && j > 0) {
+                int element = i%j;
+                if (element == 0) {
+                    zeros.add(element);
+                } else {
+                    pq.offer(element);
+                }
+            }
+        }
+        return pq.size()+zeros.size();
+    }
+    public static int minimumArrayLength2(int[] nums){
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+        List<Integer> zeros = new ArrayList<>();
+        for (int i : nums) {
+            pq.offer(i);
+        }
+        while (pq.size() >= 2) {
+            int i = pq.poll();
+            int j = pq.poll();
+            if (i > 0 && j > 0) {
+                int element = j % i;
+                if (element == 0) {
+                    zeros.add(element);
+                } else {
+                    pq.offer(element);
+                }
+            }
+        }
+        return pq.size()+zeros.size();
+    }
+//working solution
+    public static int miniArrayO(int[] nums){
+        if(nums==null || nums.length==0)
+            return 0;
+        int min=Integer.MAX_VALUE;
+        for(int i:nums)
+            min=Math.min(i,min);
+        int result=0;
+        for(int i:nums){
+            if(i==min)
+                result++;
+            else if(i%min!=0)
+                return 1;
+        }
+        return (result+1)/2;
+    }
     public static void main(String[] args) {
-        int[][] test={{0,1,1,1,1},{1,0,0,0,0},{1,0,0,0,0},{1,0,0,0,0},{1,0,0,0,0}};
-        System.out.println(singleFailure(test));
+        System.out.println(miniArrayO(new int[]{1,4,3,1}));
+//        System.out.println(sortArray(new int[]{8,4,2,30,15}));
+//        int[][] test={{0,1,1,1,1},{1,0,0,0,0},{1,0,0,0,0},{1,0,0,0,0},{1,0,0,0,0}};
+//        System.out.println(singleFailure(test));
 //        System.out.println(Arrays.toString(nextLar(new int[]{6,7,3,8})));
 //        System.out.println(decodeStr("3[a2[c]]"));
 //        System.out.println(filePath("/home/a/./x/../b//c/"));
