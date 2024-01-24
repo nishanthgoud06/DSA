@@ -2010,8 +2010,91 @@ public static char[][] conwayGame(char[][] grid) {
         }
         return (result+1)/2;
     }
+//    set(key, value, time): sets key to value for t = time.
+//            get(key, time): gets the key at t = time.
+    static class TimeValue{
+        HashMap<Integer,TreeMap<Integer,Integer>> hashmap;
+        public TimeValue(){
+            hashmap=new HashMap<>();
+        }
+        public void set(int key,int value,int time){
+            hashmap.putIfAbsent(key,new TreeMap<>());
+            hashmap.get(key).put(time,value);
+        }
+        public int get(int key,int time){
+            if(!hashmap.containsKey(key))
+                return -1;
+            Integer position=hashmap.get(key).floorKey(time);
+            return position!=null?hashmap.get(key).get(position):-1;
+        }
+}
+//    Given a number in the form of a list of digits, return all possible permutations.
+    public static List<List<Integer>> posCombi(List<Integer> list){
+        if(list.size()==0)
+            return new ArrayList<>();
+        List<List<Integer>> result=new ArrayList<>();
+        posCombiHelper(list,result,0);
+        return result;
+    }
+    public static void posCombiHelper(List<Integer> list,List<List<Integer>> result,int index){
+        if(index==list.size()-1){
+            result.add(new ArrayList<>(list));
+            return;
+        }
+        for(int i=index;i<list.size();i++){
+            posCombiHelperSwap(list,index,i);
+            posCombiHelper(list,result,index+1);
+            posCombiHelperSwap(list,index,i);
+        }
+    }
+    public static void posCombiHelperSwap(List<Integer> list,int index,int i){
+        int temp=list.get(index);
+        list.set(index,list.get(i));
+        list.set(i,temp);
+    }
+    //next Permutation
+    public static int[] nextPer(int[] nums){
+        int len=nums.length,i,j;
+        for(i=len-2;i>=0;i--){
+            if(nums[i]<nums[i+1])
+                break;
+        }
+        if(i<0){
+            revese(nums,0,len-1);
+        }else {
+            for(j=len-1;j>i;j--){
+                if(nums[j]>nums[i])
+                    break;
+            }
+            swap(nums,i,j);
+            revese(nums,i+1,len-1);
+        }
+        return nums;
+    }
+    public static void swap(int[] nums,int i,int j){
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+    public static void revese(int[] nums,int i,int j) {
+        while (i < j) {
+           swap(nums,i,j);
+            i++;
+            j--;
+        }
+    }
     public static void main(String[] args) {
-        System.out.println(miniArrayO(new int[]{1,4,3,1}));
+        //next permutation
+        System.out.println(Arrays.toString(nextPer(new int[]{1,2,3})));
+        //test case for possible combination
+//        System.out.println(posCombi(Arrays.asList(1,2,3)));
+        //test case
+//        TimeValue test=new TimeValue();
+//        test.set(1,1,5);
+//        test.set(1,2,2);
+//        System.out.println(test.get(1,0));
+//        System.out.println(test.get(1,10));
+//        System.out.println(miniArrayO(new int[]{1,4,3,1}));
 //        System.out.println(sortArray(new int[]{8,4,2,30,15}));
 //        int[][] test={{0,1,1,1,1},{1,0,0,0,0},{1,0,0,0,0},{1,0,0,0,0},{1,0,0,0,0}};
 //        System.out.println(singleFailure(test));
