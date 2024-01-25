@@ -2083,9 +2083,114 @@ public static char[][] conwayGame(char[][] grid) {
             j--;
         }
     }
+//    Given a 2D board of characters and a word, find if the word exists in the grid.
+    public static boolean wordExist(String s,char[][] grid){
+        boolean[][] visited=new boolean[grid.length][grid[0].length];
+        for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]==s.charAt(0)){
+                    if(helperWordExist(0,grid,i,j,visited,s))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+    public static boolean helperWordExist(int index, char[][] grid, int i, int j, boolean[][] visited, String s) {
+        if (index >= s.length())
+            return true;
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || visited[i][j] || grid[i][j] != s.charAt(index))
+            return false;
+//        System.out.println(s.charAt(index));
+        visited[i][j] = true;
+
+        boolean found=helperWordExist(index + 1, grid, i + 1, j, visited, s) ||
+                helperWordExist(index + 1, grid, i - 1, j, visited, s) ||
+                helperWordExist(index + 1, grid, i, j + 1, visited, s) ||
+                helperWordExist(index + 1, grid, i, j - 1, visited, s);
+
+        visited[i][j] = false;
+        return found;
+    }
+//    maximum path sum between two nodes
+    public static int maxPathSum(Node node){
+        if(node==null)
+            return 0;
+        int left=Math.max(0,maxPathSumHelper(node.left));
+        int right=Math.max(0,maxPathSumHelper(node.right));
+        int sum=node.val+left+right;
+        int result=maxPathSumHelper(node);
+        return Math.max(sum,Math.max(left,right));
+    }
+    public static int maxPathSumHelper(Node node){
+        if(node==null)
+            return 0;
+        if(node.left==null && node.right==null){
+            return node.val;
+        }
+        int left=Math.max(0,maxPathSumHelper(node.left));
+        int right=Math.max(0,maxPathSumHelper(node.right));
+        return node.val+Math.max(left,right);
+    }
+    //Given a tree, find the largest tree/subtree that is a BST.
+    public static int largestBST(Node node){
+        if(node==null)
+            return 0;
+        int[] result=new int[1];
+        largestBSTHelper(result,node);
+        return 1+result[0];
+    }
+    public static void largestBSTHelper(int[] result,Node node){
+        if(node==null)
+            return;
+        if(isBST(node)){
+            result[0]=Math.max(result[0],levelBST(node));
+        }
+        largestBSTHelper(result,node.left);
+        largestBSTHelper(result,node.right);
+    }
+    public static boolean isBST(Node node){
+        if(node==null)
+            return true;
+        return isBSTHelper(node,null,null);
+    }
+    public static boolean isBSTHelper(Node node,Integer min,Integer max){
+        if(node==null)
+            return true;
+        if((min!=null && min>node.val) || (max!=null && max<node.val))
+            return false;
+        return isBSTHelper(node.left,min,node.val)&&isBSTHelper(node.right,node.val,max);
+    }
+    public static int levelBST(Node node){
+        if(node==null)
+            return 0;
+        return 1+Math.max(levelBST(node.left),levelBST(node.right));
+    }
+
     public static void main(String[] args) {
+        //test case for max Sum Path
+        Node n = new Node(10);
+        n.left = new Node(5);
+        n.right = new Node(15);
+        n.left.left = new Node(1);
+        n.left.right = new Node(8);
+        n.right.right = new Node(7);
+        System.out.println(largestBST(n));
+        Node n1=new Node(10);
+        n1.left=new Node(5);
+        n1.right=new Node(15);
+        n1.left.left=new Node(1);
+        n1.left.right=new Node(8);
+        n1.right.left=new Node(12);
+        n1.right.right=new Node(20);
+        System.out.println(largestBST(n1));
+        //find the word in the grid
+//        char[][] grid={{'A','B','C','E'},{'S','F','C','S'},{'A','D','E','E'}};
+//        System.out.println(wordExist("ABCCED",grid));
+//        System.out.println(wordExist("SEE",grid));
+//        System.out.println(wordExist("ABCB",grid));
         //next permutation
-        System.out.println(Arrays.toString(nextPer(new int[]{1,2,3})));
+//        System.out.println(Arrays.toString(nextPer(new int[]{1,2,3})));
         //test case for possible combination
 //        System.out.println(posCombi(Arrays.asList(1,2,3)));
         //test case
