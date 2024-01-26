@@ -2166,24 +2166,70 @@ public static char[][] conwayGame(char[][] grid) {
             return 0;
         return 1+Math.max(levelBST(node.left),levelBST(node.right));
     }
-
+//    Given an unsorted array of integers, find the length of the longest consecutive elements sequence.
+    public static int longunSortedArray(int[] nums){
+        if(nums.length==0)
+            return 0;
+        PriorityQueue<Integer> pq=new PriorityQueue<>((a,b)->a-b);
+        for(int i: nums)
+            pq.offer(i);
+        int result=0;
+        int current=pq.poll();
+        int count=1;
+        while(!pq.isEmpty()){
+            if(pq.peek()-1==current){
+                count++;
+            }else{
+               count=1;
+            }
+            current=pq.poll();
+            result=Math.max(result,count);
+        }
+        return result;
+    }
+    //optimzied version
+    public static int longunSortedArray2(int[] nums){
+        if(nums==null || nums.length==0)
+            return 0;
+        HashSet<Integer> hashset=new HashSet<>();
+        for(int i:nums){
+            hashset.add(i);
+        }
+        int result=0;
+        for(int i:nums){
+            if(hashset.contains(i+1)){
+                int current=i;
+                int count=1;
+                while(hashset.contains(current+1)){
+                    current=current+1;
+                    count++;
+                }
+                result=Math.max(result,count);
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //test case for Given an unsorted array of integers,
+        // find the length of the longest consecutive elements sequence.
+        System.out.println(longunSortedArray(new int[]{100, 4, 200, 1, 3, 2}));
+        System.out.println(longunSortedArray2(new int[]{100, 4, 200, 1, 3, 2}));
         //test case for max Sum Path
-        Node n = new Node(10);
-        n.left = new Node(5);
-        n.right = new Node(15);
-        n.left.left = new Node(1);
-        n.left.right = new Node(8);
-        n.right.right = new Node(7);
-        System.out.println(largestBST(n));
-        Node n1=new Node(10);
-        n1.left=new Node(5);
-        n1.right=new Node(15);
-        n1.left.left=new Node(1);
-        n1.left.right=new Node(8);
-        n1.right.left=new Node(12);
-        n1.right.right=new Node(20);
-        System.out.println(largestBST(n1));
+//        Node n = new Node(10);
+//        n.left = new Node(5);
+//        n.right = new Node(15);
+//        n.left.left = new Node(1);
+//        n.left.right = new Node(8);
+//        n.right.right = new Node(7);
+//        System.out.println(largestBST(n));
+//        Node n1=new Node(10);
+//        n1.left=new Node(5);
+//        n1.right=new Node(15);
+//        n1.left.left=new Node(1);
+//        n1.left.right=new Node(8);
+//        n1.right.left=new Node(12);
+//        n1.right.right=new Node(20);
+//        System.out.println(largestBST(n1));
         //find the word in the grid
 //        char[][] grid={{'A','B','C','E'},{'S','F','C','S'},{'A','D','E','E'}};
 //        System.out.println(wordExist("ABCCED",grid));
