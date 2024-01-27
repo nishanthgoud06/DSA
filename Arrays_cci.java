@@ -2209,11 +2209,56 @@ public static char[][] conwayGame(char[][] grid) {
         }
         return result;
     }
+//    You are in an infinite 2D grid where you can move in any of the 8 directions:
+public static int minSteps(int[][] grid) {
+    if (grid == null || grid.length == 0)
+        return 0;
+
+    int[][] dir = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {-1, 1}, {1, -1}, {-1, -1}, {1, 1}};
+
+    Queue<int[]> queue = new java.util.LinkedList<>();
+    for (int[] q : grid)
+        queue.offer(q);
+
+    int count = 0;
+    boolean found = false;
+
+    while (!queue.isEmpty()) {
+        int size = queue.size();
+
+        for (int i = 0; i < size - 1; i++) {
+            int[] current = queue.poll();
+            int[] peek = queue.peek();
+            found = false;
+
+            for (int[] d : dir) {
+                int new_X = d[0] + current[0];
+                int new_Y = d[1] + current[1];
+                if (new_X == peek[0] && new_Y == peek[1]) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                count++;
+            } else {
+                return -1;
+            }
+        }
+        // Process the last point in the queue
+        queue.poll();
+    }
+    return count;
+}
     public static void main(String[] args) {
+        //test case for directions
+        int[][] test={{0,0},{1,1},{1,2}};
+        System.out.println(minSteps(test));
         //test case for Given an unsorted array of integers,
         // find the length of the longest consecutive elements sequence.
-        System.out.println(longunSortedArray(new int[]{100, 4, 200, 1, 3, 2}));
-        System.out.println(longunSortedArray2(new int[]{100, 4, 200, 1, 3, 2}));
+//        System.out.println(longunSortedArray(new int[]{100, 4, 200, 1, 3, 2}));
+//        System.out.println(longunSortedArray2(new int[]{100, 4, 200, 1, 3, 2}));
         //test case for max Sum Path
 //        Node n = new Node(10);
 //        n.left = new Node(5);
