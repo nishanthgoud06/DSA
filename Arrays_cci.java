@@ -2251,10 +2251,91 @@ public static int minSteps(int[][] grid) {
     }
     return count;
 }
+//    Given an even number (greater than 2), return two prime numbers whose sum will be equal to the given number.
+    public static int[] getPrime(int n){
+        List<Integer> primeNumbers=new ArrayList<>();
+        boolean isPrime = true;
+        for (int i = 2; i <= n / 2; i++) {
+            isPrime = true;
+            for (int j = 2; j <= Math.sqrt(i); j++) {
+                if (i % j == 0) {
+                    isPrime = false;
+                    break;
+                }
+            }
+            if (isPrime) {
+                primeNumbers.add(i);
+            }
+        }
+        for(int i=0;i<primeNumbers.size();i++){
+            for(int j=0;j<primeNumbers.size();j++){
+                if(primeNumbers.get(i)+primeNumbers.get(j)==n)
+                    return new int[]{primeNumbers.get(i),primeNumbers.get(j)};
+            }
+        }
+        return new int[]{};
+    }
+//    Given a string and a set of characters, return the shortest substring containing all the characters in the set.
+    public static String shortSub(String str,List<Character> chars){
+        int[] ch=new int[126];
+        for(char c:chars)
+            ch[c]++;
+        int start=0,end=0,startIndex=0,result=Integer.MAX_VALUE,currentSize=chars.size();
+        while(end<str.length()){
+            char current=str.charAt(end);
+            if(ch[current]>0){
+                currentSize--;
+            }
+            ch[current]--;
+            while(currentSize==0){
+                if(end-start<result){
+                    startIndex=start;
+                    result=end-start;
+                }
+                char currentChar=str.charAt(start);
+                if(ch[currentChar]==0)
+                    currentSize++;
+                ch[currentChar]++;
+                start++;
+            }
+            end++;
+        }
+        return result==Integer.MAX_VALUE?"":str.substring(startIndex,startIndex+result+1);
+    }
+//    Given a list of integers and a number K, return which contiguous elements of the list sum to K.
+    public static int[] conEle(int[] nums,int target){
+        if (nums == null || nums.length == 0 || target == 0)
+            return new int[0];
+        int start=0,end=0,current=0,startIndex=0,endIndex=nums.length-1;
+        while(end<nums.length){
+            current+=nums[end];
+            while(current>=target){
+                if(current==target){
+                    startIndex=start;
+                    endIndex=end;
+                    int[] result=new int[endIndex-startIndex+1];
+                    int j=0;
+                    for(int i=startIndex;i<=endIndex;i++){
+                        result[j++]=nums[i];
+                    }
+                    return result;
+                }
+                current-=nums[start];
+                start++;
+            }
+            end++;
+        }
+        return new int[0];
+    }
     public static void main(String[] args) {
+        //contiguous elements
+        System.out.println(Arrays.toString(conEle(new int[]{1, 2, 3, 4, 5},9)));
+        //test case for shortest substring
+//        System.out.println(shortSub("figehaeci",Arrays.asList('a','e','i')));
+//        System.out.println(Arrays.toString(getPrime(4)));
         //test case for directions
-        int[][] test={{0,0},{1,1},{1,2}};
-        System.out.println(minSteps(test));
+//        int[][] test={{0,0},{1,1},{1,2}};
+//        System.out.println(minSteps(test));
         //test case for Given an unsorted array of integers,
         // find the length of the longest consecutive elements sequence.
 //        System.out.println(longunSortedArray(new int[]{100, 4, 200, 1, 3, 2}));
