@@ -2327,9 +2327,67 @@ public static int minSteps(int[][] grid) {
         }
         return new int[0];
     }
+//    Determine whether a doubly linked list is a palindrome. What if it’s singly linked?
+    public static LinkedList reverseit(LinkedList node){
+        LinkedList prev=null;
+        while(node!=null){
+            LinkedList next=node.next;
+            node.next=prev;
+            prev=node;
+            node=next;
+        }
+        return prev;
+    }
+    public static boolean isPalLinkedL(LinkedList node){
+        if(node==null)
+            return true;
+        LinkedList slow=node;
+        LinkedList fast=node;
+        while(fast!=null && fast.next!=null){
+            fast=fast.next.next;
+            slow=slow.next;
+        }
+        LinkedList rev=reverseit(slow);
+        fast=node;
+        while(fast!=null){
+            if(fast.val!=rev.val)
+                return false;
+            fast=fast.next;
+            rev=rev.next;
+        }
+        return true;
+    }
+//    80. Remove Duplicates from Sorted Array II
+    public static int[] removeDupli2(int[] nums){
+        if(nums==null || nums.length<=2)
+            return nums;
+        int i=1,j=1,count=1;
+        while(i<nums.length){
+            if(nums[i]==nums[i-1]){
+                count++;
+            }else{
+                count=1;
+            }
+            if(count<=2){
+                nums[j]=nums[i];
+                j++;
+            }
+            i++;
+        }
+        return nums;
+    }
     public static void main(String[] args) {
+//        80. Remove Duplicates from Sorted Array II
+        System.out.println(Arrays.toString(removeDupli2(new int[]{1,1,1,2,2,3})));
+        //Determine whether a doubly linked list is a palindrome. What if it’s singly linked?
+//        LinkedList test=new LinkedList(1);
+//        test.next=new LinkedList(4);
+//        test.next.next=new LinkedList(3);
+//        test.next.next.next=new LinkedList(4);
+////        test.next.next.next.next=new LinkedList(1);
+//        System.out.println(isPalLinkedL(test));
         //contiguous elements
-        System.out.println(Arrays.toString(conEle(new int[]{1, 2, 3, 4, 5},9)));
+//        System.out.println(Arrays.toString(conEle(new int[]{1, 2, 3, 4, 5},9)));
         //test case for shortest substring
 //        System.out.println(shortSub("figehaeci",Arrays.asList('a','e','i')));
 //        System.out.println(Arrays.toString(getPrime(4)));
