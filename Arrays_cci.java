@@ -2376,9 +2376,81 @@ public static int minSteps(int[][] grid) {
         }
         return nums;
     }
+    public static int[] removeDupli(int[] nums){
+        if(nums.length<=2)
+            return nums;
+        int i=0,j=0;
+        while (i<nums.length){
+            int k=i+1;
+            while(k<nums.length && nums[i]==nums[k]){
+                k++;
+            }
+            int count=j+2;
+            while(j<count){
+                nums[j++]=nums[i];
+            }
+            i=k;
+        }
+        return nums;
+    }
+    //650. 2 Keys Keyboard
+    public static int keyBoard2(int n){
+        int[] dp=new int[n+1];
+        for(int i=2;i<=n;i++){
+            dp[i]=Integer.MAX_VALUE;
+            for(int j=1;j<i;j++){
+                if(i%j!=0)
+                    continue;
+                dp[i]=Math.min(dp[i],dp[j]+i/j);
+            }
+        }
+        return dp[n];
+    }
+
+//1048. Longest String Chain
+    public static int longestChain(String[] nums){
+        if(nums==null ||nums.length<=1)
+            return nums.length;
+        int result=0;
+        for(int i=0;i<nums.length;i++){
+            String current=nums[i];
+            int count=1;
+            for(int j=i+1;j<nums.length;j++){
+                if(current.length()+1==nums[j].length()){
+                    if(longestChainHelper(current,nums[j])){
+                        count++;
+                        current=nums[j];
+                    }
+                }
+            }
+            result=Math.max(result,count);
+        }
+        return result;
+    }
+    public static boolean longestChainHelper(String s1, String s2) {
+        int i = 0, j = 0;
+        boolean used = false;
+        while (i < s1.length() && j < s2.length()) {
+            if (s1.charAt(i) != s2.charAt(j)) {
+                if (used)
+                    return false; // Return true if a second difference is encountered
+                used = true;
+                j++; // Move the pointer of s2
+            } else {
+                i++;
+                j++;
+            }
+        }
+        return true; // Return true at the end, indicating a valid chain
+    }
+
     public static void main(String[] args) {
+        //test case for 1048. Longest String Chain
+        System.out.println(longestChain(new String[]{"a","b","ba","bca","bda","bdca"}));
+//        System.out.println(keyBoard2(3));
 //        80. Remove Duplicates from Sorted Array II
-        System.out.println(Arrays.toString(removeDupli2(new int[]{1,1,1,2,2,3})));
+//        System.out.println(Arrays.toString(removeDupli2(new int[]{1,1,1,2,2,3})));
+//        System.out.println(Arrays.toString(removeDupli(new int[]{1,1,1,2,2,3})));
         //Determine whether a doubly linked list is a palindrome. What if it’s singly linked?
 //        LinkedList test=new LinkedList(1);
 //        test.next=new LinkedList(4);
