@@ -2443,10 +2443,48 @@ public static int minSteps(int[][] grid) {
         }
         return true; // Return true at the end, indicating a valid chain
     }
-
+//    Given an integer list where each number represents the number of hops you can make,
+//    determine whether you can reach to the last index starting at index 0.
+    public static boolean canBeReached(int[] nums){
+        if(nums==null || nums.length==0)
+            return true;
+        boolean[] dp=new boolean[nums.length];
+        dp[0]=true;
+        for(int i=0;i<nums.length;i++){
+            for(int j=1;j<=nums[i];j++){
+                if(dp[i] && i+j<nums.length){
+                    dp[i+j]=true;
+                }
+            }
+        }
+        System.out.println(Arrays.toString(dp));
+        return dp[nums.length-1];
+    }
+//    1027. Longest Arithmetic Subsequence
+    public static int longArith(int[] nums){
+        if(nums==null || nums.length==0)
+            return 0;
+        int result=2;
+        HashMap<Integer,Integer>[] hashmap=new HashMap[nums.length];
+        for(int i=0;i<nums.length;i++){
+            hashmap[i]=new HashMap<>();
+            for(int j=0;j<i;j++){
+                int current=nums[i]-nums[j];
+                int count=hashmap[j].getOrDefault(current,1)+1;
+                hashmap[i].put(current,count);
+                result=Math.max(result,count);
+            }
+        }
+    return result;
+    }
     public static void main(String[] args) {
+        //test case for Longest Arthimatic
+        System.out.println(longArith(new int[]{20,1,15,3,10,5,8}));
+        //Test case for can be Reached or not
+//        System.out.println(canBeReached(new int[]{2, 0, 1, 0}));
+//        System.out.println(canBeReached(new int[]{1, 1, 0, 1}));
         //test case for 1048. Longest String Chain
-        System.out.println(longestChain(new String[]{"a","b","ba","bca","bda","bdca"}));
+//        System.out.println(longestChain(new String[]{"a","b","ba","bca","bda","bdca"}));
 //        System.out.println(keyBoard2(3));
 //        80. Remove Duplicates from Sorted Array II
 //        System.out.println(Arrays.toString(removeDupli2(new int[]{1,1,1,2,2,3})));
