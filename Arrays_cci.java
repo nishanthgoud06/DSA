@@ -2477,9 +2477,44 @@ public static int minSteps(int[][] grid) {
         }
     return result;
     }
+    public static int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        if (n == 0 || flights == null || flights.length == 0 || k < 0)
+            return -1;
+        Map<Integer, List<int[]>> graph = new HashMap<>();
+        for (int[] flight : flights) {
+            int from = flight[0];
+            int to = flight[1];
+            int cost = flight[2];
+            graph.putIfAbsent(from, new ArrayList<>());
+            graph.get(from).add(new int[]{to, cost});
+        }
+        PriorityQueue<int[]> queue = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
+        HashMap<Integer, Integer> visited = new HashMap<>();
+        queue.offer(new int[]{src, 0, k+1});
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int place = current[0];
+            int price = current[1];
+            int count = current[2];
+            if(visited.containsKey(place) && visited.get(place)>=price)
+                continue;
+            visited.put(place, price);
+            if (place == dst) {
+                return price;
+            }
+            if (count >0) {
+                List<int[]> scheduled = graph.getOrDefault(place, new ArrayList<>());
+                for (int[] go : scheduled) {
+                    queue.offer(new int[]{go[0], go[1] + price, count - 1});
+                }
+            }
+        }
+        return -1;
+    }
     public static void main(String[] args) {
+        System.out.println(findCheapestPrice(4,new int[][] {{0,1,100},{1,2,100},{2,0,100},{1,3,600},{2,3,200}},0,3,1));
         //test case for Longest Arthimatic
-        System.out.println(longArith(new int[]{20,1,15,3,10,5,8}));
+//        System.out.println(longArith(new int[]{20,1,15,3,10,5,8}));
         //Test case for can be Reached or not
 //        System.out.println(canBeReached(new int[]{2, 0, 1, 0}));
 //        System.out.println(canBeReached(new int[]{1, 1, 0, 1}));
