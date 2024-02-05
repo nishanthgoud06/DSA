@@ -2536,17 +2536,90 @@ public static int minSteps(int[][] grid) {
             solve(node.right,level+1);
         }
     }
+    //Unique Binary Search Trees
+    public static int uniqueBST(int n){
+        if(n<=0)
+            return 0;
+        int[] dp=new int[n+1];
+        dp[0]=1;
+        for(int i=1;i<=n;i++){
+            for(int j=1;j<=i;j++){
+                int top=dp[j-1];
+                int bottom=dp[i-j];
+                dp[i]+=top*bottom;
+            }
+        }
+        return dp[n];
+    }
+    //95. Unique Binary Search Trees II
+    public static List<Node> uniqueBST2(int n){
+        List<Node> result=new ArrayList<>();
+        if(n<=0)
+            return result;
+        return uniqueBST2Helper(1,n);
+    }
+    public static List<Node> uniqueBST2Helper(int start,int end){
+        List<Node> result=new ArrayList<>();
+        if(start>end){
+            result.add(null);
+            return result;
+        }
+        for(int i=start;i<=end;i++){
+            List<Node> left=uniqueBST2Helper(start,i-1);
+            List<Node> right=uniqueBST2Helper(i+1,end);
+            for(Node l:left){
+                for(Node r:right){
+                    Node n=new Node(i);
+                    n.left=l;
+                    n.right=r;
+                    result.add(n);
+                }
+            }
+        }
+        return result;
+    }
+    static class IPAddress{
+        String str;
+        List<String> result;
+        public IPAddress(String str){
+            this.str=str;
+            result=new ArrayList<>();
+        }
+        public List<String> getResult(){
+            helper("",0,0);
+            return result;
+        }
+        public void helper(String s,int current,int count){
+            if(count>4)
+                return;
+            if(count==4 && current>=str.length())
+                result.add(s.substring(0,s.length()-1));
+            for(int i=1;i<=3&&i+current<=str.length();i++){
+                String number=str.substring(current,current+i);
+                if(number.charAt(0)=='0' && number.length()>1)
+                    break;
+                else if(Integer.parseInt(number)<=255){
+                    helper(s+number+".",current+i,count+1);
+                }
+            }
+        }
+    }
     public static void main(String[] args) {
-        Node test=new Node(1);
-        test.left=new Node(2);
-        test.right=new Node(3);
-        test.left.left=new Node(4);
-        test.left.right=new Node(4);
-        test.left.left.left=new Node(7);
-        test.right.right=new Node(6);
-        test.right.right.right=new Node(8);
-        deep testing=new deep(test);
-        System.out.println(testing.ans());
+//        Test case for IP Adress generator
+        IPAddress test=new IPAddress("25525511135");
+        System.out.println(test.getResult());
+//        TestCASE for unique BST based on the number
+//        System.out.println(uniqueBST(3));
+//        Node test=new Node(1);
+//        test.left=new Node(2);
+//        test.right=new Node(3);
+//        test.left.left=new Node(4);
+//        test.left.right=new Node(4);
+//        test.left.left.left=new Node(7);
+//        test.right.right=new Node(6);
+//        test.right.right.right=new Node(8);
+//        deep testing=new deep(test);
+//        System.out.println(testing.ans());
 //        System.out.println(findCheapestPrice(4,new int[][] {{0,1,100},{1,2,100},{2,0,100},{1,3,600},{2,3,200}},0,3,1));
         //test case for Longest Arthimatic
 //        System.out.println(longArith(new int[]{20,1,15,3,10,5,8}));
