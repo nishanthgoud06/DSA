@@ -2511,8 +2511,43 @@ public static int minSteps(int[][] grid) {
         }
         return -1;
     }
+    //Deepest Leaves Sum
+    static class deep{
+        int current=0;
+        int result=0;
+        Node node;
+        public deep(Node node){
+            this.node=node;
+        }
+        public int ans(){
+            solve(node,0);
+            return result;
+        }
+        public void solve(Node node,int level){
+            if(node==null)
+                return;
+            if(level>current){
+                result=0;
+                current=level;
+            }
+            if(level==current)
+                result+=node.val;
+            solve(node.left,level+1);
+            solve(node.right,level+1);
+        }
+    }
     public static void main(String[] args) {
-        System.out.println(findCheapestPrice(4,new int[][] {{0,1,100},{1,2,100},{2,0,100},{1,3,600},{2,3,200}},0,3,1));
+        Node test=new Node(1);
+        test.left=new Node(2);
+        test.right=new Node(3);
+        test.left.left=new Node(4);
+        test.left.right=new Node(4);
+        test.left.left.left=new Node(7);
+        test.right.right=new Node(6);
+        test.right.right.right=new Node(8);
+        deep testing=new deep(test);
+        System.out.println(testing.ans());
+//        System.out.println(findCheapestPrice(4,new int[][] {{0,1,100},{1,2,100},{2,0,100},{1,3,600},{2,3,200}},0,3,1));
         //test case for Longest Arthimatic
 //        System.out.println(longArith(new int[]{20,1,15,3,10,5,8}));
         //Test case for can be Reached or not
