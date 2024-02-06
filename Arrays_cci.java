@@ -2604,10 +2604,44 @@ public static int minSteps(int[][] grid) {
             }
         }
     }
+//    63. Unique Paths II
+    public static int uniquePath2(int[][] given){
+        int m=given.length;
+        int n=given[0].length;
+        if(given[0][0]==1 || given[m-1][n-1]==1)
+            return 0;
+        int[][] dp=new int[m][n];
+        for(int i=0;i<m;i++){
+            if(given[i][0]==0)
+                dp[i][0]=1;
+            else
+                break;
+        }
+        for(int i=0;i<n;i++){
+            if(given[0][i]==0)
+                dp[0][i]=1;
+            else
+                break;
+        }
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                if(given[i][j]==0){
+                    if(given[i-1][j]==0)
+                        dp[i][j]+=dp[i-1][j];
+                    if(given[i][j-1]==0)
+                        dp[i][j]+=dp[i][j-1];
+                }
+            }
+        }
+        return dp[m-1][n-1];
+    }
     public static void main(String[] args) {
+//        test case for unique grid-2
+        int[][] test={{0,0,0},{0,1,0},{0,0,0}};
+        System.out.println(uniquePath2(test));
 //        Test case for IP Adress generator
-        IPAddress test=new IPAddress("25525511135");
-        System.out.println(test.getResult());
+//        IPAddress test=new IPAddress("25525511135");
+//        System.out.println(test.getResult());
 //        TestCASE for unique BST based on the number
 //        System.out.println(uniqueBST(3));
 //        Node test=new Node(1);
