@@ -2635,10 +2635,142 @@ public static int minSteps(int[][] grid) {
         }
         return dp[m-1][n-1];
     }
+//    Given a binary tree, return all paths from the root to leaves.
+    public static List<List<Integer>> RootToLeaf(Node n){
+        List<List<Integer>> result=new ArrayList<>();
+        RootToLeafHelper(result,n,new ArrayList<>());
+        return result;
+    }
+    public static void RootToLeafHelper(List<List<Integer>> result,Node n,List<Integer> temp){
+//        if(n.left==null && n.right==null){
+//            temp.add(n.val);
+//            result.add(new ArrayList<>(temp));
+//            return;
+//        }
+        if(n==null){
+            if(!result.contains(temp))
+                result.add(new ArrayList<>(temp));
+            return;
+        }
+        temp.add(n.val);
+        RootToLeafHelper(result,n.left,temp);
+        RootToLeafHelper(result,n.right,temp);
+        temp.remove(temp.size()-1);
+    }
+
+//2610. Convert an Array Into a 2D Array With Conditions
+public static List<List<Integer>> findMatrix(int[] nums) {
+    HashMap<Integer,Integer> hashmap=new HashMap<>();
+    int max=Integer.MIN_VALUE;
+    int min=Integer.MAX_VALUE;
+    for(int i:nums){
+        hashmap.put(i,hashmap.getOrDefault(i,0)+1);
+    }
+    List<List<Integer>> result=new ArrayList<>();
+    // int size=hashmap.size();
+    while(hashmap.size()>0){
+        List<Integer> a=findMatrixHelper(hashmap,max);
+        if(a.size()>0)
+            result.add(new ArrayList<>(a));
+        else
+            break;
+    }
+    return result;
+}
+    public static List<Integer> findMatrixHelper(HashMap<Integer,Integer> hashmap,int count){
+        List<Integer> result=new ArrayList<>();
+        for(Map.Entry<Integer,Integer> entry:hashmap.entrySet()){
+            if(entry.getValue()>0){
+                result.add(entry.getKey());
+                hashmap.put(entry.getKey(),entry.getValue()-1);
+            }
+        }
+        return result;
+    }
+//    1282. Group the People Given the Group Size They Belong To
+public static List<List<Integer>> groupThePeople(int[] groupSizes) {
+    List<List<Integer>> result=new ArrayList<>();
+    if(groupSizes.length==0)
+        return result;
+    boolean[] used=new boolean[groupSizes.length];
+    for(int i=0;i<groupSizes.length;i++){
+        if(!used[i]){
+            int find=groupSizes[i];
+            List<Integer> current=new ArrayList<>();
+            current.add(i);
+            for(int j=i+1;j<groupSizes.length;j++){
+                if(groupSizes[j]==find && !used[j] && current.size()<find){
+                    current.add(j);
+                    used[j]=true;
+                }
+            }
+            result.add(current);
+        }
+    }
+    return result;
+}
+//2807. Insert Greatest Common Divisors in Linked List
+    static class ListNode{
+        int val;
+        ListNode next;
+        public ListNode(int val){
+            this.val=val;
+        }
+}
+    public static ListNode gcpLL(ListNode node){
+        if(node==null || node.next==null)
+            return node;
+        ListNode result=new  ListNode(node.val);
+        ListNode dummy=result;
+        ListNode slow=node;
+        ListNode fast=slow.next;
+        while(fast!=null){
+            dummy.next=new ListNode(gcd(slow.val,fast.val));
+            dummy=dummy.next;
+            dummy.next=new ListNode(fast.val);
+            dummy=dummy.next;
+            slow=fast;
+            fast=fast.next;
+        }
+        return result;
+    }
+    public static int gcd(int a,int b){
+        while (b != 0) {
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+    public static void printLinkedList(ListNode node){
+        while(node!=null){
+            System.out.print(node.val+" ");
+            node=node.next;
+        }
+        System.out.println();
+    }
     public static void main(String[] args) {
+//        2807. Insert Greatest Common Divisors in Linked List
+        ListNode test=new ListNode(18);
+        test.next=new ListNode(6);
+        test.next.next=new ListNode(10);
+        test.next.next.next=new ListNode(3);
+        printLinkedList(test);
+        printLinkedList(gcpLL(test));
+//        1282. Group the People Given the Group Size They Belong To
+//        System.out.println(groupThePeople(new int[]{3,3,3,3,3,1,3}));
+//        2610. Convert an Array Into a 2D Array With Conditions
+//        System.out.println(findMatrix(new int[]{1,3,4,1,2,3,1}));
+//        Test case for all paths from the root to leaves.
+//        Node test=new Node(1);
+//        test.left=new Node(2);
+//        test.right=new Node(3);
+//        test.right.left=new Node(4);
+//        test.right.right=new Node(5);
+//        System.out.println(RootToLeaf(test));
 //        test case for unique grid-2
-        int[][] test={{0,0,0},{0,1,0},{0,0,0}};
-        System.out.println(uniquePath2(test));
+//        int[][] test={{0,0,0},{0,1,0},{0,0,0}};
+//        System.out.println(uniquePath2(test));
 //        Test case for IP Adress generator
 //        IPAddress test=new IPAddress("25525511135");
 //        System.out.println(test.getResult());
