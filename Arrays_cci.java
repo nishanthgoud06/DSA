@@ -2749,14 +2749,40 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         }
         System.out.println();
     }
+//    2433. Find The Original Array of Prefix Xor
+    public static int[] prefixXorArr(int[] nums){
+        if(nums==null || nums.length==0)
+            return nums;
+        int[] result=new int[nums.length];
+        result[0]=nums[0];
+        for(int i=1;i<nums.length;i++){
+            result[i]=nums[i-1]^nums[i];
+        }
+        return result;
+    }
+//    1689. Partitioning Into Minimum Number Of Deci-Binary Numbers
+    public static int partMin(String num){
+        if(num.length()==0)
+            return 0;
+        int result=0;
+        for(char c:num.toCharArray()){
+            int ch=c-'0';
+            result=Math.max(result,ch);
+        }
+        return result;
+    }
     public static void main(String[] args) {
+//        1689. Partitioning Into Minimum Number Of Deci-Binary Numbers
+        System.out.println(partMin("27346209830709182346"));
+//        2433. Find The Original Array of Prefix Xor
+//        System.out.println(Arrays.toString(prefixXorArr(new int[]{5,2,0,3,1})));
 //        2807. Insert Greatest Common Divisors in Linked List
-        ListNode test=new ListNode(18);
-        test.next=new ListNode(6);
-        test.next.next=new ListNode(10);
-        test.next.next.next=new ListNode(3);
-        printLinkedList(test);
-        printLinkedList(gcpLL(test));
+//        ListNode test=new ListNode(18);
+//        test.next=new ListNode(6);
+//        test.next.next=new ListNode(10);
+//        test.next.next.next=new ListNode(3);
+//        printLinkedList(test);
+//        printLinkedList(gcpLL(test));
 //        1282. Group the People Given the Group Size They Belong To
 //        System.out.println(groupThePeople(new int[]{3,3,3,3,3,1,3}));
 //        2610. Convert an Array Into a 2D Array With Conditions
