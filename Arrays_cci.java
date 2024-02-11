@@ -2828,17 +2828,125 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         }
         return result.next.next;
     }
+//    894. All Possible Full Binary Trees
+    public static List<Node> allPossibleBT(int n){
+        List<Node> result=new ArrayList<>();
+        if(n%2==0)
+            return result;
+        if(n==1){
+            result.add(new Node(0));
+            return result;
+        }
+        for(int i=1;i<n;i++){
+            int j=n-1-i;
+            List<Node> left=allPossibleBT(i);
+            List<Node> right=allPossibleBT(i);
+            for(Node lefty:left){
+                for(Node righty:right){
+                    Node current=new Node(0);
+                    current.left=lefty;
+                    current.right=righty;
+                    result.add(current);
+                }
+            }
+        }
+        return result;
+    }
+//    2785. Sort Vowels in a String
+    public static String sortVowels(String s) {
+        List<Character> list=new ArrayList<>();
+        list.add('a');
+        list.add('e');
+        list.add('i');
+        list.add('o');
+        list.add('u');
+        list.add('A');
+        list.add('E');
+        list.add('I');
+        list.add('O');
+        list.add('U');
+        StringBuilder sb=new StringBuilder();
+        List<Character> vowels=new ArrayList<>();
+        for(char c:s.toCharArray()){
+            if(list.contains(c)){
+                sb.append('#');
+                vowels.add(c);
+            }else{
+                sb.append(c);
+            }
+        }
+        Collections.sort(vowels);
+        int current=0;
+        for(int i=0;i<sb.length();i++){
+            if(sb.charAt(i)=='#'){
+                sb.setCharAt(i,vowels.get(current++));
+            }
+        }
+        return sb.toString();
+    }
+//    1382. Balance a Binary Search Tree
+    public static Node balanceBST(Node node){
+        if(node==null)
+            return node;
+        List<Integer> list=new ArrayList<>();
+        balanceBSTHelper1(list,node);
+        return balanceBST2(list,0,list.size()-1);
+    }
+    public static void balanceBSTHelper1(List<Integer> list,Node node){
+        if(node==null)
+            return;
+        balanceBSTHelper1(list,node.left);
+        list.add(node.val);
+        balanceBSTHelper1(list,node.right);
+    }
+    public static Node balanceBST2(List<Integer> list,int low, int high){
+        if(low<=high) {
+            int mid = low + (high - low) / 2;
+            Node result = new Node(list.get(mid));
+            result.left = balanceBST2(list, low, mid - 1);
+            result.right = balanceBST2(list, mid + 1, high);
+            return result;
+        }
+        return null;
+    }
+    public static void printTree(Node node){
+        if(node==null)
+            return;
+        Queue<Node> queue=new java.util.LinkedList<>();
+        queue.offer(node);
+        while(!queue.isEmpty()){
+            int size=queue.size();
+            for(int i=0;i<size;i++){
+                Node current=queue.poll();
+                System.out.print(current.val+" ");
+                if(current.left!=null)
+                    queue.offer(current.left);
+                if(current.right!=null)
+                    queue.offer(current.right);
+            }
+            System.out.println("");
+        }
+    }
     public static void main(String[] args) {
-        ListNode test=new ListNode(0);
-        test.next=new ListNode(3);
-        test.next.next=new ListNode(1);
-        test.next.next.next=new ListNode(0);
-        test.next.next.next.next=new ListNode(4);
-        test.next.next.next.next.next=new ListNode(5);
-        test.next.next.next.next.next.next=new ListNode(2);
-        test.next.next.next.next.next.next.next=new ListNode(0);
-        printLinkedList(test);
-        printLinkedList(mergeNode(test));
+//        1382. Balance a Binary Search Tree
+        Node node=new Node(1);
+        node.right=new Node(2);
+        node.right.right=new Node(3);
+        node.right.right.right=new Node(4);
+        printTree(node);
+        printTree(balanceBST(node));
+        //Test case Sort Vowels in a String
+//        System.out.println(sortVowels("lEetcOde"));
+//        ListNode test=new ListNode(0);
+//        test.next=new ListNode(3);
+//        test.next.next=new ListNode(1);
+//        test.next.next.next=new ListNode(0);
+//        test.next.next.next.next=new ListNode(4);
+//        test.next.next.next.next.next=new ListNode(5);
+//        test.next.next.next.next.next.next=new ListNode(2);
+//        test.next.next.next.next.next.next.next=new ListNode(0);
+//        printLinkedList(test);
+//        printLinkedList(mergeNode(test));
 //        1769. Minimum Number of Operations to Move All Balls to Each Box
 //        System.out.println(Arrays.toString(minOperations("001011")));
 //        2391. Minimum Amount of Time to Collect Garbage
