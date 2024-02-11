@@ -2771,9 +2771,80 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         }
         return result;
     }
+    //2391. Minimum Amount of Time to Collect Garbage
+    public static int MinAmount(String[] trash,int[] cost){
+        if(trash==null || cost==null || trash.length==0 || cost.length==0)
+            return 0;
+        int result=0;
+        int[] last=new int[3];
+        for(int i=0;i<trash.length;i++){
+            result+=trash[i].length();
+            if(trash[i].contains("M"))
+                last[0]=i;
+            if(trash[i].contains("P"))
+                last[1]=i;
+            if(trash[i].contains("G"))
+                last[2]=i;
+        }
+        System.out.println(Arrays.toString(last));
+        for(int i=0;i<3;i++){
+            for(int j=0;j<cost.length;j++){
+                if(j<last[i])
+                    result+=cost[j];
+            }
+        }
+        return result;
+    }
+//    1769. Minimum Number of Operations to Move All Balls to Each Box
+    public static int[] minOperations(String boxes) {
+        if(boxes.length()==0)
+            return new int[0];
+        int[] result=new int[boxes.length()];
+        for(int i=0;i<boxes.length();i++){
+            for(int j=0;j<boxes.length();j++){
+                if(boxes.charAt(j)=='1'){
+                    result[i]+=Math.abs(i-j);
+                }
+            }
+        }
+        return result;
+    }
+//    2181. Merge Nodes in Between Zeros
+    public static ListNode mergeNode(ListNode node){
+        if(node==null)
+            return node;
+        ListNode result=new ListNode(-1);
+        ListNode dummy=result;
+        int current=0;
+        while(node!=null){
+            if(node.val!=0)
+                current+=node.val;
+            if(node.val==0){
+                dummy.next=new ListNode(current);
+                dummy=dummy.next;
+                current=0;
+            }
+            node=node.next;
+        }
+        return result.next.next;
+    }
     public static void main(String[] args) {
+        ListNode test=new ListNode(0);
+        test.next=new ListNode(3);
+        test.next.next=new ListNode(1);
+        test.next.next.next=new ListNode(0);
+        test.next.next.next.next=new ListNode(4);
+        test.next.next.next.next.next=new ListNode(5);
+        test.next.next.next.next.next.next=new ListNode(2);
+        test.next.next.next.next.next.next.next=new ListNode(0);
+        printLinkedList(test);
+        printLinkedList(mergeNode(test));
+//        1769. Minimum Number of Operations to Move All Balls to Each Box
+//        System.out.println(Arrays.toString(minOperations("001011")));
+//        2391. Minimum Amount of Time to Collect Garbage
+//        System.out.println(MinAmount(new String[]{"G","P","GP","GG"},new int[]{2,4,3}));
 //        1689. Partitioning Into Minimum Number Of Deci-Binary Numbers
-        System.out.println(partMin("27346209830709182346"));
+//        System.out.println(partMin("27346209830709182346"));
 //        2433. Find The Original Array of Prefix Xor
 //        System.out.println(Arrays.toString(prefixXorArr(new int[]{5,2,0,3,1})));
 //        2807. Insert Greatest Common Divisors in Linked List
