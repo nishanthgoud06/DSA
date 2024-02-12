@@ -2927,14 +2927,123 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
             System.out.println("");
         }
     }
+//    1061. Lexicographically Smallest Equivalent String
+    static class union{
+        int[] parents;
+        public union(){
+            parents=new int[26];
+            for(int i=0;i<26;i++)
+                parents[i]=i;
+        }
+        public void union(char c1,char c2){
+            int a=find(c1);
+            int b=find(c2);
+            if(a<b)
+                parents[b]=a;
+            else
+                parents[a]=b;
+        }
+        public int find(char c){
+            while(c-'a'!=parents[c-'a']){
+                parents[c-'a']=parents[parents[c-'a']];
+                c=(char)(parents[c-'a']+'a');
+            }
+            return c-'a';
+        }
+    }
+    public static String lexStringSmallest(String s1,String s2,String baseStr){
+        if(baseStr.length()==0)
+            return baseStr;
+        union test=new union();
+        for(int i=0;i<s1.length();i++){
+            char c1=s1.charAt(i);
+            char c2=s2.charAt(i);
+            test.union(c1,c2);
+        }
+        StringBuilder sb=new StringBuilder();
+        for(char c:baseStr.toCharArray()){
+            sb.append((char)('a'+test.find(c)));
+        }
+        return sb.toString();
+    }
+//    2442. Count Number of Distinct Integers After Reverse Operations
+    public static int countRevOperation(int[] nums){
+        if(nums==null || nums.length==0)
+            return 0;
+        HashSet<Integer> hashSet=new HashSet<>();
+        for(int i:nums){
+            hashSet.add(i);
+            hashSet.add(countRevOperationHelper(i));
+        }
+        return hashSet.size();
+    }
+    public static int countRevOperationHelper(int num){
+        int result=0;
+        while(num>0){
+            result=result*10+num%10;
+            num=num/10;
+        }
+        return result;
+    }
+//    890. Find and Replace Pattern
+    public static List<String> findAndReplacePattern(String[] words, String pattern) {
+        List<String> result=new ArrayList<>();
+        for(String str:words){
+            if(findAndReplacePatternhelper(str,pattern) && findAndReplacePatternhelper2(str,pattern))
+                result.add(str);
+        }
+        return result;
+    }
+    public static boolean findAndReplacePatternhelper(String str1,String str2){
+        if(str1.length()!=str2.length())
+            return false;
+        HashMap<Character,Character> hashmap=new HashMap<>();
+        for(int i=0;i<str1.length();i++){
+            char c1=str1.charAt(i);
+            char c2=str2.charAt(i);
+            if(hashmap.containsKey(c1)){
+                if(hashmap.get(c1)!=c2)
+                    return false;
+            }else if(hashmap.containsValue(c2)){
+                if(!hashmap.containsKey(c1) ||hashmap.get(c1)!=c2)
+                    return false;
+            }else{
+                hashmap.put(c1,c2);
+            }
+        }
+        return true;
+    }
+    public static boolean findAndReplacePatternhelper2(String str1,String str2){
+        int[] char1=new int[26];
+        int[] char2=new int[26];
+        for(char c:str1.toCharArray()){
+            char1[c-'a']++;
+        }
+        for(char c:str2.toCharArray()){
+            char2[c-'a']++;
+        }
+        Arrays.sort(char1);
+        Arrays.sort(char2);
+        for(int i=0;i<26;i++){
+            if(char1[i]!=char2[i])
+                return false;
+        }
+        return true;
+    }
     public static void main(String[] args) {
+//        890. Find and Replace Pattern
+        System.out.println(findAndReplacePattern(new String[]{"abc","deq","mee","aqq","dkd","ccc"},"abb"));
+//        2442. Count Number of Distinct Integers After Reverse Operations
+//        System.out.println(countRevOperation(new int[]{1,13,10,12,31}));
+//        1061. Lexicographically Smallest Equivalent String
+//        System.out.println(lexStringSmallest("parker","morris","parser"));
 //        1382. Balance a Binary Search Tree
-        Node node=new Node(1);
-        node.right=new Node(2);
-        node.right.right=new Node(3);
-        node.right.right.right=new Node(4);
-        printTree(node);
-        printTree(balanceBST(node));
+//        Node node=new Node(1);
+//        node.right=new Node(2);
+//        node.right.right=new Node(3);
+//        node.right.right.right=new Node(4);
+//        printTree(node);
+//        printTree(balanceBST(node));
         //Test case Sort Vowels in a String
 //        System.out.println(sortVowels("lEetcOde"));
 //        ListNode test=new ListNode(0);
