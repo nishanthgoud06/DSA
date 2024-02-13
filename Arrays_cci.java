@@ -3030,9 +3030,63 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         }
         return true;
     }
+    //1910. Remove All Occurrences of a Substring
+    public static String removaAllOc(String str1,String str2){
+        if(str2.length()==0 ||str1.length()==0)
+            return "";
+        int index=str1.indexOf(str2);
+        while(index!=-1){
+            str1=str1.substring(0,index)+str1.substring(index+str2.length());
+            index=str1.indexOf(str2);
+        }
+        return str1;
+    }
+//    1261. Find Elements in a Contaminated Binary Tree
+    static class Deconstruct{
+        HashSet<Integer> hashset=new HashSet<>();
+        Queue<Node> queue;
+        public Deconstruct(Node node){
+            node.val=0;
+            hashset.add(0);
+            queue=new java.util.LinkedList<>();
+            queue.offer(node);
+            fixit();
+        }
+        public void fixit(){
+            while(!queue.isEmpty()){
+                int size=queue.size();
+                for(int i=0;i<size;i++){
+                    Node current=queue.poll();
+                    if(current.left!=null){
+                        current.left.val=2*current.val+1;
+                        hashset.add(current.left.val);
+                        queue.offer(current.left);
+                    }
+                    if(current.right!=null){
+                        current.right.val=2*current.val+2;
+                        hashset.add(current.right.val);
+                        queue.offer(current.right);
+                    }
+                }
+            }
+        }
+        public boolean find(int n){
+            return hashset.contains(n);
+        }
+    }
     public static void main(String[] args) {
+//        1261. Find Elements in a Contaminated Binary Tree
+        Node test=new Node(-1);
+        test.left=new Node(-1);
+        test.right=new Node(-1);
+        test.left.left=new Node(-1);
+        test.left.right=new Node(-1);
+        Deconstruct testing=new Deconstruct(test);
+        System.out.println(testing.find(9));
+        //test case for 1910. Remove All Occurrences of a Substring
+//        System.out.println(removaAllOc("daabcbaabcbc","abc"));
 //        890. Find and Replace Pattern
-        System.out.println(findAndReplacePattern(new String[]{"abc","deq","mee","aqq","dkd","ccc"},"abb"));
+//        System.out.println(findAndReplacePattern(new String[]{"abc","deq","mee","aqq","dkd","ccc"},"abb"));
 //        2442. Count Number of Distinct Integers After Reverse Operations
 //        System.out.println(countRevOperation(new int[]{1,13,10,12,31}));
 //        1061. Lexicographically Smallest Equivalent String
