@@ -3074,15 +3074,87 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
             return hashset.contains(n);
         }
     }
+//    2545. Sort the Students by Their Kth Score
+    //Approch-1
+    public static int[][] sortTheStudents(int[][] score, int k) {
+        if (k >= score[0].length) {
+            return score;
+        }
+        List<Integer> list=new ArrayList<>();
+        for(int i=0;i<score.length;i++){
+            list.add(score[i][k]);
+        }
+        int[][] result=new int[score.length][score[0].length];
+        Collections.sort(list,Collections.reverseOrder());
+        for(int i=0;i<list.size();i++){
+            for(int j=0;j<score.length;j++){
+                if(list.get(i)==score[j][k]){
+                    sortTheStudentsHelper(result,i,j,score);
+                }
+            }
+        }
+        return result;
+    }
+    public static void sortTheStudentsHelper(int[][] result,int i,int j,int[][] score){
+        for(int k=0;k<result[0].length;k++){
+            result[i][k]=score[j][k];
+        }
+    }
+    //Approch-2
+    public static int[][] sortTheStudents2(int[][] score,int k){
+        Arrays.sort(score,(a,b)->b[k]-a[k]);
+        return score;
+    }
+//    2482. Difference Between Ones and Zeros in Row and Column
+        public static int[][] diffBWOandZ(int[][] grid){
+            int m=grid.length;
+            int n=grid[0].length;
+            int[] rowOne=new int[m];
+            int[] colOne=new int[n];
+            int[] rowZero=new int[m];
+            int[] colZero=new int[n];
+            for(int i=0;i<m;i++){
+                for(int j=0;j<n;j++){
+                    if(grid[i][j]==1){
+                        rowOne[i]++;
+                        colOne[j]++;
+                    }else{
+                        rowZero[i]++;
+                        colZero[j]++;
+                    }
+                }
+            }
+            int[][] result=new int[m][n];
+            for(int i=0;i<m;i++){
+                for(int j=0;j<n;j++){
+                    result[i][j]=rowOne[i]+colOne[j]-rowZero[i]-colZero[j];
+                }
+            }
+            return result;
+        }
+//    Given two non-empty binary trees s and t, check whether tree t has exactly
+//    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
+//    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
     public static void main(String[] args) {
-//        1261. Find Elements in a Contaminated Binary Tree
-        Node test=new Node(-1);
-        test.left=new Node(-1);
-        test.right=new Node(-1);
-        test.left.left=new Node(-1);
-        test.left.right=new Node(-1);
-        Deconstruct testing=new Deconstruct(test);
-        System.out.println(testing.find(9));
+        //test case for 2482. Difference Between Ones and Zeros in Row and Column
+        int[][] test={{0,1,1},{1,0,1},{0,0,1}};
+        test=diffBWOandZ(test);
+        for(int[] i:test)
+            System.out.println(Arrays.toString(i));
+        //test case for 2545. Sort the Students by Their Kth Score
+//        int[][] test={{10,6,9,1},{7,5,11,2},{4,8,3,15}};
+//        test=sortTheStudents(test,2);
+//        for(int[] i:test) {
+//            System.out.println(Arrays.toString(i));
+//        }
+//        1261. Find Elements in a Contaminated Binary Tre
+//        Node test=new Node(-1);
+//        test.left=new Node(-1);
+//        test.right=new Node(-1);
+//        test.left.left=new Node(-1);
+//        test.left.right=new Node(-1);
+//        Deconstruct testing=new Deconstruct(test);
+//        System.out.println(testing.find(9));
         //test case for 1910. Remove All Occurrences of a Substring
 //        System.out.println(removaAllOc("daabcbaabcbc","abc"));
 //        890. Find and Replace Pattern
