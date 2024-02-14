@@ -3132,15 +3132,58 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
             }
             return result;
         }
+        //1561. Maximum Number of Coins You Can Get
+    public static int maxSum2ndChoice(int[] nums){
+        if(nums==null || nums.length<=2)
+            return 0;
+        Arrays.sort(nums);
+        int limit=nums.length/3;
+        int index=nums.length-2;
+        int result=0;
+        for(int i=0;i<limit;i++){
+            result+=nums[index];
+            index-=2;
+        }
+        return result;
+    }
+//    1630. Arithmetic Subarrays
+    public static boolean[] arthSubArray(int[] nums,int[] l,int[] r){
+        if(nums==null || nums.length<=1 || l==null || l.length==0 || r==null || r.length==0)
+            return new boolean[0];
+        boolean[] result=new boolean[l.length];
+        for(int i=0;i<l.length;i++){
+            if(arthSubArrayHelper(Arrays.copyOfRange(nums,l[i],r[i]+1)))
+                result[i]=true;
+            else
+                result[i]=false;
+        }
+        return result;
+    }
+    public static boolean arthSubArrayHelper(int[] nums){
+        if(nums.length<=1)
+            return false;
+        Arrays.sort(nums);
+        int diff=nums[0]-nums[1];
+        for(int i=0;i<nums.length-1;i++){
+            if(nums[i]-nums[i+1]!=diff)
+                return false;
+        }
+        return true;
+    }
 //    Given two non-empty binary trees s and t, check whether tree t has exactly
 //    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
 //    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
     public static void main(String[] args) {
+//        Test case for 1630. Arithmetic Subarrays
+        System.out.println(Arrays.toString(arthSubArray(new int[]{4,6,5,9,3,7},new int[]{0,0,2},new int[]{2,3,5})));
+//      Test case for 1561. Maximum Number of Coins You Can Get
+//        System.out.println(maxSum2ndChoice(new int[]{2,4,1,2,7,8}));
+//        System.out.println(maxSum2ndChoice(new int[]{9,8,7,6,5,1,2,3,4}));
         //test case for 2482. Difference Between Ones and Zeros in Row and Column
-        int[][] test={{0,1,1},{1,0,1},{0,0,1}};
-        test=diffBWOandZ(test);
-        for(int[] i:test)
-            System.out.println(Arrays.toString(i));
+//        int[][] test={{0,1,1},{1,0,1},{0,0,1}};
+//        test=diffBWOandZ(test);
+//        for(int[] i:test)
+//            System.out.println(Arrays.toString(i));
         //test case for 2545. Sort the Students by Their Kth Score
 //        int[][] test={{10,6,9,1},{7,5,11,2},{4,8,3,15}};
 //        test=sortTheStudents(test,2);
