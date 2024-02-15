@@ -3170,12 +3170,27 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         }
         return true;
     }
+//    1442. Count Triplets That Can Form Two Arrays of Equal XOR
+    public static int countTriplets(int[] nums){
+        int result=0;
+        for(int i=0;i<nums.length;i++){
+            int pre=nums[i];
+            for(int j=i+1;j<nums.length;j++){
+                pre^=nums[j];
+                if(pre==0)
+                    result+=j-i;
+            }
+        }
+        return result;
+    }
 //    Given two non-empty binary trees s and t, check whether tree t has exactly
 //    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
 //    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
     public static void main(String[] args) {
+        //1442. Count Triplets That Can Form Two Arrays of Equal XOR
+        System.out.println(countTriplets(new int[]{2,3,1,6,7}));
 //        Test case for 1630. Arithmetic Subarrays
-        System.out.println(Arrays.toString(arthSubArray(new int[]{4,6,5,9,3,7},new int[]{0,0,2},new int[]{2,3,5})));
+//        System.out.println(Arrays.toString(arthSubArray(new int[]{4,6,5,9,3,7},new int[]{0,0,2},new int[]{2,3,5})));
 //      Test case for 1561. Maximum Number of Coins You Can Get
 //        System.out.println(maxSum2ndChoice(new int[]{2,4,1,2,7,8}));
 //        System.out.println(maxSum2ndChoice(new int[]{9,8,7,6,5,1,2,3,4}));
