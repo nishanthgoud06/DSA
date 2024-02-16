@@ -1,10 +1,10 @@
 #Data Structure and Algorithm
-This repo contains all the topics from beginner to advanve level questioins.
+This repo contains all the topics from beginner to advanced-level questions.
 
-It cantains all daily byte solutins.
+It contains all daily byte solutions.
 
 **##Topics**
-*1. questions are divided into seperate topics*
+*1. questions are divided into separate topics*
 - BackTracking
 - BinarySeachTree
 - breathFirstSearch
