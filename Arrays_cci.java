@@ -3183,12 +3183,110 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         }
         return result;
     }
+    //Goldman Sachs Interview Question
+    public static int MaxGrade(String[][] arr){
+        if(arr==null || arr.length==0)
+            return 0;
+        HashMap<String,Integer> hashmap=new HashMap<>();
+        HashMap<String,Integer> count=new HashMap<>();
+        for(String[] s:arr){
+            String name=s[0];
+            int marks=Integer.valueOf(s[1]);
+            if(hashmap.containsKey(name)){
+                int currentValue=hashmap.get(name);
+                currentValue+=marks;
+                hashmap.put(name,currentValue);
+            }else{
+                hashmap.put(name,marks);
+            }
+            count.put(name,count.getOrDefault(name,0)+1);
+        }
+        int highest=Integer.MIN_VALUE;
+        for(Map.Entry<String,Integer> entry:hashmap.entrySet()){
+            int current=entry.getValue();
+            current=current/count.get(entry.getKey());
+            if(current>highest)
+                highest=current;
+        }
+        return highest;
+    }
+    //Approch-2
+    public static int MaxGrade2(String[][] arr){
+        HashMap<String,List<Integer>> hashmap=new HashMap<>();
+        for(String[] str:arr){
+            String name=str[0];
+            int value=Integer.valueOf(str[1]);
+            if(hashmap.containsKey(name)){
+                hashmap.get(name).add(value);
+            }else{
+                hashmap.put(name,Arrays.asList(value));
+            }
+        }
+        int highest=0;
+        for(Map.Entry<String,List<Integer>> entry:hashmap.entrySet()){
+            List<Integer> list=entry.getValue();
+            int total=0;
+            for(int i:list){
+                total+=i;
+            }
+            total/=list.size();
+            if(total> highest){
+                highest=total;
+            }
+        }
+        return highest;
+    }
+    //Goldman Sachs problem-2 RandomInterval return orderInteraval
+    public static int[][] RandomInterval(int[][] arr){
+        if(arr==null || arr.length<=1)
+            return arr;
+        PriorityQueue<int[]> pq=new PriorityQueue<>((a,b)->a[0]-b[0]);
+        for(int[] i:arr){
+            pq.offer(i);
+        }
+        int[][] result=new int[arr.length][2];
+        int index=0;
+        while(!pq.isEmpty()){
+            result[index++]=pq.poll();
+        }
+        return result;
+    }
+//    811. Subdomain Visit Count
+    public static List<String> subDomain(String[] str){
+        List<String> result=new ArrayList<>();
+        HashMap<String,Integer> hashmap=new HashMap<>();
+        for(String s:str){
+            String[] arr1=s.split(" ");
+            int value=Integer.valueOf(arr1[0]);
+            String[] arr2=arr1[1].split("\\.");
+            StringBuilder sb=new StringBuilder();
+            for(int i=arr2.length-1;i>=0;i--){
+                if(sb.length()>0){
+                    sb.insert(0,".");
+                    sb.insert(0,arr2[i]);
+                }else{
+                    sb.append(arr2[i]);
+                }
+                hashmap.put(sb.toString(),hashmap.getOrDefault(sb.toString(),0)+value);
+            }
+        }
+        for(Map.Entry<String,Integer> entry:hashmap.entrySet()){
+            result.add(entry.getValue()+" "+entry.getKey());
+        }
+        return result;
+    }
 //    Given two non-empty binary trees s and t, check whether tree t has exactly
 //    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
 //    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
     public static void main(String[] args) {
+        //Test case for 811. Subdomain Visit Count
+        System.out.println(subDomain(new String[]{"900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org"}));
+        //Test case for Goldman Sachs Problem
+//        int[][] test={{5,7},{15,29},{7,9},{1,5},{12,15},{39,34},{9,12}};
+//        for(int[] i:RandomInterval(test))
+//            System.out.print(Arrays.toString(i));
         //1442. Count Triplets That Can Form Two Arrays of Equal XOR
-        System.out.println(countTriplets(new int[]{2,3,1,6,7}));
+//        System.out.println(countTriplets(new int[]{2,3,1,6,7}));
 //        Test case for 1630. Arithmetic Subarrays
 //        System.out.println(Arrays.toString(arthSubArray(new int[]{4,6,5,9,3,7},new int[]{0,0,2},new int[]{2,3,5})));
 //      Test case for 1561. Maximum Number of Coins You Can Get
