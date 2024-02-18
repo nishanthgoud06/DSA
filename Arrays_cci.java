@@ -3327,6 +3327,44 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
             }
         }
     }
+//    419. Battleships in a Board
+    public int countBattleships(char[][] board) {
+        int result=0;
+        for(int i=0;i<board.length;i++){
+            for(int j=0;j<board[0].length;j++){
+                if(board[i][j]=='X'){
+                    int left=j-1;
+                    int right=j+1;
+                    int top=i-1;
+                    int bottom=i+1;
+                    result++;
+                    if((left>=0 && left<board[0].length && board[i][left]=='X' ) || (right>=0 && right<board[0].length && board[i][right]=='X')){
+                        countBattleshipshori(i,j,board);
+                        // result++;
+                    }
+                    if((top>=0 && top<board.length && board[top][j]=='X') || (bottom>=0 && bottom<board.length && board[bottom][j]=='X')){
+                        countBattleshipsverti(i,j,board);
+                        // result++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    public static void countBattleshipshori(int i,int j,char[][] board){
+        if(j>=0 && j<board[0].length && board[i][j]=='X'){
+            board[i][j]='.';
+            countBattleshipshori(i,j-1,board);
+            countBattleshipshori(i,j+1,board);
+        }
+    }
+    public static void countBattleshipsverti(int i,int j,char[][] board){
+        if(i>=0 && i<board.length && board[i][j]=='X'){
+            board[i][j]='.';
+            countBattleshipsverti(i+1,j,board);
+            countBattleshipsverti(i-1,j,board);
+        }
+    }
 //    Given two non-empty binary trees s and t, check whether tree t has exactly
 //    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
 //    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
