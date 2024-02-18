@@ -3275,12 +3275,68 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         }
         return result;
     }
+//    2221. Find Triangular Sum of an Array
+    public static int findTriSum(int[] nums){
+        if(nums.length==1)
+            return nums[0];
+        List<Integer> result=new ArrayList<>();
+        for(int i:nums)
+            result.add(i);
+        while(true){
+            List<Integer> temp=new ArrayList<>();
+            for(int i=0;i<result.size()-1;i++){
+                int value=result.get(i)+result.get(i+1);
+                temp.add(value%10);
+            }
+            result=temp;
+            if(result.size()==1)
+                break;
+        }
+        return result.get(0);
+    }
+    //Approch-2
+    public static int findTriSum2(int[] nums){
+        if(nums.length==1)
+            return nums[0];
+        int n=nums.length;
+        for(int i=1;i<n;i++){
+            for(int j=0;j<n-i;j++){
+                nums[j]=(nums[j]+nums[j+1])%10;
+            }
+        }
+        return nums[0];
+    }
+//    1079. Letter Tile Possibilities
+    public static int lettleTile(String str){
+        if(str.length()<=1)
+            return str.length();
+        Set<String> result = new HashSet<>();
+        lettleTileHelper(result, str, new StringBuilder(), new boolean[str.length()]);
+        return result.size();
+    }
+    public static void lettleTileHelper(Set<String> result, String tiles, StringBuilder sb, boolean[] used){
+        if (sb.length() > 0)
+            result.add(sb.toString());
+        for (int i = 0; i < tiles.length(); i++) {
+            if (!used[i]) {
+                sb.append(tiles.charAt(i));
+                used[i] = true;
+                lettleTileHelper(result, tiles, sb, used);
+                used[i] = false;
+                sb.deleteCharAt(sb.length() - 1);
+            }
+        }
+    }
 //    Given two non-empty binary trees s and t, check whether tree t has exactly
 //    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
 //    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
     public static void main(String[] args) {
+        //Test case for 1079. Letter Tile Possibilities
+        System.out.println(lettleTile("AAB"));
+        //Test case for 2221. Find Triangular Sum of an Array
+//        System.out.println(findTriSum(new int[]{2,6,6,5,5,3,3,8,6,4,3,3,5,1,0,1,3,6,9}));
         //Test case for 811. Subdomain Visit Count
-        System.out.println(subDomain(new String[]{"900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org"}));
+//        System.out.println(subDomain(new String[]{"900 google.mail.com", "50 yahoo.com", "1 intel.mail.com", "5 wiki.org"}));
         //Test case for Goldman Sachs Problem
 //        int[][] test={{5,7},{15,29},{7,9},{1,5},{12,15},{39,34},{9,12}};
 //        for(int[] i:RandomInterval(test))
