@@ -3365,12 +3365,64 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
             countBattleshipsverti(i-1,j,board);
         }
     }
+//    1277. Count Square Submatrices with All Ones
+    public static int countSquare(int[][] grid){
+        if(grid==null || grid.length==0)
+            return 0;
+        int m=grid.length;
+        int n=grid[0].length;
+        int[][] dp=new int[m][n];
+        for(int i=0;i<m;i++){
+            dp[i][0]=grid[i][0];
+        }
+        for(int i=0;i<n;i++){
+            dp[0][i]=grid[0][i];
+        }
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                if(grid[i][j]==1){
+                    dp[i][j]=1+Math.min(dp[i-1][j-1],Math.min(dp[i-1][j],dp[i][j-1]));
+                }
+            }
+        }
+        int result=0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                result+=dp[i][j];
+            }
+        }
+        return result;
+    }
+//    921. Minimum Add to Make Parentheses Valid
+    public static int diffParaValid(String str){
+        if(str.length()==0)
+            return 0;
+        Stack<Character> stack=new Stack<>();
+        int count=0;
+        for(char c:str.toCharArray()){
+            if(c=='(')
+                stack.push(')');
+            else{
+                if(c==')' && !stack.isEmpty())
+                    stack.pop();
+                else count++;
+            }
+        }
+        return count+stack.size();
+    }
 //    Given two non-empty binary trees s and t, check whether tree t has exactly
 //    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
 //    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
     public static void main(String[] args) {
+        
+//        921. Minimum Add to Make Parentheses Valid
+//        System.out.println(diffParaValid("((("));
+//        System.out.println(diffParaValid("()))(("));
+//        1277. Count Square Submatrices with All Ones
+//        int[][] test={{0,1,1,1},{1,1,1,1},{0,1,1,1}};
+//        System.out.println(countSquare(test));
         //Test case for 1079. Letter Tile Possibilities
-        System.out.println(lettleTile("AAB"));
+//        System.out.println(lettleTile("AAB"));
         //Test case for 2221. Find Triangular Sum of an Array
 //        System.out.println(findTriSum(new int[]{2,6,6,5,5,3,3,8,6,4,3,3,5,1,0,1,3,6,9}));
         //Test case for 811. Subdomain Visit Count
