@@ -3410,11 +3410,92 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         }
         return count+stack.size();
     }
+    public static int add(int a,int b){
+        return a+b;
+    }
+//    427. Construct Quad Tree
+    static class Quad{
+        boolean isLeaf;
+        boolean val;
+        Quad topLeft;
+        Quad topRight;
+        Quad bottomLeft;
+        Quad bottomRight;
+        public Quad(){}
+        public Quad(boolean isLeaf,boolean val){
+            this.isLeaf=isLeaf;
+            this.val=val;
+        }
+    public Quad(boolean isLeaf,boolean val,Quad topLeft,Quad topRight,Quad bottomLeft,Quad bottomRight){
+        this.isLeaf=isLeaf;
+        this.val=val;
+        this.topLeft=topLeft;
+        this.topRight=topRight;
+        this.bottomLeft=bottomLeft;
+        this.bottomRight=bottomRight;
+    }
+}
+    public static Quad ConstructQuad(int[][] grid){
+        return ConstructQuadHelper(grid,0,0,grid.length);
+    }
+    private static Quad ConstructQuadHelper(int[][] grid,int a,int b,int n){
+        if(n==1)
+            return new Quad(grid[a][b]==1,true);
+        boolean different=true;
+        for(int i=a;i<n;i++){
+            for(int j=b;j<n;j++){
+                if(grid[a][b]!=grid[i+a][j+b]){
+                    different=false;
+                    break;
+                }
+            }
+        }
+        if(different)
+            return new Quad(grid[a][b]==1,true);
+        n/=2;
+        Quad topLeft=ConstructQuadHelper(grid,a,b,n);
+        Quad topRight=ConstructQuadHelper(grid,a,b+n,n);
+        Quad bottomLeft=ConstructQuadHelper(grid,a+n,b,n);
+        Quad bottomRight=ConstructQuadHelper(grid,a+n,b+n,n);
+        return new Quad(false,false,topLeft,topRight,bottomLeft,bottomRight);
+    }
+    //1669. Merge In Between Linked Lists
+    public static ListNode mergeBetween(ListNode node1,ListNode node2,int m,int n){
+        ListNode result=new ListNode(-1);
+        result.next=node1;
+        ListNode test=node1;
+        ListNode dummy=result;
+        int count=0;
+        while(count<=n){
+            count++;
+            if(count<=m){
+                dummy=dummy.next;
+            }
+            test=test.next;
+        }
+        while(node2!=null){
+            dummy.next=node2;
+            dummy=dummy.next;
+            node2=node2.next;
+        }
+        dummy.next=test;
+        return result.next;
+    }
 //    Given two non-empty binary trees s and t, check whether tree t has exactly
 //    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
 //    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
     public static void main(String[] args) {
-        
+        // Test case 1669. Merge In Between Linked Lists
+        ListNode node1=new ListNode(0);
+        node1.next=new ListNode(1);
+        node1.next.next=new ListNode(2);
+        node1.next.next.next=new ListNode(3);
+        node1.next.next.next.next=new ListNode(4);
+        node1.next.next.next.next.next=new ListNode(5);
+        ListNode node2=new ListNode(1000);
+        node2.next=new ListNode(1001);
+        node2.next.next=new ListNode(1002);
+        printLinkedList(mergeBetween(node1,node2,3,4));
 //        921. Minimum Add to Make Parentheses Valid
 //        System.out.println(diffParaValid("((("));
 //        System.out.println(diffParaValid("()))(("));
