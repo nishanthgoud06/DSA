@@ -3481,21 +3481,172 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         dummy.next=test;
         return result.next;
     }
+//    59. Spiral Matrix II
+        public static int[][] spiralMatrx(int n){
+        if(n==0)
+            return new int[0][0];
+        int[][] result=new int[n][n];
+        int current=1;
+        int limit=n*n;
+        int left=0,top=0,right=n-1,bottom=n-1;
+        while(current<=limit){
+            for(int i=left;i<=right && current<=limit;i++){
+                result[top][i]=current++;
+            }
+            top++;
+            for(int i=top;i<=bottom && current <=limit;i++){
+                result[i][right]=current++;
+            }
+            right--;
+            for(int i=right;i>=left && current<=limit;i--){
+                result[bottom][i]=current++;
+            }
+            bottom--;
+            for(int i=bottom;i>=top && current<=limit;i--){
+                result[i][left]=current++;
+            }
+            left++;
+        }
+        return result;
+        }
+//        451. Sort Characters By Frequency
+    public static String sortCharFreq(String str){
+        if(str.length()<=1)
+            return str;
+        HashMap<Character,Integer> hashmap=new HashMap<>();
+        for(char c:str.toCharArray()){
+            hashmap.put(c,hashmap.getOrDefault(c,0)+1);
+        }
+        PriorityQueue<Character> pq=new PriorityQueue<>((a,b)->hashmap.get(b)-hashmap.get(a));
+        for(char c:hashmap.keySet())
+            pq.offer(c);
+        StringBuilder sb=new StringBuilder();
+        while(!pq.isEmpty()){
+            char current=pq.poll();
+            int limit=hashmap.get(current);
+            while(limit>0){
+                sb.append(current);
+                limit--;
+            }
+        }
+        return sb.toString();
+    }
+//    1111. Maximum Nesting Depth of Two Valid Parentheses Strings
+    public static int[] maxNestDepth(String str){
+        if(str.length()==0)
+            return new int[0];
+        int[] result=new int[str.length()];
+        int count=0;
+        for(int i=0;i<str.length();i++){
+            int current=str.charAt(i);
+            if(current=='('){
+                count++;
+                result[i]=count%2;
+            }else{
+                result[i]=count%2;
+                count--;
+            }
+        }
+        return result;
+    }
+//    1325. Delete Leaves With a Given Value
+    public static Node deleteLevValue(Node root,int target){
+        if(root==null)
+            return root;
+        root.left=deleteLevValue(root.left,target);
+        root.right=deleteLevValue(root.right,target);
+        if(root.left==null && root.right==null && root.val==target)
+            return null;
+        return root;
+    }
+    //Print Tree with null
+    public static void printTree2(Node node){
+        List<Integer> result=new ArrayList<>();
+        printTree2Helper(result,node);
+        System.out.println(result);
+    }
+    public static void printTree2Helper(List<Integer> result,Node node){
+        if(node==null){
+            result.add(null);
+            return;
+        }
+        result.add(node.val);
+        printTree2Helper(result,node.left);
+        printTree2Helper(result,node.right);
+    }
+    //1980. Find Unique Binary String
+    public static String findUnique(String[] str){
+        List<String> combi=new ArrayList<>();
+        findUniqueHelper(combi,new StringBuilder(),str[0].length(),0);
+        for(String s:combi){
+            boolean found=false;
+            for(int i=0;i<str.length;i++){
+                if(str[i].equals(s)){
+                    found=true;
+                    break;
+                }
+            }
+            if(!found){
+                return s;
+            }
+        }
+        return "";
+    }
+    //Approcch-2
+    public static String findUnique2(String[] str){
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<str.length;i++){
+            sb.append(str[i].charAt(i)=='0'?'1':'0');
+        }
+        return sb.toString();
+    }
+    public static void findUniqueHelper(List<String> list,StringBuilder sb,int length,int current){
+        if(current==length){
+            list.add(sb.toString());
+            return;
+        }
+        sb.append('0');
+        findUniqueHelper(list,sb,length,current+1);
+        sb.deleteCharAt(sb.length()-1);
+        sb.append('1');
+        findUniqueHelper(list,sb,length,current+1);
+        sb.deleteCharAt(sb.length()-1);
+    }
 //    Given two non-empty binary trees s and t, check whether tree t has exactly
 //    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
 //    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
     public static void main(String[] args) {
+        //1980. Find Unique Binary String
+        System.out.println(findUnique(new String[]{"01","10"}));
+        //1325. Delete Leaves With a Given Value
+//        Node test=new Node(1);
+//        test.left=new Node(2);
+//        test.right=new Node(3);
+//        test.left.left=new Node(2);
+//        test.right.left=new Node(2);
+//        test.right.right=new Node(4);
+//        printTree2(test);
+//        printTree2(deleteLevValue(test,2));
+        //1111. Maximum Nesting Depth of Two Valid Parentheses Strings
+//        System.out.println(Arrays.toString(maxNestDepth("(()())")));
+        //451. Sort Characters By Frequency
+//        System.out.println(sortCharFreq("tree"));
+//        59. Spiral Matrix II
+//        int[][] test=spiralMatrx(3);
+//        for(int[] i:test){
+//            System.out.println(Arrays.toString(i));
+//        }
         // Test case 1669. Merge In Between Linked Lists
-        ListNode node1=new ListNode(0);
-        node1.next=new ListNode(1);
-        node1.next.next=new ListNode(2);
-        node1.next.next.next=new ListNode(3);
-        node1.next.next.next.next=new ListNode(4);
-        node1.next.next.next.next.next=new ListNode(5);
-        ListNode node2=new ListNode(1000);
-        node2.next=new ListNode(1001);
-        node2.next.next=new ListNode(1002);
-        printLinkedList(mergeBetween(node1,node2,3,4));
+//        ListNode node1=new ListNode(0);
+//        node1.next=new ListNode(1);
+//        node1.next.next=new ListNode(2);
+//        node1.next.next.next=new ListNode(3);
+//        node1.next.next.next.next=new ListNode(4);
+//        node1.next.next.next.next.next=new ListNode(5);
+//        ListNode node2=new ListNode(1000);
+//        node2.next=new ListNode(1001);
+//        node2.next.next=new ListNode(1002);
+//        printLinkedList(mergeBetween(node1,node2,3,4));
 //        921. Minimum Add to Make Parentheses Valid
 //        System.out.println(diffParaValid("((("));
 //        System.out.println(diffParaValid("()))(("));
