@@ -3612,12 +3612,184 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         findUniqueHelper(list,sb,length,current+1);
         sb.deleteCharAt(sb.length()-1);
     }
+//    Let's represent an integer in a linked list format by having each node represent
+//    a digit in the number. The nodes make up the number in reversed order.
+    public static ListNode addLLNode(ListNode node1,ListNode node2){
+        if(node1==null && node2==null)
+            return new ListNode(-1);
+        if(node1==null)
+            return node2;
+        if(node2==null)
+            return node1;
+        int borrow=0;
+        ListNode result=new ListNode(-1);
+        ListNode dummy=result;
+        while(node1!=null && node2!=null){
+            int current=node1.val+node2.val+borrow;
+            int value=current%10;
+            borrow=current/10;
+            dummy.next=new ListNode(value);
+            dummy=dummy.next;
+            node1=node1.next;
+            node2=node2.next;
+        }
+        while(node1!=null){
+            int current=node1.val+borrow;
+            int value=current%10;
+            borrow=current/10;
+            dummy.next=new ListNode(value);
+            dummy=dummy.next;
+            node1=node1.next;
+        }
+        while(node2!=null){
+            int current=node2.val+borrow;
+            int value=current%10;
+            borrow=current/10;
+            dummy.next=new ListNode(value);
+            dummy=dummy.next;
+            node2=node2.next;
+        }
+        if(borrow!=0){
+            dummy.next=new ListNode(borrow);
+            dummy=dummy.next;
+        }
+        return result.next;
+    }
+//    Write a function that rotates a list by k elements.
+//    For example, [1, 2, 3, 4, 5, 6] rotated by two becomes [3, 4, 5, 6, 1, 2].
+//    Try solving this without creating a copy of the list. How many swap or move operations do you need?
+    public static int[] rotateByK(int[] nums,int k){
+        if(nums==null || nums.length==0)
+            return nums;
+        rotateByKH1(nums,0,k-1);
+        rotateByKH1(nums,k,nums.length-1);
+        int start=0;
+        int end=nums.length-1;
+        while(start<k){
+            rotateByKH2(nums,start,end);
+            start++;
+            end--;
+        }
+        rotateByKH1(nums,start,end);
+        return nums;
+    }
+    public static void rotateByKH1(int[] nums,int i,int j){
+        while(i<j){
+            int temp=nums[i];
+            nums[i]=nums[j];
+            nums[j]=temp;
+            i++;
+            j--;
+        }
+    }
+    public static void rotateByKH2(int[] nums,int i,int j){
+        int temp=nums[i];
+        nums[i]=nums[j];
+        nums[j]=temp;
+    }
+    //Find Sum in BST
+    public static int[] findSumBST(Node node,int target){
+        if(node==null)
+            return new int[0];
+        List<Integer> inorder=new ArrayList<>();
+        findSumBSTHelper(inorder,node);
+        int low=0,high=inorder.size()-1;
+        while(low<high){
+            int sum=inorder.get(low)+inorder.get(high);
+            if(sum==target){
+                return new int[]{inorder.get(low),inorder.get(high)};
+            }else if(sum>target){
+                high--;
+            }else{
+                low++;
+            }
+        }
+        return new int[0];
+    }
+    public static void findSumBSTHelper(List<Integer> result,Node node){
+        if(node==null)
+            return;
+        findSumBSTHelper(result,node.left);
+        result.add(node.val);
+        findSumBSTHelper(result,node.right);
+    }
+//    find the maximum number of coins you can collect by the bottom right corner.
+    public static int maxNumCoins(int[][] grid){
+        if(grid==null || grid.length==0)
+            return 0;
+        int m=grid.length;
+        int n=grid[0].length;
+        for(int i=1;i<n;i++){
+            grid[0][i]=Math.max(grid[0][i]+grid[0][i-1],grid[0][i]);
+        }
+        for(int i=1;i<m;i++){
+            grid[i][0]=Math.max(grid[i][0]+grid[i-1][0],grid[i][0]);
+        }
+        for(int i=1;i<m;i++){
+            for(int j=1;j<n;j++){
+                grid[i][j]=Math.max(grid[i][j]+grid[i-1][j],Math.max(grid[i][j]+grid[i][j-1],grid[i][j]));
+            }
+        }
+        return grid[m-1][n-1];
+    }
+    //Given a string which we can delete at most k, return whether you can make a palindrome.
+    public static boolean isPalPossible(String str,int k){
+        int length=str.length();
+        int[][] dp=new int[length][length];
+        for(int i=0;i<length;i++){
+            dp[i][i]=1;
+        }
+        for(int i=length-2;i>=0;i--){
+            for(int j=i+1;j<length;j++){
+                if(str.charAt(i)==str.charAt(j)){
+                    dp[i][j]=2+dp[i+1][j-1];
+                }else{
+                    dp[i][j]=Math.max(dp[i+1][j],dp[i][j-1]);
+                }
+            }
+        }
+        return str.length()-dp[0][length-1]<=k;
+    }
+//    find the smallest set of numbers that covers all the intervals.
+    public static int[] smallestSet(int[][] nums){
+        Arrays.sort(nums,(a,b)->a[0]-b[0]);
+        int startIndex=nums[0][0];
+        int prev=nums[0][1];
+        for(int i=1;i<nums.length;i++){
+            if(nums[i][0]>prev){
+                prev=nums[i][0];
+            }
+        }
+        return new int[]{startIndex,prev};
+    }
 //    Given two non-empty binary trees s and t, check whether tree t has exactly
 //    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
 //    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
     public static void main(String[] args) {
+//        find the smallest set of numbers that covers all the intervals.
+        System.out.println(Arrays.toString(smallestSet(new int[][]{{0, 3}, {2, 6}, {3, 4}, {6, 9}})));
+        //Given a string which we can delete at most k, return whether you can make a palindrome.
+//        System.out.println(isPalPossible("waterrfetawx",2));
+        //find the maximum number of coins you can collect by the bottom right corner.
+//        System.out.println(maxNumCoins(new int[][]{{0,3,1,1},{2,0,0,4},{1,5,3,1}}));
+        //Two nodes in the tree whose sum equals K.
+//        Node test=new Node(10);
+//        test.left=new Node(5);
+//        test.right=new Node(15);
+//        test.right.left=new Node(11);
+//        test.right.right=new Node(15);
+//        System.out.println(Arrays.toString(findSumBST(test,20)));
+        //rotates a list by k elements
+//        System.out.println(Arrays.toString(rotateByK(new int[]{1,2,3,4,5,6},2)));
+        //ADD Linkedlist
+//        ListNode test1=new ListNode(9);
+//        test1.next=new ListNode(9);
+//        ListNode test2=new ListNode(5);
+//        test2.next=new ListNode(2);
+//        ListNode result=addLLNode(test1,test2);
+//        printLinkedList(result);
         //1980. Find Unique Binary String
-        System.out.println(findUnique(new String[]{"01","10"}));
+//        System.out.println(findUnique(new String[]{"01","10"}));
         //1325. Delete Leaves With a Given Value
 //        Node test=new Node(1);
 //        test.left=new Node(2);
