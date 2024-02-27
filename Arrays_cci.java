@@ -3762,12 +3762,58 @@ public static List<List<Integer>> groupThePeople(int[] groupSizes) {
         }
         return new int[]{startIndex,prev};
     }
+//    Tower of Hanoi
+        public static void TowerOfHanoi(char from,char to,char via,int n){
+            if(n==0)
+                return;
+            TowerOfHanoi(from,via,to,n-1);
+            System.out.println("Move the Dice "+n+ " from "+ from+" to "+to);
+            TowerOfHanoi(via,to,from,n-1);
+        }
+        //1884. Egg Drop With 2 Eggs and N Floors
+    public static int eggDrop(int n){
+        int[][] dp=new int[3][n+1];
+        for(int i=1;i<=n;i++){
+            dp[1][i]=i;
+            dp[2][i]=Integer.MAX_VALUE;
+        }
+        dp[2][1]=1;
+        for(int floor=2;floor<=n;floor++){
+            for(int i=1;i<=floor;i++){
+                int value=1+Math.max(dp[1][i-1],dp[2][floor-i]);
+                dp[2][floor]=Math.min(dp[2][floor],value);
+            }
+        }
+        return dp[2][n];
+    }
+//    877. Stone Game
+    public static boolean StoneGame(int[] piles){
+        if(piles==null || piles.length==0)
+            return true;
+        int n=piles.length;
+        int[][] dp=new int[n][n];
+        for(int i=0;i<n;i++){
+            dp[i][i]=piles[i];
+        }
+        for(int i=2;i<=n;i++){
+            for(int j=0;j<=n-i;j++){
+                int k=n-i-1;
+                dp[j][k]=Math.max(piles[j]-dp[j+1][k],piles[k]-dp[j][k-1]);
+            }
+        }
+        return dp[0][n-1]>0;
+    }
 //    Given two non-empty binary trees s and t, check whether tree t has exactly
 //    the same structure and node values with a subtree of s. A subtree of s is a tree consists of a
 //    node in s and all of this node's descendants. The tree s could also be considered as a subtree of itself.
     public static void main(String[] args) {
+        //877. Stone Game
+        System.out.println(StoneGame(new int[]{3,2,10,4}));
+//        1884. Egg Drop With 2 Eggs and N Floors
+//        System.out.println(eggDrop(100));
+//        TowerOfHanoi('A','C','B',3);
 //        find the smallest set of numbers that covers all the intervals.
-        System.out.println(Arrays.toString(smallestSet(new int[][]{{0, 3}, {2, 6}, {3, 4}, {6, 9}})));
+//        System.out.println(Arrays.toString(smallestSet(new int[][]{{0, 3}, {2, 6}, {3, 4}, {6, 9}})));
         //Given a string which we can delete at most k, return whether you can make a palindrome.
 //        System.out.println(isPalPossible("waterrfetawx",2));
         //find the maximum number of coins you can collect by the bottom right corner.

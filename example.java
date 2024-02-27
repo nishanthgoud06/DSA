@@ -353,8 +353,31 @@ public class example {
         }
         return -1;
     }
+//    Reduce Array Size to The Half
+    public static int reduceArray(int[] nums){
+        HashMap<Integer,Integer> hashmap=new HashMap<>();
+        for(int i:nums){
+            hashmap.put(i,hashmap.getOrDefault(i,0)+1);
+        }
+        int result=0;
+        int currentSize=0;
+        PriorityQueue<Integer> pq=new PriorityQueue<>((a,b)->hashmap.get(b)-hashmap.get(a));
+        for(int i:hashmap.keySet()){
+            pq.offer(i);
+        }
+        while(!pq.isEmpty()){
+            int value=pq.poll();
+            currentSize+=value;
+            result++;
+            if(currentSize>=nums.length/2){
+                break;
+            }
+        }
+        return result;
+    }
     public static void main(String[] args) {
-        System.out.println(Indexof("abcdef","e"));
+        System.out.println(reduceArray(new int[]{3,3,3,3,5,5,5,2,2,7}));
+//        System.out.println(Indexof("abcdef","e"));
 //        int[][] test={{1,1,1,-1,-1},{1,1,1,-1,-1},{-1,-1,-1,1,1},{1,1,1,1,-1},{-1,-1,-1,-1,-1}};
 //        System.out.println(Arrays.toString(ballFall(test)));
 //        System.out.println(longPali("racecar"));
