@@ -1,7 +1,6 @@
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 public class example {
     class Node{
         Node left;
@@ -375,8 +374,103 @@ public class example {
         }
         return result;
     }
+//    the next bigger element, also known as the inorder successor.
+    static class PNode{
+        int data;
+        PNode left,right,parent;
+
+    public PNode(int data, PNode left, PNode right, PNode parent) {
+        this.data = data;
+        this.left = left;
+        this.right = right;
+        this.parent = parent;
+    }
+
+    public PNode(int data) {
+        this.data = data;
+    }
+}
+    public static int nextBigElement(PNode node,int target){
+        if(node!=null){
+            if(node.data==target){
+                if(node.parent!=null && node.parent.data>target){
+                    return node.parent.data;
+                }else{
+                    if(node.right!=null){
+                        PNode current=node.right;
+                        while(current.left!=null){
+                            current=current.left;
+                        }
+                        return current.data;
+                    }
+                }
+            }else if(node.data>target){
+                return nextBigElement(node.left,target);
+            }else if(node.data<target){
+                return nextBigElement(node.right,target);
+            }
+        }
+        return -1;
+    }
+//    where each node also has a “random” pointer that points to anywhere in the linked list, deep clone the list.
+    static class LNode{
+      int data;
+      LNode next,random;
+
+    public LNode(int data, LNode next, LNode random) {
+        this.data = data;
+        this.next = next;
+        this.random = random;
+    }
+
+    public LNode(int data) {
+        this.data = data;
+    }
+
+    public  LNode(int data, LNode next){
+          this.data=data;
+          this.next=next;
+      }
+}
+    public static LNode hardCopy(LNode node){
+        HashMap<LNode,LNode> hashmap=new HashMap<>();
+        LNode temp=node;
+        LNode result=new LNode(-1);
+        LNode dummy=result;
+        while(temp!=null){
+            dummy.next=new LNode(temp.data);
+            dummy=dummy.next;
+            hashmap.put(dummy,temp);
+            temp=temp.next;
+        }
+        dummy=result;
+        dummy=dummy.next;
+        temp=node;
+        while(temp!=null){
+            if(temp.random!=null && hashmap.containsKey(temp.random)){
+                dummy.random=hashmap.get(temp.random);
+            }
+            temp=temp.next;
+            dummy=dummy.next;
+        }
+        return result.next;
+    }
     public static void main(String[] args) {
-        System.out.println(reduceArray(new int[]{3,3,3,3,5,5,5,2,2,7}));
+        PNode root = new PNode(10);
+        root.left = new PNode(5);
+        root.right = new PNode(30);
+        root.right.left = new PNode(22);
+        root.right.right = new PNode(35);
+        root.right.right.left = new PNode(33);
+
+        // Set parent pointers
+        root.left.parent = root;
+        root.right.parent = root;
+        root.right.left.parent = root.right;
+        root.right.right.parent = root.right;
+        root.right.right.left.parent=root.right.right;
+        System.out.println(nextBigElement(root,30));
+//        System.out.println(reduceArray(new int[]{3,3,3,3,5,5,5,2,2,7}));
 //        System.out.println(Indexof("abcdef","e"));
 //        int[][] test={{1,1,1,-1,-1},{1,1,1,-1,-1},{-1,-1,-1,1,1},{1,1,1,1,-1},{-1,-1,-1,-1,-1}};
 //        System.out.println(Arrays.toString(ballFall(test)));
