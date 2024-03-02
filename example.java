@@ -2,7 +2,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 public class example {
-    class Node{
+    static class Node{
         Node left;
         Node right;
         int val;
@@ -455,21 +455,55 @@ public class example {
         }
         return result.next;
     }
+//    Construct String from Binary Tree
+    public static String constructStringBST(Node node){
+        if(node==null)
+            return "";
+        StringBuilder sb=new StringBuilder();
+        constructStringBSTHepler(node,sb);
+        return sb.toString();
+    }
+    public static void constructStringBSTHepler(Node node,StringBuilder sb){
+        if(node==null)
+            return;
+        sb.append(node.val);
+        if(node.left!=null || node.right!=null){
+            sb.append("(");
+            constructStringBSTHepler(node.left,sb);
+            sb.append(")");
+            if(node.right!=null){
+                sb.append("(");
+                constructStringBSTHepler(node.right,sb);
+                sb.append(")");
+            }
+        }
+    }
     public static void main(String[] args) {
-        PNode root = new PNode(10);
-        root.left = new PNode(5);
-        root.right = new PNode(30);
-        root.right.left = new PNode(22);
-        root.right.right = new PNode(35);
-        root.right.right.left = new PNode(33);
-
-        // Set parent pointers
-        root.left.parent = root;
-        root.right.parent = root;
-        root.right.left.parent = root.right;
-        root.right.right.parent = root.right;
-        root.right.right.left.parent=root.right.right;
-        System.out.println(nextBigElement(root,30));
+//        Construct String from Binary Tree
+        Node test=new Node(1);
+        test.left=new Node(2);
+        test.right=new Node(3);
+        test.left.left=new Node(4);
+        System.out.println(constructStringBST(test));
+        Node test1=new Node(1);
+        test1.left=new Node(2);
+        test1.left.right=new Node(4);
+        test1.right=new Node(3);
+        System.out.println(constructStringBST(test1));
+//        PNode root = new PNode(10);
+//        root.left = new PNode(5);
+//        root.right = new PNode(30);
+//        root.right.left = new PNode(22);
+//        root.right.right = new PNode(35);
+//        root.right.right.left = new PNode(33);
+//
+//        // Set parent pointers
+//        root.left.parent = root;
+//        root.right.parent = root;
+//        root.right.left.parent = root.right;
+//        root.right.right.parent = root.right;
+//        root.right.right.left.parent=root.right.right;
+//        System.out.println(nextBigElement(root,30));
 //        System.out.println(reduceArray(new int[]{3,3,3,3,5,5,5,2,2,7}));
 //        System.out.println(Indexof("abcdef","e"));
 //        int[][] test={{1,1,1,-1,-1},{1,1,1,-1,-1},{-1,-1,-1,1,1},{1,1,1,1,-1},{-1,-1,-1,-1,-1}};
