@@ -478,18 +478,86 @@ public class example {
             }
         }
     }
+    //Max Histogram Area
+    public static int maxHistogram(int[] nums){
+        int result=Integer.MIN_VALUE;
+        Stack<Integer> stack=new Stack<>();
+        int multipler;
+        for(int i=0;i<nums.length;i++){
+            multipler=i;
+            if(stack.isEmpty() || nums[stack.peek()]<=nums[i]){
+                stack.add(i);
+            }else{
+                while(!stack.isEmpty() && nums[stack.peek()]>nums[i]){
+                    int value=0;
+                    int currentIndex=stack.pop();
+                    if(stack.isEmpty()){
+                        value=nums[currentIndex]*i;
+                    }else{
+                        value=nums[currentIndex]*(multipler-stack.peek()-1);
+                    }
+                    result=Math.max(result,value);
+                }
+                stack.add(i);
+            }
+        }
+        while(!stack.isEmpty()){
+            int value=0;
+            multipler=nums.length;
+            int currentIndex=stack.pop();
+            if(stack.isEmpty()){
+                value=nums[currentIndex]*multipler;
+            }else{
+                value=nums[currentIndex]*(multipler-stack.peek()-1);
+            }
+            result=Math.max(result,value);
+        }
+        return result;
+    }
+//    Given an N by M matrix consisting only of 1's and 0's,
+//    find the largest rectangle containing only 1's and return its area.
+    public static int largestRect(int[][] grid){
+        if(grid==null || grid.length==0)
+            return 0;
+        int[] prev=null;
+        int result=0;
+        for(int i=0;i<grid.length;i++){
+            if(i==0){
+                prev=grid[i];
+            }else{
+                for(int j=0;j<grid[i].length;j++){
+                    if(grid[i][j]!=0) {
+                        if (prev[j] != 0) {
+                            prev[j] += 1;
+                        } else {
+                            prev[j] = grid[i][j];
+                        }
+                    }else{
+                        prev[j]=0;
+                    }
+                }
+            }
+//            System.out.println(Arrays.toString(prev));
+            result=Math.max(result,maxHistogram(prev));
+        }
+        return result;
+    }
     public static void main(String[] args) {
+        //find the largest rectangle containing only 1's and return its area.
+        System.out.println(largestRect(new int[][]{{1,0,0,0},{1,0,1,1},{1,0,1,1},{0,1,0,0}}));
+        //Max Histogram Area
+//        System.out.println(maxHistogram(new int[]{2,1,2,3,1}));
 //        Construct String from Binary Tree
-        Node test=new Node(1);
-        test.left=new Node(2);
-        test.right=new Node(3);
-        test.left.left=new Node(4);
-        System.out.println(constructStringBST(test));
-        Node test1=new Node(1);
-        test1.left=new Node(2);
-        test1.left.right=new Node(4);
-        test1.right=new Node(3);
-        System.out.println(constructStringBST(test1));
+//        Node test=new Node(1);
+//        test.left=new Node(2);
+//        test.right=new Node(3);
+//        test.left.left=new Node(4);
+//        System.out.println(constructStringBST(test));
+//        Node test1=new Node(1);
+//        test1.left=new Node(2);
+//        test1.left.right=new Node(4);
+//        test1.right=new Node(3);
+//        System.out.println(constructStringBST(test1));
 //        PNode root = new PNode(10);
 //        root.left = new PNode(5);
 //        root.right = new PNode(30);
