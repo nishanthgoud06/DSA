@@ -542,9 +542,26 @@ public class example {
         }
         return result;
     }
+//    Find the minimum number of coins required to make n cents.
+    public static int minNumCoin(int change){
+        int[] dp=new int[change+1];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[0]=0;
+        int[] cents={1,5,10,25};
+        for(int i=1;i<=change;i++){
+            for(int j=0;j<cents.length;j++){
+                if(cents[j]<=i){
+                    dp[i]=Math.min(dp[i],dp[i-cents[j]]+1);
+                }
+            }
+        }
+        return dp[change];
+    }
     public static void main(String[] args) {
+//        Find the minimum number of coins required to make n cents.
+        System.out.println(minNumCoin(16));
         //find the largest rectangle containing only 1's and return its area.
-        System.out.println(largestRect(new int[][]{{1,0,0,0},{1,0,1,1},{1,0,1,1},{0,1,0,0}}));
+//        System.out.println(largestRect(new int[][]{{1,0,0,0},{1,0,1,1},{1,0,1,1},{0,1,0,0}}));
         //Max Histogram Area
 //        System.out.println(maxHistogram(new int[]{2,1,2,3,1}));
 //        Construct String from Binary Tree
