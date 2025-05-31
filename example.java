@@ -557,9 +557,65 @@ public class example {
         }
         return dp[change];
     }
+//    You must buy the stock before you can sell it, and you must sell the stock before you can buy it again.
+//   123. Best Time to Buy and Sell Stock III
+    public static int bestTimeSellandBuy(int[] prices){
+        if(prices==null || prices.length<=1)
+            return 0;
+        int firstBuy=Integer.MIN_VALUE;
+        int secondBuy=Integer.MIN_VALUE;
+        int firstSell=0;
+        int secondSell=0;
+        int n= prices.length;
+        for(int i=0;i<n;i++){
+            firstBuy=Math.max(firstBuy,-prices[i]);
+            firstSell=Math.max(firstSell,firstBuy+prices[i]);
+            secondBuy=Math.max(secondBuy,firstSell-prices[i]);
+            secondSell=Math.max(secondSell,secondBuy+prices[i]);
+        }
+        return secondSell;
+    }
+//    find the two elements that appear only once.
+    public static List<Integer> findTwo(int[] nums){
+        if(nums==null || nums.length==0)
+            return new ArrayList<>();
+        List<Integer> result=new ArrayList<>();
+        for(int i:nums){
+            if(!result.contains(i)){
+                result.add(i);
+            }else{
+                result.remove(result.indexOf(i));
+            }
+        }
+        return result;
+    }
+
+    //efficent anagram solution
+    public boolean isAnagram(String s, String t) {
+        HashMap<Character,Integer> hashmap =new HashMap<>();
+        int i=0,j=0;
+        while(i<s.length()){
+            hashmap.put(s.charAt(i),hashmap.getOrDefault(s.charAt(i),0)+1);
+            i++;
+        }
+        while(j<t.length()){
+            if(!hashmap.containsKey(t.charAt(j)))
+                return false;
+            hashmap.put(t.charAt(j),hashmap.get(t.charAt(j))-1);
+            if(hashmap.get(t.charAt(j))==0)
+                hashmap.remove(t.charAt(j));
+            j++;
+        }
+        return hashmap.isEmpty();
+    }
+
     public static void main(String[] args) {
+//        find the two elements that appear only once.
+        System.out.println(findTwo(new int[]{2, 4, 6, 8, 10, 2, 6, 10}));
+//        123. Best Time to Buy and Sell Stock III
+//        System.out.println(bestTimeSellandBuy(new int[]{3,3,5,0,0,3,1,4}));
 //        Find the minimum number of coins required to make n cents.
-        System.out.println(minNumCoin(16));
+//        System.out.println(minNumCoin(16));
         //find the largest rectangle containing only 1's and return its area.
 //        System.out.println(largestRect(new int[][]{{1,0,0,0},{1,0,1,1},{1,0,1,1},{0,1,0,0}}));
         //Max Histogram Area
